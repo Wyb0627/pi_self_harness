@@ -44,3 +44,5 @@ plans/
 collect.sh
 packages/agent/docs/extensions/pi-server-artifact/index.md
 default.profraw
+/DGM_results
+datasets/SWE-bench/
