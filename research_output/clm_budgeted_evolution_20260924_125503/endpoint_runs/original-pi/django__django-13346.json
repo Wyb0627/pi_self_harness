@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "instanceId": "django__django-13346",
+  "modelProvider": "rollback-deepseek",
+  "modelId": "byteplus/deepseek-v4-flash-ga",
+  "startedAt": "2026-09-24T07:31:23.089Z",
+  "completedAt": "2026-09-24T07:33:21.465Z",
+  "durationMs": 118375,
+  "inputTokens": 40247,
+  "outputTokens": 15061,
+  "cacheReadTokens": 458240,
+  "cacheWriteTokens": 0,
+  "toolCalls": 28,
+  "maxOutputTokens": 65536,
+  "maxTotalTokens": 512000,
+  "budgetAborted": true,
+  "timeoutAborted": false,
+  "providerError": "This operation was aborted",
+  "patch": "diff --git a/django/db/models/fields/json.py b/django/db/models/fields/json.py\nindex fafc1be..918ca68 100644\n--- a/django/db/models/fields/json.py\n+++ b/django/db/models/fields/json.py\n@@ -463,6 +463,10 @@ class KeyTransformNumericLookupMixin:\n         return rhs, rhs_params\n \n \n+class KeyTransformIn(KeyTransformNumericLookupMixin, lookups.In):\n+    pass\n+\n+\n class KeyTransformLt(KeyTransformNumericLookupMixin, lookups.LessThan):\n     pass\n \n@@ -490,6 +494,7 @@ KeyTransform.register_lookup(KeyTransformIEndsWith)\n KeyTransform.register_lookup(KeyTransformRegex)\n KeyTransform.register_lookup(KeyTransformIRegex)\n \n+KeyTransform.register_lookup(KeyTransformIn)\n KeyTransform.register_lookup(KeyTransformLt)\n KeyTransform.register_lookup(KeyTransformLte)\n KeyTransform.register_lookup(KeyTransformGt)\n",
+  "fullPatch": "diff --git a/django/db/models/fields/json.py b/django/db/models/fields/json.py\nindex fafc1be..918ca68 100644\n--- a/django/db/models/fields/json.py\n+++ b/django/db/models/fields/json.py\n@@ -463,6 +463,10 @@ class KeyTransformNumericLookupMixin:\n         return rhs, rhs_params\n \n \n+class KeyTransformIn(KeyTransformNumericLookupMixin, lookups.In):\n+    pass\n+\n+\n class KeyTransformLt(KeyTransformNumericLookupMixin, lookups.LessThan):\n     pass\n \n@@ -490,6 +494,7 @@ KeyTransform.register_lookup(KeyTransformIEndsWith)\n KeyTransform.register_lookup(KeyTransformRegex)\n KeyTransform.register_lookup(KeyTransformIRegex)\n \n+KeyTransform.register_lookup(KeyTransformIn)\n KeyTransform.register_lookup(KeyTransformLt)\n KeyTransform.register_lookup(KeyTransformLte)\n KeyTransform.register_lookup(KeyTransformGt)\n"
+}

@@ -1,0 +1,12 @@
+[
+  {
+    "instance_id": "django__django-13279",
+    "model_name_or_path": "original-pi-deepseek-v4-flash-isolated",
+    "model_patch": "diff --git a/django/contrib/sessions/backends/base.py b/django/contrib/sessions/backends/base.py\nindex b545316..35d3494 100644\n--- a/django/contrib/sessions/backends/base.py\n+++ b/django/contrib/sessions/backends/base.py\n@@ -106,8 +106,16 @@ class SessionBase:\n         key_salt = \"django.contrib.sessions\" + self.__class__.__name__\n         return salted_hmac(key_salt, value).hexdigest()\n \n+    def _legacy_encode(self, session_dict):\n+        # RemovedInDjango40Warning: pre-Django 3.1 format will be invalid.\n+        serialized = self.serializer().dumps(session_dict)\n+        hash = self._hash(serialized)\n+        return base64.b64encode(hash.encode() + b':' + serialized).decode('ascii')\n+\n     def encode(self, session_dict):\n         \"Return the given session dictionary serialized and encoded as a string.\"\n+        if settings.DEFAULT_HASHING_ALGORITHM == 'sha1':\n+            return self._legacy_encode(session_dict)\n         return signing.dumps(\n             session_dict, salt=self.key_salt, serializer=self.serializer,\n             compress=True,\n"
+  },
+  {
+    "instance_id": "django__django-13346",
+    "model_name_or_path": "original-pi-deepseek-v4-flash-isolated",
+    "model_patch": "diff --git a/django/db/models/fields/json.py b/django/db/models/fields/json.py\nindex fafc1be..918ca68 100644\n--- a/django/db/models/fields/json.py\n+++ b/django/db/models/fields/json.py\n@@ -463,6 +463,10 @@ class KeyTransformNumericLookupMixin:\n         return rhs, rhs_params\n \n \n+class KeyTransformIn(KeyTransformNumericLookupMixin, lookups.In):\n+    pass\n+\n+\n class KeyTransformLt(KeyTransformNumericLookupMixin, lookups.LessThan):\n     pass\n \n@@ -490,6 +494,7 @@ KeyTransform.register_lookup(KeyTransformIEndsWith)\n KeyTransform.register_lookup(KeyTransformRegex)\n KeyTransform.register_lookup(KeyTransformIRegex)\n \n+KeyTransform.register_lookup(KeyTransformIn)\n KeyTransform.register_lookup(KeyTransformLt)\n KeyTransform.register_lookup(KeyTransformLte)\n KeyTransform.register_lookup(KeyTransformGt)\n"
+  }
+]

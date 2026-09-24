@@ -1,0 +1,17 @@
+[
+  {
+    "instance_id": "django__django-10973",
+    "model_name_or_path": "rf-clm-infra-smoke",
+    "model_patch": "diff --git a/swebench_smoke.txt b/swebench_smoke.txt\nnew file mode 100644\nindex 0000000..caed606\n--- /dev/null\n+++ b/swebench_smoke.txt\n@@ -0,0 +1 @@\n+smoke\n"
+  },
+  {
+    "instance_id": "django__django-11066",
+    "model_name_or_path": "rf-clm-infra-smoke",
+    "model_patch": "diff --git a/swebench_smoke.txt b/swebench_smoke.txt\nnew file mode 100644\nindex 0000000..caed606\n--- /dev/null\n+++ b/swebench_smoke.txt\n@@ -0,0 +1 @@\n+smoke\n"
+  },
+  {
+    "instance_id": "django__django-12754",
+    "model_name_or_path": "rf-clm-infra-smoke",
+    "model_patch": "diff --git a/swebench_smoke.txt b/swebench_smoke.txt\nnew file mode 100644\nindex 0000000..caed606\n--- /dev/null\n+++ b/swebench_smoke.txt\n@@ -0,0 +1 @@\n+smoke\n"
+  }
+]

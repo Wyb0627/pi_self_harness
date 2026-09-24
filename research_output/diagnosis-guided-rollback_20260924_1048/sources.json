@@ -1,0 +1,58 @@
+{
+  "sources": [
+    {
+      "url": "https://arxiv.org/html/2608.29228",
+      "title": "Localizing Emergent Failures in Agentic AI",
+      "priority": "P1-paper",
+      "added_at": "2026-09-24"
+    },
+    {
+      "url": "https://arxiv.org/html/2605.17439",
+      "title": "DiagEval",
+      "priority": "P1-paper",
+      "added_at": "2026-09-24"
+    },
+    {
+      "url": "https://arxiv.org/html/2604.25850v3",
+      "title": "Agentic Harness Engineering",
+      "priority": "P1-paper",
+      "added_at": "2026-09-24"
+    },
+    {
+      "url": "https://arxiv.org/html/2603.29109v1",
+      "title": "SemLoc",
+      "priority": "P1-paper",
+      "added_at": "2026-09-24"
+    },
+    {
+      "url": "https://arxiv.org/html/2511.18854",
+      "title": "Time Travel: LLM-Assisted Semantic Behavior Localization with Git Bisect",
+      "priority": "P1-paper",
+      "added_at": "2026-09-24"
+    },
+    {
+      "url": "https://arxiv.org/html/2605.25338",
+      "title": "CausalFlow",
+      "priority": "P1-paper",
+      "added_at": "2026-09-24"
+    },
+    {
+      "url": "https://arxiv.org/html/2601.10657v1",
+      "title": "PACEvolve",
+      "priority": "P1-paper",
+      "added_at": "2026-09-24"
+    },
+    {
+      "url": "https://arxiv.org/html/2505.22954",
+      "title": "Darwin Godel Machine",
+      "priority": "P1-paper",
+      "added_at": "2026-09-24"
+    },
+    {
+      "url": "https://github.com/earendil-works/pi",
+      "title": "pi coding agent repository and extension API",
+      "priority": "P1-project",
+      "added_at": "2026-09-24"
+    }
+  ]
+}

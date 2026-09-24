@@ -1,0 +1,43 @@
+{
+  "iteration": 3,
+  "max_iterations": 5,
+  "original_query": "Find a precise, low-cost rollback method that can beat DGM and original Pi on a fair DGM-data benchmark.",
+  "subproblems": [
+    {
+      "id": 1,
+      "title": "Establish an identifiable same-task, same-model, same-budget benchmark",
+      "status": "completed",
+      "sources": 3
+    },
+    {
+      "id": 2,
+      "title": "Find a method that reduces evaluated-node count while preserving task performance",
+      "status": "completed",
+      "sources": 5
+    },
+    {
+      "id": 3,
+      "title": "Implement staged Pi, DGM-style, and CLM experiments",
+      "status": "processing",
+      "sources": 7
+    }
+  ],
+  "has_new_concepts": false,
+  "enough_evidence": false,
+  "selected_method": "Repair-First Causal Lineage Minimization",
+  "status": "development_pilot_complete_confirmatory_pending",
+  "blocker": "A matched multi-seed DGM-style evolution arm and the untouched 140-task holdout have not been run. Repair output-token accounting is also unreliable because the gateway exceeded the requested max_tokens value.",
+  "completed_evidence": {
+    "synthetic_settings_passed": "7/7",
+    "plugin_tests": "15/15",
+    "python_tests": "29/29",
+    "plugin_check": "passed",
+    "root_check": "blocked by existing model-catalog unknown/never type errors outside RF-CLM files",
+    "docker_environment": "8 CPU, 16 GiB RAM, 120 GiB Docker data disk",
+    "endpoint_smoke": "3/3 completed with expected 0/3 resolved for inert patches",
+    "dgm_small_original_pi": "5/10 resolved",
+    "dgm_small_released_dgm_best": "4/10 resolved",
+    "dgm_small_rf_clm": "8/10 resolved; all 3/3 selected repair candidates passed the official grader"
+  },
+  "endpoint_claim": "development quality supported; matched full quality and low-cost claims unverified"
+}

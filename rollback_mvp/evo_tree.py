@@ -16,8 +16,11 @@ the two nodes' submitted-task sets, otherwise a task the descendant never ran
 looks like a regression.
 """
 
+from __future__ import annotations
+
 import json
 import os
+from glob import glob
 from dataclasses import dataclass, field
 
 from config import DGM_SWE_ROOT
@@ -43,6 +46,7 @@ class EvoNode:
     entry: str | None  # mutation label, e.g. "solve_stochasticity"
     accuracy: float | None  # accuracy_score on this node's submitted subset
     resolved: set[str] = field(default_factory=set)
+    errors: set[str] = field(default_factory=set)
     submitted: set[str] = field(default_factory=set)  # resolved|unresolved|emptypatch
     dir_path: str = ""
     mutation_intent: str = ""  # the "# To Implement" section from problem_statement
@@ -84,15 +88,20 @@ class EvoTree:
                 meta = json.load(f)
             perf = meta.get("overall_performance")
             resolved: set[str] = set()
+            errors: set[str] = set()
             submitted: set[str] = set()
             accuracy: float | None = None
             if perf:
                 resolved = set(perf.get("total_resolved_ids", []))
+                errors = _load_error_ids(node_dir, perf)
                 submitted = (
                     resolved
                     | set(perf.get("total_unresolved_ids", []))
                     | set(perf.get("total_emptypatch_ids", []))
+                    | errors
                 )
+                if len(submitted) < perf.get("total_submitted_instances", 0):
+                    submitted |= _load_prediction_ids(node_dir)
                 accuracy = perf.get("accuracy_score")
             nodes[name] = EvoNode(
                 id=name,
@@ -100,6 +109,7 @@ class EvoTree:
                 entry=meta.get("entry"),
                 accuracy=accuracy,
                 resolved=resolved,
+                errors=errors,
                 submitted=submitted,
                 dir_path=node_dir,
                 mutation_intent=_extract_intent(meta.get("problem_statement", "")),
@@ -149,6 +159,23 @@ class EvoTree:
                 vals.append(acc)
         return max(vals) if vals else None
 
+    def accuracy_on_tasks(self, nid: str, tasks: set[str]) -> float:
+        """Accuracy on a fixed task set shared by all compared nodes."""
+        node = self.nodes[nid]
+        if not tasks:
+            raise ValueError("Cannot score an empty task set.")
+        if not tasks.issubset(node.submitted):
+            raise ValueError(f"{nid} was not evaluated on every requested task.")
+        return sum(task in node.resolved for task in tasks) / len(tasks)
+
+    def subtree_best_accuracy_on_tasks(
+        self,
+        nid: str,
+        tasks: set[str],
+    ) -> float:
+        nodes = [nid, *self.scored_descendants(nid)]
+        return max(self.accuracy_on_tasks(node, tasks) for node in nodes)
+
     # --- fair per-task comparison (subset intersection) ---
 
     def comparable_tasks(self, a: str, b: str) -> set[str]:
@@ -170,3 +197,24 @@ class EvoTree:
             if len(scored_kids) >= min_scored_children:
                 forks.append((parent, scored_kids))
         return forks
+
+
+def _load_error_ids(node_dir: str, performance: dict) -> set[str]:
+    error_ids: set[str] = set()
+    for filename in performance.get("files", []):
+        path = os.path.join(node_dir, filename)
+        if not os.path.isfile(path):
+            continue
+        with open(path) as f:
+            result = json.load(f)
+        error_ids.update(result.get("error_ids", []))
+    return error_ids
+
+
+def _load_prediction_ids(node_dir: str) -> set[str]:
+    paths = glob(os.path.join(node_dir, "predictions", "*", "*.json"))
+    return {
+        os.path.splitext(os.path.basename(path))[0]
+        for path in paths
+        if os.path.basename(path) != "all_preds.jsonl"
+    }

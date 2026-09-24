@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "instanceId": "django__django-13279",
+  "modelProvider": "rollback-deepseek",
+  "modelId": "byteplus/deepseek-v4-flash-ga",
+  "startedAt": "2026-09-24T07:26:41.177Z",
+  "completedAt": "2026-09-24T07:28:31.309Z",
+  "durationMs": 110132,
+  "inputTokens": 41388,
+  "outputTokens": 14292,
+  "cacheReadTokens": 490752,
+  "cacheWriteTokens": 0,
+  "toolCalls": 30,
+  "maxOutputTokens": 65536,
+  "maxTotalTokens": 512000,
+  "budgetAborted": true,
+  "timeoutAborted": false,
+  "providerError": "This operation was aborted",
+  "patch": "diff --git a/django/contrib/sessions/backends/base.py b/django/contrib/sessions/backends/base.py\nindex b545316..35d3494 100644\n--- a/django/contrib/sessions/backends/base.py\n+++ b/django/contrib/sessions/backends/base.py\n@@ -106,8 +106,16 @@ class SessionBase:\n         key_salt = \"django.contrib.sessions\" + self.__class__.__name__\n         return salted_hmac(key_salt, value).hexdigest()\n \n+    def _legacy_encode(self, session_dict):\n+        # RemovedInDjango40Warning: pre-Django 3.1 format will be invalid.\n+        serialized = self.serializer().dumps(session_dict)\n+        hash = self._hash(serialized)\n+        return base64.b64encode(hash.encode() + b':' + serialized).decode('ascii')\n+\n     def encode(self, session_dict):\n         \"Return the given session dictionary serialized and encoded as a string.\"\n+        if settings.DEFAULT_HASHING_ALGORITHM == 'sha1':\n+            return self._legacy_encode(session_dict)\n         return signing.dumps(\n             session_dict, salt=self.key_salt, serializer=self.serializer,\n             compress=True,\n",
+  "fullPatch": "diff --git a/django/contrib/sessions/backends/base.py b/django/contrib/sessions/backends/base.py\nindex b545316..35d3494 100644\n--- a/django/contrib/sessions/backends/base.py\n+++ b/django/contrib/sessions/backends/base.py\n@@ -106,8 +106,16 @@ class SessionBase:\n         key_salt = \"django.contrib.sessions\" + self.__class__.__name__\n         return salted_hmac(key_salt, value).hexdigest()\n \n+    def _legacy_encode(self, session_dict):\n+        # RemovedInDjango40Warning: pre-Django 3.1 format will be invalid.\n+        serialized = self.serializer().dumps(session_dict)\n+        hash = self._hash(serialized)\n+        return base64.b64encode(hash.encode() + b':' + serialized).decode('ascii')\n+\n     def encode(self, session_dict):\n         \"Return the given session dictionary serialized and encoded as a string.\"\n+        if settings.DEFAULT_HASHING_ALGORITHM == 'sha1':\n+            return self._legacy_encode(session_dict)\n         return signing.dumps(\n             session_dict, salt=self.key_salt, serializer=self.serializer,\n             compress=True,\n"
+}

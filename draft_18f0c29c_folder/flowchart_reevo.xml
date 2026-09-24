@@ -1,0 +1,27 @@
+<h2 seq="auto">主实验流程图（真跑再进化，仅复用前缀）</h2>
+<p>与 3.4 的离线版本对照：离线版只在 DGM 已跑过的孩子里做决策、零新轨迹；下面这个主实验版本会真跑再进化，从岔点往后的新节点必须付费，只有共享祖先前缀与 DGM 整棵树的缓存分免费继承。同一套配色。</p>
+<whiteboard type="mermaid">
+flowchart TD
+  A["继承 DGM 整棵进化树 + 缓存分<br/>约 83 节点，分数全部现成<br/>〔DGM 原有 · 免费继承 · 不耗 token〕"] --> D["再进化：从当前节点提议新改动 self-modify<br/>〔我们新加 · 全新节点 · 消耗 token 💰〕"]
+  D --> E["评测新节点：真跑受影响任务（staging 分级）<br/>〔我们新加 · 真跑 · 成本大头 💰〕"]
+  E --> G{"出现回归 / 失败？<br/>〔我们新加〕"}
+  G -->|是| B["诊断式回退：attribution 定位 → 选祖先 B<br/>复用 initial→B 缓存前缀（免费）<br/>〔LLM 决策 · 少量 token 💰〕"]
+  B --> F["回退剪枝：有毒子树降权 / 剪掉，少生成 M<br/>〔我们新加 · 省钱主力 · 不耗 token〕"]
+  F --> D
+  G -->|否| T{"达到目标分数？<br/>〔我们新加〕"}
+  T -->|否| D
+  T -->|是| H["汇总：达标总评测成本 C_total<br/>〔我们新加 · 不耗 token〕"]
+
+  subgraph 图例
+    L1["DGM 原有 / 免费继承<br/>（不耗 token）"]
+    L2["我们新加<br/>（不耗 token）"]
+    L3["我们新加 · 消耗 token 💰"]
+  end
+
+  classDef dgm fill:#dbeafe,stroke:#3b82f6,color:#1e3a5f;
+  classDef ours fill:#dcfce7,stroke:#16a34a,color:#14532d;
+  classDef token fill:#fed7aa,stroke:#ea580c,color:#7c2d12,stroke-width:3px;
+  class A,L1 dgm;
+  class G,F,T,H,L2 ours;
+  class D,E,B,L3 token;
+</whiteboard>

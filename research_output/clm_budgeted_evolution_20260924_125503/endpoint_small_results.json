@@ -1,0 +1,172 @@
+{
+  "schema_version": 1,
+  "scope": "DGM official 10-task small development subset",
+  "task_ids": [
+    "django__django-10973",
+    "django__django-11066",
+    "django__django-12754",
+    "django__django-15930",
+    "django__django-13279",
+    "django__django-16661",
+    "django__django-13346",
+    "django__django-10880",
+    "django__django-10999",
+    "django__django-11087"
+  ],
+  "task_results": {
+    "django__django-10973": {
+      "dgm_initial": true,
+      "dgm_best": true,
+      "original_pi": true,
+      "rf_clm": true,
+      "repair_attempted": false
+    },
+    "django__django-11066": {
+      "dgm_initial": true,
+      "dgm_best": true,
+      "original_pi": true,
+      "rf_clm": true,
+      "repair_attempted": false
+    },
+    "django__django-12754": {
+      "dgm_initial": false,
+      "dgm_best": false,
+      "original_pi": true,
+      "rf_clm": true,
+      "repair_attempted": false
+    },
+    "django__django-15930": {
+      "dgm_initial": true,
+      "dgm_best": true,
+      "original_pi": false,
+      "rf_clm": true,
+      "repair_attempted": true
+    },
+    "django__django-13279": {
+      "dgm_initial": false,
+      "dgm_best": false,
+      "original_pi": true,
+      "rf_clm": true,
+      "repair_attempted": false
+    },
+    "django__django-16661": {
+      "dgm_initial": false,
+      "dgm_best": false,
+      "original_pi": false,
+      "rf_clm": false,
+      "repair_attempted": false
+    },
+    "django__django-13346": {
+      "dgm_initial": false,
+      "dgm_best": false,
+      "original_pi": false,
+      "rf_clm": true,
+      "repair_attempted": true
+    },
+    "django__django-10880": {
+      "dgm_initial": false,
+      "dgm_best": true,
+      "original_pi": true,
+      "rf_clm": true,
+      "repair_attempted": false
+    },
+    "django__django-10999": {
+      "dgm_initial": false,
+      "dgm_best": false,
+      "original_pi": false,
+      "rf_clm": true,
+      "repair_attempted": true
+    },
+    "django__django-11087": {
+      "dgm_initial": false,
+      "dgm_best": false,
+      "original_pi": false,
+      "rf_clm": false,
+      "repair_attempted": false
+    }
+  },
+  "systems": {
+    "dgm_initial_released": {
+      "resolved": 3,
+      "total": 10,
+      "solve_rate": 0.3,
+      "resolved_ids": [
+        "django__django-10973",
+        "django__django-11066",
+        "django__django-15930"
+      ]
+    },
+    "dgm_best_released": {
+      "node_id": "20250402_233611_093918",
+      "resolved": 4,
+      "total": 10,
+      "solve_rate": 0.4,
+      "resolved_ids": [
+        "django__django-10973",
+        "django__django-11066",
+        "django__django-15930",
+        "django__django-10880"
+      ]
+    },
+    "original_pi_isolated": {
+      "package": "@earendil-works/pi-coding-agent@0.85.1",
+      "model": "byteplus/deepseek-v4-flash-ga",
+      "resolved": 5,
+      "total": 10,
+      "solve_rate": 0.5,
+      "resolved_ids": [
+        "django__django-10973",
+        "django__django-11066",
+        "django__django-12754",
+        "django__django-13279",
+        "django__django-10880"
+      ],
+      "input_tokens": 300665,
+      "output_tokens": 116161,
+      "cache_read_tokens": 3025408,
+      "cache_write_tokens": 0,
+      "total_reported_tokens": 3442234,
+      "tool_calls": 214,
+      "wall_seconds": 898.908,
+      "budget_aborted_tasks": 6
+    },
+    "rf_clm_recovery": {
+      "base": "original_pi_isolated",
+      "method": "one-call repair-first causal slice with executable validation",
+      "repair_attempts": 3,
+      "repair_successes": 3,
+      "repaired_ids": [
+        "django__django-13346",
+        "django__django-15930",
+        "django__django-10999"
+      ],
+      "resolved": 8,
+      "total": 10,
+      "solve_rate": 0.8,
+      "repair_input_tokens": 24084,
+      "repair_output_tokens": 113307,
+      "repair_total_reported_tokens": 137391,
+      "repair_wall_seconds": 590.609,
+      "combined_total_reported_tokens": 3579625,
+      "repair_overhead_vs_all_pi_tokens": 0.0399,
+      "repair_overhead_vs_selected_pi_tasks": 0.1253
+    }
+  },
+  "quality_deltas": {
+    "rf_clm_minus_original_pi": 0.3,
+    "rf_clm_minus_dgm_best_released": 0.4,
+    "rf_clm_minus_dgm_initial_released": 0.5
+  },
+  "validity": {
+    "official_swebench_grader": true,
+    "future_git_history_available_to_pi": false,
+    "external_network_available_to_pi": false,
+    "same_tasks": true,
+    "same_model_for_original_pi_and_rf_clm": true,
+    "same_model_and_agent_for_released_dgm": false,
+    "confirmatory_multi_seed_run": false,
+    "held_out_140_task_evaluation": false,
+    "endpoint_low_cost_claim": false,
+    "note": "This supports a DGM-small development-set quality result, not a matched full DGM evolution or held-out benchmark claim. The gateway also reported 20K-52K output tokens per repair despite an 8192 max_tokens request."
+  }
+}

@@ -1,0 +1,1345 @@
+{
+  "schema_version": 1,
+  "preregistration": {
+    "hypothesis": "On monotone delayed regressions, CLM exact rollback >=0.90, repair success exceeds rollback-1 and the score-only DGM proxy, and mean probes do not exceed linear scan.",
+    "kill_criterion": "Kill if exact <0.90, repair success does not exceed either baseline, or mean probes exceed linear scan."
+  },
+  "scope": "Offline failure-recovery benchmark over logged DGM trajectories. It does not estimate counterfactual generated-agent performance.",
+  "endpoint_comparison": {
+    "canonical_tasks": 60,
+    "systems": {
+      "dgm-initial-agent": {
+        "node_id": "initial",
+        "raw_accuracy": 0.2,
+        "fixed_d60_accuracy": 0.2
+      },
+      "dgm": {
+        "node_id": "20250402_233611_093918",
+        "raw_accuracy": 0.5,
+        "fixed_d60_accuracy": 0.5,
+        "missing_d60_tasks": 0
+      },
+      "no-open-ended": {
+        "node_id": "20250419_072917_573516",
+        "raw_accuracy": 0.23333333333333334,
+        "fixed_d60_accuracy": 0.23333333333333334,
+        "missing_d60_tasks": 0
+      },
+      "no-self-improve": {
+        "node_id": "20250409_222922_900063",
+        "raw_accuracy": 0.3898305084745763,
+        "fixed_d60_accuracy": 0.38333333333333336,
+        "missing_d60_tasks": 1
+      }
+    },
+    "note": "The DGM initial agent is not the pi repository's current agent. No released original-pi predictions exist on these tasks. Missing canonical tasks are counted as failures."
+  },
+  "census": {
+    "all_failure_episodes": 69,
+    "unique_tasks": 9,
+    "unique_leaves": 22,
+    "monotone": 56,
+    "non_monotone": 13,
+    "delayed_monotone": 41,
+    "delayed_unique_tasks": 6,
+    "delayed_unique_leaves": 18,
+    "mean_scored_states_delayed": 4.5366
+  },
+  "selection": {
+    "seed": 20260924,
+    "max_episodes": 12,
+    "episode_ids": [
+      "20250402_005204_335241:django__django-15930",
+      "20250329_104654_602457:django__django-11964",
+      "20250329_104654_602457:django__django-15930",
+      "20250404_063906_626966:sphinx-doc__sphinx-10449",
+      "20250327_193700_187162:django__django-10973",
+      "20250402_121108_002158:django__django-15930",
+      "20250328_113705_938015:django__django-15930",
+      "20250330_110348_637680:django__django-15930",
+      "20250428_024446_061467:sphinx-doc__sphinx-10449",
+      "20250428_024446_061467:django__django-15930",
+      "20250327_193141_970605:django__django-15930",
+      "20250331_131622_337643:django__django-11964"
+    ],
+    "unique_tasks": 4,
+    "unique_leaves": 10
+  },
+  "episodes": [
+    {
+      "id": "20250402_005204_335241:django__django-15930",
+      "task_id": "django__django-15930",
+      "leaf_id": "20250402_005204_335241",
+      "nodes": [
+        "initial",
+        "20250327_084619_293670",
+        "20250327_230053_522024",
+        "20250328_043621_592702",
+        "20250330_040956_487852",
+        "20250402_005204_335241"
+      ],
+      "outcomes": [
+        true,
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "scores": [
+        0.20689655172413793,
+        0.1724137931034483,
+        0.22413793103448276,
+        0.41379310344827586,
+        0.3448275862068966,
+        0.3103448275862069
+      ],
+      "first_bad_index": 1
+    },
+    {
+      "id": "20250329_104654_602457:django__django-11964",
+      "task_id": "django__django-11964",
+      "leaf_id": "20250329_104654_602457",
+      "nodes": [
+        "initial",
+        "20250327_044512_401971",
+        "20250327_162845_831928",
+        "20250329_104654_602457"
+      ],
+      "outcomes": [
+        true,
+        false,
+        false,
+        false
+      ],
+      "scores": [
+        0.2033898305084746,
+        0.2542372881355932,
+        0.1694915254237288,
+        0.3050847457627119
+      ],
+      "first_bad_index": 1
+    },
+    {
+      "id": "20250329_104654_602457:django__django-15930",
+      "task_id": "django__django-15930",
+      "leaf_id": "20250329_104654_602457",
+      "nodes": [
+        "initial",
+        "20250327_044512_401971",
+        "20250327_162845_831928",
+        "20250329_104654_602457"
+      ],
+      "outcomes": [
+        true,
+        false,
+        false,
+        false
+      ],
+      "scores": [
+        0.2033898305084746,
+        0.2542372881355932,
+        0.1694915254237288,
+        0.3050847457627119
+      ],
+      "first_bad_index": 1
+    },
+    {
+      "id": "20250404_063906_626966:sphinx-doc__sphinx-10449",
+      "task_id": "sphinx-doc__sphinx-10449",
+      "leaf_id": "20250404_063906_626966",
+      "nodes": [
+        "initial",
+        "20250327_084619_293670",
+        "20250327_230053_522024",
+        "20250328_043621_592702",
+        "20250401_214239_643967",
+        "20250404_063906_626966"
+      ],
+      "outcomes": [
+        true,
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "scores": [
+        0.2033898305084746,
+        0.1694915254237288,
+        0.22033898305084745,
+        0.423728813559322,
+        0.3898305084745763,
+        0.423728813559322
+      ],
+      "first_bad_index": 1
+    },
+    {
+      "id": "20250327_193700_187162:django__django-10973",
+      "task_id": "django__django-10973",
+      "leaf_id": "20250327_193700_187162",
+      "nodes": [
+        "initial",
+        "20250327_044512_401971",
+        "20250327_162845_831928",
+        "20250327_193700_187162"
+      ],
+      "outcomes": [
+        true,
+        true,
+        false,
+        false
+      ],
+      "scores": [
+        0.3,
+        0.3,
+        0.2,
+        0.0
+      ],
+      "first_bad_index": 2
+    },
+    {
+      "id": "20250402_121108_002158:django__django-15930",
+      "task_id": "django__django-15930",
+      "leaf_id": "20250402_121108_002158",
+      "nodes": [
+        "initial",
+        "20250327_141021_286218",
+        "20250328_014441_399142",
+        "20250402_121108_002158"
+      ],
+      "outcomes": [
+        true,
+        false,
+        false,
+        false
+      ],
+      "scores": [
+        0.2,
+        0.15,
+        0.2833333333333333,
+        0.26666666666666666
+      ],
+      "first_bad_index": 1
+    },
+    {
+      "id": "20250328_113705_938015:django__django-15930",
+      "task_id": "django__django-15930",
+      "leaf_id": "20250328_113705_938015",
+      "nodes": [
+        "initial",
+        "20250327_044512_401971",
+        "20250328_113705_938015"
+      ],
+      "outcomes": [
+        true,
+        false,
+        false
+      ],
+      "scores": [
+        0.20689655172413793,
+        0.25862068965517243,
+        0.29310344827586204
+      ],
+      "first_bad_index": 1
+    },
+    {
+      "id": "20250330_110348_637680:django__django-15930",
+      "task_id": "django__django-15930",
+      "leaf_id": "20250330_110348_637680",
+      "nodes": [
+        "initial",
+        "20250327_084619_287593",
+        "20250330_110348_637680"
+      ],
+      "outcomes": [
+        true,
+        false,
+        false
+      ],
+      "scores": [
+        0.2,
+        0.2,
+        0.18333333333333332
+      ],
+      "first_bad_index": 1
+    },
+    {
+      "id": "20250428_024446_061467:sphinx-doc__sphinx-10449",
+      "task_id": "sphinx-doc__sphinx-10449",
+      "leaf_id": "20250428_024446_061467",
+      "nodes": [
+        "initial",
+        "20250327_084619_293670",
+        "20250327_230053_522024",
+        "20250328_043621_592702",
+        "20250330_040956_487852",
+        "20250330_142644_312864",
+        "20250428_024446_061467"
+      ],
+      "outcomes": [
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "scores": [
+        0.21052631578947367,
+        0.17543859649122806,
+        0.22807017543859648,
+        0.42105263157894735,
+        0.3508771929824561,
+        0.38596491228070173,
+        0.3333333333333333
+      ],
+      "first_bad_index": 1
+    },
+    {
+      "id": "20250428_024446_061467:django__django-15930",
+      "task_id": "django__django-15930",
+      "leaf_id": "20250428_024446_061467",
+      "nodes": [
+        "initial",
+        "20250327_084619_293670",
+        "20250327_230053_522024",
+        "20250328_043621_592702",
+        "20250330_040956_487852",
+        "20250330_142644_312864",
+        "20250428_024446_061467"
+      ],
+      "outcomes": [
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "scores": [
+        0.21052631578947367,
+        0.17543859649122806,
+        0.22807017543859648,
+        0.42105263157894735,
+        0.3508771929824561,
+        0.38596491228070173,
+        0.3333333333333333
+      ],
+      "first_bad_index": 1
+    },
+    {
+      "id": "20250327_193141_970605:django__django-15930",
+      "task_id": "django__django-15930",
+      "leaf_id": "20250327_193141_970605",
+      "nodes": [
+        "initial",
+        "20250327_084619_293670",
+        "20250327_193141_970605"
+      ],
+      "outcomes": [
+        true,
+        false,
+        false
+      ],
+      "scores": [
+        0.3,
+        0.3,
+        0.0
+      ],
+      "first_bad_index": 1
+    },
+    {
+      "id": "20250331_131622_337643:django__django-11964",
+      "task_id": "django__django-11964",
+      "leaf_id": "20250331_131622_337643",
+      "nodes": [
+        "initial",
+        "20250327_141021_286218",
+        "20250328_014441_399142",
+        "20250331_131622_337643"
+      ],
+      "outcomes": [
+        true,
+        false,
+        false,
+        false
+      ],
+      "scores": [
+        0.2,
+        0.15,
+        0.2833333333333333,
+        0.3
+      ],
+      "first_bad_index": 1
+    }
+  ],
+  "baselines": {
+    "binary": {
+      "n": 12,
+      "exact": 1,
+      "repair_success": 1,
+      "mean_probe_calls": 1.4167,
+      "fallback_rate": 0
+    },
+    "dgm-score-proxy": {
+      "n": 12,
+      "exact": 0.0833,
+      "repair_success": 0.0833,
+      "mean_probe_calls": 0,
+      "fallback_rate": 0
+    },
+    "linear": {
+      "n": 12,
+      "exact": 1,
+      "repair_success": 1,
+      "mean_probe_calls": 1.0833,
+      "fallback_rate": 0
+    },
+    "no-rollback": {
+      "n": 12,
+      "exact": 0,
+      "repair_success": 0,
+      "mean_probe_calls": 0,
+      "fallback_rate": 0
+    },
+    "rollback-1": {
+      "n": 12,
+      "exact": 0,
+      "repair_success": 0,
+      "mean_probe_calls": 0,
+      "fallback_rate": 0
+    }
+  },
+  "baseline_decisions": [
+    {
+      "method": "no-rollback",
+      "selected_node": "20250402_005204_335241",
+      "selected_edge": "20250402_005204_335241",
+      "exact": false,
+      "repairs": false,
+      "probe_calls": 0,
+      "used_fallback": false
+    },
+    {
+      "method": "rollback-1",
+      "selected_node": "20250330_040956_487852",
+      "selected_edge": "20250402_005204_335241",
+      "exact": false,
+      "repairs": false,
+      "probe_calls": 0,
+      "used_fallback": false
+    },
+    {
+      "method": "dgm-score-proxy",
+      "selected_node": "20250328_043621_592702",
+      "selected_edge": "20250330_040956_487852",
+      "exact": false,
+      "repairs": false,
+      "probe_calls": 0,
+      "used_fallback": false
+    },
+    {
+      "method": "linear",
+      "selected_node": "initial",
+      "selected_edge": "20250327_084619_293670",
+      "exact": true,
+      "repairs": true,
+      "probe_calls": 1,
+      "used_fallback": false
+    },
+    {
+      "method": "binary",
+      "selected_node": "initial",
+      "selected_edge": "20250327_084619_293670",
+      "exact": true,
+      "repairs": true,
+      "probe_calls": 2,
+      "used_fallback": false
+    },
+    {
+      "method": "no-rollback",
+      "selected_node": "20250329_104654_602457",
+      "selected_edge": "20250329_104654_602457",
+      "exact": false,
+      "repairs": false,
+      "probe_calls": 0,
+      "used_fallback": false
+    },
+    {
+      "method": "rollback-1",
+      "selected_node": "20250327_162845_831928",
+      "selected_edge": "20250329_104654_602457",
+      "exact": false,
+      "repairs": false,
+      "probe_calls": 0,
+      "used_fallback": false
+    },
+    {
+      "method": "dgm-score-proxy",
+      "selected_node": "20250327_044512_401971",
+      "selected_edge": "20250327_162845_831928",
+      "exact": false,
+      "repairs": false,
+      "probe_calls": 0,
+      "used_fallback": false
+    },
+    {
+      "method": "linear",
+      "selected_node": "initial",
+      "selected_edge": "20250327_044512_401971",
+      "exact": true,
+      "repairs": true,
+      "probe_calls": 1,
+      "used_fallback": false
+    },
+    {
+      "method": "binary",
+      "selected_node": "initial",
+      "selected_edge": "20250327_044512_401971",
+      "exact": true,
+      "repairs": true,
+      "probe_calls": 1,
+      "used_fallback": false
+    },
+    {
+      "method": "no-rollback",
+      "selected_node": "20250329_104654_602457",
+      "selected_edge": "20250329_104654_602457",
+      "exact": false,
+      "repairs": false,
+      "probe_calls": 0,
+      "used_fallback": false
+    },
+    {
+      "method": "rollback-1",
+      "selected_node": "20250327_162845_831928",
+      "selected_edge": "20250329_104654_602457",
+      "exact": false,
+      "repairs": false,
+      "probe_calls": 0,
+      "used_fallback": false
+    },
+    {
+      "method": "dgm-score-proxy",
+      "selected_node": "20250327_044512_401971",
+      "selected_edge": "20250327_162845_831928",
+      "exact": false,
+      "repairs": false,
+      "probe_calls": 0,
+      "used_fallback": false
+    },
+    {
+      "method": "linear",
+      "selected_node": "initial",
+      "selected_edge": "20250327_044512_401971",
+      "exact": true,
+      "repairs": true,
+      "probe_calls": 1,
+      "used_fallback": false
+    },
+    {
+      "method": "binary",
+      "selected_node": "initial",
+      "selected_edge": "20250327_044512_401971",
+      "exact": true,
+      "repairs": true,
+      "probe_calls": 1,
+      "used_fallback": false
+    },
+    {
+      "method": "no-rollback",
+      "selected_node": "20250404_063906_626966",
+      "selected_edge": "20250404_063906_626966",
+      "exact": false,
+      "repairs": false,
+      "probe_calls": 0,
+      "used_fallback": false
+    },
+    {
+      "method": "rollback-1",
+      "selected_node": "20250401_214239_643967",
+      "selected_edge": "20250404_063906_626966",
+      "exact": false,
+      "repairs": false,
+      "probe_calls": 0,
+      "used_fallback": false
+    },
+    {
+      "method": "dgm-score-proxy",
+      "selected_node": "20250328_043621_592702",
+      "selected_edge": "20250401_214239_643967",
+      "exact": false,
+      "repairs": false,
+      "probe_calls": 0,
+      "used_fallback": false
+    },
+    {
+      "method": "linear",
+      "selected_node": "initial",
+      "selected_edge": "20250327_084619_293670",
+      "exact": true,
+      "repairs": true,
+      "probe_calls": 1,
+      "used_fallback": false
+    },
+    {
+      "method": "binary",
+      "selected_node": "initial",
+      "selected_edge": "20250327_084619_293670",
+      "exact": true,
+      "repairs": true,
+      "probe_calls": 2,
+      "used_fallback": false
+    },
+    {
+      "method": "no-rollback",
+      "selected_node": "20250327_193700_187162",
+      "selected_edge": "20250327_193700_187162",
+      "exact": false,
+      "repairs": false,
+      "probe_calls": 0,
+      "used_fallback": false
+    },
+    {
+      "method": "rollback-1",
+      "selected_node": "20250327_162845_831928",
+      "selected_edge": "20250327_193700_187162",
+      "exact": false,
+      "repairs": false,
+      "probe_calls": 0,
+      "used_fallback": false
+    },
+    {
+      "method": "dgm-score-proxy",
+      "selected_node": "20250327_044512_401971",
+      "selected_edge": "20250327_162845_831928",
+      "exact": true,
+      "repairs": true,
+      "probe_calls": 0,
+      "used_fallback": false
+    },
+    {
+      "method": "linear",
+      "selected_node": "20250327_044512_401971",
+      "selected_edge": "20250327_162845_831928",
+      "exact": true,
+      "repairs": true,
+      "probe_calls": 2,
+      "used_fallback": false
+    },
+    {
+      "method": "binary",
+      "selected_node": "20250327_044512_401971",
+      "selected_edge": "20250327_162845_831928",
+      "exact": true,
+      "repairs": true,
+      "probe_calls": 2,
+      "used_fallback": false
+    },
+    {
+      "method": "no-rollback",
+      "selected_node": "20250402_121108_002158",
+      "selected_edge": "20250402_121108_002158",
+      "exact": false,
+      "repairs": false,
+      "probe_calls": 0,
+      "used_fallback": false
+    },
+    {
+      "method": "rollback-1",
+      "selected_node": "20250328_014441_399142",
+      "selected_edge": "20250402_121108_002158",
+      "exact": false,
+      "repairs": false,
+      "probe_calls": 0,
+      "used_fallback": false
+    },
+    {
+      "method": "dgm-score-proxy",
+      "selected_node": "20250328_014441_399142",
+      "selected_edge": "20250402_121108_002158",
+      "exact": false,
+      "repairs": false,
+      "probe_calls": 0,
+      "used_fallback": false
+    },
+    {
+      "method": "linear",
+      "selected_node": "initial",
+      "selected_edge": "20250327_141021_286218",
+      "exact": true,
+      "repairs": true,
+      "probe_calls": 1,
+      "used_fallback": false
+    },
+    {
+      "method": "binary",
+      "selected_node": "initial",
+      "selected_edge": "20250327_141021_286218",
+      "exact": true,
+      "repairs": true,
+      "probe_calls": 1,
+      "used_fallback": false
+    },
+    {
+      "method": "no-rollback",
+      "selected_node": "20250328_113705_938015",
+      "selected_edge": "20250328_113705_938015",
+      "exact": false,
+      "repairs": false,
+      "probe_calls": 0,
+      "used_fallback": false
+    },
+    {
+      "method": "rollback-1",
+      "selected_node": "20250327_044512_401971",
+      "selected_edge": "20250328_113705_938015",
+      "exact": false,
+      "repairs": false,
+      "probe_calls": 0,
+      "used_fallback": false
+    },
+    {
+      "method": "dgm-score-proxy",
+      "selected_node": "20250327_044512_401971",
+      "selected_edge": "20250328_113705_938015",
+      "exact": false,
+      "repairs": false,
+      "probe_calls": 0,
+      "used_fallback": false
+    },
+    {
+      "method": "linear",
+      "selected_node": "initial",
+      "selected_edge": "20250327_044512_401971",
+      "exact": true,
+      "repairs": true,
+      "probe_calls": 1,
+      "used_fallback": false
+    },
+    {
+      "method": "binary",
+      "selected_node": "initial",
+      "selected_edge": "20250327_044512_401971",
+      "exact": true,
+      "repairs": true,
+      "probe_calls": 1,
+      "used_fallback": false
+    },
+    {
+      "method": "no-rollback",
+      "selected_node": "20250330_110348_637680",
+      "selected_edge": "20250330_110348_637680",
+      "exact": false,
+      "repairs": false,
+      "probe_calls": 0,
+      "used_fallback": false
+    },
+    {
+      "method": "rollback-1",
+      "selected_node": "20250327_084619_287593",
+      "selected_edge": "20250330_110348_637680",
+      "exact": false,
+      "repairs": false,
+      "probe_calls": 0,
+      "used_fallback": false
+    },
+    {
+      "method": "dgm-score-proxy",
+      "selected_node": "20250327_084619_287593",
+      "selected_edge": "20250330_110348_637680",
+      "exact": false,
+      "repairs": false,
+      "probe_calls": 0,
+      "used_fallback": false
+    },
+    {
+      "method": "linear",
+      "selected_node": "initial",
+      "selected_edge": "20250327_084619_287593",
+      "exact": true,
+      "repairs": true,
+      "probe_calls": 1,
+      "used_fallback": false
+    },
+    {
+      "method": "binary",
+      "selected_node": "initial",
+      "selected_edge": "20250327_084619_287593",
+      "exact": true,
+      "repairs": true,
+      "probe_calls": 1,
+      "used_fallback": false
+    },
+    {
+      "method": "no-rollback",
+      "selected_node": "20250428_024446_061467",
+      "selected_edge": "20250428_024446_061467",
+      "exact": false,
+      "repairs": false,
+      "probe_calls": 0,
+      "used_fallback": false
+    },
+    {
+      "method": "rollback-1",
+      "selected_node": "20250330_142644_312864",
+      "selected_edge": "20250428_024446_061467",
+      "exact": false,
+      "repairs": false,
+      "probe_calls": 0,
+      "used_fallback": false
+    },
+    {
+      "method": "dgm-score-proxy",
+      "selected_node": "20250328_043621_592702",
+      "selected_edge": "20250330_040956_487852",
+      "exact": false,
+      "repairs": false,
+      "probe_calls": 0,
+      "used_fallback": false
+    },
+    {
+      "method": "linear",
+      "selected_node": "initial",
+      "selected_edge": "20250327_084619_293670",
+      "exact": true,
+      "repairs": true,
+      "probe_calls": 1,
+      "used_fallback": false
+    },
+    {
+      "method": "binary",
+      "selected_node": "initial",
+      "selected_edge": "20250327_084619_293670",
+      "exact": true,
+      "repairs": true,
+      "probe_calls": 2,
+      "used_fallback": false
+    },
+    {
+      "method": "no-rollback",
+      "selected_node": "20250428_024446_061467",
+      "selected_edge": "20250428_024446_061467",
+      "exact": false,
+      "repairs": false,
+      "probe_calls": 0,
+      "used_fallback": false
+    },
+    {
+      "method": "rollback-1",
+      "selected_node": "20250330_142644_312864",
+      "selected_edge": "20250428_024446_061467",
+      "exact": false,
+      "repairs": false,
+      "probe_calls": 0,
+      "used_fallback": false
+    },
+    {
+      "method": "dgm-score-proxy",
+      "selected_node": "20250328_043621_592702",
+      "selected_edge": "20250330_040956_487852",
+      "exact": false,
+      "repairs": false,
+      "probe_calls": 0,
+      "used_fallback": false
+    },
+    {
+      "method": "linear",
+      "selected_node": "initial",
+      "selected_edge": "20250327_084619_293670",
+      "exact": true,
+      "repairs": true,
+      "probe_calls": 1,
+      "used_fallback": false
+    },
+    {
+      "method": "binary",
+      "selected_node": "initial",
+      "selected_edge": "20250327_084619_293670",
+      "exact": true,
+      "repairs": true,
+      "probe_calls": 2,
+      "used_fallback": false
+    },
+    {
+      "method": "no-rollback",
+      "selected_node": "20250327_193141_970605",
+      "selected_edge": "20250327_193141_970605",
+      "exact": false,
+      "repairs": false,
+      "probe_calls": 0,
+      "used_fallback": false
+    },
+    {
+      "method": "rollback-1",
+      "selected_node": "20250327_084619_293670",
+      "selected_edge": "20250327_193141_970605",
+      "exact": false,
+      "repairs": false,
+      "probe_calls": 0,
+      "used_fallback": false
+    },
+    {
+      "method": "dgm-score-proxy",
+      "selected_node": "20250327_084619_293670",
+      "selected_edge": "20250327_193141_970605",
+      "exact": false,
+      "repairs": false,
+      "probe_calls": 0,
+      "used_fallback": false
+    },
+    {
+      "method": "linear",
+      "selected_node": "initial",
+      "selected_edge": "20250327_084619_293670",
+      "exact": true,
+      "repairs": true,
+      "probe_calls": 1,
+      "used_fallback": false
+    },
+    {
+      "method": "binary",
+      "selected_node": "initial",
+      "selected_edge": "20250327_084619_293670",
+      "exact": true,
+      "repairs": true,
+      "probe_calls": 1,
+      "used_fallback": false
+    },
+    {
+      "method": "no-rollback",
+      "selected_node": "20250331_131622_337643",
+      "selected_edge": "20250331_131622_337643",
+      "exact": false,
+      "repairs": false,
+      "probe_calls": 0,
+      "used_fallback": false
+    },
+    {
+      "method": "rollback-1",
+      "selected_node": "20250328_014441_399142",
+      "selected_edge": "20250331_131622_337643",
+      "exact": false,
+      "repairs": false,
+      "probe_calls": 0,
+      "used_fallback": false
+    },
+    {
+      "method": "dgm-score-proxy",
+      "selected_node": "20250328_014441_399142",
+      "selected_edge": "20250331_131622_337643",
+      "exact": false,
+      "repairs": false,
+      "probe_calls": 0,
+      "used_fallback": false
+    },
+    {
+      "method": "linear",
+      "selected_node": "initial",
+      "selected_edge": "20250327_141021_286218",
+      "exact": true,
+      "repairs": true,
+      "probe_calls": 1,
+      "used_fallback": false
+    },
+    {
+      "method": "binary",
+      "selected_node": "initial",
+      "selected_edge": "20250327_141021_286218",
+      "exact": true,
+      "repairs": true,
+      "probe_calls": 1,
+      "used_fallback": false
+    }
+  ],
+  "clm": {
+    "decisions": [
+      {
+        "method": "clm-deepseek",
+        "selected_node": "initial",
+        "selected_edge": "20250327_084619_293670",
+        "exact": true,
+        "repairs": true,
+        "probe_calls": 1,
+        "used_fallback": false
+      },
+      {
+        "method": "clm-deepseek",
+        "selected_node": "initial",
+        "selected_edge": "20250327_044512_401971",
+        "exact": true,
+        "repairs": true,
+        "probe_calls": 1,
+        "used_fallback": false
+      },
+      {
+        "method": "clm-deepseek",
+        "selected_node": "initial",
+        "selected_edge": "20250327_044512_401971",
+        "exact": true,
+        "repairs": true,
+        "probe_calls": 1,
+        "used_fallback": false
+      },
+      {
+        "method": "clm-deepseek",
+        "selected_node": "initial",
+        "selected_edge": "20250327_084619_293670",
+        "exact": true,
+        "repairs": true,
+        "probe_calls": 2,
+        "used_fallback": true
+      },
+      {
+        "method": "clm-deepseek",
+        "selected_node": "20250327_044512_401971",
+        "selected_edge": "20250327_162845_831928",
+        "exact": true,
+        "repairs": true,
+        "probe_calls": 2,
+        "used_fallback": false
+      },
+      {
+        "method": "clm-deepseek",
+        "selected_node": "initial",
+        "selected_edge": "20250327_141021_286218",
+        "exact": true,
+        "repairs": true,
+        "probe_calls": 1,
+        "used_fallback": false
+      },
+      {
+        "method": "clm-deepseek",
+        "selected_node": "initial",
+        "selected_edge": "20250327_044512_401971",
+        "exact": true,
+        "repairs": true,
+        "probe_calls": 1,
+        "used_fallback": false
+      },
+      {
+        "method": "clm-deepseek",
+        "selected_node": "initial",
+        "selected_edge": "20250327_084619_287593",
+        "exact": true,
+        "repairs": true,
+        "probe_calls": 1,
+        "used_fallback": false
+      },
+      {
+        "method": "clm-deepseek",
+        "selected_node": "initial",
+        "selected_edge": "20250327_084619_293670",
+        "exact": true,
+        "repairs": true,
+        "probe_calls": 3,
+        "used_fallback": true
+      },
+      {
+        "method": "clm-deepseek",
+        "selected_node": "initial",
+        "selected_edge": "20250327_084619_293670",
+        "exact": true,
+        "repairs": true,
+        "probe_calls": 3,
+        "used_fallback": true
+      },
+      {
+        "method": "clm-deepseek",
+        "selected_node": "initial",
+        "selected_edge": "20250327_084619_293670",
+        "exact": true,
+        "repairs": true,
+        "probe_calls": 1,
+        "used_fallback": false
+      },
+      {
+        "method": "clm-deepseek",
+        "selected_node": "initial",
+        "selected_edge": "20250327_141021_286218",
+        "exact": true,
+        "repairs": true,
+        "probe_calls": 1,
+        "used_fallback": false
+      }
+    ],
+    "summary": {
+      "clm-deepseek": {
+        "n": 12,
+        "exact": 1,
+        "repair_success": 1,
+        "mean_probe_calls": 1.5,
+        "fallback_rate": 0.25
+      }
+    },
+    "llm": {
+      "model": "byteplus/deepseek-v4-flash-ga",
+      "repeats_per_episode": 1,
+      "calls": 12,
+      "top1_accuracy": 0.3333333333333333,
+      "input_tokens": 52754,
+      "output_tokens": 181072,
+      "latency_seconds": 767.291,
+      "attempts": 12
+    }
+  },
+  "llm_runs": [
+    {
+      "episode_id": "20250402_005204_335241:django__django-15930",
+      "repeat": 1,
+      "ranking": [
+        "20250327_084619_293670",
+        "20250330_040956_487852",
+        "20250328_043621_592702",
+        "20250327_230053_522024",
+        "20250402_005204_335241"
+      ],
+      "anonymous_ranking": [
+        "e1",
+        "e4",
+        "e3",
+        "e2",
+        "e5"
+      ],
+      "top1_exact": 1,
+      "input_tokens": 5544,
+      "output_tokens": 14045,
+      "latency_seconds": 60.904353542,
+      "attempts": 1,
+      "raw_response": "{\n  \"ranked_edges\": [\"e1\", \"e4\", \"e3\", \"e2\", \"e5\"],\n  \"candidate_edges\": [\"e1\", \"e4\", \"e3\"],\n  \"reason\": \"e1 is directly implicated: the final acceptance message 'Valid patch with source file modifications' matches e1's validator return string, yet the displayed assistant output is only a user-level workaround with no apparent Django source fix. e1's shallow non-test-file check plus retry loop is the earliest mechanism that can turn a non-solving attempt into an accepted 'valid' patch. e4 is next because its history-trimming can drop the original repo-editing instruction, explaining the generic workaround answer; it would also expose the longer conversation caused by e1 retries. e3 is next because replacing 'edit' with 'str_replace' is the most disruptive editor-tool change and could hinder actual source modification. e2 and e5 are tooling changes with less direct evidence in the failed trajectory.\",\n  \"confidence\": 0.4\n}"
+    },
+    {
+      "episode_id": "20250329_104654_602457:django__django-11964",
+      "repeat": 1,
+      "ranking": [
+        "20250327_044512_401971",
+        "20250329_104654_602457",
+        "20250327_162845_831928"
+      ],
+      "anonymous_ranking": [
+        "e1",
+        "e3",
+        "e2"
+      ],
+      "top1_exact": 1,
+      "input_tokens": 3830,
+      "output_tokens": 5019,
+      "latency_seconds": 24.669252458,
+      "attempts": 1,
+      "raw_response": "{\n  \"ranked_edges\": [\"e1\", \"e3\", \"e2\"],\n  \"candidate_edges\": [\"e1\", \"e3\"],\n  \"reason\": \"e1 directly changes the editor's line-range and newline behavior, which can corrupt source files; the observed failure is a SyntaxError from a malformed Django source line, consistent with a faulty partial edit. e3 can amplify or expose prior editing defects through retries, but is less likely to be the originating cause. e2 is a log-analysis helper with no plausible mechanism to corrupt source files.\",\n  \"confidence\": 0.7\n}"
+    },
+    {
+      "episode_id": "20250329_104654_602457:django__django-15930",
+      "repeat": 1,
+      "ranking": [
+        "20250327_044512_401971",
+        "20250329_104654_602457",
+        "20250327_162845_831928"
+      ],
+      "anonymous_ranking": [
+        "e1",
+        "e3",
+        "e2"
+      ],
+      "top1_exact": 1,
+      "input_tokens": 3875,
+      "output_tokens": 7430,
+      "latency_seconds": 36.954888333,
+      "attempts": 1,
+      "raw_response": "{\n  \"ranked_edges\": [\"e1\", \"e3\", \"e2\"],\n  \"candidate_edges\": [\"e1\", \"e3\"],\n  \"reason\": \"e1 is the earliest plausible cause: it changes the editor tool to support surgical line-range edits, and the failed trajectory shows a narrow surgical patch in expressions.py rather than a broader root-cause fix. e3 is later and could expose or amplify incomplete patches via its retry/empty-patch logic. e2 is a separate log-analysis tool that is not implicated in this trajectory.\",\n  \"confidence\": 0.3\n}"
+    },
+    {
+      "episode_id": "20250404_063906_626966:sphinx-doc__sphinx-10449",
+      "repeat": 1,
+      "ranking": [
+        "20250328_043621_592702",
+        "20250404_063906_626966",
+        "20250327_230053_522024",
+        "20250401_214239_643967",
+        "20250327_084619_293670"
+      ],
+      "anonymous_ranking": [
+        "e3",
+        "e5",
+        "e2",
+        "e4",
+        "e1"
+      ],
+      "top1_exact": 0,
+      "input_tokens": 5731,
+      "output_tokens": 24085,
+      "latency_seconds": 101.09840720800001,
+      "attempts": 1,
+      "raw_response": "{\n  \"ranked_edges\": [\"e3\", \"e5\", \"e2\", \"e4\", \"e1\"],\n  \"candidate_edges\": [\"e3\", \"e5\", \"e2\"],\n  \"reason\": \"e3 is the earliest change that plausibly destroys the previous reliable whole-file edit workflow by replacing it with unique-substring str_replace; a resulting incorrect or partially applied source edit would produce the observed externally-scored 0% patch. e5 is the later change whose new multi-attempt scoring/selection loop then accepts and reports that bad patch as 100%, exposing the earlier defect. e2 is a lesser tool-behavior change to view ranges, while e4 and e1 are less likely to affect the target patch.\",\n  \"confidence\": 0.31\n}"
+    },
+    {
+      "episode_id": "20250327_193700_187162:django__django-10973",
+      "repeat": 1,
+      "ranking": [
+        "20250327_193700_187162",
+        "20250327_044512_401971",
+        "20250327_162845_831928"
+      ],
+      "anonymous_ranking": [
+        "e3",
+        "e1",
+        "e2"
+      ],
+      "top1_exact": 0,
+      "input_tokens": 3065,
+      "output_tokens": 1182,
+      "latency_seconds": 6.346019040999998,
+      "attempts": 1,
+      "raw_response": "{\"ranked_edges\": [\"e3\", \"e1\", \"e2\"], \"candidate_edges\": [\"e3\"], \"reason\": \"The failure is 'Failed to import tools.diff_merge: No module named astor'. Only edge e3 adds tools/diff_merge.py and its dependency on astor, directly introducing the failing import. e1 and e2 are unrelated to diff_merge or astor and do not contribute to this failure.\", \"confidence\": 0.97}"
+    },
+    {
+      "episode_id": "20250402_121108_002158:django__django-15930",
+      "repeat": 1,
+      "ranking": [
+        "20250327_141021_286218",
+        "20250328_014441_399142",
+        "20250402_121108_002158"
+      ],
+      "anonymous_ranking": [
+        "e1",
+        "e2",
+        "e3"
+      ],
+      "top1_exact": 1,
+      "input_tokens": 4139,
+      "output_tokens": 33765,
+      "latency_seconds": 134.480377708,
+      "attempts": 1,
+      "raw_response": "{\n  \"ranked_edges\": [\"e1\", \"e2\", \"e3\"],\n  \"candidate_edges\": [\"e1\", \"e2\"],\n  \"reason\": \"e1 introduces brittle target extraction/verification that can misclassify merely-viewed line ranges as required modification targets; the failed trajectory includes a line-numbered expressions.py snippet (RowRange/WindowFrame) that the agent is not fixing, so e1 likely rejects or corrupts the correct When-class patch. e2's line-range viewer/edit tool produces those line-numbered snippets and is the likely exposal path. e3 is a later test-checkpoint hazard but is less directly tied to the observed pre-edit failure.\",\n  \"confidence\": 0.4\n}"
+    },
+    {
+      "episode_id": "20250328_113705_938015:django__django-15930",
+      "repeat": 1,
+      "ranking": [
+        "20250328_113705_938015",
+        "20250327_044512_401971"
+      ],
+      "anonymous_ranking": [
+        "e2",
+        "e1"
+      ],
+      "top1_exact": 0,
+      "input_tokens": 3064,
+      "output_tokens": 15265,
+      "latency_seconds": 65.00901504200002,
+      "attempts": 1,
+      "raw_response": "{\n  \"ranked_edges\": [\"e2\", \"e1\"],\n  \"candidate_edges\": [\"e2\", \"e1\"],\n  \"reason\": \"e2 is most likely the regression: it adds Django-specific pattern validation that can reject or alter changes to core ORM/expression methods like When.as_sql, directly interfering with the target fix. The failed trajectory's edit succeeded and its own test passed, so e1's line-range editor appears to have worked; e1 is less likely the direct cause, though it remains a possible latent contributor.\",\n  \"confidence\": 0.6\n}"
+    },
+    {
+      "episode_id": "20250330_110348_637680:django__django-15930",
+      "repeat": 1,
+      "ranking": [
+        "20250330_110348_637680",
+        "20250327_084619_287593"
+      ],
+      "anonymous_ranking": [
+        "e2",
+        "e1"
+      ],
+      "top1_exact": 0,
+      "input_tokens": 3258,
+      "output_tokens": 14226,
+      "latency_seconds": 61.795022208999995,
+      "attempts": 1,
+      "raw_response": "{\n  \"ranked_edges\": [\"e2\", \"e1\"],\n  \"candidate_edges\": [\"e2\", \"e1\"],\n  \"reason\": \"e2 is the later change and is directly Python/AST-editing focused, matching the Django/Python patch the current trajectory is preparing; its label also corresponds to the failing task context. e1 is an older, more general line-editing change and is less specifically tied to this failure, though it cannot be fully excluded.\",\n  \"confidence\": 0.62\n}"
+    },
+    {
+      "episode_id": "20250428_024446_061467:sphinx-doc__sphinx-10449",
+      "repeat": 1,
+      "ranking": [
+        "20250330_142644_312864",
+        "20250428_024446_061467",
+        "20250327_230053_522024",
+        "20250328_043621_592702",
+        "20250330_040956_487852",
+        "20250327_084619_293670"
+      ],
+      "anonymous_ranking": [
+        "e5",
+        "e6",
+        "e2",
+        "e3",
+        "e4",
+        "e1"
+      ],
+      "top1_exact": 0,
+      "input_tokens": 6984,
+      "output_tokens": 18021,
+      "latency_seconds": 76.88565324999999,
+      "attempts": 1,
+      "raw_response": "{\n  \"ranked_edges\": [\"e5\", \"e6\", \"e2\", \"e3\", \"e4\", \"e1\"],\n  \"candidate_edges\": [\"e5\", \"e6\", \"e2\"],\n  \"reason\": \"The failure corrupts sphinx/ext/autodoc/__init__.py so that `Documenter` is undefined when `ClassDocumenter` is declared. The most likely regression is e5, which changed `str_replace` from exact unique replacement to regex/line-range editing; such range/pattern logic can overmatch or delete unrelated definitions. e6 is next because it introduces test-feedback-driven edit-range suggestions that may trigger the faulty editing path. e2 introduced line-range viewing that e5's range machinery may inherit, making it a plausible earlier latent contributor. e3, e4, and e1 are less directly tied to source corruption.\",\n  \"confidence\": 0.55\n}"
+    },
+    {
+      "episode_id": "20250428_024446_061467:django__django-15930",
+      "repeat": 1,
+      "ranking": [
+        "20250330_142644_312864",
+        "20250328_043621_592702",
+        "20250330_040956_487852",
+        "20250327_084619_293670",
+        "20250428_024446_061467",
+        "20250327_230053_522024"
+      ],
+      "anonymous_ranking": [
+        "e5",
+        "e3",
+        "e4",
+        "e1",
+        "e6",
+        "e2"
+      ],
+      "top1_exact": 0,
+      "input_tokens": 6167,
+      "output_tokens": 18987,
+      "latency_seconds": 83.692408083,
+      "attempts": 1,
+      "raw_response": "{\n  \"ranked_edges\": [\"e5\", \"e3\", \"e4\", \"e1\", \"e6\", \"e2\"],\n  \"candidate_edges\": [\"e5\", \"e3\", \"e4\"],\n  \"reason\": \"The failed trajectory shows the agent attempting source-level fixes to When.as_sql/Q.resolve_expression, then abandoning them for a test/workaround-based solution instead of fixing Django's core SQL generation. e5 is the only edge labeled with the target task (django__django-11299) and directly rewrites the editor's str_replace/edit mechanics, which is the most likely place for the agent to lose the ability to apply precise source edits. e3 is an earlier editor regression that replaced whole-file edit with substring-only str_replace and likely remains a latent contributor. e4 is also plausible because its context-truncation logic can silently drop the original problem statement, matching the final response treating a workaround as sufficient. e1, e6, and e2 affect patch validation, test feedback, and viewing behavior with less direct evidence in this trajectory.\",\n  \"confidence\": 0.4\n}"
+    },
+    {
+      "episode_id": "20250327_193141_970605:django__django-15930",
+      "repeat": 1,
+      "ranking": [
+        "20250327_193141_970605",
+        "20250327_084619_293670"
+      ],
+      "anonymous_ranking": [
+        "e2",
+        "e1"
+      ],
+      "top1_exact": 0,
+      "input_tokens": 3048,
+      "output_tokens": 3185,
+      "latency_seconds": 13.620191582999993,
+      "attempts": 1,
+      "raw_response": "{\n  \"ranked_edges\": [\"e2\", \"e1\"],\n  \"candidate_edges\": [\"e2\", \"e1\"],\n  \"reason\": \"The failed trajectory's first error is a tool-loading failure for 'tools.test_smart_edit', which directly implicates the smart_edit tooling change in e2. e2 is the only candidate that adds/modifies smart-edit-related tool modules and plausibly introduces a module that the tool loader tries to import as a tool but which lacks required functions. The 'Invalid patch: Empty patch' retry behavior seen in the trajectory is caused by e1's patch-validation logic, but it is a downstream symptom/exacerbation rather than the earliest failure condition. Therefore e2 is the most likely earliest defect-introducing edge.\",\n  \"confidence\": 0.72\n}"
+    },
+    {
+      "episode_id": "20250331_131622_337643:django__django-11964",
+      "repeat": 1,
+      "ranking": [
+        "20250328_014441_399142",
+        "20250327_141021_286218",
+        "20250331_131622_337643"
+      ],
+      "anonymous_ranking": [
+        "e2",
+        "e1",
+        "e3"
+      ],
+      "top1_exact": 0,
+      "input_tokens": 4049,
+      "output_tokens": 25862,
+      "latency_seconds": 101.83555412499999,
+      "attempts": 1,
+      "raw_response": "{\"ranked_edges\":[\"e2\",\"e1\",\"e3\"],\"candidate_edges\":[\"e2\",\"e1\"],\"reason\":\"The failure traceback shows django.db.models.fields lost DurationField, indicating a block of source was accidentally removed/overwritten while editing. e2 introduces line-range editing (smart_edit), the most direct mechanism for such a contiguous deletion; e1's post-patch target verification could also force edits toward wrong files/lines, while e3's search/refactor tool is a later and less directly implicated mechanism.\",\"confidence\":0.55}"
+    }
+  ]
+}

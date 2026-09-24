@@ -1,0 +1,23 @@
+diff --git a/django/db/models/fields/json.py b/django/db/models/fields/json.py
+index fafc1be..918ca68 100644
+--- a/django/db/models/fields/json.py
++++ b/django/db/models/fields/json.py
+@@ -463,6 +463,10 @@ class KeyTransformNumericLookupMixin:
+         return rhs, rhs_params
+ 
+ 
++class KeyTransformIn(KeyTransformNumericLookupMixin, lookups.In):
++    pass
++
++
+ class KeyTransformLt(KeyTransformNumericLookupMixin, lookups.LessThan):
+     pass
+ 
+@@ -490,6 +494,7 @@ KeyTransform.register_lookup(KeyTransformIEndsWith)
+ KeyTransform.register_lookup(KeyTransformRegex)
+ KeyTransform.register_lookup(KeyTransformIRegex)
+ 
++KeyTransform.register_lookup(KeyTransformIn)
+ KeyTransform.register_lookup(KeyTransformLt)
+ KeyTransform.register_lookup(KeyTransformLte)
+ KeyTransform.register_lookup(KeyTransformGt)

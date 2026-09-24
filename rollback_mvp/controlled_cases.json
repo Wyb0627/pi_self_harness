@@ -1,0 +1,683 @@
+{
+  "schema_version": 1,
+  "cases": [
+    {
+      "id": "compaction-drops-contract",
+      "title": "Compaction silently drops an early tool contract",
+      "task_family": "long-horizon repository repair",
+      "versions": [
+        {
+          "id": "v0",
+          "score": 0.20,
+          "change": "Baseline agent with full-history prompting.",
+          "patch": "(baseline)"
+        },
+        {
+          "id": "v1",
+          "score": 0.24,
+          "change": "Add line-range file viewing to reduce irrelevant tool output.",
+          "patch": "+ view(path, start_line=None, end_line=None)"
+        },
+        {
+          "id": "v2",
+          "score": 0.27,
+          "change": "Compact history after 80k tokens by summarizing only user and assistant messages.",
+          "patch": "+ kept = [m for m in history if m.role in ('user', 'assistant')]\n+ summary = summarize(kept)\n+ history = [summary]"
+        },
+        {
+          "id": "v3",
+          "score": 0.31,
+          "change": "Add targeted retry prompts after a failed test command.",
+          "patch": "+ if test_failed: prompt(build_retry_prompt(test_output))"
+        },
+        {
+          "id": "v4",
+          "score": 0.18,
+          "change": "Add a faster repository index used only for file discovery.",
+          "patch": "+ repo_index = build_index(cwd)"
+        }
+      ],
+      "failure": {
+        "error": "The agent edits generated files despite an earlier tool result marking them read-only, then fails the final repository integrity check.",
+        "observations": [
+          "The failure appears only after the conversation crosses the compaction threshold.",
+          "Short runs on the same task family still pass.",
+          "The v3 retry logic repeats the forbidden edit instead of recovering."
+        ],
+        "debug": [
+          "Before compaction, message 41 is a tool result: READ_ONLY_PATHS=['src/generated/**'].",
+          "The compacted history contains no tool-result messages and no READ_ONLY_PATHS marker.",
+          "The first forbidden edit occurs immediately after compaction; the repository index resolves the path correctly."
+        ]
+      },
+      "oracle": {
+        "culprit_edge": "v1->v2",
+        "rollback_to": "v1",
+        "explanation": "v2 removes tool-result contracts during compaction; later changes only expose or repeat the latent defect."
+      }
+    },
+    {
+      "id": "cache-key-cross-repo",
+      "title": "A cache key omits repository identity",
+      "task_family": "parallel multi-repository evaluation",
+      "versions": [
+        {
+          "id": "v0",
+          "score": 0.19,
+          "change": "Baseline agent without tool-result caching.",
+          "patch": "(baseline)"
+        },
+        {
+          "id": "v1",
+          "score": 0.23,
+          "change": "Normalize tool arguments before logging for stable traces.",
+          "patch": "+ args = canonical_json(tool_arguments)"
+        },
+        {
+          "id": "v2",
+          "score": 0.26,
+          "change": "Add explicit repository IDs to session metadata.",
+          "patch": "+ session.repo_id = sha256(remote_url)"
+        },
+        {
+          "id": "v3",
+          "score": 0.30,
+          "change": "Cache read-only tool results by tool name and canonical arguments.",
+          "patch": "+ key = sha256(tool_name + canonical_json(arguments))\n+ cache[key] = result"
+        },
+        {
+          "id": "v4",
+          "score": 0.33,
+          "change": "Run two independent task sessions concurrently.",
+          "patch": "+ await gather(run(task_a), run(task_b))"
+        },
+        {
+          "id": "v5",
+          "score": 0.16,
+          "change": "Add progress events around concurrent task execution.",
+          "patch": "+ emit('task_started', task.id)"
+        }
+      ],
+      "failure": {
+        "error": "A Django task receives the contents of requests/sessions.py from a different repository and patches a nonexistent symbol.",
+        "observations": [
+          "The error requires two repositories with the same relative file path to run concurrently.",
+          "Sequential single-repository evaluations pass.",
+          "The wrong content is returned by the read_file tool before any model reasoning error."
+        ],
+        "debug": [
+          "Both reads use key read_file:{\"path\":\"src/sessions.py\"}.",
+          "Session repo IDs differ, but repo_id is absent from the cache key.",
+          "The second read is logged cache_hit=true and its result hash equals the first repository's file."
+        ]
+      },
+      "oracle": {
+        "culprit_edge": "v2->v3",
+        "rollback_to": "v2",
+        "explanation": "v3 introduces a cross-repository cache collision; concurrency in v4 makes it observable."
+      }
+    },
+    {
+      "id": "retry-reset-discards-progress",
+      "title": "A retry loop resets useful partial progress",
+      "task_family": "multi-step code repair",
+      "versions": [
+        {
+          "id": "v0",
+          "score": 0.21,
+          "change": "Baseline single-attempt coding agent.",
+          "patch": "(baseline)"
+        },
+        {
+          "id": "v1",
+          "score": 0.25,
+          "change": "Validate that generated patches touch a non-test source file.",
+          "patch": "+ valid = any(not is_test(path) for path in changed_files)"
+        },
+        {
+          "id": "v2",
+          "score": 0.29,
+          "change": "Retry invalid patches up to three times, resetting the repository before each retry.",
+          "patch": "+ for attempt in range(3):\n+     git_reset_hard(base_commit)\n+     patch = run_agent(problem)"
+        },
+        {
+          "id": "v3",
+          "score": 0.32,
+          "change": "Feed the previous test failure into the next retry prompt.",
+          "patch": "+ problem += format_failure(last_test_output)"
+        },
+        {
+          "id": "v4",
+          "score": 0.17,
+          "change": "Add a final syntax check before returning the selected patch.",
+          "patch": "+ assert parses_as_python(final_patch)"
+        }
+      ],
+      "failure": {
+        "error": "The final patch fixes the caller but omits the helper function created during the first attempt, causing NameError: normalize_field is not defined.",
+        "observations": [
+          "Attempt 1 creates normalize_field but fails a caller-side assertion.",
+          "Attempt 2 fixes the caller and passes the local syntax check.",
+          "The final diff contains only the attempt-2 edit."
+        ],
+        "debug": [
+          "git diff before retry 2 contains utils.py:+def normalize_field(...).",
+          "git reset --hard runs before retry 2 and removes that diff.",
+          "The retry prompt includes the assertion text but not the discarded patch or helper definition."
+        ]
+      },
+      "oracle": {
+        "culprit_edge": "v1->v2",
+        "rollback_to": "v1",
+        "explanation": "v2 makes retries destructive; v3 adds feedback but does not preserve prior useful edits."
+      }
+    },
+    {
+      "id": "framework-validator-overfires",
+      "title": "A framework-specific validator is inserted into the global loop",
+      "task_family": "mixed Python repositories",
+      "versions": [
+        {
+          "id": "v0",
+          "score": 0.18,
+          "change": "Baseline coding agent.",
+          "patch": "(baseline)"
+        },
+        {
+          "id": "v1",
+          "score": 0.22,
+          "change": "Add structured diff parsing for modified files.",
+          "patch": "+ files = parse_unified_diff(patch)"
+        },
+        {
+          "id": "v2",
+          "score": 0.25,
+          "change": "Add a generic post-patch review hook, disabled by default.",
+          "patch": "+ review_hooks = []"
+        },
+        {
+          "id": "v3",
+          "score": 0.29,
+          "change": "Register Django migration regex checks globally and force a revision on any match.",
+          "patch": "+ review_hooks.append(DjangoPatternChecker())\n+ if issues: patch = revise(patch, issues)"
+        },
+        {
+          "id": "v4",
+          "score": 0.15,
+          "change": "Improve revision prompts with line-numbered diff context.",
+          "patch": "+ revision_prompt += numbered_diff(patch)"
+        }
+      ],
+      "failure": {
+        "error": "A correct patch in a non-Django ORM project is replaced by a revision that removes a required field option.",
+        "observations": [
+          "The first generated patch passes all project tests.",
+          "The forced revision is the only patch returned to evaluation.",
+          "Disabling review hooks makes the same model output pass."
+        ],
+        "debug": [
+          "DjangoPatternChecker matches the string 'models.CharField' in a compatibility fixture.",
+          "Repository inspection finds no manage.py, django dependency, or migrations package.",
+          "Revision trace says 'remove unsupported null=True'; the target ORM requires null=True."
+        ]
+      },
+      "oracle": {
+        "culprit_edge": "v2->v3",
+        "rollback_to": "v2",
+        "explanation": "v3 activates a domain-specific checker globally; v4 only makes its incorrect revision more targeted."
+      }
+    },
+    {
+      "id": "parallel-tools-race",
+      "title": "Parallel tool execution violates a write-then-read dependency",
+      "task_family": "repository edits with validation",
+      "versions": [
+        {
+          "id": "v0",
+          "score": 0.20,
+          "change": "Baseline serial tool dispatcher.",
+          "patch": "(baseline)"
+        },
+        {
+          "id": "v1",
+          "score": 0.24,
+          "change": "Classify tools as read-only or mutating.",
+          "patch": "+ tool.effect = READ_ONLY if name in READ_TOOLS else MUTATING"
+        },
+        {
+          "id": "v2",
+          "score": 0.28,
+          "change": "Execute all tool calls in one assistant message concurrently.",
+          "patch": "+ results = await gather(*(call(tool) for tool in tool_calls))"
+        },
+        {
+          "id": "v3",
+          "score": 0.30,
+          "change": "Add a test-result parser for faster failure summaries.",
+          "patch": "+ parsed = parse_test_output(stdout)"
+        },
+        {
+          "id": "v4",
+          "score": 0.14,
+          "change": "Stream tool completion events to the transcript.",
+          "patch": "+ emit('tool_complete', call.id)"
+        }
+      ],
+      "failure": {
+        "error": "The agent reports tests passing for the pre-edit code, but the submitted patch fails those same tests.",
+        "observations": [
+          "The assistant emits write_file followed by run_tests in one message.",
+          "The failure is intermittent and more common on a cold filesystem.",
+          "Serial execution removes the mismatch."
+        ],
+        "debug": [
+          "run_tests starts at 10:03:11.204; write_file finishes at 10:03:11.287.",
+          "Test trace reads file hash 9ab1; submitted workspace after tools has hash f042.",
+          "Both calls are scheduled by the same gather() despite one being mutating."
+        ]
+      },
+      "oracle": {
+        "culprit_edge": "v1->v2",
+        "rollback_to": "v1",
+        "explanation": "v2 ignores tool dependencies and introduces the race; later observability changes do not cause it."
+      }
+    },
+    {
+      "id": "summary-drops-error-state",
+      "title": "Session summaries omit tool error state",
+      "task_family": "long debugging sessions",
+      "versions": [
+        {
+          "id": "v0",
+          "score": 0.17,
+          "change": "Baseline agent with raw transcript replay.",
+          "patch": "(baseline)"
+        },
+        {
+          "id": "v1",
+          "score": 0.21,
+          "change": "Store tool names and text output in a compact event schema.",
+          "patch": "+ event = {'tool': name, 'text': content}"
+        },
+        {
+          "id": "v2",
+          "score": 0.25,
+          "change": "Add branch summaries generated from compact events.",
+          "patch": "+ branch_summary = summarize(events)"
+        },
+        {
+          "id": "v3",
+          "score": 0.28,
+          "change": "Use branch summaries when resuming after context compaction.",
+          "patch": "+ resumed_history = [branch_summary, recent_messages]"
+        },
+        {
+          "id": "v4",
+          "score": 0.31,
+          "change": "Include modified file names in each compact tool event.",
+          "patch": "+ event['paths'] = extract_paths(arguments)"
+        },
+        {
+          "id": "v5",
+          "score": 0.13,
+          "change": "Add a concise final-answer template.",
+          "patch": "+ final_prompt = 'Report tests and changed files concisely.'"
+        }
+      ],
+      "failure": {
+        "error": "After compaction, the agent states that the integration test passed even though the test command exited 1.",
+        "observations": [
+          "The raw pre-compaction transcript contains the correct nonzero exit status.",
+          "The resumed branch summary quotes stdout but labels it as a normal tool observation.",
+          "The final-answer template trusts the resumed summary."
+        ],
+        "debug": [
+          "Raw event has is_error=true and exit_code=1.",
+          "The compact event schema contains only tool, text, and paths; neither is_error nor exit_code is serialized.",
+          "The first version introducing compact events is v1; later summary/resume steps propagate the lost state."
+        ]
+      },
+      "oracle": {
+        "culprit_edge": "v0->v1",
+        "rollback_to": "v0",
+        "explanation": "v1 irreversibly drops error metadata before summarization; v2/v3 expose the latent loss."
+      }
+    },
+    {
+      "id": "workspace-path-cache",
+      "title": "Resolved paths are cached without the working directory",
+      "task_family": "forked task sessions",
+      "versions": [
+        {
+          "id": "v0",
+          "score": 0.20,
+          "change": "Baseline path resolution per tool call.",
+          "patch": "(baseline)"
+        },
+        {
+          "id": "v1",
+          "score": 0.23,
+          "change": "Normalize relative paths before filesystem access.",
+          "patch": "+ resolved = os.path.realpath(os.path.join(cwd, path))"
+        },
+        {
+          "id": "v2",
+          "score": 0.27,
+          "change": "Fork a fresh workspace for each benchmark task.",
+          "patch": "+ task.cwd = clone_into_temp(task.repo)"
+        },
+        {
+          "id": "v3",
+          "score": 0.30,
+          "change": "Memoize normalized relative paths by their input string.",
+          "patch": "+ resolved_path_cache[path] = resolved"
+        },
+        {
+          "id": "v4",
+          "score": 0.12,
+          "change": "Reuse one worker process across several isolated task sessions.",
+          "patch": "+ worker.run_many(task_sessions)"
+        }
+      ],
+      "failure": {
+        "error": "An edit intended for task B is applied to task A's temporary checkout.",
+        "observations": [
+          "Both tasks request the relative path src/config.py.",
+          "Each task has a distinct isolated cwd.",
+          "The failure requires worker reuse; a fresh process per task passes."
+        ],
+        "debug": [
+          "Task A caches src/config.py -> /tmp/task-a/src/config.py.",
+          "Task B cache lookup uses only 'src/config.py' and returns the task-A absolute path.",
+          "The workspace guard runs before cache lookup, not after the cached path is returned."
+        ]
+      },
+      "oracle": {
+        "culprit_edge": "v2->v3",
+        "rollback_to": "v2",
+        "explanation": "v3 omits cwd/session identity from the cache key; v4 worker reuse reveals the collision."
+      }
+    },
+    {
+      "id": "tool-allowlist-shadowing",
+      "title": "A static allowlist hides dynamically loaded tools",
+      "task_family": "extension-driven agent tasks",
+      "versions": [
+        {
+          "id": "v0",
+          "score": 0.18,
+          "change": "Baseline tool registry exposes all loaded tools.",
+          "patch": "(baseline)"
+        },
+        {
+          "id": "v1",
+          "score": 0.22,
+          "change": "Add extension reload without restarting the session.",
+          "patch": "+ session.reload_extensions()"
+        },
+        {
+          "id": "v2",
+          "score": 0.25,
+          "change": "Record each tool's source extension for audit logs.",
+          "patch": "+ tool.metadata['extension'] = extension_name"
+        },
+        {
+          "id": "v3",
+          "score": 0.28,
+          "change": "Add a static startup allowlist to reduce tool-selection tokens.",
+          "patch": "+ visible_tools = [t for t in registry if t.name in startup_allowlist]"
+        },
+        {
+          "id": "v4",
+          "score": 0.11,
+          "change": "Load a repository-specific symbol-search extension after startup.",
+          "patch": "+ reload_extension('symbol-search')"
+        }
+      ],
+      "failure": {
+        "error": "The model cannot call symbol_search and repeatedly scans files manually until it exhausts the turn budget.",
+        "observations": [
+          "The extension loader reports symbol-search loaded successfully.",
+          "The tool is present in the runtime registry.",
+          "The model's advertised tool schema does not include symbol_search."
+        ],
+        "debug": [
+          "startup_allowlist is captured before the extension reload.",
+          "visible_tools is not recomputed after registry change events.",
+          "Removing the startup allowlist exposes symbol_search immediately."
+        ]
+      },
+      "oracle": {
+        "culprit_edge": "v2->v3",
+        "rollback_to": "v2",
+        "explanation": "v3 freezes tool visibility at startup; v4 is a valid extension whose tool is shadowed."
+      }
+    },
+    {
+      "id": "token-budget-undercount",
+      "title": "The context budget ignores cache-read tokens",
+      "task_family": "large-context repair",
+      "versions": [
+        {
+          "id": "v0",
+          "score": 0.19,
+          "change": "Baseline context budgeting from total provider usage.",
+          "patch": "(baseline)"
+        },
+        {
+          "id": "v1",
+          "score": 0.23,
+          "change": "Split usage reporting into input, output, cache-read, and cache-write fields.",
+          "patch": "+ usage = Usage(input, output, cache_read, cache_write)"
+        },
+        {
+          "id": "v2",
+          "score": 0.27,
+          "change": "Trigger compaction using input plus output tokens only.",
+          "patch": "+ consumed = usage.input + usage.output\n+ if consumed > limit: compact()"
+        },
+        {
+          "id": "v3",
+          "score": 0.30,
+          "change": "Enable provider prefix caching for repository context.",
+          "patch": "+ request.cache_control = 'ephemeral'"
+        },
+        {
+          "id": "v4",
+          "score": 0.14,
+          "change": "Attach more repository documentation to the cached prefix.",
+          "patch": "+ cached_prefix += repository_docs"
+        }
+      ],
+      "failure": {
+        "error": "Provider rejects the final request with context_length_exceeded although the harness reports 124k/180k tokens used.",
+        "observations": [
+          "The failure begins after prefix caching is enabled and repository docs grow.",
+          "Turning off caching makes the harness compact earlier and the request succeeds.",
+          "No individual new message is unusually large."
+        ],
+        "debug": [
+          "Usage at failure: input=118k, output=6k, cache_read=71k, cache_write=0.",
+          "Harness consumed calculation is 118k+6k=124k; provider context occupancy is about 195k.",
+          "The consumed formula was introduced before prefix caching and omits cache_read."
+        ]
+      },
+      "oracle": {
+        "culprit_edge": "v1->v2",
+        "rollback_to": "v1",
+        "explanation": "v2 undercounts context occupancy; v3/v4 increase the omitted cache-read component."
+      }
+    },
+    {
+      "id": "deletion-patch-rejected",
+      "title": "Patch validation rejects a valid deletion-only fix",
+      "task_family": "source cleanup and behavior removal",
+      "versions": [
+        {
+          "id": "v0",
+          "score": 0.20,
+          "change": "Baseline agent returns its first patch.",
+          "patch": "(baseline)"
+        },
+        {
+          "id": "v1",
+          "score": 0.24,
+          "change": "Parse changed paths from unified diff headers.",
+          "patch": "+ paths = re.findall(r'^\\+\\+\\+ b/(.+)$', patch, re.MULTILINE)"
+        },
+        {
+          "id": "v2",
+          "score": 0.28,
+          "change": "Reject patches unless the parsed paths include a non-test source file.",
+          "patch": "+ if not any(is_source(p) for p in paths): retry()"
+        },
+        {
+          "id": "v3",
+          "score": 0.31,
+          "change": "Add a clearer retry message explaining that source code must change.",
+          "patch": "+ retry_reason = 'Modify at least one non-test source file.'"
+        },
+        {
+          "id": "v4",
+          "score": 0.13,
+          "change": "Select the last retry that passes syntax validation.",
+          "patch": "+ final_patch = last(syntax_valid_attempts)"
+        }
+      ],
+      "failure": {
+        "error": "The correct deletion of obsolete.py is discarded; a later retry edits an unrelated caller and fails regression tests.",
+        "observations": [
+          "The task is solved by deleting a deprecated module that is auto-discovered at runtime.",
+          "Attempt 1 exactly matches the reference deletion.",
+          "Attempts 2 and 3 are generated only because attempt 1 is labeled invalid."
+        ],
+        "debug": [
+          "A deleted file's unified diff header is '+++ /dev/null', so the v1 parser returns no b/... path.",
+          "The v2 validator sees paths=[] and rejects the patch.",
+          "The syntax validator in v4 cannot evaluate a deleted file and therefore selects the unrelated retry."
+        ]
+      },
+      "oracle": {
+        "culprit_edge": "v0->v1",
+        "rollback_to": "v0",
+        "explanation": "v1 first introduces the latent inability to represent deletion paths; v2 later turns that pre-existing defect into a blocking gate."
+      }
+    },
+    {
+      "id": "reload-schema-mismatch",
+      "title": "The latest reload change advertises a stale tool schema",
+      "task_family": "dynamic extension reload",
+      "versions": [
+        {
+          "id": "v0",
+          "score": 0.18,
+          "change": "Baseline extension loader with session restart.",
+          "patch": "(baseline)"
+        },
+        {
+          "id": "v1",
+          "score": 0.22,
+          "change": "Add stable extension IDs to resource metadata.",
+          "patch": "+ extension.id = sha256(extension.path)"
+        },
+        {
+          "id": "v2",
+          "score": 0.25,
+          "change": "Support extension reload inside an existing session.",
+          "patch": "+ await session.reload_extensions()"
+        },
+        {
+          "id": "v3",
+          "score": 0.29,
+          "change": "Invalidate the visible tool list after every successful reload.",
+          "patch": "+ on_reload_success(lambda: tool_cache.clear())"
+        },
+        {
+          "id": "v4",
+          "score": 0.12,
+          "change": "Reuse the pre-reload JSON schema object when a tool name is unchanged.",
+          "patch": "+ schema = old_schemas.get(tool.name, tool.schema)"
+        }
+      ],
+      "failure": {
+        "error": "After reload, the model calls symbol_search with the old 'query' argument, but the updated extension requires 'pattern'.",
+        "observations": [
+          "The tool implementation and runtime registry both use the new pattern argument.",
+          "Starting a fresh session advertises the correct schema.",
+          "Only same-session reloads after v4 fail."
+        ],
+        "debug": [
+          "Reload log: tool name unchanged, old schema object reused.",
+          "Advertised schema contains required=['query']; runtime validator contains required=['pattern'].",
+          "v3 clears the tool-list cache correctly; v4 repopulates it with the stale object."
+        ]
+      },
+      "oracle": {
+        "culprit_edge": "v3->v4",
+        "rollback_to": "v3",
+        "explanation": "The most recent v4 optimization directly introduces the stale-schema mismatch."
+      }
+    },
+    {
+      "id": "timeout-unit-conversion",
+      "title": "The latest timeout refactor mixes seconds and milliseconds",
+      "task_family": "long-running test execution",
+      "versions": [
+        {
+          "id": "v0",
+          "score": 0.19,
+          "change": "Baseline shell tool with a fixed timeout.",
+          "patch": "(baseline)"
+        },
+        {
+          "id": "v1",
+          "score": 0.23,
+          "change": "Expose per-command timeout in tool arguments.",
+          "patch": "+ timeout_seconds = arguments.get('timeout', 120)"
+        },
+        {
+          "id": "v2",
+          "score": 0.26,
+          "change": "Add progress heartbeats while shell commands run.",
+          "patch": "+ emit_heartbeat(command_id)"
+        },
+        {
+          "id": "v3",
+          "score": 0.28,
+          "change": "Allow test commands to request up to ten minutes.",
+          "patch": "+ timeout_seconds = min(requested_timeout, 600)"
+        },
+        {
+          "id": "v4",
+          "score": 0.30,
+          "change": "Record timeout values in run telemetry.",
+          "patch": "+ telemetry.timeout_seconds = timeout_seconds"
+        },
+        {
+          "id": "v5",
+          "score": 0.10,
+          "change": "Pass the timeout to a new subprocess helper that expects milliseconds.",
+          "patch": "+ run_process(command, timeout_ms=timeout_seconds)"
+        }
+      ],
+      "failure": {
+        "error": "A test command requesting 300 seconds is killed after about 300 milliseconds.",
+        "observations": [
+          "The command consistently terminates before its first one-second heartbeat.",
+          "v4 runs the same command for the requested five minutes.",
+          "The failure affects every command with an explicit timeout."
+        ],
+        "debug": [
+          "Telemetry records timeout_seconds=300.",
+          "New helper trace records timeout_ms=300 and sends SIGTERM at 0.301 seconds.",
+          "No earlier version calls the millisecond-based helper."
+        ]
+      },
+      "oracle": {
+        "culprit_edge": "v4->v5",
+        "rollback_to": "v4",
+        "explanation": "The latest edge passes seconds directly to a millisecond API."
+      }
+    }
+  ]
+}

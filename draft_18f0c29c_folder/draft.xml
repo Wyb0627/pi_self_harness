@@ -1,0 +1,127 @@
+<title>诊断式回退初期实验设计说明</title>
+
+<callout emoji="📌" background-color="light-blue">
+<p>一句话结论：初期实验只替换"失败后如何回退"这一个决策，前向探索和任务轨迹全部复用 DGM 已放出的结果，因此几乎不消耗额外 token（实测约 0.3M），却能在 DGM 真实进化树上验证回退决策质量。</p>
+</callout>
+
+<h1 seq="auto">摘要</h1>
+<p>本文面向资源审批与项目负责人，说明诊断式回退（diagnosis-guided rollback）的初期实验如何设计、为什么经济。核心立场是：现有 harness 自进化把"回退"当作缺失的一等操作，我们把进化谱系建成可回溯的树，失败后用 failure attribution 决定退回哪个祖先版本，而不是盲目退一版或贪心选当前最高分。</p>
+<p>初期实验不重跑任何 SWE 任务，而是离线复用 DGM 公开的 SWE 进化树与每任务分数，只在每个分叉上重新做"选哪个前提继续长"的决策，再用真实下游结果离线打分。证据边界：这是回退决策器的验证，不是 pi harness 闭环；树较浅，属存在性证明与机制演示级证据，不追求统计显著。</p>
+
+<h1 seq="auto">前向探索复用 DGM，不重跑 SWE-bench</h1>
+<p>初期实验的第一个设计选择，是把前向探索完全交给 DGM 已有的结果，我们不生成新节点、不跑新任务。</p>
+<p>DGM 公开的 <code>swe_results</code> 给出一棵真实进化树：约 83 个节点，其中 46 个有非空分数，构成 11 个"父节点带两个以上有分孩子"的分叉。每个节点自带四类信息，正好覆盖决策所需：父指针（树结构）、mutation 标签与自我修改推理、相对父节点的 <code>model_patch.diff</code>、以及每任务的 resolved/unresolved/emptypatch 明细。</p>
+<p>这意味着初期只做一件事：在这些现成分叉上，把"选哪个孩子作为前提继续进化"的决策换成我们的回退逻辑，用 DGM 现成的下游分数离线判对错。因为不生成新 agent、不起 Docker、不跑一遍 SWE 任务，我们省掉了自进化里最贵的那部分（任务 rollout），初期实验的 token 开销只剩少量决策用的 LLM 调用。</p>
+
+<h1 seq="auto">初期回退机制如何实现</h1>
+<p>初期回退机制聚焦方向文档里的因子 A（failure attribution）与因子 B（rollback point selection）。因子 C（回退后再进化）会产生 DGM 树里不存在的新节点，离线无法验证，推迟到需要真跑的主实验阶段。</p>
+
+<h2 seq="auto">决策与打分的信息隔离</h2>
+<p>这是初期实验的核心方法论，写死不可违反。决策器（被测方法）只看决策时刻已有的信息：孩子的 id、mutation 意图、代码 diff、以及它自己在父节点子集上的每任务对错。它禁止看任何下游子树结果，做的是前瞻判断"哪个前提最有前途"，与真实部署一致。oracle 只用真实下游打分，不参与决策，避免用 LLM 判 LLM 的循环论证。</p>
+
+<h2 seq="auto">三个对照</h2>
+<ul>
+<li><b>greedy</b>：选当前自身准确率最高的孩子。这是 DGM 式按分数选 parent 的忠实替身。</li>
+<li><b>random</b>：均匀随机选一个孩子，对应去掉 attribution 的消融（Ours-minus-A）。</li>
+<li><b>llm（Ours）</b>：Gemini 基于每个孩子的意图、diff、自身分数做前瞻推理，预测哪个前提的子树最有前途，多次投票平滑随机性。</li>
+</ul>
+<p>oracle 采用强版判据 subtree-best：一个分叉上真实下游子树可达最高分的那个兄弟，而非当前分最高的兄弟。指标是命中率（hit rate）与 regret（oracle 子树最优减去所选子树最优），regret 是离线版的"逃逸代价"。</p>
+
+<h2 seq="auto">伪代码</h2>
+<pre lang="python" caption="离线回退决策：复用 DGM 进化树，只替换选前提的策略"><code>tree  = load_dgm_swe_tree()                 # 约 83 节点，46 个有分数
+forks = sibling_forks(tree, min_children=2) # 11 个分叉（父节点带 2+ 有分孩子）
+
+for parent, children in forks:
+    # 决策器只看决策时刻信息，禁看下游子树（信息隔离）
+    view = [(c.id, c.intent, c.diff, c.own_pass_fail) for c in children]
+
+    choice_greedy = argmax(children, key=own_accuracy)   # DGM 式：当前分最高
+    choice_random = uniform_random(children)             # 消融：无 attribution
+    choice_ours   = llm_pick_best_premise(view, votes=5) # 我们：前瞻诊断
+
+    # oracle 用真实下游，只打分，不参与决策
+    oracle = argmax(children, key=subtree_best_accuracy)
+    for name, choice in [greedy, random, ours]:
+        hit    = (choice == oracle)
+        regret = subtree_best(oracle) - subtree_best(choice)
+        record(parent, name, choice, hit, regret)
+
+
+def llm_pick_best_premise(view, votes):
+    # 判断"哪个改动作为前提最有前途"，只用决策时刻信息
+    counts = {}
+    for _ in range(votes):
+        c = LLM(system=PREMISE_PROMPT, user=render(view)).choice
+        counts[c] += 1
+    return argmax(counts)          # 多数投票，平滑 LLM 随机性
+</code></pre>
+
+<h1 seq="auto">成本与经济性分析</h1>
+<p>本节回答三个问题：初期实验在 SWE-bench 上预计消耗多少 token；如果完全重跑 SWE-bench，按 DGM 算法与我们的算法各需多少；以及为什么初期这样跑更省。成本用两个可核对的单位表达：任务 rollout 次数（一个 agent 解一道 SWE 任务）与美元；token 与二者成正比。</p>
+
+<h2 seq="auto">锚点与假设</h2>
+<ul>
+<li>DGM 论文成本锚点：SWE-bench 60 任务约 350 美元（约 5.8 美元/任务），80 代整轮约 22,000 美元。</li>
+<li>DGM 公开树实测：46 个有分节点共约 3,600 次任务评测，均值约 78 次/节点；换算约 3,600 × 5.8 ≈ 21K 美元，与论文 22K 一致。</li>
+<li>token 换算假设：单次 SWE 任务 rollout 约 0.5M token（多轮工具调用与长上下文的中位量级，供按此重算）。</li>
+<li>初期实验实测：11 个分叉 × 5 票 = 55 次决策 LLM 调用，输入约 296K、输出约 8K，合计约 0.3M token，零任务 rollout。</li>
+</ul>
+
+<h2 seq="auto">三方对比</h2>
+<table>
+<colgroup><col width="150"/><col width="120"/><col width="130"/><col width="140"/><col width="130"/></colgroup>
+<thead>
+<tr>
+<th background-color="light-gray"><p>方案</p></th>
+<th background-color="light-gray"><p>是否重跑 SWE 任务</p></th>
+<th background-color="light-gray"><p>任务 rollout 次数</p></th>
+<th background-color="light-gray"><p>预计 token</p></th>
+<th background-color="light-gray"><p>预计成本</p></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><p>初期实验（离线复用 DGM 树）</p></td>
+<td><p>否</p></td>
+<td><p>0</p></td>
+<td><p>约 0.3M（仅决策 LLM，实测）</p></td>
+<td><p>约 0.1 至 0.5 美元（可忽略）</p></td>
+</tr>
+<tr>
+<td><p>完全重跑 · DGM 算法</p></td>
+<td><p>是</p></td>
+<td><p>约 3,600 至 4,000</p></td>
+<td><p>约 1.8B（按 0.5M/任务）</p></td>
+<td><p>约 22,000 美元（论文锚点）</p></td>
+</tr>
+<tr>
+<td><p>完全重跑 · 我们的算法</p></td>
+<td><p>是</p></td>
+<td><p>约 2,200 至 2,900（回退剪枝后）</p></td>
+<td><p>约 1.1B 至 1.4B</p></td>
+<td><p>约 13,000 至 17,000 美元（投影）</p></td>
+</tr>
+</tbody>
+</table>
+
+<h2 seq="auto">为什么我们更省</h2>
+<p>两点。第一，初期实验几乎免费。复用 DGM 现成 trajectory 与分数，只重做回退决策，开销从"完全重跑"的十亿级 token、两万美元级，降到 0.3M token、几毛钱级，相差约四到五个数量级。要资源时这一步的边际成本近乎为零。</p>
+<p>第二，即便将来完全重跑，我们的算法也比 DGM 更省。省钱主力是回退剪枝（把被判为污染的子树降权或剪掉），它把有效分支因子从 b 收到 b′，达到同一深度所需评测的节点数从 O(b^d) 降到 O(b′^d)。DGM 公开树里 11 个有效分叉有 4 个（36%）出现"当前分最高的孩子并非子树产出最好的孩子"，说明贪心会持续在死胡同前提上长孩子，每多长一个注定失败的孩子就要付一整套提议加评测。回退剪掉这些子树，直接减少被评测节点数 M，因此我们完全重跑的成本低于 DGM。</p>
+
+<h1 seq="auto">诚实边界</h1>
+<ul>
+<li>不说 DGM 成本是指数级。它实际是随迭代数线性 O(N)；指数的是双方共享的可达配置空间。</li>
+<li>不说我们的搜索空间更小。空间相同，省的是"实际被评测的节点集"的 realized 成本。</li>
+<li>省钱主力是减少被评测节点数 M（回退剪枝），不是 partial 复评。partial 复评只对局部改动有效，是有条件加成。</li>
+<li>初期节点是 DGM 的 coding-agent 代码，不是 pi harness，验证的是回退决策器，不是 pi 闭环。</li>
+<li>树浅（83 节点里 53 个叶子，仅 4 个分叉为分歧样本），属 case study 级证据；统计显著留给后续受控注入与真跑。</li>
+<li>"完全重跑 · 我们的算法"一行是投影，剪枝比例与 token/任务假设均可按实际数据重算。</li>
+</ul>
+
+<h1 seq="auto">参考</h1>
+<ul>
+<li>DGM: Darwin Gödel Machine, ICLR 2026 (arXiv:2505.22954) — archive/tree、重选 parent、无回退。</li>
+<li>MARS (arXiv:2607.29055) — 任务轨迹层的 Rollback 与 failure taxonomy，机制灵感。</li>
+<li>Safe Harness Self-Evolution (arXiv:2609.08175) — 单线更新的理论界，理论动机。</li>
+<li>本仓库：<code>EVOLUTION_ROLLBACK_DIRECTION.md</code>（方向与实验设计）、<code>rollback_mvp/</code>（初期离线实现）。</li>
+</ul>

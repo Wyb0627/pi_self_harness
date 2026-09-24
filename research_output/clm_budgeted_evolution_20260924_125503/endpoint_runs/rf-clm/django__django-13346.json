@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "instanceId": "django__django-13346",
+  "method": "repair-first-causal-slice",
+  "candidatePaths": [
+    "django/db/models/fields/json.py"
+  ],
+  "changedPaths": [
+    "django/db/models/fields/json.py",
+    "django/db/models/fields/json.py"
+  ],
+  "inputTokens": 5093,
+  "outputTokens": 51860,
+  "latencySeconds": 231.925632125,
+  "attempts": 1,
+  "failureHash": "96fb5fc270a14161f810bd8e9960ab3efc4d9baa1e4ebb58bba932b1874b5071",
+  "patch": "diff --git a/django/db/models/fields/json.py b/django/db/models/fields/json.py\nindex fafc1be..b58aac3 100644\n--- a/django/db/models/fields/json.py\n+++ b/django/db/models/fields/json.py\n@@ -423,6 +423,34 @@ class KeyTransformExact(JSONExact):\n         return super().as_sql(compiler, connection)\n \n \n+class KeyTransformIn(lookups.In):\n+    def process_rhs(self, compiler, connection):\n+        if not isinstance(self.rhs, (list, tuple)):\n+            return super().process_rhs(compiler, connection)\n+        rhs, rhs_params = super().process_rhs(compiler, connection)\n+        if connection.vendor == 'oracle':\n+            rhs_params = ['null' if value is None else value for value in rhs_params]\n+            func = []\n+            for value in rhs_params:\n+                value = json.loads(value)\n+                function = 'JSON_QUERY' if isinstance(value, (list, dict)) else 'JSON_VALUE'\n+                func.append(\"%s('%s', '$.value')\" % (\n+                    function,\n+                    json.dumps({'value': value}),\n+                ))\n+            rhs = rhs % tuple(func)\n+            rhs_params = []\n+        elif connection.vendor == 'sqlite':\n+            rhs_params = ['null' if value is None else value for value in rhs_params]\n+            func = [\"JSON_EXTRACT(%s, '$')\" if value != 'null' else '%s' for value in rhs_params]\n+            rhs = rhs % tuple(func)\n+        elif connection.vendor == 'mysql':\n+            rhs_params = ['null' if value is None else value for value in rhs_params]\n+            func = [\"JSON_EXTRACT(%s, '$')\"] * len(rhs_params)\n+            rhs = rhs % tuple(func)\n+        return rhs, rhs_params\n+\n+\n class KeyTransformIExact(CaseInsensitiveMixin, KeyTransformTextLookupMixin, lookups.IExact):\n     pass\n \n@@ -489,6 +517,7 @@ KeyTransform.register_lookup(KeyTransformEndsWith)\n KeyTransform.register_lookup(KeyTransformIEndsWith)\n KeyTransform.register_lookup(KeyTransformRegex)\n KeyTransform.register_lookup(KeyTransformIRegex)\n+KeyTransform.register_lookup(KeyTransformIn)\n \n KeyTransform.register_lookup(KeyTransformLt)\n KeyTransform.register_lookup(KeyTransformLte)\n",
+  "explanation": "Add a dedicated KeyTransformIn lookup that keeps SQL IN semantics but applies the same backend-specific JSON RHS adaptation as KeyTransformExact, avoiding SQLite unsupported-type errors for dictionary/list JSON values on MySQL, Oracle, and SQLite."
+}

@@ -1,0 +1,42 @@
+{
+	"name": "pi-causal-rollback",
+	"version": "0.1.0",
+	"description": "Evidence-gated causal rollback and selective replay for pi harness evolution",
+	"type": "module",
+	"license": "MIT",
+	"keywords": [
+		"pi-package",
+		"pi-extension",
+		"rollback",
+		"causal-debugging",
+		"agent-harness"
+	],
+	"files": [
+		"extensions",
+		"src",
+		"fixtures",
+		"README.md"
+	],
+	"scripts": {
+		"check": "biome check . && tsc --noEmit",
+		"test": "node --import tsx --test test/*.test.ts"
+	},
+	"pi": {
+		"extensions": [
+			"./extensions/index.ts"
+		]
+	},
+	"peerDependencies": {
+		"@earendil-works/pi-coding-agent": "*"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "2.3.5",
+		"@earendil-works/pi-coding-agent": "0.85.1",
+		"@types/node": "22.19.19",
+		"tsx": "4.22.1",
+		"typescript": "5.9.3"
+	},
+	"engines": {
+		"node": ">=22.19.0"
+	}
+}

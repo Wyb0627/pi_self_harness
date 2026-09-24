@@ -1,0 +1,88 @@
+{
+  "sources": [
+    {
+      "url": "https://arxiv.org/html/2505.22954v2/",
+      "title": "Darwin Godel Machine: Open-Ended Evolution of Self-Improving Agents",
+      "priority": "P1-paper",
+      "added_at": "2026-09-24"
+    },
+    {
+      "url": "https://ar5iv.labs.arxiv.org/html/1807.01774",
+      "title": "BOHB: Robust and Efficient Hyperparameter Optimization at Scale",
+      "priority": "P1-paper",
+      "added_at": "2026-09-24"
+    },
+    {
+      "url": "https://arxiv.org/html/2606.04866",
+      "title": "Provably Reduced Sample Cost in Prior-Guided Hyperparameter Optimization",
+      "priority": "P1-paper",
+      "added_at": "2026-09-24"
+    },
+    {
+      "url": "https://arxiv.org/html/2604.14655v1",
+      "title": "AgentGA: Evolving Code Solutions in Agent-Seed Space",
+      "priority": "P1-paper",
+      "added_at": "2026-09-24"
+    },
+    {
+      "url": "https://arxiv.org/html/2608.29228",
+      "title": "Localizing Emergent Failures in Agentic AI: Recovering Minimal Repair Families via Counterfactual Replay",
+      "priority": "P1-paper",
+      "added_at": "2026-09-24"
+    },
+    {
+      "url": "https://dl.acm.org/doi/fullHtml/10.1145/3460231.3473320",
+      "title": "Counterfactual Learning and Evaluation for Recommender Systems",
+      "priority": "P1-tutorial",
+      "added_at": "2026-09-24"
+    },
+    {
+      "url": "file:///Users/bytedance/codes/pi/rollback_mvp/outputs/dgm_budgeted_quarantine.json",
+      "title": "DGM logged-candidate branch-quarantine experiment",
+      "priority": "P1-project-evidence",
+      "added_at": "2026-09-24"
+    },
+    {
+      "url": "https://arxiv.org/html/2507.12453",
+      "title": "Cost-aware Stopping for Bayesian Optimization",
+      "priority": "P1-paper",
+      "added_at": "2026-09-24"
+    },
+    {
+      "url": "https://www.swebench.com/SWE-bench/guides/docker_setup/",
+      "title": "SWE-bench Docker Setup Guide",
+      "priority": "P1-official",
+      "added_at": "2026-09-24"
+    },
+    {
+      "url": "file:///Users/bytedance/codes/pi/rollback_mvp/outputs/dgm_multifidelity_race.json",
+      "title": "DGM multi-fidelity promotion replay",
+      "priority": "P1-project-evidence",
+      "added_at": "2026-09-24"
+    },
+    {
+      "url": "file:///Users/bytedance/codes/pi/rollback_mvp/outputs/repair_first_results.json",
+      "title": "Repair-first CLM synthetic interaction benchmark",
+      "priority": "P1-project-evidence",
+      "added_at": "2026-09-24"
+    },
+    {
+      "url": "file:///Users/bytedance/codes/pi/research_output/clm_budgeted_evolution_20260924_125503/endpoint_small_results.json",
+      "title": "DGM-small endpoint aggregate",
+      "priority": "P1-project-evidence",
+      "added_at": "2026-09-24"
+    },
+    {
+      "url": "file:///Users/bytedance/codes/pi/DGM_results/swe_results/swe_dgm/20250402_233611_093918/metadata.json",
+      "title": "Best released DGM node metadata",
+      "priority": "P1-released-evidence",
+      "added_at": "2026-09-24"
+    },
+    {
+      "url": "file:///Users/bytedance/codes/pi/research_output/clm_budgeted_evolution_20260924_125503/logs/run_evaluation",
+      "title": "Official SWE-bench evaluator reports for isolated Pi and RF-CLM",
+      "priority": "P1-executable-evidence",
+      "added_at": "2026-09-24"
+    }
+  ]
+}

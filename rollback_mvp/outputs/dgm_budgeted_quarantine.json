@@ -1,0 +1,993 @@
+{
+  "schema_version": 1,
+  "scope": "Chronological logged-candidate replay. It can measure whether a quarantine rule would have skipped released descendants, but not which counterfactual children another evolution policy would generate.",
+  "cost_model": {
+    "task_evaluation": 1.0,
+    "candidate_proposal": 1.0,
+    "note": "The proposal weight is a conservative task-equivalent proxy."
+  },
+  "preregistration": {
+    "hypothesis": "The primary confirmed-no-new-gain rule preserves each run's best fixed-D60 endpoint, improves normalized quality-cost AUC, and saves at least 20% of total task-equivalent cost.",
+    "kill_criterion": "Kill if any released run loses its best endpoint, fails to improve AUC, or saves less than 20% cost.",
+    "primary_rule": "confirmed-no-new-gain"
+  },
+  "runs": {
+    "dgm": {
+      "root": "/Users/bytedance/codes/pi/DGM_results/swe_results/swe_dgm",
+      "canonical_tasks": 60,
+      "attempts": 82,
+      "baseline": {
+        "evaluated_nodes": 45,
+        "proposal_attempts": 82,
+        "task_evaluations": 3540,
+        "total_cost": 3622.0,
+        "comparison_budget": 3622.0,
+        "best_fixed_d60": 0.5,
+        "best_node": "20250402_233611_093918",
+        "normalized_quality_cost_auc": 0.394828,
+        "quarantined_count": 0,
+        "skipped_attempts": 0,
+        "quarantined": [],
+        "skipped_node_ids": []
+      },
+      "policies": {
+        "no-new-gain-1": {
+          "evaluated_nodes": 45,
+          "proposal_attempts": 82,
+          "task_evaluations": 3540,
+          "total_cost": 3622.0,
+          "comparison_budget": 3622.0,
+          "best_fixed_d60": 0.5,
+          "best_node": "20250402_233611_093918",
+          "normalized_quality_cost_auc": 0.394828,
+          "quarantined_count": 5,
+          "skipped_attempts": 0,
+          "quarantined": [
+            {
+              "node_id": "20250327_193141_970605",
+              "parent_id": "20250327_084619_293670",
+              "generation": 7,
+              "delta": {
+                "common_tasks": 10,
+                "gained": 0,
+                "lost": 3
+              }
+            },
+            {
+              "node_id": "20250327_193700_187162",
+              "parent_id": "20250327_162845_831928",
+              "generation": 8,
+              "delta": {
+                "common_tasks": 10,
+                "gained": 0,
+                "lost": 2
+              }
+            },
+            {
+              "node_id": "20250329_104224_054039",
+              "parent_id": "20250329_024021_871963",
+              "generation": 16,
+              "delta": {
+                "common_tasks": 10,
+                "gained": 0,
+                "lost": 4
+              }
+            },
+            {
+              "node_id": "20250403_191215_472006",
+              "parent_id": "20250329_024021_871963",
+              "generation": 32,
+              "delta": {
+                "common_tasks": 10,
+                "gained": 0,
+                "lost": 4
+              }
+            },
+            {
+              "node_id": "20250403_234013_673230",
+              "parent_id": "20250403_191215_505018",
+              "generation": 33,
+              "delta": {
+                "common_tasks": 10,
+                "gained": 0,
+                "lost": 4
+              }
+            }
+          ],
+          "skipped_node_ids": [],
+          "best_preserved": true,
+          "cost_saving_fraction": 0.0,
+          "task_evaluation_saving_fraction": 0.0,
+          "auc_improvement": 0.0
+        },
+        "confirmed-no-new-gain": {
+          "evaluated_nodes": 45,
+          "proposal_attempts": 82,
+          "task_evaluations": 3540,
+          "total_cost": 3622.0,
+          "comparison_budget": 3622.0,
+          "best_fixed_d60": 0.5,
+          "best_node": "20250402_233611_093918",
+          "normalized_quality_cost_auc": 0.394828,
+          "quarantined_count": 5,
+          "skipped_attempts": 0,
+          "quarantined": [
+            {
+              "node_id": "20250327_193141_970605",
+              "parent_id": "20250327_084619_293670",
+              "generation": 7,
+              "delta": {
+                "common_tasks": 10,
+                "gained": 0,
+                "lost": 3
+              }
+            },
+            {
+              "node_id": "20250327_193700_187162",
+              "parent_id": "20250327_162845_831928",
+              "generation": 8,
+              "delta": {
+                "common_tasks": 10,
+                "gained": 0,
+                "lost": 2
+              }
+            },
+            {
+              "node_id": "20250329_104224_054039",
+              "parent_id": "20250329_024021_871963",
+              "generation": 16,
+              "delta": {
+                "common_tasks": 10,
+                "gained": 0,
+                "lost": 4
+              }
+            },
+            {
+              "node_id": "20250403_191215_472006",
+              "parent_id": "20250329_024021_871963",
+              "generation": 32,
+              "delta": {
+                "common_tasks": 10,
+                "gained": 0,
+                "lost": 4
+              }
+            },
+            {
+              "node_id": "20250403_234013_673230",
+              "parent_id": "20250403_191215_505018",
+              "generation": 33,
+              "delta": {
+                "common_tasks": 10,
+                "gained": 0,
+                "lost": 4
+              }
+            }
+          ],
+          "skipped_node_ids": [],
+          "best_preserved": true,
+          "cost_saving_fraction": 0.0,
+          "task_evaluation_saving_fraction": 0.0,
+          "auc_improvement": 0.0
+        },
+        "net-loss-2": {
+          "evaluated_nodes": 8,
+          "proposal_attempts": 21,
+          "task_evaluations": 476,
+          "total_cost": 497.0,
+          "comparison_budget": 3622.0,
+          "best_fixed_d60": 0.2833,
+          "best_node": "20250328_113705_938015",
+          "normalized_quality_cost_auc": 0.279068,
+          "quarantined_count": 3,
+          "skipped_attempts": 61,
+          "quarantined": [
+            {
+              "node_id": "20250327_084619_293670",
+              "parent_id": "initial",
+              "generation": 1,
+              "delta": {
+                "common_tasks": 59,
+                "gained": 3,
+                "lost": 5
+              }
+            },
+            {
+              "node_id": "20250327_141021_286218",
+              "parent_id": "initial",
+              "generation": 3,
+              "delta": {
+                "common_tasks": 60,
+                "gained": 2,
+                "lost": 5
+              }
+            },
+            {
+              "node_id": "20250327_162845_831928",
+              "parent_id": "20250327_044512_401971",
+              "generation": 5,
+              "delta": {
+                "common_tasks": 59,
+                "gained": 1,
+                "lost": 6
+              }
+            }
+          ],
+          "skipped_node_ids": [
+            "20250327_113104_564253",
+            "20250327_162137_989620",
+            "20250327_162138_002544",
+            "20250327_193141_970605",
+            "20250327_193700_173123",
+            "20250327_193700_187162",
+            "20250327_230053_522024",
+            "20250327_230053_536362",
+            "20250328_014441_388920",
+            "20250328_014441_399142",
+            "20250328_043621_592702",
+            "20250328_162643_296955",
+            "20250328_162643_313073",
+            "20250328_233347_783816",
+            "20250329_024021_871963",
+            "20250329_104224_054039",
+            "20250329_104654_602457",
+            "20250329_104654_623929",
+            "20250330_040956_466474",
+            "20250330_040956_487852",
+            "20250330_110127_511139",
+            "20250330_110348_661159",
+            "20250330_142644_312864",
+            "20250330_142644_333779",
+            "20250330_195203_004216",
+            "20250330_195203_028166",
+            "20250330_235839_326434",
+            "20250330_235839_349015",
+            "20250331_131622_310781",
+            "20250331_131622_337643",
+            "20250401_214239_643967",
+            "20250401_214239_671261",
+            "20250402_005204_335241",
+            "20250402_050711_835532",
+            "20250402_050711_864184",
+            "20250402_121107_972591",
+            "20250402_121108_002158",
+            "20250402_144331_397845",
+            "20250402_144331_427439",
+            "20250402_144852_141439",
+            "20250402_144852_169816",
+            "20250402_233611_062279",
+            "20250402_233611_093918",
+            "20250403_191215_472006",
+            "20250403_191215_505018",
+            "20250403_234013_673230",
+            "20250403_234013_710487",
+            "20250403_234624_677647",
+            "20250403_234624_711575",
+            "20250404_063906_590547",
+            "20250404_063906_626966",
+            "20250428_001718_705728",
+            "20250428_001718_747012",
+            "20250428_024446_018090",
+            "20250428_024446_061467",
+            "20250428_052346_044852",
+            "20250428_052346_086156",
+            "20250428_122225_833819",
+            "20250428_122225_874182",
+            "20250428_195354_542173",
+            "20250428_195354_586196"
+          ],
+          "best_preserved": false,
+          "cost_saving_fraction": 0.8628,
+          "task_evaluation_saving_fraction": 0.8655,
+          "auc_improvement": -0.11576
+        }
+      }
+    },
+    "no-open-ended": {
+      "root": "/Users/bytedance/codes/pi/DGM_results/swe_results/swe_dgm_nodarwin",
+      "canonical_tasks": 60,
+      "attempts": 80,
+      "baseline": {
+        "evaluated_nodes": 36,
+        "proposal_attempts": 80,
+        "task_evaluations": 1595,
+        "total_cost": 1675.0,
+        "comparison_budget": 1675.0,
+        "best_fixed_d60": 0.2333,
+        "best_node": "20250419_072917_573516",
+        "normalized_quality_cost_auc": 0.216766,
+        "quarantined_count": 0,
+        "skipped_attempts": 0,
+        "quarantined": [],
+        "skipped_node_ids": []
+      },
+      "policies": {
+        "no-new-gain-1": {
+          "evaluated_nodes": 36,
+          "proposal_attempts": 80,
+          "task_evaluations": 1595,
+          "total_cost": 1675.0,
+          "comparison_budget": 1675.0,
+          "best_fixed_d60": 0.2333,
+          "best_node": "20250419_072917_573516",
+          "normalized_quality_cost_auc": 0.216766,
+          "quarantined_count": 11,
+          "skipped_attempts": 0,
+          "quarantined": [
+            {
+              "node_id": "20250416_210105_111866",
+              "parent_id": "20250416_162446_431374",
+              "generation": 13,
+              "delta": {
+                "common_tasks": 10,
+                "gained": 0,
+                "lost": 2
+              }
+            },
+            {
+              "node_id": "20250416_213848_898101",
+              "parent_id": "20250416_162446_431374",
+              "generation": 14,
+              "delta": {
+                "common_tasks": 10,
+                "gained": 0,
+                "lost": 2
+              }
+            },
+            {
+              "node_id": "20250417_081747_776010",
+              "parent_id": "20250417_031558_514074",
+              "generation": 22,
+              "delta": {
+                "common_tasks": 10,
+                "gained": 0,
+                "lost": 3
+              }
+            },
+            {
+              "node_id": "20250417_083450_945178",
+              "parent_id": "20250417_031558_514074",
+              "generation": 24,
+              "delta": {
+                "common_tasks": 10,
+                "gained": 0,
+                "lost": 3
+              }
+            },
+            {
+              "node_id": "20250418_202649_433233",
+              "parent_id": "20250418_111445_657569",
+              "generation": 35,
+              "delta": {
+                "common_tasks": 10,
+                "gained": 0,
+                "lost": 2
+              }
+            },
+            {
+              "node_id": "20250419_142607_602822",
+              "parent_id": "20250419_072917_573516",
+              "generation": 38,
+              "delta": {
+                "common_tasks": 10,
+                "gained": 0,
+                "lost": 4
+              }
+            },
+            {
+              "node_id": "20250419_154712_291595",
+              "parent_id": "20250419_072917_573516",
+              "generation": 40,
+              "delta": {
+                "common_tasks": 10,
+                "gained": 0,
+                "lost": 4
+              }
+            },
+            {
+              "node_id": "20250420_091959_410644",
+              "parent_id": "20250420_025027_311593",
+              "generation": 44,
+              "delta": {
+                "common_tasks": 10,
+                "gained": 0,
+                "lost": 4
+              }
+            },
+            {
+              "node_id": "20250420_161532_184048",
+              "parent_id": "20250420_094759_992223",
+              "generation": 47,
+              "delta": {
+                "common_tasks": 10,
+                "gained": 0,
+                "lost": 4
+              }
+            },
+            {
+              "node_id": "20250421_173043_916516",
+              "parent_id": "20250421_103353_350599",
+              "generation": 52,
+              "delta": {
+                "common_tasks": 10,
+                "gained": 0,
+                "lost": 3
+              }
+            },
+            {
+              "node_id": "20250424_161003_558263",
+              "parent_id": "20250424_074551_499104",
+              "generation": 65,
+              "delta": {
+                "common_tasks": 10,
+                "gained": 0,
+                "lost": 3
+              }
+            }
+          ],
+          "skipped_node_ids": [],
+          "best_preserved": true,
+          "cost_saving_fraction": 0.0,
+          "task_evaluation_saving_fraction": 0.0,
+          "auc_improvement": 0.0
+        },
+        "confirmed-no-new-gain": {
+          "evaluated_nodes": 36,
+          "proposal_attempts": 80,
+          "task_evaluations": 1595,
+          "total_cost": 1675.0,
+          "comparison_budget": 1675.0,
+          "best_fixed_d60": 0.2333,
+          "best_node": "20250419_072917_573516",
+          "normalized_quality_cost_auc": 0.216766,
+          "quarantined_count": 11,
+          "skipped_attempts": 0,
+          "quarantined": [
+            {
+              "node_id": "20250416_210105_111866",
+              "parent_id": "20250416_162446_431374",
+              "generation": 13,
+              "delta": {
+                "common_tasks": 10,
+                "gained": 0,
+                "lost": 2
+              }
+            },
+            {
+              "node_id": "20250416_213848_898101",
+              "parent_id": "20250416_162446_431374",
+              "generation": 14,
+              "delta": {
+                "common_tasks": 10,
+                "gained": 0,
+                "lost": 2
+              }
+            },
+            {
+              "node_id": "20250417_081747_776010",
+              "parent_id": "20250417_031558_514074",
+              "generation": 22,
+              "delta": {
+                "common_tasks": 10,
+                "gained": 0,
+                "lost": 3
+              }
+            },
+            {
+              "node_id": "20250417_083450_945178",
+              "parent_id": "20250417_031558_514074",
+              "generation": 24,
+              "delta": {
+                "common_tasks": 10,
+                "gained": 0,
+                "lost": 3
+              }
+            },
+            {
+              "node_id": "20250418_202649_433233",
+              "parent_id": "20250418_111445_657569",
+              "generation": 35,
+              "delta": {
+                "common_tasks": 10,
+                "gained": 0,
+                "lost": 2
+              }
+            },
+            {
+              "node_id": "20250419_142607_602822",
+              "parent_id": "20250419_072917_573516",
+              "generation": 38,
+              "delta": {
+                "common_tasks": 10,
+                "gained": 0,
+                "lost": 4
+              }
+            },
+            {
+              "node_id": "20250419_154712_291595",
+              "parent_id": "20250419_072917_573516",
+              "generation": 40,
+              "delta": {
+                "common_tasks": 10,
+                "gained": 0,
+                "lost": 4
+              }
+            },
+            {
+              "node_id": "20250420_091959_410644",
+              "parent_id": "20250420_025027_311593",
+              "generation": 44,
+              "delta": {
+                "common_tasks": 10,
+                "gained": 0,
+                "lost": 4
+              }
+            },
+            {
+              "node_id": "20250420_161532_184048",
+              "parent_id": "20250420_094759_992223",
+              "generation": 47,
+              "delta": {
+                "common_tasks": 10,
+                "gained": 0,
+                "lost": 4
+              }
+            },
+            {
+              "node_id": "20250421_173043_916516",
+              "parent_id": "20250421_103353_350599",
+              "generation": 52,
+              "delta": {
+                "common_tasks": 10,
+                "gained": 0,
+                "lost": 3
+              }
+            },
+            {
+              "node_id": "20250424_161003_558263",
+              "parent_id": "20250424_074551_499104",
+              "generation": 65,
+              "delta": {
+                "common_tasks": 10,
+                "gained": 0,
+                "lost": 3
+              }
+            }
+          ],
+          "skipped_node_ids": [],
+          "best_preserved": true,
+          "cost_saving_fraction": 0.0,
+          "task_evaluation_saving_fraction": 0.0,
+          "auc_improvement": 0.0
+        },
+        "net-loss-2": {
+          "evaluated_nodes": 3,
+          "proposal_attempts": 6,
+          "task_evaluations": 180,
+          "total_cost": 186.0,
+          "comparison_budget": 1675.0,
+          "best_fixed_d60": 0.2,
+          "best_node": "initial",
+          "normalized_quality_cost_auc": 0.2,
+          "quarantined_count": 1,
+          "skipped_attempts": 74,
+          "quarantined": [
+            {
+              "node_id": "20250416_113358_812162",
+              "parent_id": "20250416_093634_522704",
+              "generation": 5,
+              "delta": {
+                "common_tasks": 60,
+                "gained": 2,
+                "lost": 6
+              }
+            }
+          ],
+          "skipped_node_ids": [
+            "20250416_152953_506021",
+            "20250416_161354_517372",
+            "20250416_162130_510403",
+            "20250416_162446_431374",
+            "20250416_205016_187744",
+            "20250416_205235_529841",
+            "20250416_205500_640736",
+            "20250416_210105_111866",
+            "20250416_213848_898101",
+            "20250416_220606_211091",
+            "20250416_221511_701682",
+            "20250416_224440_336448",
+            "20250417_030840_732197",
+            "20250417_031558_514074",
+            "20250417_080827_243995",
+            "20250417_081508_270238",
+            "20250417_081747_776010",
+            "20250417_082701_294875",
+            "20250417_083450_945178",
+            "20250417_084047_582763",
+            "20250417_084920_708106",
+            "20250417_085538_732149",
+            "20250417_090245_738428",
+            "20250417_131047_771544",
+            "20250417_195108_749607",
+            "20250417_200427_630734",
+            "20250418_024311_734166",
+            "20250418_111445_657569",
+            "20250418_201311_907663",
+            "20250418_202649_433233",
+            "20250418_221338_788747",
+            "20250419_072917_573516",
+            "20250419_142607_602822",
+            "20250419_143340_340559",
+            "20250419_154712_291595",
+            "20250419_160500_847290",
+            "20250420_025002_964116",
+            "20250420_025027_311593",
+            "20250420_091959_410644",
+            "20250420_094759_992223",
+            "20250420_160353_873765",
+            "20250420_161532_184048",
+            "20250420_163539_584164",
+            "20250421_015519_585468",
+            "20250421_103353_350599",
+            "20250421_170119_686571",
+            "20250421_173043_916516",
+            "20250422_073206_823168",
+            "20250422_073729_025331",
+            "20250422_074351_059880",
+            "20250422_150744_293884",
+            "20250422_151123_456148",
+            "20250422_215958_643787",
+            "20250424_003520_333146",
+            "20250424_004151_945763",
+            "20250424_064400_315654",
+            "20250424_074551_499104",
+            "20250424_155346_273507",
+            "20250424_160246_023046",
+            "20250424_161003_558263",
+            "20250424_162447_017070",
+            "20250425_064702_901775",
+            "20250425_234243_153790",
+            "20250425_234313_425143",
+            "20250425_234340_627238",
+            "20250425_234407_662500",
+            "20250425_234435_302322",
+            "20250425_234503_250068",
+            "20250425_234530_377411",
+            "20250425_234557_514276",
+            "20250425_234625_259451",
+            "20250425_234652_179678",
+            "20250425_234719_995716",
+            "20250425_234748_810815"
+          ],
+          "best_preserved": false,
+          "cost_saving_fraction": 0.889,
+          "task_evaluation_saving_fraction": 0.8871,
+          "auc_improvement": -0.016766
+        }
+      }
+    },
+    "no-self-improve": {
+      "root": "/Users/bytedance/codes/pi/DGM_results/swe_results/swe_dgm_noselfimprove",
+      "canonical_tasks": 60,
+      "attempts": 80,
+      "baseline": {
+        "evaluated_nodes": 30,
+        "proposal_attempts": 80,
+        "task_evaluations": 1528,
+        "total_cost": 1608.0,
+        "comparison_budget": 1608.0,
+        "best_fixed_d60": 0.3833,
+        "best_node": "20250409_222922_900063",
+        "normalized_quality_cost_auc": 0.344476,
+        "quarantined_count": 0,
+        "skipped_attempts": 0,
+        "quarantined": [],
+        "skipped_node_ids": []
+      },
+      "policies": {
+        "no-new-gain-1": {
+          "evaluated_nodes": 16,
+          "proposal_attempts": 52,
+          "task_evaluations": 802,
+          "total_cost": 854.0,
+          "comparison_budget": 1608.0,
+          "best_fixed_d60": 0.3833,
+          "best_node": "20250409_222922_900063",
+          "normalized_quality_cost_auc": 0.353058,
+          "quarantined_count": 5,
+          "skipped_attempts": 28,
+          "quarantined": [
+            {
+              "node_id": "20250408_005738_095636",
+              "parent_id": "20250407_212519_184190",
+              "generation": 1,
+              "delta": {
+                "common_tasks": 60,
+                "gained": 0,
+                "lost": 6
+              }
+            },
+            {
+              "node_id": "20250410_172148_291340",
+              "parent_id": "20250409_222922_900063",
+              "generation": 14,
+              "delta": {
+                "common_tasks": 9,
+                "gained": 0,
+                "lost": 1
+              }
+            },
+            {
+              "node_id": "20250412_070834_853747",
+              "parent_id": "20250410_074942_327267",
+              "generation": 19,
+              "delta": {
+                "common_tasks": 10,
+                "gained": 0,
+                "lost": 4
+              }
+            },
+            {
+              "node_id": "20250412_175248_288905",
+              "parent_id": "20250409_222922_911304",
+              "generation": 25,
+              "delta": {
+                "common_tasks": 59,
+                "gained": 0,
+                "lost": 8
+              }
+            },
+            {
+              "node_id": "20250416_041119_471454",
+              "parent_id": "20250409_222922_911304",
+              "generation": 34,
+              "delta": {
+                "common_tasks": 10,
+                "gained": 0,
+                "lost": 5
+              }
+            }
+          ],
+          "skipped_node_ids": [
+            "20250408_105122_576806",
+            "20250408_164921_066292",
+            "20250409_011437_235009",
+            "20250409_011814_247835",
+            "20250409_192339_118893",
+            "20250410_074942_344929",
+            "20250410_172148_309115",
+            "20250411_191224_360624",
+            "20250411_191720_950338",
+            "20250412_070834_833452",
+            "20250412_094820_163919",
+            "20250412_094820_183990",
+            "20250412_173753_274169",
+            "20250412_174144_090379",
+            "20250412_175248_311313",
+            "20250413_020132_283869",
+            "20250413_020433_719968",
+            "20250415_193516_255911",
+            "20250415_194056_594597",
+            "20250415_194056_618658",
+            "20250416_033956_570407",
+            "20250416_033956_594013",
+            "20250416_040151_202919",
+            "20250416_041119_500276",
+            "20250416_042907_079542",
+            "20250416_042907_107350",
+            "20250416_072531_373287",
+            "20250416_072531_395979"
+          ],
+          "best_preserved": true,
+          "cost_saving_fraction": 0.4689,
+          "task_evaluation_saving_fraction": 0.4751,
+          "auc_improvement": 0.008582
+        },
+        "confirmed-no-new-gain": {
+          "evaluated_nodes": 16,
+          "proposal_attempts": 52,
+          "task_evaluations": 802,
+          "total_cost": 854.0,
+          "comparison_budget": 1608.0,
+          "best_fixed_d60": 0.3833,
+          "best_node": "20250409_222922_900063",
+          "normalized_quality_cost_auc": 0.353058,
+          "quarantined_count": 4,
+          "skipped_attempts": 28,
+          "quarantined": [
+            {
+              "node_id": "20250408_005738_095636",
+              "parent_id": "20250407_212519_184190",
+              "generation": 1,
+              "delta": {
+                "common_tasks": 60,
+                "gained": 0,
+                "lost": 6
+              }
+            },
+            {
+              "node_id": "20250412_070834_853747",
+              "parent_id": "20250410_074942_327267",
+              "generation": 19,
+              "delta": {
+                "common_tasks": 10,
+                "gained": 0,
+                "lost": 4
+              }
+            },
+            {
+              "node_id": "20250412_175248_288905",
+              "parent_id": "20250409_222922_911304",
+              "generation": 25,
+              "delta": {
+                "common_tasks": 59,
+                "gained": 0,
+                "lost": 8
+              }
+            },
+            {
+              "node_id": "20250416_041119_471454",
+              "parent_id": "20250409_222922_911304",
+              "generation": 34,
+              "delta": {
+                "common_tasks": 10,
+                "gained": 0,
+                "lost": 5
+              }
+            }
+          ],
+          "skipped_node_ids": [
+            "20250408_105122_576806",
+            "20250408_164921_066292",
+            "20250409_011437_235009",
+            "20250409_011814_247835",
+            "20250409_192339_118893",
+            "20250410_074942_344929",
+            "20250410_172148_309115",
+            "20250411_191224_360624",
+            "20250411_191720_950338",
+            "20250412_070834_833452",
+            "20250412_094820_163919",
+            "20250412_094820_183990",
+            "20250412_173753_274169",
+            "20250412_174144_090379",
+            "20250412_175248_311313",
+            "20250413_020132_283869",
+            "20250413_020433_719968",
+            "20250415_193516_255911",
+            "20250415_194056_594597",
+            "20250415_194056_618658",
+            "20250416_033956_570407",
+            "20250416_033956_594013",
+            "20250416_040151_202919",
+            "20250416_041119_500276",
+            "20250416_042907_079542",
+            "20250416_042907_107350",
+            "20250416_072531_373287",
+            "20250416_072531_395979"
+          ],
+          "best_preserved": true,
+          "cost_saving_fraction": 0.4689,
+          "task_evaluation_saving_fraction": 0.4751,
+          "auc_improvement": 0.008582
+        },
+        "net-loss-2": {
+          "evaluated_nodes": 9,
+          "proposal_attempts": 29,
+          "task_evaluations": 485,
+          "total_cost": 514.0,
+          "comparison_budget": 1608.0,
+          "best_fixed_d60": 0.3833,
+          "best_node": "20250409_222922_900063",
+          "normalized_quality_cost_auc": 0.356851,
+          "quarantined_count": 4,
+          "skipped_attempts": 51,
+          "quarantined": [
+            {
+              "node_id": "20250408_005738_095636",
+              "parent_id": "20250407_212519_184190",
+              "generation": 1,
+              "delta": {
+                "common_tasks": 60,
+                "gained": 0,
+                "lost": 6
+              }
+            },
+            {
+              "node_id": "20250408_140134_418925",
+              "parent_id": "initial",
+              "generation": 5,
+              "delta": {
+                "common_tasks": 60,
+                "gained": 2,
+                "lost": 7
+              }
+            },
+            {
+              "node_id": "20250408_164921_054471",
+              "parent_id": "20250407_212519_184190",
+              "generation": 6,
+              "delta": {
+                "common_tasks": 60,
+                "gained": 1,
+                "lost": 6
+              }
+            },
+            {
+              "node_id": "20250410_074942_327267",
+              "parent_id": "20250409_222922_900063",
+              "generation": 12,
+              "delta": {
+                "common_tasks": 58,
+                "gained": 3,
+                "lost": 8
+              }
+            }
+          ],
+          "skipped_node_ids": [
+            "20250408_105122_576806",
+            "20250408_164921_066292",
+            "20250409_011437_235009",
+            "20250409_011814_247835",
+            "20250409_192339_106032",
+            "20250409_192339_118893",
+            "20250409_222922_911304",
+            "20250410_074942_344929",
+            "20250410_171527_557109",
+            "20250410_171527_571918",
+            "20250410_172148_309115",
+            "20250411_022457_393327",
+            "20250411_022457_413376",
+            "20250411_191224_360624",
+            "20250411_191224_377983",
+            "20250411_191720_950338",
+            "20250412_070436_915130",
+            "20250412_070834_833452",
+            "20250412_070834_853747",
+            "20250412_094820_163919",
+            "20250412_094820_183990",
+            "20250412_173429_669789",
+            "20250412_173753_251104",
+            "20250412_173753_274169",
+            "20250412_174144_090379",
+            "20250412_174629_007756",
+            "20250412_175248_288905",
+            "20250412_175248_311313",
+            "20250413_020132_260280",
+            "20250413_020132_283869",
+            "20250413_020433_719968",
+            "20250415_193516_255911",
+            "20250415_194056_594597",
+            "20250415_194056_618658",
+            "20250416_033956_570407",
+            "20250416_033956_594013",
+            "20250416_035748_083454",
+            "20250416_040151_202919",
+            "20250416_040533_592846",
+            "20250416_041119_471454",
+            "20250416_041119_500276",
+            "20250416_042206_743701",
+            "20250416_042206_767706",
+            "20250416_042907_079542",
+            "20250416_042907_107350",
+            "20250416_072236_757606",
+            "20250416_072236_780910",
+            "20250416_072531_373287",
+            "20250416_072531_395979",
+            "20250416_102506_688510",
+            "20250416_102506_714767"
+          ],
+          "best_preserved": true,
+          "cost_saving_fraction": 0.6803,
+          "task_evaluation_saving_fraction": 0.6826,
+          "auc_improvement": 0.012375
+        }
+      }
+    }
+  },
+  "verdict": {
+    "passed": false,
+    "primary_rule": "confirmed-no-new-gain",
+    "runs_passing": 1,
+    "runs_total": 3
+  }
+}
