@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "instanceId": "django__django-10880",
+  "modelProvider": "rollback-deepseek",
+  "modelId": "byteplus/deepseek-v4-flash-ga",
+  "startedAt": "2026-09-24T07:22:05.653Z",
+  "completedAt": "2026-09-24T07:22:35.203Z",
+  "durationMs": 29550,
+  "inputTokens": 8902,
+  "outputTokens": 3293,
+  "cacheReadTokens": 36608,
+  "cacheWriteTokens": 0,
+  "toolCalls": 11,
+  "maxOutputTokens": 65536,
+  "maxTotalTokens": 512000,
+  "budgetAborted": false,
+  "timeoutAborted": false,
+  "patch": "diff --git a/django/db/models/aggregates.py b/django/db/models/aggregates.py\nindex ac0b62d..ea88c54 100644\n--- a/django/db/models/aggregates.py\n+++ b/django/db/models/aggregates.py\n@@ -68,7 +68,7 @@ class Aggregate(Func):\n         return []\n \n     def as_sql(self, compiler, connection, **extra_context):\n-        extra_context['distinct'] = 'DISTINCT' if self.distinct else ''\n+        extra_context['distinct'] = 'DISTINCT ' if self.distinct else ''\n         if self.filter:\n             if connection.features.supports_aggregate_filter_clause:\n                 filter_sql, filter_params = self.filter.as_sql(compiler, connection)\n",
+  "fullPatch": "diff --git a/django/db/models/aggregates.py b/django/db/models/aggregates.py\nindex ac0b62d..ea88c54 100644\n--- a/django/db/models/aggregates.py\n+++ b/django/db/models/aggregates.py\n@@ -68,7 +68,7 @@ class Aggregate(Func):\n         return []\n \n     def as_sql(self, compiler, connection, **extra_context):\n-        extra_context['distinct'] = 'DISTINCT' if self.distinct else ''\n+        extra_context['distinct'] = 'DISTINCT ' if self.distinct else ''\n         if self.filter:\n             if connection.features.supports_aggregate_filter_clause:\n                 filter_sql, filter_params = self.filter.as_sql(compiler, connection)\n"
+}

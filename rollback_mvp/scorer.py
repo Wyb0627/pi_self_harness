@@ -27,14 +27,16 @@ class Judged:
 
 
 def judge(scenario: Scenario, decider_name: str, choice: str, reason: str) -> Judged:
-    oracle_best = scenario.subtree_best[scenario.oracle_child]
+    oracle_best = max(
+        scenario.subtree_best[oracle] for oracle in scenario.oracle_children
+    )
     chosen_best = scenario.subtree_best.get(choice, 0.0)
     return Judged(
         fork_parent=scenario.fork_parent,
         decider=decider_name,
         choice=choice,
         reason=reason,
-        hit=int(choice == scenario.oracle_child),
+        hit=int(choice in scenario.oracle_children),
         regret=round(oracle_best - chosen_best, 4),
     )
 

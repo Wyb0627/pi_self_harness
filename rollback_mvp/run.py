@@ -3,11 +3,11 @@
 Compares three deciders on DGM's real SWE evolution-tree forks:
   greedy  -- DGM-style score-based parent selection (baseline)
   random  -- no attribution (Ours-minus-A ablation)
-  llm     -- Gemini diagnosis-guided rollback (method under test)
+  llm     -- deepseek-v4-flash diagnosis-guided rollback (method under test)
 
 Usage:
   python run.py --offline            # baselines only, no API calls
-  python run.py                      # includes the Gemini decider
+  python run.py                      # includes the deepseek decider
   python run.py --only-disagreement  # restrict to greedy != oracle forks
 
 Each fork is scored against the subtree-best oracle (hit rate + mean regret),
@@ -28,10 +28,11 @@ from scorer import Judged, judge, summarize
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--offline", action="store_true", help="skip the Gemini decider")
+    parser.add_argument("--offline", action="store_true", help="skip the LLM decider")
     parser.add_argument("--only-disagreement", action="store_true")
     parser.add_argument("--seed", type=int, default=0)
     parser.add_argument("--llm-repeats", type=int, default=5, help="LLM calls per fork")
+    parser.add_argument("--output", help="output JSONL path")
     args = parser.parse_args()
 
     tree = EvoTree.load()
@@ -48,26 +49,37 @@ def main() -> None:
 
     client = None
     if not args.offline:
-        from gemini_client import GeminiClient
+        from llm_client import LLMClient
 
-        client = GeminiClient()
+        client = LLMClient()
 
     for s in scenarios:
         results.append(judge(s, "greedy", greedy_decider(s), "highest own accuracy"))
         results.append(judge(s, "random", random_decider(s, rng), "uniform random"))
         if client is not None:
             # Majority vote across repeats to smooth LLM stochasticity.
-            votes: dict[str, str] = {}
             counts: dict[str, int] = {}
+            vote_records: list[dict[str, str]] = []
             for _ in range(args.llm_repeats):
                 choice, reason = llm_decider(s, client)
                 counts[choice] = counts.get(choice, 0) + 1
-                votes[choice] = reason
-            best_choice = max(counts, key=lambda c: counts[c])
-            results.append(judge(s, "llm", best_choice, votes[best_choice]))
+                vote_records.append({"choice": choice, "reasoning": reason})
+            top_count = max(counts.values())
+            winners = [choice for choice, count in counts.items() if count == top_count]
+            best_choice = winners[0] if len(winners) == 1 else ""
+            audit_record = json.dumps(
+                {
+                    "vote_counts": counts,
+                    "votes": vote_records,
+                    "abstained_on_tie": len(winners) != 1,
+                },
+                ensure_ascii=False,
+            )
+            results.append(judge(s, "llm", best_choice, audit_record))
 
     _report(results, scenarios)
-    _save(results)
+    default_output = "results_baselines.jsonl" if args.offline else "results.jsonl"
+    _save(results, args.output or os.path.join(OUTPUT_DIR, default_output))
 
 
 def _report(results: list[Judged], scenarios) -> None:
@@ -92,9 +104,8 @@ def _report(results: list[Judged], scenarios) -> None:
             print(f"  [{j.decider:<6}] fork {j.fork_parent[:19]} choice {j.choice[:19]} hit={j.hit} regret={j.regret}")
 
 
-def _save(results: list[Judged]) -> None:
-    os.makedirs(OUTPUT_DIR, exist_ok=True)
-    path = os.path.join(OUTPUT_DIR, "results.jsonl")
+def _save(results: list[Judged], path: str) -> None:
+    os.makedirs(os.path.dirname(os.path.abspath(path)), exist_ok=True)
     with open(path, "w") as f:
         for j in results:
             f.write(json.dumps(j.__dict__) + "\n")

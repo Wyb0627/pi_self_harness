@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "prerequisite_images": [],
+  "images": [
+    {
+      "instance_id": "django__django-13346",
+      "base_commit": "9c92924cd5d164701e2514e1c2d6574126bd7cc2",
+      "env_image": "sweb.env.arm64.e83e37f52c09532c62acfb:latest",
+      "instance_image": "sweb.eval.arm64.django__django-13346:latest",
+      "architecture": "arm64",
+      "history_depth": 2,
+      "status": "reused"
+    }
+  ]
+}

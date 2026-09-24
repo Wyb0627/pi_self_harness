@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "instanceId": "django__django-11087",
+  "modelProvider": "rollback-deepseek",
+  "modelId": "byteplus/deepseek-v4-flash-ga",
+  "startedAt": "2026-09-24T07:36:17.628Z",
+  "completedAt": "2026-09-24T07:39:29.391Z",
+  "durationMs": 191762,
+  "inputTokens": 64482,
+  "outputTokens": 36926,
+  "cacheReadTokens": 463872,
+  "cacheWriteTokens": 0,
+  "toolCalls": 24,
+  "maxOutputTokens": 65536,
+  "maxTotalTokens": 512000,
+  "budgetAborted": true,
+  "timeoutAborted": false,
+  "providerError": "This operation was aborted",
+  "patch": "",
+  "fullPatch": ""
+}

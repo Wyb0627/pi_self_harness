@@ -1,0 +1,42 @@
+<table>
+<colgroup><col width="150"/><col width="120"/><col width="130"/><col width="140"/><col width="130"/></colgroup>
+<thead>
+<tr>
+<th background-color="light-gray"><p>方案</p></th>
+<th background-color="light-gray"><p>是否重跑 SWE 任务</p></th>
+<th background-color="light-gray"><p>任务 rollout 次数</p></th>
+<th background-color="light-gray"><p>预计 token</p></th>
+<th background-color="light-gray"><p>预计成本</p></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><p>初期实验（离线复用 DGM 树）</p></td>
+<td><p>否</p></td>
+<td><p>0</p></td>
+<td><p>约 0.3M（仅决策 LLM，实测）</p></td>
+<td><p>约 0.1 至 0.5 美元（可忽略）</p></td>
+</tr>
+<tr>
+<td><p>真跑再进化 · 仅复用前缀</p></td>
+<td><p>部分（只跑新分支）</p></td>
+<td><p>约 500 至 1,400（仅新节点）</p></td>
+<td><p>约 0.25B 至 0.7B（按 0.5M/任务）</p></td>
+<td><p>约 3,000 至 8,000 美元（投影）</p></td>
+</tr>
+<tr>
+<td><p>完全重跑 · DGM 算法</p></td>
+<td><p>是</p></td>
+<td><p>约 3,600 至 4,000</p></td>
+<td><p>约 1.8B（按 0.5M/任务）</p></td>
+<td><p>约 22,000 美元（论文锚点）</p></td>
+</tr>
+<tr>
+<td><p>完全重跑 · 我们的算法</p></td>
+<td><p>是</p></td>
+<td><p>约 2,200 至 2,900（回退剪枝后）</p></td>
+<td><p>约 1.1B 至 1.4B</p></td>
+<td><p>约 13,000 至 17,000 美元（投影）</p></td>
+</tr>
+</tbody>
+</table>

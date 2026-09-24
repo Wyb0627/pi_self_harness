@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "instanceId": "django__django-10999",
+  "method": "repair-first-causal-slice",
+  "candidatePaths": [
+    "django/utils/dateparse.py"
+  ],
+  "changedPaths": [
+    "django/utils/dateparse.py"
+  ],
+  "inputTokens": 2288,
+  "outputTokens": 40974,
+  "latencySeconds": 247.466499333,
+  "attempts": 1,
+  "failureHash": "f8e293eeafe789fd2a628fe68a200ae85a191c587fe3f54577a0eddca07bbbbc",
+  "patch": "diff --git a/django/utils/dateparse.py b/django/utils/dateparse.py\nindex 8d08b7d..8971420 100644\n--- a/django/utils/dateparse.py\n+++ b/django/utils/dateparse.py\n@@ -29,9 +29,10 @@ datetime_re = re.compile(\n standard_duration_re = re.compile(\n     r'^'\n     r'(?:(?P<days>-?\\d+) (days?, )?)?'\n-    r'((?:(?P<hours>-?\\d+):)(?=\\d+:\\d+))?'\n-    r'(?:(?P<minutes>-?\\d+):)?'\n-    r'(?P<seconds>-?\\d+)'\n+    r'(?P<sign>-)?'\n+    r'((?:(?P<hours>\\d+):)(?=\\d+:\\d+))?'\n+    r'(?:(?P<minutes>\\d+):)?'\n+    r'(?P<seconds>\\d+)'\n     r'(?:\\.(?P<microseconds>\\d{1,6})\\d{0,6})?'\n     r'$'\n )\n",
+  "explanation": "Give standard_duration_re a single optional sign before the clock-style time portion and make time components unsigned; parse_duration already multiplies those components by the captured sign while leaving days independently signed."
+}

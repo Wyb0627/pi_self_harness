@@ -1,0 +1,148 @@
+{
+  "subproblems": [
+    {
+      "id": 1,
+      "title": "Diagnose current static-LLM and controlled-experiment performance",
+      "findings": [
+        {
+          "source": "local-code-audit",
+          "priority": "P1-project",
+          "key_points": [
+            "DGM fork oracle compares raw accuracies from unequal staged subsets instead of the documented task intersection.",
+            "Plurality ties in run.py are resolved by insertion order and can flip the v2 kill conclusion.",
+            "Controlled prompts expose semantic case IDs and strongly directed evidence; 1.0 accuracy is not a credible real-distribution estimate."
+          ],
+          "conflict": null
+        },
+        {
+          "source": "https://arxiv.org/html/2604.25850v3",
+          "priority": "P1-paper",
+          "key_points": [
+            "AHE reports that component, experience, and decision observability make harness edits auditable.",
+            "AHE explicitly reports regression blindness even when fix attribution is reliable.",
+            "Component interactions are non-additive."
+          ],
+          "conflict": null
+        },
+        {
+          "source": "local-experiments-E3-E7",
+          "priority": "P1-project",
+          "key_points": [
+            "Common-task-set correction leaves only one strict DGM greedy/oracle disagreement among 11 forks; the earlier 4/11 claim is withdrawn.",
+            "DGM histories are 92.24% monotone, but shallow paths limit binary-search savings to 8.1%.",
+            "The controlled 1.0 score is a semantically revealing positive control, not a real-distribution accuracy estimate."
+          ],
+          "conflict": "Corrects the project's earlier raw-accuracy and controlled-accuracy interpretation."
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "title": "Identify precise low-cost rollback algorithms from prior work",
+      "findings": [
+        {
+          "source": "https://arxiv.org/html/2608.29228",
+          "priority": "P1-paper",
+          "key_points": [
+            "Pointwise attribution cannot represent jointly necessary or alternative repairs.",
+            "Graph-constrained counterfactual replay recovers minimal singleton/pair repair families exactly within its declared domain.",
+            "Dependency slicing and minimality pruning reduce replay calls by about 52-55% versus exhaustive search."
+          ],
+          "conflict": null
+        },
+        {
+          "source": "https://arxiv.org/html/2605.17439",
+          "priority": "P1-paper",
+          "key_points": [
+            "A single failed trajectory is structurally insufficient for attribution.",
+            "Targeted probes ranked by information value outperform blind retries.",
+            "Attribution should update from probe outcomes and stop when evidence is sufficient."
+          ],
+          "conflict": null
+        },
+        {
+          "source": "https://arxiv.org/html/2603.29109v1",
+          "priority": "P1-paper",
+          "key_points": [
+            "Free-form LLM localization is stochastic and unverifiable.",
+            "Structured grounding turns semantic hypotheses into executable constraints.",
+            "Counterfactual verification adds 12 percentage points Top-1 localization in the reported benchmark."
+          ],
+          "conflict": null
+        },
+        {
+          "source": "https://arxiv.org/html/2511.18854",
+          "priority": "P1-paper",
+          "key_points": [
+            "Git bisect is logarithmic only under deterministic monotone predicates.",
+            "Flaky and non-monotone regressions break ordinary bisect.",
+            "LLM temporal analysis can improve semantic bisect but still targets first-bad behavior, not latent interacting premises."
+          ],
+          "conflict": null
+        },
+        {
+          "source": "local-active-replay-E4-E6",
+          "priority": "P1-project",
+          "key_points": [
+            "Full ddmin recovered all clean synthetic 1-3 edge interaction causes.",
+            "A 40% dependency slice saved only 11-14% calls, killing the universal >=20% cost claim.",
+            "The retained cost gate requires a slice covering <=30% of lineage edges with audited cause recall >=95%; otherwise the method uses full ddmin."
+          ],
+          "conflict": "Published GCJR savings do not transfer automatically to shallow harness-patch lineages."
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "title": "Design and validate a pi extension and open-source evaluation workflow",
+      "findings": [
+        {
+          "source": "https://arxiv.org/html/2604.25850v3",
+          "priority": "P1-paper",
+          "key_points": [
+            "File-level components, layered trajectory evidence, and change manifests are practical integration primitives.",
+            "Tools, middleware, and memory carry more transferable gains than prompt-only changes."
+          ],
+          "conflict": null
+        },
+        {
+          "source": "https://arxiv.org/html/2608.29228",
+          "priority": "P1-paper",
+          "key_points": [
+            "An auditable plugin should return a set-valued repair family rather than only a scalar edge ranking.",
+            "Replay outcomes are the success certificate; LLM guesses alone are insufficient."
+          ],
+          "conflict": null
+        },
+        {
+          "source": "local-pi-plugin-implementation",
+          "priority": "P1-project",
+          "key_points": [
+            "The standalone pi-causal-rollback package persists checkpoint manifests and content-addressed artifact snapshots.",
+            "Its commands cover checkpoint, diagnose, status, and confirmed apply without invoking git reset.",
+            "Apply restores the rollback checkpoint and replays only later patches without declared dependencies or changed-file overlap."
+          ],
+          "conflict": null
+        }
+      ]
+    }
+  ],
+  "new_concepts": [
+    "minimal repair family",
+    "graph-constrained joint replay",
+    "single-trajectory identifiability gap",
+    "information-value diagnostic probes",
+    "structured semantic grounding",
+    "set-valued rollback diagnosis",
+    "Causal Lineage Minimization",
+    "rollback-and-replay plan",
+    "audited slice cost gate"
+  ],
+  "uncertain_points": [
+    "The closest counterfactual-replay papers operate on execution events, not harness-version patch lineages, but materially reduce novelty room.",
+    "The corrected DGM common-task-set analysis has only one strict disagreement fork, so it cannot support a statistical parent-selection claim.",
+    "Selective patch removal may fail when later harness patches depend syntactically or semantically on the removed patch.",
+    "Most 2026 sources are arXiv preprints; peer-review status is uncertain.",
+    "Real pi/SWE-bench failures have not yet established end-to-end repair success or cost savings."
+  ]
+}

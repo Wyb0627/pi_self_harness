@@ -1,0 +1,157 @@
+{
+  "schema_version": 1,
+  "scope": "Fully observed eight-candidate promotion replay. Hash rotations are sensitivity trials, not independent agent-generation runs.",
+  "task_panels": {
+    "small": 10,
+    "medium": 50,
+    "big": 140,
+    "total": 200
+  },
+  "candidate_count": 8,
+  "global_best": {
+    "node_id": "20250402_233611_093918",
+    "score": 0.5
+  },
+  "preregistration": {
+    "hypothesis": "Stability-gated promotion contains the global-best candidate in at least 95% of hash-rotated trials and uses at least 20% fewer task evaluations than documented DGM staging.",
+    "kill_criterion": "Kill if hit rate is below 0.95 or mean task-evaluation saving versus DGM staging is below 0.20.",
+    "primary_method": "stability-gated-6"
+  },
+  "official_split": {
+    "uniform-full": {
+      "method": "uniform-full",
+      "selected_ids": [
+        "20250328_043621_592702",
+        "20250329_024021_871963",
+        "20250330_040956_487852",
+        "20250330_142644_312864",
+        "20250330_235839_326434",
+        "20250330_235839_349015",
+        "20250331_131622_310781",
+        "20250402_233611_093918"
+      ],
+      "best_selected_score": 0.5,
+      "contains_global_best": true,
+      "task_evaluations": 1600,
+      "promoted_after_10": 8,
+      "promoted_after_60": 8
+    },
+    "dgm-threshold-top2": {
+      "method": "dgm-threshold-top2",
+      "selected_ids": [
+        "20250402_233611_093918",
+        "20250330_235839_326434"
+      ],
+      "best_selected_score": 0.5,
+      "contains_global_best": true,
+      "task_evaluations": 660,
+      "promoted_after_10": 6,
+      "promoted_after_60": 2
+    },
+    "successive-4-2": {
+      "method": "successive-4-2",
+      "selected_ids": [
+        "20250402_233611_093918",
+        "20250330_235839_326434"
+      ],
+      "best_selected_score": 0.5,
+      "contains_global_best": true,
+      "task_evaluations": 560,
+      "promoted_after_10": 4,
+      "promoted_after_60": 2
+    },
+    "risk-limiting-5-2": {
+      "method": "risk-limiting-5-2",
+      "selected_ids": [
+        "20250402_233611_093918",
+        "20250330_235839_326434"
+      ],
+      "best_selected_score": 0.5,
+      "contains_global_best": true,
+      "task_evaluations": 610,
+      "promoted_after_10": 5,
+      "promoted_after_60": 2
+    },
+    "stability-gated-6": {
+      "method": "stability-gated-6",
+      "selected_ids": [
+        "20250402_233611_093918"
+      ],
+      "best_selected_score": 0.5,
+      "contains_global_best": true,
+      "task_evaluations": 520,
+      "promoted_after_10": 6,
+      "promoted_after_60": 1
+    },
+    "top1-after-60": {
+      "method": "top1-after-60",
+      "selected_ids": [
+        "20250402_233611_093918"
+      ],
+      "best_selected_score": 0.5,
+      "contains_global_best": true,
+      "task_evaluations": 520,
+      "promoted_after_10": 6,
+      "promoted_after_60": 1
+    }
+  },
+  "rotated_trials": {
+    "count": 5000,
+    "seed": 20260924,
+    "summary": {
+      "uniform-full": {
+        "global_best_hit_rate": 1,
+        "mean_selected_score": 0.5,
+        "mean_task_evaluations": 1600,
+        "mean_promoted_after_10": 8,
+        "mean_promoted_after_60": 8,
+        "cost_saving_vs_dgm": -1.6682
+      },
+      "dgm-threshold-top2": {
+        "global_best_hit_rate": 0.8452,
+        "mean_selected_score": 0.4866,
+        "mean_task_evaluations": 599.65,
+        "mean_promoted_after_10": 5.1934,
+        "mean_promoted_after_60": 1.857,
+        "cost_saving_vs_dgm": 0.0
+      },
+      "successive-4-2": {
+        "global_best_hit_rate": 0.8298,
+        "mean_selected_score": 0.4872,
+        "mean_task_evaluations": 560,
+        "mean_promoted_after_10": 4,
+        "mean_promoted_after_60": 2,
+        "cost_saving_vs_dgm": 0.0661
+      },
+      "risk-limiting-5-2": {
+        "global_best_hit_rate": 0.8994,
+        "mean_selected_score": 0.4926,
+        "mean_task_evaluations": 610,
+        "mean_promoted_after_10": 5,
+        "mean_promoted_after_60": 2,
+        "cost_saving_vs_dgm": -0.0173
+      },
+      "stability-gated-6": {
+        "global_best_hit_rate": 0.8946,
+        "mean_selected_score": 0.4919,
+        "mean_task_evaluations": 560.208,
+        "mean_promoted_after_10": 6,
+        "mean_promoted_after_60": 1.2872,
+        "cost_saving_vs_dgm": 0.0658
+      },
+      "top1-after-60": {
+        "global_best_hit_rate": 0.8554,
+        "mean_selected_score": 0.4886,
+        "mean_task_evaluations": 520,
+        "mean_promoted_after_10": 6,
+        "mean_promoted_after_60": 1,
+        "cost_saving_vs_dgm": 0.1328
+      }
+    }
+  },
+  "verdict": {
+    "passed": false,
+    "accuracy_passed": false,
+    "cost_passed": false
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "prerequisite_images": [
+    {
+      "image": "sweb.base.x86_64:latest",
+      "architecture": "amd64",
+      "status": "built",
+      "duration_seconds": 303.322,
+      "log": "/Users/bytedance/codes/pi/research_output/clm_budgeted_evolution_20260924_125503/logs/local_instance_images/sweb.base.x86_64__latest.build.log"
+    },
+    {
+      "image": "sweb.env.x86_64.a33dddf55cdff5d8e23374:latest",
+      "architecture": "amd64",
+      "status": "built",
+      "duration_seconds": 470.844,
+      "log": "/Users/bytedance/codes/pi/research_output/clm_budgeted_evolution_20260924_125503/logs/local_instance_images/sweb.env.x86_64.a33dddf55cdff5d8e23374__latest.build.log"
+    }
+  ],
+  "images": [
+    {
+      "instance_id": "django__django-15930",
+      "base_commit": "63884829acd207404f2a5c3cc1d6b4cd0a822b70",
+      "env_image": "sweb.env.x86_64.a33dddf55cdff5d8e23374:latest",
+      "instance_image": "sweb.eval.x86_64.django__django-15930:latest",
+      "architecture": "amd64",
+      "history_depth": 2,
+      "status": "built",
+      "duration_seconds": 68.618,
+      "log": "/Users/bytedance/codes/pi/research_output/clm_budgeted_evolution_20260924_125503/logs/local_instance_images/django__django-15930.build.log"
+    }
+  ]
+}

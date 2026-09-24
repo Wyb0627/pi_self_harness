@@ -1,0 +1,33 @@
+{
+  "providers": {
+    "rollback-deepseek": {
+      "baseUrl": "http://127.0.0.1:8765/v1",
+      "api": "openai-completions",
+      "apiKey": "$ROLLBACK_ENDPOINT_API_KEY",
+      "compat": {
+        "maxTokensField": "max_tokens",
+        "supportsDeveloperRole": false,
+        "supportsReasoningEffort": false,
+        "supportsUsageInStreaming": false
+      },
+      "models": [
+        {
+          "id": "byteplus/deepseek-v4-flash-ga",
+          "name": "DeepSeek V4 Flash GA",
+          "reasoning": false,
+          "input": [
+            "text"
+          ],
+          "contextWindow": 131072,
+          "maxTokens": 4096,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0
+          }
+        }
+      ]
+    }
+  }
+}

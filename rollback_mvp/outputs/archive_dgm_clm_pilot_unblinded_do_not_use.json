@@ -1,0 +1,422 @@
+{
+  "schema_version": 1,
+  "preregistration": {
+    "hypothesis": "On monotone delayed regressions, CLM exact rollback >=0.90, repair success exceeds rollback-1 and the score-only DGM proxy, and mean probes do not exceed linear scan.",
+    "kill_criterion": "Kill if exact <0.90, repair success does not exceed either baseline, or mean probes exceed linear scan."
+  },
+  "scope": "Offline failure-recovery benchmark over logged DGM trajectories. It does not estimate counterfactual generated-agent performance.",
+  "endpoint_comparison": {
+    "canonical_tasks": 60,
+    "systems": {
+      "dgm-initial-agent": {
+        "node_id": "initial",
+        "raw_accuracy": 0.2,
+        "fixed_d60_accuracy": 0.2
+      },
+      "dgm": {
+        "node_id": "20250402_233611_093918",
+        "raw_accuracy": 0.5,
+        "fixed_d60_accuracy": 0.5,
+        "missing_d60_tasks": 0
+      },
+      "no-open-ended": {
+        "node_id": "20250419_072917_573516",
+        "raw_accuracy": 0.23333333333333334,
+        "fixed_d60_accuracy": 0.23333333333333334,
+        "missing_d60_tasks": 0
+      },
+      "no-self-improve": {
+        "node_id": "20250409_222922_900063",
+        "raw_accuracy": 0.3898305084745763,
+        "fixed_d60_accuracy": 0.38333333333333336,
+        "missing_d60_tasks": 1
+      }
+    },
+    "note": "The DGM initial agent is not the pi repository's current agent. No released original-pi predictions exist on these tasks. Missing canonical tasks are counted as failures."
+  },
+  "census": {
+    "all_failure_episodes": 69,
+    "monotone": 56,
+    "non_monotone": 13,
+    "delayed_monotone": 41,
+    "mean_scored_states_delayed": 4.5366
+  },
+  "selection": {
+    "seed": 20260924,
+    "max_episodes": 12,
+    "episode_ids": [
+      "20250402_005204_335241:django__django-15930",
+      "20250329_104654_602457:django__django-11964",
+      "20250329_104654_602457:django__django-15930",
+      "20250404_063906_626966:sphinx-doc__sphinx-10449",
+      "20250327_193700_187162:django__django-10973",
+      "20250402_121108_002158:django__django-15930",
+      "20250328_113705_938015:django__django-15930",
+      "20250330_110348_637680:django__django-15930",
+      "20250428_024446_061467:sphinx-doc__sphinx-10449",
+      "20250428_024446_061467:django__django-15930",
+      "20250327_193141_970605:django__django-15930",
+      "20250331_131622_337643:django__django-11964"
+    ],
+    "unique_tasks": 4,
+    "unique_leaves": 10
+  },
+  "baselines": {
+    "binary": {
+      "n": 12,
+      "exact": 1,
+      "repair_success": 1,
+      "mean_probe_calls": 1.4167,
+      "fallback_rate": 0
+    },
+    "dgm-score-proxy": {
+      "n": 12,
+      "exact": 0.0833,
+      "repair_success": 0.0833,
+      "mean_probe_calls": 0,
+      "fallback_rate": 0
+    },
+    "linear": {
+      "n": 12,
+      "exact": 1,
+      "repair_success": 1,
+      "mean_probe_calls": 1.0833,
+      "fallback_rate": 0
+    },
+    "pi-no-rollback": {
+      "n": 12,
+      "exact": 0,
+      "repair_success": 0,
+      "mean_probe_calls": 0,
+      "fallback_rate": 0
+    },
+    "rollback-1": {
+      "n": 12,
+      "exact": 0,
+      "repair_success": 0,
+      "mean_probe_calls": 0,
+      "fallback_rate": 0
+    }
+  },
+  "clm": {
+    "decisions": [
+      {
+        "method": "clm-deepseek",
+        "selected_node": "initial",
+        "selected_edge": "20250327_084619_293670",
+        "exact": true,
+        "repairs": true,
+        "probe_calls": 3,
+        "used_fallback": true
+      },
+      {
+        "method": "clm-deepseek",
+        "selected_node": "initial",
+        "selected_edge": "20250327_044512_401971",
+        "exact": true,
+        "repairs": true,
+        "probe_calls": 1,
+        "used_fallback": false
+      },
+      {
+        "method": "clm-deepseek",
+        "selected_node": "initial",
+        "selected_edge": "20250327_044512_401971",
+        "exact": true,
+        "repairs": true,
+        "probe_calls": 1,
+        "used_fallback": false
+      },
+      {
+        "method": "clm-deepseek",
+        "selected_node": "initial",
+        "selected_edge": "20250327_084619_293670",
+        "exact": true,
+        "repairs": true,
+        "probe_calls": 3,
+        "used_fallback": true
+      },
+      {
+        "method": "clm-deepseek",
+        "selected_node": "20250327_044512_401971",
+        "selected_edge": "20250327_162845_831928",
+        "exact": true,
+        "repairs": true,
+        "probe_calls": 2,
+        "used_fallback": false
+      },
+      {
+        "method": "clm-deepseek",
+        "selected_node": "initial",
+        "selected_edge": "20250327_141021_286218",
+        "exact": true,
+        "repairs": true,
+        "probe_calls": 1,
+        "used_fallback": false
+      },
+      {
+        "method": "clm-deepseek",
+        "selected_node": "initial",
+        "selected_edge": "20250327_044512_401971",
+        "exact": true,
+        "repairs": true,
+        "probe_calls": 1,
+        "used_fallback": false
+      },
+      {
+        "method": "clm-deepseek",
+        "selected_node": "initial",
+        "selected_edge": "20250327_084619_287593",
+        "exact": true,
+        "repairs": true,
+        "probe_calls": 1,
+        "used_fallback": false
+      },
+      {
+        "method": "clm-deepseek",
+        "selected_node": "initial",
+        "selected_edge": "20250327_084619_293670",
+        "exact": true,
+        "repairs": true,
+        "probe_calls": 2,
+        "used_fallback": true
+      },
+      {
+        "method": "clm-deepseek",
+        "selected_node": "initial",
+        "selected_edge": "20250327_084619_293670",
+        "exact": true,
+        "repairs": true,
+        "probe_calls": 1,
+        "used_fallback": false
+      },
+      {
+        "method": "clm-deepseek",
+        "selected_node": "initial",
+        "selected_edge": "20250327_084619_293670",
+        "exact": true,
+        "repairs": true,
+        "probe_calls": 1,
+        "used_fallback": false
+      },
+      {
+        "method": "clm-deepseek",
+        "selected_node": "initial",
+        "selected_edge": "20250327_141021_286218",
+        "exact": true,
+        "repairs": true,
+        "probe_calls": 1,
+        "used_fallback": false
+      }
+    ],
+    "summary": {
+      "clm-deepseek": {
+        "n": 12,
+        "exact": 1,
+        "repair_success": 1,
+        "mean_probe_calls": 1.5,
+        "fallback_rate": 0.25
+      }
+    },
+    "llm": {
+      "model": "byteplus/deepseek-v4-flash-ga",
+      "repeats_per_episode": 1,
+      "calls": 12,
+      "top1_accuracy": 0.25,
+      "input_tokens": 54361,
+      "output_tokens": 117595,
+      "latency_seconds": 533.917,
+      "attempts": 12,
+      "reused_from": "/Users/bytedance/codes/pi/rollback_mvp/outputs/dgm_clm_benchmark_deepseek.json"
+    }
+  },
+  "llm_runs": [
+    {
+      "episode_id": "20250402_005204_335241:django__django-15930",
+      "repeat": 1,
+      "ranking": [
+        "20250330_040956_487852",
+        "20250402_005204_335241",
+        "20250328_043621_592702",
+        "20250327_230053_522024",
+        "20250327_084619_293670"
+      ],
+      "top1_exact": 0,
+      "input_tokens": 5727,
+      "output_tokens": 10187,
+      "latency_seconds": 47.084219041,
+      "attempts": 1,
+      "raw_response": "{\n  \"ranked_edges\": [\n    \"20250330_040956_487852\",\n    \"20250402_005204_335241\",\n    \"20250328_043621_592702\",\n    \"20250327_230053_522024\",\n    \"20250327_084619_293670\"\n  ],\n  \"candidate_edges\": [\n    \"20250330_040956_487852\",\n    \"20250402_005204_335241\",\n    \"20250328_043621_592702\"\n  ],\n  \"reason\": \"The failure trajectory shows the agent ending with a user-facing workaround rather than a repository source fix, which is consistent with losing the original task instruction to modify /testbed files. The context-length handling edge (20250330_040956_487852) is the earliest change that can cause this: on token overflow it trims history to only the system message and the last four messages, potentially dropping the initial problem statement. The current edge (20250402_005204_335241) is later and likely only increases context/tool usage enough to trigger that latent trimming. The str_replace change is less directly implicated, and the editor/view and empty-patch validation changes are even less likely causes.\",\n  \"confidence\": 0.58\n}"
+    },
+    {
+      "episode_id": "20250329_104654_602457:django__django-11964",
+      "repeat": 1,
+      "ranking": [
+        "20250327_044512_401971",
+        "20250329_104654_602457",
+        "20250327_162845_831928"
+      ],
+      "top1_exact": 1,
+      "input_tokens": 3943,
+      "output_tokens": 4360,
+      "latency_seconds": 22.246674875,
+      "attempts": 1,
+      "raw_response": "{\n  \"ranked_edges\": [\n    \"20250327_044512_401971\",\n    \"20250329_104654_602457\",\n    \"20250327_162845_831928\"\n  ],\n  \"candidate_edges\": [\n    \"20250327_044512_401971\",\n    \"20250329_104654_602457\"\n  ],\n  \"reason\": \"The failure symptom is a SyntaxError in django/db/models/fields/__init__.py, indicating a source file was corrupted by an editing operation. The earliest likely root cause is the line-range editor change: it altered write behavior (added trailing newlines) and introduced partial line-replacement capabilities, which are the most plausible source of malformed Django source. The later solve_empty_patches change adds retry logic that could expose the latent editor defect, but it does not mutate repository files directly. The test_log_analyzer change only adds log parsing and is unlikely to corrupt source.\",\n  \"confidence\": 0.68\n}"
+    },
+    {
+      "episode_id": "20250329_104654_602457:django__django-15930",
+      "repeat": 1,
+      "ranking": [
+        "20250329_104654_602457",
+        "20250327_162845_831928",
+        "20250327_044512_401971"
+      ],
+      "top1_exact": 0,
+      "input_tokens": 3988,
+      "output_tokens": 15340,
+      "latency_seconds": 71.388776042,
+      "attempts": 1,
+      "raw_response": "{\n  \"ranked_edges\": [\n    \"20250329_104654_602457\",\n    \"20250327_162845_831928\",\n    \"20250327_044512_401971\"\n  ],\n  \"candidate_edges\": [\n    \"20250329_104654_602457\",\n    \"20250327_162845_831928\"\n  ],\n  \"reason\": \"Edge 20250329_104654_602457 directly rewrites the core AgenticSystem.forward() solve loop with patch filtering and retry behavior, making it the most likely source of a regression in overall task solving. The trajectory's narrow source workaround plus self-added test is consistent with retry pressure to produce a non-test source change. Edge 20250327_162845_831928 adds test-log-analysis guidance that encourages selective edits, but no direct use is visible. Edge 20250327_044512_401971 only adjusts editor line-range mechanics and is less likely to be the underlying cause.\",\n  \"confidence\": 0.3\n}"
+    },
+    {
+      "episode_id": "20250404_063906_626966:sphinx-doc__sphinx-10449",
+      "repeat": 1,
+      "ranking": [
+        "20250404_063906_626966",
+        "20250328_043621_592702",
+        "20250327_230053_522024",
+        "20250327_084619_293670",
+        "20250401_214239_643967"
+      ],
+      "top1_exact": 0,
+      "input_tokens": 5917,
+      "output_tokens": 6708,
+      "latency_seconds": 32.254106875,
+      "attempts": 1,
+      "raw_response": "{\n  \"ranked_edges\": [\n    \"20250404_063906_626966\",\n    \"20250328_043621_592702\",\n    \"20250327_230053_522024\",\n    \"20250327_084619_293670\",\n    \"20250401_214239_643967\"\n  ],\n  \"candidate_edges\": [\n    \"20250404_063906_626966\",\n    \"20250328_043621_592702\",\n    \"20250327_230053_522024\"\n  ],\n  \"reason\": \"The failed trajectory shows the system reporting '=== Getting Regression Tests ===' and 'Applied best patch from attempt 1 with score 100.00%' while the final test score is 0.00%. That internal best-attempt scoring/selection flow is introduced by solve_stochasticity, making it the most likely direct cause. Earlier edges are primarily patch validation, file-view ranges, and editor-command changes; str_replace is the next plausible failure point because it changes the editing primitive used to apply a source patch, but the successful local test run makes it less likely than the new scoring/selection logic.\",\n  \"confidence\": 0.4\n}"
+    },
+    {
+      "episode_id": "20250327_193700_187162:django__django-10973",
+      "repeat": 1,
+      "ranking": [
+        "20250327_193700_187162",
+        "20250327_044512_401971",
+        "20250327_162845_831928"
+      ],
+      "top1_exact": 0,
+      "input_tokens": 3178,
+      "output_tokens": 1164,
+      "latency_seconds": 6.090362499999998,
+      "attempts": 1,
+      "raw_response": "{\n  \"ranked_edges\": [\n    \"20250327_193700_187162\",\n    \"20250327_044512_401971\",\n    \"20250327_162845_831928\"\n  ],\n  \"candidate_edges\": [\n    \"20250327_193700_187162\"\n  ],\n  \"reason\": \"The failure is 'Failed to import tools.diff_merge: No module named astor'. Only edge 20250327_193700_187162 introduces tools/diff_merge.py and its tests, so it is the earliest and only change that can have introduced the missing astor dependency. The earlier edges modify unrelated editor/test-log-analyzer functionality and do not affect diff_merge or astor.\",\n  \"confidence\": 0.95\n}"
+    },
+    {
+      "episode_id": "20250402_121108_002158:django__django-15930",
+      "repeat": 1,
+      "ranking": [
+        "20250402_121108_002158",
+        "20250328_014441_399142",
+        "20250327_141021_286218"
+      ],
+      "top1_exact": 0,
+      "input_tokens": 4252,
+      "output_tokens": 13991,
+      "latency_seconds": 60.09455616699999,
+      "attempts": 1,
+      "raw_response": "{\n  \"ranked_edges\": [\n    \"20250402_121108_002158\",\n    \"20250328_014441_399142\",\n    \"20250327_141021_286218\"\n  ],\n  \"candidate_edges\": [\n    \"20250402_121108_002158\",\n    \"20250328_014441_399142\",\n    \"20250327_141021_286218\"\n  ],\n  \"reason\": \"The newest edge adds a test checkpoint/revert mechanism. Its identify_relevant_tests() hardcodes /dgm/tests instead of /testbed, so for expressions.py no relevant tests are found and run_tests() falls back to a full pytest run, which can fail and revert a valid edit. The trajectory shows the agent creating a test and beginning the expressions.py edit, consistent with an edit/test/revert failure. The second edge introduced the smart_editor tool used in the trajectory and is the main latent suspect; the first edge's target verification is less directly implicated.\",\n  \"confidence\": 0.45\n}"
+    },
+    {
+      "episode_id": "20250328_113705_938015:django__django-15930",
+      "repeat": 1,
+      "ranking": [
+        "20250328_113705_938015",
+        "20250327_044512_401971"
+      ],
+      "top1_exact": 0,
+      "input_tokens": 3142,
+      "output_tokens": 8369,
+      "latency_seconds": 41.280655792,
+      "attempts": 1,
+      "raw_response": "{\n  \"ranked_edges\": [\n    \"20250328_113705_938015\",\n    \"20250327_044512_401971\"\n  ],\n  \"candidate_edges\": [\n    \"20250328_113705_938015\",\n    \"20250327_044512_401971\"\n  ],\n  \"reason\": \"The later edge introduces a DjangoPatternChecker validation step that can reject or alter the agent's generated patch. The failing task involves a nonstandard CASE/WHEN/~Q(pk__in=[]) fix in expressions.py, which is exactly the kind of change a pattern-based post-check could incorrectly flag or distort. The earlier edge adds line-range editor tooling; the current trajectory uses that tooling successfully for the expressions.py edit, so it is less likely to be the primary regression source, though it remains a candidate as a latent tooling defect.\",\n  \"confidence\": 0.6\n}"
+    },
+    {
+      "episode_id": "20250330_110348_637680:django__django-15930",
+      "repeat": 1,
+      "ranking": [
+        "20250330_110348_637680",
+        "20250327_084619_287593"
+      ],
+      "top1_exact": 0,
+      "input_tokens": 3336,
+      "output_tokens": 7247,
+      "latency_seconds": 37.826653500000006,
+      "attempts": 1,
+      "raw_response": "{\n  \"ranked_edges\": [\"20250330_110348_637680\", \"20250327_084619_287593\"],\n  \"candidate_edges\": [\"20250330_110348_637680\", \"20250327_084619_287593\"],\n  \"reason\": \"The current failing version is the node after the latest edge, and that edge introduces AST-based editing. Such a tool is the most plausible source of a subtle source corruption or incomplete patch while modifying Django expression/test files, causing the reported Case/When failure. The older line-editing edge is less directly implicated and is ranked second only as a possible latent contributor.\",\n  \"confidence\": 0.3\n}"
+    },
+    {
+      "episode_id": "20250428_024446_061467:sphinx-doc__sphinx-10449",
+      "repeat": 1,
+      "ranking": [
+        "20250327_230053_522024",
+        "20250330_142644_312864",
+        "20250330_040956_487852",
+        "20250328_043621_592702",
+        "20250327_084619_293670",
+        "20250428_024446_061467"
+      ],
+      "top1_exact": 0,
+      "input_tokens": 7205,
+      "output_tokens": 15909,
+      "latency_seconds": 68.875031333,
+      "attempts": 1,
+      "raw_response": "{\n  \"ranked_edges\": [\n    \"20250327_230053_522024\",\n    \"20250330_142644_312864\",\n    \"20250330_040956_487852\",\n    \"20250328_043621_592702\",\n    \"20250327_084619_293670\",\n    \"20250428_024446_061467\"\n  ],\n  \"candidate_edges\": [\n    \"20250327_230053_522024\",\n    \"20250330_142644_312864\",\n    \"20250330_040956_487852\"\n  ],\n  \"reason\": \"The NameError shows sphinx/ext/autodoc/__init__.py was overwritten with a partial file missing the Documenter base class. The view_range change first allowed the agent to inspect only a snippet instead of the full file; later the re-introduced whole-file edit command turned that partial view into destructive overwrites. Context trimming is a secondary mechanism for losing full-file context. The remaining changes are policy or post-failure feedback and are less likely to be the earliest root cause.\",\n  \"confidence\": 0.45\n}"
+    },
+    {
+      "episode_id": "20250428_024446_061467:django__django-15930",
+      "repeat": 1,
+      "ranking": [
+        "20250327_084619_293670",
+        "20250428_024446_061467",
+        "20250328_043621_592702",
+        "20250330_142644_312864",
+        "20250330_040956_487852",
+        "20250327_230053_522024"
+      ],
+      "top1_exact": 1,
+      "input_tokens": 6385,
+      "output_tokens": 10659,
+      "latency_seconds": 47.668618541,
+      "attempts": 1,
+      "raw_response": "{\n  \"ranked_edges\": [\n    \"20250327_084619_293670\",\n    \"20250428_024446_061467\",\n    \"20250328_043621_592702\",\n    \"20250330_142644_312864\",\n    \"20250330_040956_487852\",\n    \"20250327_230053_522024\"\n  ],\n  \"candidate_edges\": [\n    \"20250327_084619_293670\",\n    \"20250428_024446_061467\",\n    \"20250328_043621_592702\"\n  ],\n  \"reason\": \"The failed trajectory ends with the exact 'Valid patch with source file modifications' message emitted by is_patch_valid, which was introduced by the oldest edge. That validator treats any non-test path as a source file, so a test/documentation workaround can be accepted as a valid patch instead of fixing Django's SQL generation. The test-feedback-analyzer edge is the latest behavioral change most likely to have pushed the agent toward modifying/running the test and declaring success, exposing that earlier validation flaw. Editor-tool changes are secondary because the trajectory shows a deliberate workaround rather than failed source editing.\",\n  \"confidence\": 0.62\n}"
+    },
+    {
+      "episode_id": "20250327_193141_970605:django__django-15930",
+      "repeat": 1,
+      "ranking": [
+        "20250327_193141_970605",
+        "20250327_084619_293670"
+      ],
+      "top1_exact": 0,
+      "input_tokens": 3126,
+      "output_tokens": 3803,
+      "latency_seconds": 16.518171457999998,
+      "attempts": 1,
+      "raw_response": "{\n  \"ranked_edges\": [\n    \"20250327_193141_970605\",\n    \"20250327_084619_293670\"\n  ],\n  \"candidate_edges\": [\n    \"20250327_193141_970605\",\n    \"20250327_084619_293670\"\n  ],\n  \"reason\": \"The failing trajectory starts with 'Failed to import tools.test_smart_edit: Tool module tools.test_smart_edit does not have required functions', and all subsequent attempts produce empty patches. This tool import failure is directly tied to the addition of tools/smart_edit.py in edge 20250327_193141_970605. The earlier edge only adds patch validation/retry logic in coding_agent.py and does not affect tool loading, so the later smart_edit edge is the earliest failure-introducing change.\",\n  \"confidence\": 0.75\n}"
+    },
+    {
+      "episode_id": "20250331_131622_337643:django__django-11964",
+      "repeat": 1,
+      "ranking": [
+        "20250327_141021_286218",
+        "20250331_131622_337643",
+        "20250328_014441_399142"
+      ],
+      "top1_exact": 1,
+      "input_tokens": 4162,
+      "output_tokens": 19858,
+      "latency_seconds": 82.58918108300001,
+      "attempts": 1,
+      "raw_response": "{\n  \"ranked_edges\": [\n    \"20250327_141021_286218\",\n    \"20250331_131622_337643\",\n    \"20250328_014441_399142\"\n  ],\n  \"candidate_edges\": [\n    \"20250327_141021_286218\",\n    \"20250331_131622_337643\"\n  ],\n  \"reason\": \"The current failure shows the agent falling back to a custom fixed_choices.py workaround instead of delivering a proper Django patch. The earliest and most direct cause is the patch-target verification introduced in 20250327_141021_286218: its regex-based extraction can misinterpret stack-trace/file-path text from the conversation (e.g., django/db/models/__init__.py line 3, expressions.py line 505) as modification targets, causing valid Django patches to be rejected. The later search_and_refactor edge is a secondary candidate because it is a broad editing tool that could have corrupted django.db.models.fields, but it is less directly aligned with the observed final-patch failure mode.\",\n  \"confidence\": 0.38\n}"
+    }
+  ]
+}

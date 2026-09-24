@@ -1,0 +1,12 @@
+{
+	"id": "demo-interaction",
+	"summary": "The cache layer becomes unsafe only after parallel workers are enabled.",
+	"candidatePatches": ["cache-layer", "parallel-workers"],
+	"priorOrder": ["cache-layer", "parallel-workers"],
+	"sliceAuditRecall": 1,
+	"metadata": {
+		"model": "deterministic-demo",
+		"promptHash": "none",
+		"dataHash": "demo-v1"
+	}
+}
