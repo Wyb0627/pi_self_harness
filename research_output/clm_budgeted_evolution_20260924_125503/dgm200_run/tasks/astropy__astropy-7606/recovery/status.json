@@ -1,0 +1,37 @@
+{
+  "status": "completed",
+  "resolved": false,
+  "candidatePaths": [
+    "astropy/units/core.py"
+  ],
+  "feedbackEvaluation": {
+    "status": "completed",
+    "resolved": false,
+    "protocol": "original",
+    "officialEvaluatorRun": true,
+    "usedInertFeedbackProbe": false,
+    "identitySha256": "eba442c96f68d400ef341969aa206fbe74b3c88be508f02938210da979b2c1a6",
+    "submittedPatchSha256": "67beef5bdd43c70aca46657d5d386972b82dbc589091da2c3158ec24ddf49cab",
+    "runId": "dgm200-original-eba442c96f68d400",
+    "modelNameOrPath": "original-pi-one-shot-eba442c96f68",
+    "returnCode": 0,
+    "durationSeconds": 32.786,
+    "reportPath": "/Users/bytedance/codes/pi/research_output/clm_budgeted_evolution_20260924_125503/dgm200_run/logs/run_evaluation/dgm200-original-eba442c96f68d400/original-pi-one-shot-eba442c96f68/astropy__astropy-7606/report.json",
+    "testOutputPath": "/Users/bytedance/codes/pi/research_output/clm_budgeted_evolution_20260924_125503/dgm200_run/logs/run_evaluation/dgm200-original-eba442c96f68d400/original-pi-one-shot-eba442c96f68/astropy__astropy-7606/test_output.txt"
+  },
+  "evaluation": {
+    "status": "completed",
+    "resolved": false,
+    "protocol": "recovery",
+    "officialEvaluatorRun": true,
+    "usedInertFeedbackProbe": false,
+    "identitySha256": "0ddc2ad1a8c87aec0437f76ed834b0a3d85dccd2fcdcdf73efe52353f0d0edb9",
+    "submittedPatchSha256": "b89cf0c483702f3aa7e60a4100afda6ec6bc72790dd7024ac24fc85e7403c68c",
+    "runId": "dgm200-recovery-0ddc2ad1a8c87aec",
+    "modelNameOrPath": "pi-rf-clm-feedback-1-0ddc2ad1a8c8",
+    "returnCode": 0,
+    "durationSeconds": 32.339,
+    "reportPath": "/Users/bytedance/codes/pi/research_output/clm_budgeted_evolution_20260924_125503/dgm200_run/logs/run_evaluation/dgm200-recovery-0ddc2ad1a8c87aec/pi-rf-clm-feedback-1-0ddc2ad1a8c8/astropy__astropy-7606/report.json",
+    "testOutputPath": "/Users/bytedance/codes/pi/research_output/clm_budgeted_evolution_20260924_125503/dgm200_run/logs/run_evaluation/dgm200-recovery-0ddc2ad1a8c87aec/pi-rf-clm-feedback-1-0ddc2ad1a8c8/astropy__astropy-7606/test_output.txt"
+  }
+}

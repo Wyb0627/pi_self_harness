@@ -22,17 +22,20 @@ settings:
 - every paired 95% bootstrap interval for call reduction excluded zero.
 
 On DGM's official 10-task small development subset, isolated Pi solved 5/10.
-One repair-first causal-slice call was applied to each of three failed tasks;
-all three repaired patches passed the official SWE-bench grader. The resulting
-combined score is **8/10**, versus **5/10** for the fixed Pi baseline and
-**4/10** for the best released DGM node on the same task IDs.
+After the official evaluator exposed hidden failure information, one
+repair-first causal-slice call was applied to each of three failed tasks; all
+three repaired patches passed a second official grading. The resulting
+feedback-assisted recovery score is **8/10**, versus **5/10** for the fixed Pi
+one-shot baseline and **4/10** for the best released DGM node on the same task
+IDs.
 
-This is a development-set quality result, not the full requested endpoint
-claim. The released DGM run uses a different model and agent substrate, and no
+The 8/10 result is a diagnostic upper bound, not a standard one-submission
+SWE-bench score and not directly comparable with DGM's 50% headline. The
+released DGM run also uses a different model and agent substrate, and no
 matched DGM-style evolution or hidden 140-task confirmatory run has completed.
-The gateway also reported unexpectedly high repair output-token counts, so the
-real endpoint low-cost claim remains unverified despite the synthetic
-probe-cost result.
+The gateway reported unexpectedly high repair output-token counts, so the real
+endpoint low-cost claim remains unverified despite the synthetic probe-cost
+result.
 
 ## Problem Diagnosis
 
@@ -171,10 +174,11 @@ submitted patch.
 | Released DGM initial | 3/10 | 30% | Historical, different agent/model |
 | Released DGM best | 4/10 | 40% | Historical, different agent/model |
 | Isolated original Pi | 5/10 | 50% | Matched Pi baseline |
-| Pi + RF-CLM recovery | **8/10** | **80%** | Same Pi/model as baseline |
+| Pi + RF-CLM recovery | **8/10** | **80%** | One official evaluator-feedback round; diagnostic upper bound |
 
-The three repair candidates were generated before official grading and all
-passed:
+The three repair candidates were generated after the original Pi patches had
+been officially graded and the hidden failure evidence had been exposed. Each
+repair then received one unchanged official grading and passed:
 
 | Task | Baseline | RF-CLM | Repair calls |
 |---|---:|---:|---:|
@@ -182,10 +186,12 @@ passed:
 | `django__django-15930` | Empty patch | Resolved | 1 |
 | `django__django-10999` | Failed | Resolved | 1 |
 
-The quality gain is +30 percentage points over isolated Pi and +40 points over
-the best released DGM node on these task IDs. No repair was attempted for
-`django__django-16661` or `django__django-11087` after the predeclared
-escalation condition became unnecessary.
+Under this feedback-assisted protocol, the diagnostic gain is +30 percentage
+points over isolated Pi and +40 points over the best released DGM node on
+these task IDs. These deltas must not be reported as a standard SWE-bench
+superiority result. No repair was attempted for `django__django-16661` or
+`django__django-11087` after the predeclared escalation condition became
+unnecessary.
 
 The 10 original Pi runs recorded 3,442,234 total tokens including cache reads.
 The three repair calls recorded 137,391 input-plus-output tokens, a 3.99%
@@ -205,7 +211,8 @@ grader reports are under `logs/run_evaluation/rf-clm-repair-*`.
 - `pi-rollback`: Biome and TypeScript checks pass.
 - `rollback_mvp`: 29/29 Python tests pass.
 - RF causal-slice candidates: 3/3 passed the official SWE-bench grader.
-- DGM-small development result: RF-CLM 8/10, Pi 5/10, released DGM best 4/10.
+- DGM-small diagnostic result: feedback-assisted RF-CLM 8/10, one-shot Pi
+  5/10, released DGM best 4/10.
 - Research state, memo, sources, and result JSON files parse successfully.
 - Exact replay-plan regression coverage verifies abstention when dependency
   filtering would make the applied plan fail.
@@ -310,14 +317,16 @@ set.
 RF-CLM is the first explored method that satisfies the pre-registered
 precision/cost target in controlled causal replay. It is implemented as a
 tested Pi plugin with conservative abstention and, in this development pilot,
-repaired 3/3 selected failures to raise the DGM-small score from 5/10 to 8/10.
+repaired 3/3 selected failures after one round of official evaluator feedback,
+raising the diagnostic DGM-small recovery score from 5/10 to 8/10.
 
-The defensible claim today is: **RF-CLM improves fixed Pi from 50% to 80% on
-DGM's 10-task development subset and exceeds the best released DGM node's 40%
-on those task IDs.** This is not yet evidence that RF-CLM beats a matched DGM
-evolution run or generalizes to DGM's hidden 140-task stage. The endpoint
-low-cost claim also remains conditional on correcting or independently
-accounting for the gateway's output-token behavior.
+The defensible claim today is: **given hidden official failure evidence,
+one-call RF-CLM repaired 3/3 selected failed Pi patches on DGM's 10-task
+development subset.** The resulting 8/10 is a feedback-assisted upper bound,
+not evidence that RF-CLM beats standard one-shot Pi, a matched DGM evolution
+run, or DGM's published 50% endpoint. The endpoint low-cost claim also remains
+conditional on correcting or independently accounting for the gateway's
+output-token behavior.
 
 ## Sources
 

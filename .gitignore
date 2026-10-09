@@ -46,3 +46,14 @@ packages/agent/docs/extensions/pi-server-artifact/index.md
 default.profraw
 /DGM_results
 datasets/SWE-bench/
+/tmp/pdfs
+
+# Python caches
+__pycache__/
+*.pyc
+
+# Local-only DGM200 workspaces, wheel cache, and runtime auth state
+/research_output/**/dgm200_run/tasks/*/workspace/
+/research_output/**/dgm200_run/invalid_attempts/*/workspace/
+/research_output/**/dgm200_run/build_wheelhouse/
+/research_output/**/pi_home/**/auth.json

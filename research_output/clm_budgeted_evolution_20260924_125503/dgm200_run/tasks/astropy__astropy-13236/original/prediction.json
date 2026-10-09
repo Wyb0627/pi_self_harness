@@ -1,0 +1,7 @@
+[
+  {
+    "instance_id": "astropy__astropy-13236",
+    "model_name_or_path": "original-pi-one-shot-aed989f68510",
+    "model_patch": "diff --git a/astropy/table/table.py b/astropy/table/table.py\nindex 5afe212..3d16b80 100644\n--- a/astropy/table/table.py\n+++ b/astropy/table/table.py\n@@ -1243,6 +1243,11 @@ class Table:\n         # mixin class\n         if (not isinstance(data, Column) and not data_is_mixin\n                 and isinstance(data, np.ndarray) and len(data.dtype) > 1):\n+            warnings.warn('Structured array encountered as a column in a Table. '\n+                          'This currently behaves like a mixin column and this '\n+                          'behavior will change in future versions. Use Column '\n+                          'or MaskedColumn to avoid this warning.',\n+                          FutureWarning)\n             data = data.view(NdarrayMixin)\n             data_is_mixin = True\n \ndiff --git a/docs/changes/table/13236.other.rst b/docs/changes/table/13236.other.rst\nnew file mode 100644\nindex 0000000..a39dfe2\n--- /dev/null\n+++ b/docs/changes/table/13236.other.rst\n@@ -0,0 +1,5 @@\n+Adding a structured ``numpy`` array to a ``Table`` now emits a\n+``FutureWarning``, since in a future version such arrays will be stored as\n+regular ``Column`` objects instead of as mixin columns (``NdarrayMixin``).\n+To avoid the warning, wrap the structured array in a ``Column`` or\n+``MaskedColumn``.\n"
+  }
+]

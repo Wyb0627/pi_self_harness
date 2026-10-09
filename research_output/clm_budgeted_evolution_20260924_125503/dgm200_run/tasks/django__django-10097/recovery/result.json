@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "instanceId": "django__django-10097",
+  "method": "repair-first-causal-slice",
+  "status": "completed",
+  "candidatePaths": [
+    "django/core/validators.py"
+  ],
+  "changedPaths": [
+    "django/core/validators.py"
+  ],
+  "inputTokens": 36184,
+  "outputTokens": 29210,
+  "latencySeconds": 211.511962291,
+  "attempts": 1,
+  "tokenTelemetryAvailable": true,
+  "failureHash": "0b4259ed097c2241459b209655caa7b0594525868e40eb5df2a35144cce5b8f2",
+  "patch": "diff --git a/django/core/validators.py b/django/core/validators.py\nindex 92394a7..55f0e1e 100644\n--- a/django/core/validators.py\n+++ b/django/core/validators.py\n@@ -92,9 +92,13 @@ class URLValidator(RegexValidator):\n     )\n     host_re = '(' + hostname_re + domain_re + tld_re + '|localhost)'\n \n+    # Userinfo pattern. This pattern is used for the userinfo part of the URL.\n+    userinfo_re = r'[a-z0-9\\.\\-_~!$&\\'()*+,;=]'\n+\n     regex = _lazy_re_compile(\n         r'^(?:[a-z0-9\\.\\-\\+]*)://'  # scheme is validated separately\n-        r'(?:\\S+(?::\\S*)?@)?'  # user:pass authentication\n+        r'(?:(?:' + userinfo_re + r')*' +\n+        r'(?::(?:' + userinfo_re + r')*)?@)?'  # user:pass authentication\n         r'(?:' + ipv4_re + '|' + ipv6_re + '|' + host_re + ')'\n         r'(?::\\d{2,5})?'  # port\n         r'(?:[/?#][^\\s]*)?'  # resource path\n",
+  "proposedEdits": [
+    {
+      "path": "django/core/validators.py",
+      "old": "    host_re = '(' + hostname_re + domain_re + tld_re + '|localhost)'\n\n    regex = _lazy_re_compile(",
+      "new": "    host_re = '(' + hostname_re + domain_re + tld_re + '|localhost)'\n\n    # Userinfo pattern. This pattern is used for the userinfo part of the URL.\n    userinfo_re = r'[a-z0-9\\.\\-_~!$&\\'()*+,;=]'\n\n    regex = _lazy_re_compile("
+    },
+    {
+      "path": "django/core/validators.py",
+      "old": "        r'(?:\\S+(?::\\S*)?@)?'  # user:pass authentication",
+      "new": "        r'(?:(?:' + userinfo_re + r')*' +\n        r'(?::(?:' + userinfo_re + r')*)?@)?'  # user:pass authentication"
+    }
+  ],
+  "explanation": "Restrict URL userinfo to allowed characters and a single optional password separator, rejecting unencoded ':', '@', and '/' in usernames/passwords."
+}

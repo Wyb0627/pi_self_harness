@@ -1,0 +1,219 @@
+diff --git a/sim_card.py b/sim_card.py
+new file mode 100644
+index 0000000..40a5618
+--- /dev/null
++++ b/sim_card.py
+@@ -0,0 +1,213 @@
++"""Pure-Python simulation of the CONTINUE-card round-trip logic in card.py."""
++import re
++
++CARD_LENGTH = 80
++KEYWORD_LENGTH = 8
++VALUE_INDICATOR = "= "
++VALUE_INDICATOR_LEN = len(VALUE_INDICATOR)
++HIERARCH_VALUE_INDICATOR = "="
++
++# From card.py
++_strg = r"\'(?P<strg>([ -~]+?|\'\'|) *?)\'(?=$|/| )"
++_comm_field = r"(?P<comm_field>(?P<sepr>/ *)(?P<comm>(.|\n)*))"
++_strg_comment_RE = re.compile(f"({_strg})? *{_comm_field}?")
++
++_digits_FSC = r"(\.\d+|\d+(\.\d*)?)([DE][+-]?\d+)?"
++_digits_NFSC = r"(\.\d+|\d+(\.\d*)?) *([deDE] *[+-]? *\d+)?"
++_numr_NFSC = r"[+-]? *" + _digits_NFSC
++
++_value_NFSC_RE = re.compile(
++    r'(?P<valu_field> *'
++        r'(?P<valu>'
++            rf'{_strg}|'
++            r'(?P<bool>[FT])|'
++            r'(?P<numr>' + _numr_NFSC + r')|'
++            r'(?P<cplx>\( *'
++                r'(?P<real>' + _numr_NFSC + r') *, *'
++                r'(?P<imag>' + _numr_NFSC + r') *\))'
++        fr')? *){_comm_field}?$'
++)
++
++
++def _words_group(s, width):
++    """Equivalent of util._words_group without numpy."""
++    words = []
++    slen = len(s)
++    # positions of spaces (including appended one)
++    blank_loc = [i for i, c in enumerate(s + " ") if c == " "]
++    offset = 0
++    xoffset = 0
++    while True:
++        try:
++            loc = next(i for i, b in enumerate(blank_loc) if b >= width + offset)
++        except StopIteration:
++            loc = len(blank_loc)
++        if loc > 0:
++            offset = blank_loc[loc - 1] + 1
++        else:
++            offset = -1
++        if offset <= xoffset:
++            offset = min(xoffset + width, slen)
++        words.append(s[xoffset:offset])
++        if offset >= slen:
++            break
++        xoffset = offset
++    return words
++
++
++def _pad(input):
++    _len = len(input)
++    if _len == CARD_LENGTH:
++        return input
++    elif _len > CARD_LENGTH:
++        strlen = _len % CARD_LENGTH
++        if strlen == 0:
++            return input
++        else:
++            return input + " " * (CARD_LENGTH - strlen)
++    else:
++        strlen = _len % CARD_LENGTH
++        return input + " " * (CARD_LENGTH - strlen)
++
++
++def format_long_image(keyword, value, comment=""):
++    """Replicates Card._format_long_image for the value part."""
++    value_length = 67
++    comment_length = 64
++    output = []
++
++    value_esc = value.replace("'", "''")
++    words = _words_group(value_esc, value_length)
++    for idx, word in enumerate(words):
++        if idx == 0:
++            headstr = "{:{len}}= ".format(keyword, len=KEYWORD_LENGTH)
++        else:
++            headstr = "CONTINUE  "
++
++        if not comment and idx == len(words) - 1:
++            value_format = "'{}'"
++        else:
++            value_format = "'{}&'"
++
++        v = value_format.format(word)
++        output.append(f"{headstr + v:80}")
++
++    if comment:
++        words = _words_group(comment, comment_length)
++        for idx, word in enumerate(words):
++            if idx == len(words) - 1:
++                headstr = "CONTINUE  '' / "
++            else:
++                headstr = "CONTINUE  '&' / "
++            c = headstr + word
++            output.append(f"{c:80}")
++
++    return "".join(output)
++
++
++def split_long(image):
++    """Replicates Card._split for the long-image CONTINUE case."""
++    values = []
++    comments = []
++    keyword = None
++    ncards = len(image) // CARD_LENGTH
++    for idx in range(0, CARD_LENGTH * ncards, CARD_LENGTH):
++        sub = image[idx : idx + CARD_LENGTH]
++        kw, vc = split_single(sub)
++        if keyword is None:
++            keyword = kw
++        if keyword in {"", "COMMENT", "HISTORY", "END"}:
++            values.append(vc)
++            continue
++        m = _strg_comment_RE.match(vc)
++        if not m:
++            return kw, vc
++        value = m.group("strg") or ""
++        value = value.rstrip().replace("''", "'")
++        if value and value[-1] == "&":
++            value = value[:-1]
++        values.append(value)
++        comment = m.group("comm")
++        if comment:
++            comments.append(comment.rstrip())
++
++    if keyword in {"", "COMMENT", "HISTORY", "END"}:
++        valuecomment = "".join(values)
++    else:
++        valuecomment = f"'{''.join(values)}' / {' '.join(comments)}"
++    return keyword, valuecomment
++
++
++def split_single(image):
++    """Replicates Card._split for a single (<=80 char) card."""
++    special = {"", "COMMENT", "HISTORY", "END", "CONTINUE"}
++    if image[:KEYWORD_LENGTH].strip() in special:
++        keyword, valuecomment = image.split(" ", 1)
++        return keyword.strip(), valuecomment.strip()
++    delim_index = image.find(VALUE_INDICATOR)
++    if delim_index is None:
++        keyword = image[:KEYWORD_LENGTH]
++        valuecomment = image[KEYWORD_LENGTH:]
++    elif delim_index > 10 and image[:9] != "HIERARCH ":
++        keyword = image[:8]
++        valuecomment = image[8:]
++    else:
++        keyword, valuecomment = image.split(VALUE_INDICATOR, 1)
++    return keyword.strip(), valuecomment.strip()
++
++
++def _format_value(value):
++    """Replicates Card._format_value for strings."""
++    if value == "":
++        return "''"
++    else:
++        exp_val_str = value.replace("'", "''")
++        val_str = f"'{exp_val_str:8}'"
++        return f"{val_str:20}"
++
++
++def parse_value(valuecomment):
++    """Replicates Card._parse_value's string path."""
++    m = _value_NFSC_RE.match(valuecomment)
++    if m is None:
++        raise ValueError("no match")
++    if m.group("strg") is not None:
++        return re.sub("''", "'", m.group("strg"))
++    raise ValueError("not a string")
++
++
++def roundtrip(n, suffix="''"):
++    value = "x" * n + suffix
++    # Replicate Card._format_image's decision:
++    # single card if len(keyword)+len(delimiter)+len(value) <= 80
++    keyword = "CONFIG  "
++    delimiter = "= "
++    val = _format_value(value)
++    if len(keyword) + len(delimiter) + len(val) <= 80:
++        image = (keyword + delimiter + val)[:80].ljust(80)
++        kw, vc = split_single(image)
++        parsed = parse_value(vc)
++        return value, parsed, image
++    # long string case
++    image = format_long_image("CONFIG", value)
++    kw, vc = split_long(image)
++    parsed = parse_value(vc)
++    return value, parsed, image
++
++
++if __name__ == "__main__":
++    print("=== case 1: value = 'x'*n + \"''\" ===")
++    for n in range(60, 70):
++        value, parsed, image = roundtrip(n)
++        ok = value == parsed
++        print(n, len(value), ok)
++        if not ok:
++            print("   value:", repr(value))
++            print("   parsed:", repr(parsed))
++            print("   image:", repr(image[:160]))
++    print()
++    print("=== case 2: value = 'x'*n + \"''\" + 'x'*10 ===")
++    for n in range(50, 70):
++        value, parsed, image = roundtrip(n, "''" + "x" * 10)
++        ok = value == parsed
++        print(n, len(value), ok)

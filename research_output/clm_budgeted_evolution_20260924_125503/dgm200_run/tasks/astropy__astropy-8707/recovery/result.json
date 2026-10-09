@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "instanceId": "astropy__astropy-8707",
+  "method": "repair-first-causal-slice",
+  "status": "repair_error",
+  "candidatePaths": [
+    "astropy/io/fits/tests/test_header.py",
+    "astropy/io/fits/hdu/base.py",
+    "astropy/io/fits/util.py"
+  ],
+  "changedPaths": [],
+  "inputTokens": 74522,
+  "outputTokens": 20633,
+  "latencySeconds": 112.44338775,
+  "attempts": 1,
+  "tokenTelemetryAvailable": true,
+  "failureHash": "d1fb186f76d7a8f898a0cdaded58a7237d4d0f5e8c4b0e5169f6099b6776bc26",
+  "patch": "",
+  "proposedEdits": [
+    {
+      "path": "astropy/io/fits/card.py",
+      "old": "        card._image = _pad(image)",
+      "new": "        if isinstance(image, bytes):\n            image = image.decode('ascii')\n        card._image = _pad(image)"
+    },
+    {
+      "path": "astropy/io/fits/header.py",
+      "old": "        return cls._from_blocks([data], endcard=True, sep=sep,",
+      "new": "        if isinstance(data, bytes):\n            data = data.decode('ascii')\n        return cls._from_blocks([data], endcard=True, sep=sep,"
+    }
+  ],
+  "explanation": "Decode bytes inputs to ASCII strings before parsing FITS cards and headers.",
+  "applicationError": "ValueError: Expected one exact match in astropy/io/fits/header.py, found 0"
+}

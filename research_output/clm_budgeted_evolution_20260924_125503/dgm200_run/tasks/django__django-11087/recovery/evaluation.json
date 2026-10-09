@@ -1,0 +1,15 @@
+{
+  "status": "completed",
+  "resolved": false,
+  "protocol": "recovery",
+  "officialEvaluatorRun": true,
+  "usedInertFeedbackProbe": false,
+  "identitySha256": "3e18de6856821928f56d0c9f5dbb62feefb4bf7bb3bbdf649677e4264b482ccf",
+  "submittedPatchSha256": "79211d11980f98c1a3e5cbfb146c721decf72d170933f6af4da584b1a25353c0",
+  "runId": "dgm200-recovery-3e18de6856821928",
+  "modelNameOrPath": "pi-rf-clm-feedback-1-3e18de685682",
+  "returnCode": 0,
+  "durationSeconds": 34.446,
+  "reportPath": "/Users/bytedance/codes/pi/research_output/clm_budgeted_evolution_20260924_125503/dgm200_run/logs/run_evaluation/dgm200-recovery-3e18de6856821928/pi-rf-clm-feedback-1-3e18de685682/django__django-11087/report.json",
+  "testOutputPath": "/Users/bytedance/codes/pi/research_output/clm_budgeted_evolution_20260924_125503/dgm200_run/logs/run_evaluation/dgm200-recovery-3e18de6856821928/pi-rf-clm-feedback-1-3e18de685682/django__django-11087/test_output.txt"
+}

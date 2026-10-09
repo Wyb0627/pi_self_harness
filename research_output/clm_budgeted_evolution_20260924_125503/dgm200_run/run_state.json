@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "startedAtUnix": 1791503710.686769,
+  "completedAtUnix": null,
+  "originalStartedAtUnix": 1790299342.344259,
+  "excludedExternalPauseSeconds": 1204368.34251,
+  "pauseAccounting": [
+    {
+      "pausedAtUnix": 1790316408,
+      "resumedAtUnix": 1791514558,
+      "reason": "User-paused interval with no benchmark, evaluator, image-build, or model process running."
+    },
+    {
+      "pausedAtUnix": 1791515628.65749,
+      "resumedAtUnix": 1791521847,
+      "reason": "User interrupted the task-17 runner and later requested continuation; no benchmark process ran during this interval."
+    }
+  ]
+}

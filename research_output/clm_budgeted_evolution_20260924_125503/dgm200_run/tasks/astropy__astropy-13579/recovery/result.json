@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "instanceId": "astropy__astropy-13579",
+  "method": "repair-first-causal-slice",
+  "status": "repair_error",
+  "candidatePaths": [
+    "cextern/wcslib/C/lin.c",
+    "astropy/wcs/wcsapi/high_level_api.py",
+    "astropy/wcs/wcsapi/high_level_wcs_wrapper.py"
+  ],
+  "changedPaths": [],
+  "inputTokens": 45742,
+  "outputTokens": 32485,
+  "latencySeconds": 288.46735625,
+  "attempts": 2,
+  "tokenTelemetryAvailable": true,
+  "failureHash": "10b487763498ead11fb98775930f36cf05e13a47edf5d856397535a6c124fa31",
+  "patch": "",
+  "proposedEdits": [
+    {
+      "path": "astropy/wcs/wcsapi/wrappers/sliced_wcs.py",
+      "old": "    def _world_to_full(self, world_arrays):\n        world_arrays = list(world_arrays)\n        for i in self._world_removed:\n            world_arrays.insert(i, np.nan)\n        return world_arrays\n",
+      "new": "    def _world_to_full(self, world_arrays):\n        world_arrays = list(world_arrays)\n        if self._world_removed:\n            pixel_arrays = self._pixel_to_full([0] * self.pixel_n_dim)\n            world_arrays_full = self._wcs.pixel_to_world_values(*pixel_arrays)\n            for i in self._world_removed:\n                world_arrays.insert(i, world_arrays_full[i])\n        return world_arrays\n"
+    }
+  ],
+  "explanation": "When slicing drops world dimensions, compute the dropped world coordinates from the fixed dropped pixel coordinates using the underlying WCS instead of inserting NaN. This prevents NaN from propagating through coupled world-to-pixel transforms.",
+  "applicationError": "ValueError: Expected one exact match in astropy/wcs/wcsapi/wrappers/sliced_wcs.py, found 0"
+}

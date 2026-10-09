@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "instanceId": "django__django-11138",
+  "method": "repair-first-causal-slice",
+  "status": "repair_error",
+  "candidatePaths": [
+    "django/db/backends/sqlite3/features.py",
+    "django/db/backends/mysql/features.py",
+    "django/db/backends/oracle/features.py"
+  ],
+  "changedPaths": [],
+  "inputTokens": 13058,
+  "outputTokens": 51886,
+  "latencySeconds": 289.746082459,
+  "attempts": 1,
+  "tokenTelemetryAvailable": true,
+  "failureHash": "412d0a06c9e220fda297f93f25b590573d60c743cfe4fb9b1ab1563c474aa339",
+  "patch": "",
+  "proposedEdits": [
+    {
+      "path": "django/db/backends/sqlite3/base.py",
+      "old": "            dt = timezone.make_aware(dt, timezone.utc).astimezone(timezone.pytz.timezone(tzname))\n        return dt.date().isoformat()",
+      "new": "            dt = timezone.make_aware(dt, self.timezone).astimezone(timezone.pytz.timezone(tzname))\n        return dt.date().isoformat()"
+    }
+  ],
+  "explanation": "Use the database connection's configured timezone instead of UTC when interpreting SQLite datetime values for date lookups.",
+  "applicationError": "ValueError: Expected one exact match in django/db/backends/sqlite3/base.py, found 0"
+}

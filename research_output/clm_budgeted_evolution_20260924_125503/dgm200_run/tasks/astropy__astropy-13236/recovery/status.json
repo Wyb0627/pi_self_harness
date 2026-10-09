@@ -1,0 +1,39 @@
+{
+  "status": "completed",
+  "resolved": true,
+  "candidatePaths": [
+    "astropy/table/table.py",
+    "docs/changes/table/13236.other.rst",
+    "astropy/table/operations.py"
+  ],
+  "feedbackEvaluation": {
+    "status": "completed",
+    "resolved": false,
+    "protocol": "original",
+    "officialEvaluatorRun": true,
+    "usedInertFeedbackProbe": false,
+    "identitySha256": "aed989f6851064bb3d485b327dbfd110b8c982f0021e8c7ea156302754672290",
+    "submittedPatchSha256": "a097e1cba3f7eb0397e4c237c12c4e23c7956d354ddb1ddf29e2e46ecae785d7",
+    "runId": "dgm200-original-aed989f6851064bb",
+    "modelNameOrPath": "original-pi-one-shot-aed989f68510",
+    "returnCode": 0,
+    "durationSeconds": 53.193,
+    "reportPath": "/Users/bytedance/codes/pi/research_output/clm_budgeted_evolution_20260924_125503/dgm200_run/logs/run_evaluation/dgm200-original-aed989f6851064bb/original-pi-one-shot-aed989f68510/astropy__astropy-13236/report.json",
+    "testOutputPath": "/Users/bytedance/codes/pi/research_output/clm_budgeted_evolution_20260924_125503/dgm200_run/logs/run_evaluation/dgm200-original-aed989f6851064bb/original-pi-one-shot-aed989f68510/astropy__astropy-13236/test_output.txt"
+  },
+  "evaluation": {
+    "status": "completed",
+    "resolved": true,
+    "protocol": "recovery",
+    "officialEvaluatorRun": true,
+    "usedInertFeedbackProbe": false,
+    "identitySha256": "de3731bb4680be5c65eaee62d883ba3b956a49df9c24bbbcc12dd3d97639cfe3",
+    "submittedPatchSha256": "abacee0df45a8d2ee8e4a92cf51ac600e2d0854e47ebf51ac037a899de1b8020",
+    "runId": "dgm200-recovery-de3731bb4680be5c",
+    "modelNameOrPath": "pi-rf-clm-feedback-1-de3731bb4680",
+    "returnCode": 0,
+    "durationSeconds": 54.04,
+    "reportPath": "/Users/bytedance/codes/pi/research_output/clm_budgeted_evolution_20260924_125503/dgm200_run/logs/run_evaluation/dgm200-recovery-de3731bb4680be5c/pi-rf-clm-feedback-1-de3731bb4680/astropy__astropy-13236/report.json",
+    "testOutputPath": "/Users/bytedance/codes/pi/research_output/clm_budgeted_evolution_20260924_125503/dgm200_run/logs/run_evaluation/dgm200-recovery-de3731bb4680be5c/pi-rf-clm-feedback-1-de3731bb4680/astropy__astropy-13236/test_output.txt"
+  }
+}

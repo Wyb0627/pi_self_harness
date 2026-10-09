@@ -4,9 +4,52 @@ from __future__ import annotations
 
 import argparse
 import json
+import sys
+import time
 import urllib.error
 import urllib.request
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+
+
+def fetch_completion(
+    upstream: str,
+    body: dict,
+    authorization: str,
+    *,
+    max_rate_limit_retries: int,
+    rate_limit_wait_seconds: float,
+) -> dict:
+    for attempt in range(max_rate_limit_retries + 1):
+        request = urllib.request.Request(
+            f"{upstream}/chat/completions",
+            data=json.dumps(body).encode(),
+            headers={
+                "Authorization": authorization,
+                "Content-Type": "application/json",
+            },
+            method="POST",
+        )
+        try:
+            with urllib.request.urlopen(request, timeout=600) as response:
+                return json.loads(response.read())
+        except urllib.error.HTTPError as error:
+            if error.code != 429 or attempt == max_rate_limit_retries:
+                raise
+            retry_after = error.headers.get("Retry-After") if error.headers else None
+            try:
+                requested_wait = float(retry_after) if retry_after else 0.0
+            except ValueError:
+                requested_wait = 0.0
+            wait_seconds = max(rate_limit_wait_seconds, requested_wait)
+            error.read()
+            print(
+                f"Upstream rate limited request; retrying in {wait_seconds:g}s "
+                f"({attempt + 1}/{max_rate_limit_retries}).",
+                file=sys.stderr,
+                flush=True,
+            )
+            time.sleep(wait_seconds)
+    raise AssertionError("unreachable")
 
 
 def response_events(payload: dict) -> list[dict]:
@@ -48,6 +91,8 @@ def response_events(payload: dict) -> list[dict]:
 
 class ProxyHandler(BaseHTTPRequestHandler):
     upstream = ""
+    max_rate_limit_retries = 3
+    rate_limit_wait_seconds = 65.0
 
     def do_POST(self) -> None:
         if not self.path.endswith("/chat/completions"):
@@ -58,17 +103,13 @@ class ProxyHandler(BaseHTTPRequestHandler):
             body = json.loads(self.rfile.read(int(self.headers.get("content-length", "0"))))
             wants_stream = bool(body.pop("stream", False))
             body.pop("stream_options", None)
-            request = urllib.request.Request(
-                f"{self.upstream}/chat/completions",
-                data=json.dumps(body).encode(),
-                headers={
-                    "Authorization": self.headers.get("authorization", ""),
-                    "Content-Type": "application/json",
-                },
-                method="POST",
+            payload = fetch_completion(
+                self.upstream,
+                body,
+                self.headers.get("authorization", ""),
+                max_rate_limit_retries=self.max_rate_limit_retries,
+                rate_limit_wait_seconds=self.rate_limit_wait_seconds,
             )
-            with urllib.request.urlopen(request, timeout=600) as response:
-                payload = json.loads(response.read())
         except urllib.error.HTTPError as error:
             self.send_response(error.code)
             self.send_header("Content-Type", "application/json")
@@ -109,12 +150,20 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--host", default="127.0.0.1")
     parser.add_argument("--port", type=int, default=8765)
+    parser.add_argument("--max-rate-limit-retries", type=int, default=3)
+    parser.add_argument("--rate-limit-wait-seconds", type=float, default=65.0)
     parser.add_argument(
         "--upstream",
         default="https://aicolate.tiktok-row.net/ai-gateway/openai/v1",
     )
     args = parser.parse_args()
+    if args.max_rate_limit_retries < 0:
+        parser.error("--max-rate-limit-retries must be non-negative")
+    if args.rate_limit_wait_seconds < 0:
+        parser.error("--rate-limit-wait-seconds must be non-negative")
     ProxyHandler.upstream = args.upstream.rstrip("/")
+    ProxyHandler.max_rate_limit_retries = args.max_rate_limit_retries
+    ProxyHandler.rate_limit_wait_seconds = args.rate_limit_wait_seconds
     ThreadingHTTPServer((args.host, args.port), ProxyHandler).serve_forever()
 
 

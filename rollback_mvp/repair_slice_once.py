@@ -18,20 +18,39 @@ def parse_patch_paths(patch: str) -> list[str]:
 
 def apply_edits(workspace: Path, edits: list[dict[str, str]]) -> list[str]:
     changed: list[str] = []
+    updated_files: dict[Path, str] = {}
+    workspace = workspace.resolve()
     for edit in edits:
+        if not isinstance(edit, dict):
+            raise ValueError("Each edit must be an object.")
         relative = edit["path"]
         path = (workspace / relative).resolve()
-        if not path.is_relative_to(workspace.resolve()):
+        if not path.is_relative_to(workspace):
             raise ValueError(f"Edit escapes workspace: {relative}")
         old = edit["old"]
         new = edit["new"]
-        text = path.read_text()
+        if not all(isinstance(value, str) for value in (relative, old, new)):
+            raise ValueError("Edit path, old, and new values must be strings.")
+        text = updated_files.get(path, path.read_text())
         count = text.count(old)
         if count != 1:
             raise ValueError(f"Expected one exact match in {relative}, found {count}")
-        path.write_text(text.replace(old, new, 1))
-        changed.append(relative)
+        updated_files[path] = text.replace(old, new, 1)
+        if relative not in changed:
+            changed.append(relative)
+    for path, text in updated_files.items():
+        path.write_text(text)
     return changed
+
+
+def workspace_patch(workspace: Path) -> str:
+    return subprocess.run(
+        ["git", "diff", "--binary", "HEAD"],
+        cwd=workspace,
+        check=True,
+        capture_output=True,
+        text=True,
+    ).stdout
 
 
 def main() -> None:
@@ -79,30 +98,37 @@ Do not edit tests and do not rely on release history or external sources."""
 """
     result = LLMClient().complete_json_with_telemetry(system, user, max_tokens=8192)
     edits = result.data.get("edits")
-    if not isinstance(edits, list) or not edits:
-        raise ValueError("Model returned no edits.")
-    changed = apply_edits(workspace, edits)
-    patch = subprocess.run(
-        ["git", "diff", "--binary", "HEAD", "--", *changed],
-        cwd=workspace,
-        check=True,
-        capture_output=True,
-        text=True,
-    ).stdout
+    status = "completed"
+    application_error = None
+    changed: list[str] = []
+    try:
+        if not isinstance(edits, list) or not edits:
+            raise ValueError("Model returned no edits.")
+        changed = apply_edits(workspace, edits)
+        patch = workspace_patch(workspace)
+    except Exception as error:
+        status = "repair_error"
+        application_error = f"{type(error).__name__}: {error}"
+        patch = workspace_patch(workspace)
     output = {
         "schemaVersion": 1,
         "instanceId": args.instance_id,
         "method": "repair-first-causal-slice",
+        "status": status,
         "candidatePaths": candidate_paths,
         "changedPaths": changed,
         "inputTokens": result.input_tokens,
         "outputTokens": result.output_tokens,
         "latencySeconds": result.latency_seconds,
         "attempts": result.attempts,
+        "tokenTelemetryAvailable": True,
         "failureHash": hashlib.sha256(Path(args.failure_file).read_bytes()).hexdigest(),
         "patch": patch,
+        "proposedEdits": edits,
         "explanation": result.data.get("explanation", ""),
     }
+    if application_error is not None:
+        output["applicationError"] = application_error
     output_path = Path(args.output)
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(json.dumps(output, indent=2) + "\n")

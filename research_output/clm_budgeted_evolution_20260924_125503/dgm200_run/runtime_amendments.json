@@ -1,0 +1,236 @@
+{
+  "schemaVersion": 1,
+  "amendments": [
+    {
+      "id": "repair-runtime-openai-sdk",
+      "detectedAfterInstance": "astropy__astropy-13033",
+      "appliesFromRecoveryRetryInstance": "astropy__astropy-13033",
+      "change": "Installed openai==2.48.0 in the temporary SWE-bench virtual environment used by the repair runner.",
+      "invalidModelCalls": 0,
+      "reusedOriginalGeneration": true,
+      "reusedOriginalEvaluation": true
+    },
+    {
+      "id": "gateway-tpm-pacing",
+      "detectedDuringInstance": "astropy__astropy-13453",
+      "appliesAfterInstance": "astropy__astropy-13453",
+      "change": "Retry upstream HTTP 429 responses up to three times after waiting at least 65 seconds; retain the 90-second inter-task delay.",
+      "interTaskDelaySeconds": 90,
+      "maxRateLimitRetries": 3,
+      "minimumRateLimitWaitSeconds": 65,
+      "proxySha256Before": "a59f376e40b314e4ddbd24508b37929a4a649048b2f50f187bd220c38040b903",
+      "proxySha256After": "72210ae143ffa0aaf1952aae350009055c991c236fa956a80d097a8b404a8ba5",
+      "triggeringAttempt": {
+        "reportedTokens": 487145,
+        "patchProduced": true,
+        "officiallyResolved": true,
+        "retainedInMetrics": true
+      }
+    },
+    {
+      "id": "image-build-network-resilience",
+      "detectedDuringInstance": "astropy__astropy-13579",
+      "appliesFromInstance": "astropy__astropy-13579",
+      "change": "Set build-only Docker ARG values PIP_DEFAULT_TIMEOUT=120 and PIP_RETRIES=20 for prerequisite and instance image builds.",
+      "failedBuildAttemptsBeforeAmendment": 2,
+      "modelCallsBeforeAmendment": 0,
+      "imageBuilderSha256Before": "7f65c6a848cb9aaae1fa0560bc98e620cf574338b877b125a96785c1c3b083b3",
+      "imageBuilderSha256After": "6efe1bd8648810623b86ae0df9db4e7a9750debadbb3d8323b9009a2a4162a4f"
+    },
+    {
+      "id": "repair-error-terminal-accounting",
+      "detectedDuringInstance": "astropy__astropy-14096",
+      "appliesFromInstance": "astropy__astropy-14096",
+      "change": "Persist repair-call telemetry before edit application and classify a model response that cannot satisfy exact-edit validation as a completed failed P2 attempt rather than an infrastructure error. Official evaluator errors remain infrastructure errors.",
+      "orchestratorSha256Before": "150c9adb3a37e338d00b2286bd84600d1dca259196378e88d532db5eb7fe4d2b",
+      "orchestratorSha256After": "0a46b8b374746ab9a3dcd261edd09f0f6c3e7bae92a4731fe02a6e75735fe4f0",
+      "repairRunnerSha256Before": "c6e94dbd6c89f475326b35e1da006e997dcd038c1f04dc0899066fafb877e474",
+      "repairRunnerSha256After": "2abf81b82f0230a1dea6aaa2ff243eef247eb99f788813fec5e7758d1f7f8e37",
+      "triggeringAttempt": {
+        "instanceId": "astropy__astropy-14096",
+        "originalResultRetained": true,
+        "secondRepairCallMade": false,
+        "recoveryResolved": false,
+        "reportedTokenTelemetryAvailable": false,
+        "conservativeTokenCharge": 512000
+      }
+    },
+    {
+      "id": "content-verified-build-wheelhouse",
+      "detectedDuringInstance": "astropy__astropy-14369",
+      "appliesFromInstance": "astropy__astropy-14369",
+      "change": "Use a SHA-256-manifested local wheelhouse with PIP_NO_INDEX during instance setup and official evaluation, retry failed image builds up to two times, skip pacing sleeps for already-completed tasks, and enforce wall time from the original run start.",
+      "dependencyResolutionChanged": false,
+      "runtimeImageContainsWheelhouse": true,
+      "wheelhouseContainsTaskInformation": false,
+      "failedBuildsBeforeAmendment": 1,
+      "modelCallsBeforeAmendment": 0,
+      "wheelhouseManifest": "build_wheelhouse/astropy-py39-arm64/SHA256SUMS",
+      "wheelhouseManifestSha256": "4ebd40f989a28b6dfc2faf01f7b5cf2ca9f0dcbdeddb842fad838e47f4ae7858",
+      "orchestratorSha256Before": "0a46b8b374746ab9a3dcd261edd09f0f6c3e7bae92a4731fe02a6e75735fe4f0",
+      "orchestratorSha256After": "547eb163376aed5c6b849e7c59aef35e7826b9aaa489b5f341b4d1f24ccb8def",
+      "imageBuilderSha256Before": "6efe1bd8648810623b86ae0df9db4e7a9750debadbb3d8323b9009a2a4162a4f",
+      "imageBuilderSha256After": "2c4c32a00b01b7a68a8bcba969a9c139ddff56647f4ad60811349406619c6921",
+      "verification": {
+        "instanceId": "astropy__astropy-14508",
+        "buildDurationSeconds": 48.457,
+        "architecture": "arm64",
+        "baseCommit": "a3f4ae6cd24d5ecdf49f213d77b3513dd509a06c",
+        "remoteCount": 0,
+        "wheelhousePresentAtRuntime": true,
+        "wheelhouseHashesVerifiedAtRuntime": true
+      }
+    },
+    {
+      "id": "wheelhouse-cython-0.29.34",
+      "detectedDuringInstance": "astropy__astropy-14995",
+      "appliesFromInstanceRetry": "astropy__astropy-14995",
+      "change": "Added the exact official PyPI CPython 3.9 ARM64 wheel for Cython==0.29.34, which this frozen commit pins as a build dependency.",
+      "dependencyResolutionChanged": false,
+      "failedBuildAttemptsBeforeAmendment": 3,
+      "modelCallsBeforeAmendment": 0,
+      "wheelFilename": "Cython-0.29.34-cp39-cp39-manylinux_2_17_aarch64.manylinux2014_aarch64.manylinux_2_24_aarch64.whl",
+      "wheelSha256": "5718319a01489688fdd22ddebb8e2fcbbd60be5f30de4336ea7063c3ae29fbe5",
+      "pypiMetadataUrl": "https://pypi.org/pypi/Cython/0.29.34/json",
+      "downloadMirror": "https://pypi.tuna.tsinghua.edu.cn/",
+      "wheelhouseManifestSha256Before": "4ebd40f989a28b6dfc2faf01f7b5cf2ca9f0dcbdeddb842fad838e47f4ae7858",
+      "wheelhouseManifestSha256After": "bbc5cc9269f4e705fbebdb6b0a9d4d5a15b257817481fb1ec85957710767b07e"
+    },
+    {
+      "id": "astropy-1.3-x86-rosetta-and-external-pause",
+      "detectedDuringInstance": "astropy__astropy-7166",
+      "appliesFromInstanceRetry": "astropy__astropy-7166",
+      "change": "Prebuilt the four Astropy 1.3 evaluator images as standard x86_64 TestSpecs under Rosetta because their exact Python 3.6 environment is unavailable on current ARM64 Conda channels; excluded the user-paused interval from the active wall-time cap.",
+      "affectedInstances": [
+        "astropy__astropy-7166",
+        "astropy__astropy-7336",
+        "astropy__astropy-7606",
+        "astropy__astropy-7671"
+      ],
+      "testSpecArchitectureRule": "SWE-bench selects x86_64 on x86_64 hosts and defaults to ARM64 on ARM64 hosts unless an instance is explicitly listed in USE_X86.",
+      "sourceCommitsChanged": false,
+      "dependencyVersionsChanged": false,
+      "compilerOptimizationChangedInFinalImages": false,
+      "modelCallsBeforeFinalImages": 0,
+      "failedArm64EnvironmentBuilds": 3,
+      "failedQemuCompilationBuilds": 5,
+      "discardedLowerOptimizationImageCount": 0,
+      "colima": {
+        "vmType": "vz",
+        "rosetta": true,
+        "cpu": 8,
+        "memoryGiB": 16,
+        "diskGiB": 120
+      },
+      "buildOnlyPyPiMirror": "https://pypi.tuna.tsinghua.edu.cn/simple",
+      "evaluatorPythonWrapper": "swebench_python_wrapper.py",
+      "evaluatorPythonWrapperSha256": "127ffd035fce1fb43401de94aaa21032430e56326bb60e222c6fdaa9d7edb82c",
+      "evaluatorWrapperScope": "Only reports x86_64 to swebench.harness.run_evaluation when --instance_ids includes one of the four affected Astropy 1.3 tasks; all other Python commands and task IDs use the real interpreter unchanged.",
+      "verifiedImages": [
+        {
+          "instanceId": "astropy__astropy-7166",
+          "baseCommit": "26d147868f8a891a6009a25cd6a8576d2e1bd747",
+          "architecture": "amd64",
+          "durationSeconds": 375.77
+        },
+        {
+          "instanceId": "astropy__astropy-7336",
+          "baseCommit": "732d89c2940156bdc0e200bb36dc38b5e424bcba",
+          "architecture": "amd64",
+          "durationSeconds": 203.67
+        },
+        {
+          "instanceId": "astropy__astropy-7606",
+          "baseCommit": "3cedd79e6c121910220f8e6df77c54a0b344ea94",
+          "architecture": "amd64",
+          "durationSeconds": 191.606
+        },
+        {
+          "instanceId": "astropy__astropy-7671",
+          "baseCommit": "a7141cd90019b62688d507ae056298507678c058",
+          "architecture": "amd64",
+          "durationSeconds": 188.701
+        }
+      ],
+      "verification": {
+        "exactBaseCommits": true,
+        "remoteCount": 0,
+        "wheelhouseHashesVerifiedAtRuntime": true
+      },
+      "externalPause": {
+        "pausedAtUnix": 1790316408,
+        "resumedAtUnix": 1791514558,
+        "excludedSeconds": 1198150,
+        "activeElapsedBeforePauseSeconds": 17065.656
+      }
+    },
+    {
+      "id": "astropy-4-test-wheelhouse-and-legacy-build-isolation",
+      "detectedDuringInstance": "astropy__astropy-8707",
+      "appliesFromInstanceRetry": "astropy__astropy-8707",
+      "change": "Completed the SHA-256-manifested offline wheelhouse for the frozen Astropy 4.0 test extra and derived only its shared ARM64 environment image with declared setup requirements preinstalled and Pip build isolation disabled, restoring legacy setup_requires behavior under Pip 26.",
+      "affectedEnvironmentImage": "sweb.env.arm64.428468730904ff6b4232aa:latest",
+      "affectedInstances": [
+        "astropy__astropy-8707",
+        "astropy__astropy-8872"
+      ],
+      "taskSourceChanged": false,
+      "testSelectionChanged": false,
+      "dependencyResolutionChanged": false,
+      "modelCallsBeforeFinalImage": 0,
+      "failedBuildAttemptsBeforeFinalImage": 7,
+      "declaredTestRequirementsAdded": {
+        "pytest-mpl": "0.18.0",
+        "objgraph": "3.6.2",
+        "ipython": "8.18.1",
+        "skyfield": "1.55"
+      },
+      "declaredSetupRequirementsPreinstalled": {
+        "Cython": "0.29.34",
+        "Jinja2": "3.1.6",
+        "MarkupSafe": "3.0.4"
+      },
+      "pipCompatibility": {
+        "pipVersion": "26.0.1",
+        "environment": "PIP_NO_BUILD_ISOLATION=0",
+        "reason": "Pip configuration maps the negative --no-build-isolation option through a store_false destination; value 0 yields build_isolation=false."
+      },
+      "environmentImage": {
+        "originalImageId": "sha256:79b82bc8f634711c659c766adfe61475839dfc430d7132ca884ce811e66a3e44",
+        "originalBackupTag": "sweb.env.arm64.428468730904ff6b4232aa-bootstrap-base:latest",
+        "derivedImageId": "sha256:5a8d3c9313e0f2fb121e3a7209dd6bcdfdff811bde92ce1dd4693de797084082",
+        "architecture": "arm64"
+      },
+      "wheelhouseManifestSha256Before": "bbc5cc9269f4e705fbebdb6b0a9d4d5a15b257817481fb1ec85957710767b07e",
+      "wheelhouseManifestSha256After": "e04a94c1d078132e1df18a077f7f66f1eecd0787fa10fca9357b8cd7fa0005e1",
+      "frozenBuilderSha256": "2c4c32a00b01b7a68a8bcba969a9c139ddff56647f4ad60811349406619c6921",
+      "verification": {
+        "instanceId": "astropy__astropy-8707",
+        "baseCommit": "a85a0747c54bac75e9c3b2fe436b105ea029d6cf",
+        "instanceImageId": "sha256:54796664d4ab3910897738e618e2f6c75692674fceab7f10fde579475d94c56e",
+        "architecture": "arm64",
+        "durationSeconds": 65.933,
+        "remoteCount": 0,
+        "wheelhouseHashesVerifiedAtRuntime": true,
+        "declaredDependenciesImportable": true
+      }
+    }
+  ],
+  "quarantinedAttempts": [
+    {
+      "instanceId": "astropy__astropy-13453",
+      "reason": "RATE_LIMIT_TPM_EXCEEDED before any reported usage or patch",
+      "reportedTokens": 0,
+      "path": "invalid_attempts/astropy__astropy-13453.tpm429-20260925T022019Z"
+    },
+    {
+      "instanceId": "astropy__astropy-7166",
+      "reason": "User interruption terminated the Pi runner with exit -9 before its atomic result file was written.",
+      "completedTurnReportedTokens": 101767,
+      "conservativeTokenCharge": 512000,
+      "qualityMetricsIncluded": false,
+      "retryFromFrozenInput": true,
+      "path": "invalid_attempts/astropy__astropy-7166.user-interrupt-20261009T111347"
+    }
+  ]
+}

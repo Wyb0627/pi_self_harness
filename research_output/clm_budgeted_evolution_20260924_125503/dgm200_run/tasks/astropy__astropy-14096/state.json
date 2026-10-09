@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "instanceId": "astropy__astropy-14096",
+  "status": "completed",
+  "updatedAtUnix": 1790306314.4913762,
+  "image": "sweb.eval.arm64.astropy__astropy-14096:latest",
+  "originalResolved": false,
+  "recoveryResolved": false,
+  "terminalNote": "P1 completed; the single P2 repair attempt failed edit validation and is retained as a completed recovery failure."
+}

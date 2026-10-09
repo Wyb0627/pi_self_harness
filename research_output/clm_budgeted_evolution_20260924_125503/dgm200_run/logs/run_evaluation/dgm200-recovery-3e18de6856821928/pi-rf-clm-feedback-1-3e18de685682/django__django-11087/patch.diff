@@ -1,0 +1,29 @@
+diff --git a/django/db/models/deletion.py b/django/db/models/deletion.py
+index 3a462f1..2cf121f 100644
+--- a/django/db/models/deletion.py
++++ b/django/db/models/deletion.py
+@@ -77,6 +77,15 @@ class Collector:
+         # parent.
+         self.dependencies = {}  # {model: {models}}
+ 
++    def _get_fields_to_fetch(self, model):
++        fields = {model._meta.pk.name}
++        for related in get_candidate_relations_to_delete(model._meta):
++            fields.add(related.field.target_field.name)
++        for parent_link in model._meta.concrete_model._meta.parents.values():
++            if parent_link:
++                fields.add(parent_link.name)
++        return list(fields)
++
+     def add(self, objs, source=None, nullable=False, reverse_dependency=False):
+         """
+         Add 'objs' to the collection of objects to be deleted.  If the call is
+@@ -234,7 +243,7 @@ class Collector:
+         """
+         return related.related_model._base_manager.using(self.using).filter(
+             **{"%s__in" % related.field.name: objs}
+-        )
++        ).only(*self._get_fields_to_fetch(related.related_model))
+ 
+     def instances_with_model(self):
+         for model, instances in self.data.items():
