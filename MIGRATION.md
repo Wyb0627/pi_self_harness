@@ -11,8 +11,9 @@
   `dgm200_run/` 中已完成的 trajectory、预测、官方评测结果与汇总。
 - `draft_18f0c29c_folder/`、`paper_ref/`：论文草稿素材与 DGM 论文。
 
-`dgm200_run` 目前的汇总仍为 `complete: false`，最后一次写入在 2026-10-09
-15:20 左右。Git 中保存的是该时点的工作快照，其中不包含：
+`dgm200_run` 目前仍在继续运行与写入，汇总仍为 `complete: false`。Git 中保存的是
+提交时点（2026-10-09 15:31 左右）的工作快照；之后的 trace 与结果需要再次提交。
+该快照不包含：
 
 - `tasks/*/workspace/` 与 `invalid_attempts/*/workspace/` 的完整任务仓库；
   对应补丁、轨迹与评测结果已提交；
@@ -28,6 +29,7 @@
 | `datasets/SWE-bench/` | 80 MB | 可按 `dgm200_run/run_config.json` 记录的 revision 从官方仓库重新克隆。 |
 | 根目录与 `pi-rollback/` 的 `node_modules/` | 791 MB | 在新机执行 `npm install --ignore-scripts` 重建。 |
 | `dgm200_run/build_wheelhouse/` | 42 MB | 可选；仅新机同为 macOS arm64 且需要复用 astropy wheels 时拷贝。 |
+| `dgm200_run/**/*.log` | 14 MB | 可选；全局 `*.log` 已忽略，如需要完整 debug 证据请单独拷贝。 |
 | Docker 任务镜像 | GB 级 | 不在 Git；在新机重建，或用 `docker save` / `docker load` 迁移。 |
 | `llm_api_samples/` | 40 KB | 当前被忽略；如仍需要这些调用样例，单独拷贝。 |
 
