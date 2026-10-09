@@ -1,0 +1,7 @@
+[
+  {
+    "instance_id": "django__django-11087",
+    "model_name_or_path": "pi-rf-clm-feedback-1-3e18de685682",
+    "model_patch": "diff --git a/django/db/models/deletion.py b/django/db/models/deletion.py\nindex 3a462f1..2cf121f 100644\n--- a/django/db/models/deletion.py\n+++ b/django/db/models/deletion.py\n@@ -77,6 +77,15 @@ class Collector:\n         # parent.\n         self.dependencies = {}  # {model: {models}}\n \n+    def _get_fields_to_fetch(self, model):\n+        fields = {model._meta.pk.name}\n+        for related in get_candidate_relations_to_delete(model._meta):\n+            fields.add(related.field.target_field.name)\n+        for parent_link in model._meta.concrete_model._meta.parents.values():\n+            if parent_link:\n+                fields.add(parent_link.name)\n+        return list(fields)\n+\n     def add(self, objs, source=None, nullable=False, reverse_dependency=False):\n         \"\"\"\n         Add 'objs' to the collection of objects to be deleted.  If the call is\n@@ -234,7 +243,7 @@ class Collector:\n         \"\"\"\n         return related.related_model._base_manager.using(self.using).filter(\n             **{\"%s__in\" % related.field.name: objs}\n-        )\n+        ).only(*self._get_fields_to_fetch(related.related_model))\n \n     def instances_with_model(self):\n         for model, instances in self.data.items():\n"
+  }
+]

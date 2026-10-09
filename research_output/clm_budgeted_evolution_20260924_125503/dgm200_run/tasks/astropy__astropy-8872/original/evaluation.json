@@ -1,0 +1,15 @@
+{
+  "status": "completed",
+  "resolved": false,
+  "protocol": "original",
+  "officialEvaluatorRun": true,
+  "usedInertFeedbackProbe": false,
+  "identitySha256": "0cbb14461584911c7ced22da23ea2dc2eab154343b0471b5f00caca195be9385",
+  "submittedPatchSha256": "65fd28b2619c61ff0f7a0b2e219596782a6559fd47914a8b97cf419daf86861d",
+  "runId": "dgm200-original-0cbb14461584911c",
+  "modelNameOrPath": "original-pi-one-shot-0cbb14461584",
+  "returnCode": 0,
+  "durationSeconds": 57.587,
+  "reportPath": "/Users/bytedance/codes/pi/research_output/clm_budgeted_evolution_20260924_125503/dgm200_run/logs/run_evaluation/dgm200-original-0cbb14461584911c/original-pi-one-shot-0cbb14461584/astropy__astropy-8872/report.json",
+  "testOutputPath": "/Users/bytedance/codes/pi/research_output/clm_budgeted_evolution_20260924_125503/dgm200_run/logs/run_evaluation/dgm200-original-0cbb14461584911c/original-pi-one-shot-0cbb14461584/astropy__astropy-8872/test_output.txt"
+}

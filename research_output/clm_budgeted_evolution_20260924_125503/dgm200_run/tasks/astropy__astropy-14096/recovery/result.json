@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "instanceId": "astropy__astropy-14096",
+  "method": "repair-first-causal-slice",
+  "status": "repair_error",
+  "candidatePaths": [
+    "astropy/coordinates/tests/test_sky_coord_velocities.py",
+    "astropy/utils/data_info.py",
+    "CHANGES.rst"
+  ],
+  "changedPaths": [],
+  "inputTokens": null,
+  "outputTokens": null,
+  "latencySeconds": null,
+  "attempts": null,
+  "tokenTelemetryAvailable": false,
+  "conservativeTokenCharge": 512000,
+  "failureHash": "351e1a4fee67e66d6fdd2d06540a3d7befbd7680fe2c551687e093ea31d68b23",
+  "patch": "",
+  "proposedEdits": null,
+  "explanation": "",
+  "applicationError": "ValueError: Expected one exact match in astropy/coordinates/sky_coordinate.py, found 3",
+  "telemetryNote": "The pre-amendment repair runner raised after the model response and before persisting usage. The conservative token charge reserves the full P1 per-task cap for global budget enforcement and is excluded from reported-token distributions."
+}

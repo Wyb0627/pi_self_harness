@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "instanceId": "django__django-11087",
+  "method": "repair-first-causal-slice",
+  "status": "completed",
+  "candidatePaths": [
+    "django/__init__.py",
+    "django/db/models/query.py",
+    "django/db/models/deletion.py"
+  ],
+  "changedPaths": [
+    "django/db/models/deletion.py"
+  ],
+  "inputTokens": 31074,
+  "outputTokens": 40772,
+  "latencySeconds": 227.575151292,
+  "attempts": 1,
+  "tokenTelemetryAvailable": true,
+  "failureHash": "00e8444f7c96682d876d9ff09c65024703832ff07c92b728dbf9fe96b3dad3c5",
+  "patch": "diff --git a/django/db/models/deletion.py b/django/db/models/deletion.py\nindex 3a462f1..2cf121f 100644\n--- a/django/db/models/deletion.py\n+++ b/django/db/models/deletion.py\n@@ -77,6 +77,15 @@ class Collector:\n         # parent.\n         self.dependencies = {}  # {model: {models}}\n \n+    def _get_fields_to_fetch(self, model):\n+        fields = {model._meta.pk.name}\n+        for related in get_candidate_relations_to_delete(model._meta):\n+            fields.add(related.field.target_field.name)\n+        for parent_link in model._meta.concrete_model._meta.parents.values():\n+            if parent_link:\n+                fields.add(parent_link.name)\n+        return list(fields)\n+\n     def add(self, objs, source=None, nullable=False, reverse_dependency=False):\n         \"\"\"\n         Add 'objs' to the collection of objects to be deleted.  If the call is\n@@ -234,7 +243,7 @@ class Collector:\n         \"\"\"\n         return related.related_model._base_manager.using(self.using).filter(\n             **{\"%s__in\" % related.field.name: objs}\n-        )\n+        ).only(*self._get_fields_to_fetch(related.related_model))\n \n     def instances_with_model(self):\n         for model, instances in self.data.items():\n",
+  "proposedEdits": [
+    {
+      "path": "django/db/models/deletion.py",
+      "old": "        self.dependencies = {}  # {model: {models}}\n\n    def add(self, objs, source=None, nullable=False, reverse_dependency=False):",
+      "new": "        self.dependencies = {}  # {model: {models}}\n\n    def _get_fields_to_fetch(self, model):\n        fields = {model._meta.pk.name}\n        for related in get_candidate_relations_to_delete(model._meta):\n            fields.add(related.field.target_field.name)\n        for parent_link in model._meta.concrete_model._meta.parents.values():\n            if parent_link:\n                fields.add(parent_link.name)\n        return list(fields)\n\n    def add(self, objs, source=None, nullable=False, reverse_dependency=False):"
+    },
+    {
+      "path": "django/db/models/deletion.py",
+      "old": "    def related_objects(self, related, objs):\n        \"\"\"\n        Get a QuerySet of objects related to `objs` via the relation `related`.\n        \"\"\"\n        return related.related_model._base_manager.using(self.using).filter(\n            **{\"%s__in\" % related.field.name: objs}\n        )",
+      "new": "    def related_objects(self, related, objs):\n        \"\"\"\n        Get a QuerySet of objects related to `objs` via the relation `related`.\n        \"\"\"\n        return related.related_model._base_manager.using(self.using).filter(\n            **{\"%s__in\" % related.field.name: objs}\n        ).only(*self._get_fields_to_fetch(related.related_model))"
+    }
+  ],
+  "explanation": "Restrict collection querysets to fields needed for deletion (primary keys and fields referenced by reverse relations), avoiding unnecessary fields like large text columns. This prevents decoding unrelated data during cascade deletes while preserving fields such as unique FK targets."
+}

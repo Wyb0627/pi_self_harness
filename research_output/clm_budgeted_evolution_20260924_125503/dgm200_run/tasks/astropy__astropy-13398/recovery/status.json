@@ -1,0 +1,39 @@
+{
+  "status": "completed",
+  "resolved": false,
+  "candidatePaths": [
+    "astropy/coordinates/transformations.py",
+    "CHANGES.rst",
+    "astropy/coordinates/builtin_frames/__init__.py"
+  ],
+  "feedbackEvaluation": {
+    "status": "completed",
+    "resolved": false,
+    "protocol": "feedback_probe",
+    "officialEvaluatorRun": true,
+    "usedInertFeedbackProbe": true,
+    "identitySha256": "370a82520f6b334c7a0739a18b3331cfd03e63e2c3a41d609caeab2ee11f3346",
+    "submittedPatchSha256": "e7409fe5f93f8a3ebca7e1c6ca7becab897326e8da70fc68d6a6a76615b162cb",
+    "runId": "dgm200-feedback_probe-370a82520f6b334c",
+    "modelNameOrPath": "pi-rf-clm-feedback-probe-370a82520f6b",
+    "returnCode": 0,
+    "durationSeconds": 51.94,
+    "reportPath": "/Users/bytedance/codes/pi/research_output/clm_budgeted_evolution_20260924_125503/dgm200_run/logs/run_evaluation/dgm200-feedback_probe-370a82520f6b334c/pi-rf-clm-feedback-probe-370a82520f6b/astropy__astropy-13398/report.json",
+    "testOutputPath": "/Users/bytedance/codes/pi/research_output/clm_budgeted_evolution_20260924_125503/dgm200_run/logs/run_evaluation/dgm200-feedback_probe-370a82520f6b334c/pi-rf-clm-feedback-probe-370a82520f6b/astropy__astropy-13398/test_output.txt"
+  },
+  "evaluation": {
+    "status": "completed",
+    "resolved": false,
+    "protocol": "recovery",
+    "officialEvaluatorRun": true,
+    "usedInertFeedbackProbe": false,
+    "identitySha256": "5eed635ea14e667fdf07d7b9eb0774c77b08dea2901f0a1a8a17f087d1b7e0a5",
+    "submittedPatchSha256": "6038233d1ecce26da20d7fa6d44fd328fbc27802505a99d7b6c0640d48b968fc",
+    "runId": "dgm200-recovery-5eed635ea14e667f",
+    "modelNameOrPath": "pi-rf-clm-feedback-1-5eed635ea14e",
+    "returnCode": 0,
+    "durationSeconds": 49.113,
+    "reportPath": "/Users/bytedance/codes/pi/research_output/clm_budgeted_evolution_20260924_125503/dgm200_run/logs/run_evaluation/dgm200-recovery-5eed635ea14e667f/pi-rf-clm-feedback-1-5eed635ea14e/astropy__astropy-13398/report.json",
+    "testOutputPath": "/Users/bytedance/codes/pi/research_output/clm_budgeted_evolution_20260924_125503/dgm200_run/logs/run_evaluation/dgm200-recovery-5eed635ea14e667f/pi-rf-clm-feedback-1-5eed635ea14e/astropy__astropy-13398/test_output.txt"
+  }
+}

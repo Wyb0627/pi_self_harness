@@ -1,0 +1,9 @@
+{
+  "schemaVersion": 1,
+  "instanceId": "astropy__astropy-14995",
+  "status": "completed",
+  "updatedAtUnix": 1790316171.4130151,
+  "image": "sweb.eval.arm64.astropy__astropy-14995:latest",
+  "originalResolved": true,
+  "recoveryResolved": true
+}

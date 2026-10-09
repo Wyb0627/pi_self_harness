@@ -1,0 +1,8 @@
+{
+  "status": "repair_error",
+  "resolved": false,
+  "returnCode": 1,
+  "candidatePaths": [
+    "astropy/io/ascii/rst.py"
+  ]
+}

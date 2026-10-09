@@ -1,0 +1,7 @@
+[
+  {
+    "instance_id": "django__django-10097",
+    "model_name_or_path": "pi-rf-clm-feedback-probe-3292376a2acf",
+    "model_patch": "diff --git a/.rf_clm_feedback_probe b/.rf_clm_feedback_probe\nnew file mode 100644\nindex 0000000..1c779f5\n--- /dev/null\n+++ b/.rf_clm_feedback_probe\n@@ -0,0 +1 @@\n+feedback probe for django__django-10097\n"
+  }
+]

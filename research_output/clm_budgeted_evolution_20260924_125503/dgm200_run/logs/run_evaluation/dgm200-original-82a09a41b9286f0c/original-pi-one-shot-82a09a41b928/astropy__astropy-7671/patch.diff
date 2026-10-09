@@ -1,0 +1,67 @@
+diff --git a/astropy/utils/introspection.py b/astropy/utils/introspection.py
+index 3e784f9..096c9f9 100644
+--- a/astropy/utils/introspection.py
++++ b/astropy/utils/introspection.py
+@@ -6,6 +6,8 @@
+ import inspect
+ import types
+ import importlib
++import operator
++import re
+ from distutils.version import LooseVersion
+ 
+ 
+@@ -88,6 +90,41 @@ def resolve_name(name, *additional_parts):
+     return ret
+ 
+ 
++def _strip_non_numeric(version):
++    """
++    Remove non-numeric components from a version string so that it can be
++    compared with `distutils.version.LooseVersion`.  For example,
++    ``'1.14dev'`` becomes ``'1.14'`` and ``'1.14.0.dev'`` becomes
++    ``'1.14.0'``.
++    """
++    parts = []
++    for part in version.split('.'):
++        digits = re.match(r'\d*', part).group()
++        if digits:
++            parts.append(digits)
++    return '.'.join(parts)
++
++
++def _compare_versions(version1, version2, inclusive):
++    """
++    Compare two version strings, returning `True` if ``version1`` is greater
++    than (or, if ``inclusive``, greater than or equal to) ``version2``.
++
++    This is essentially the comparison done by `distutils.version.LooseVersion`
++    but it does not fail when a numeric component in one version is compared
++    with a non-numeric component in the other (e.g. ``'1.14.3'`` with
++    ``'1.14dev'``), which raises a ``TypeError`` due to
++    https://bugs.python.org/issue30272.  In that case the comparison is
++    retried with the non-numeric components stripped from both versions.
++    """
++    op = operator.ge if inclusive else operator.gt
++    try:
++        return op(LooseVersion(version1), LooseVersion(version2))
++    except TypeError:
++        return op(LooseVersion(_strip_non_numeric(version1)),
++                  LooseVersion(_strip_non_numeric(version2)))
++
++
+ def minversion(module, version, inclusive=True, version_path='__version__'):
+     """
+     Returns `True` if the specified Python module satisfies a minimum version
+@@ -139,10 +176,7 @@ def minversion(module, version, inclusive=True, version_path='__version__'):
+     else:
+         have_version = resolve_name(module.__name__, version_path)
+ 
+-    if inclusive:
+-        return LooseVersion(have_version) >= LooseVersion(version)
+-    else:
+-        return LooseVersion(have_version) > LooseVersion(version)
++    return _compare_versions(have_version, version, inclusive)
+ 
+ 
+ def find_current_module(depth=1, finddiff=False):

@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import json
 import re
+import shutil
 import subprocess
 import tempfile
 import time
@@ -57,6 +58,18 @@ def image_architecture(image: str) -> str | None:
 
 def normalize_dockerfile_platform(dockerfile: str) -> str:
     return dockerfile.replace("linux/x86_64", "linux/amd64")
+
+
+def add_pip_network_resilience(dockerfile: str) -> str:
+    match = FROM_PATTERN.search(dockerfile)
+    if match is None:
+        raise ValueError("Dockerfile has no FROM instruction.")
+    line_end = dockerfile.find("\n", match.end())
+    if line_end == -1:
+        return dockerfile + "\nARG PIP_DEFAULT_TIMEOUT=120\nARG PIP_RETRIES=20\n"
+    line_end += 1
+    settings = "ARG PIP_DEFAULT_TIMEOUT=120\nARG PIP_RETRIES=20\n"
+    return dockerfile[:line_end] + settings + dockerfile[line_end:]
 
 
 def pin_dockerfile_source(dockerfile: str, spec: TestSpec) -> str:
@@ -152,7 +165,9 @@ def ensure_environment_images(
         with tempfile.TemporaryDirectory(prefix="sweb-prerequisite-") as tmp:
             context = Path(tmp)
             (context / "Dockerfile").write_text(
-                pin_dockerfile_source(dockerfile, spec)
+                add_pip_network_resilience(
+                    pin_dockerfile_source(dockerfile, spec)
+                )
             )
             for filename, contents in files.items():
                 (context / filename).write_text(contents)
@@ -222,9 +237,22 @@ def local_setup_script(spec: TestSpec, base_commit: str) -> str:
     return "\n".join(commands) + "\n"
 
 
-def local_dockerfile(spec: TestSpec) -> str:
+def local_dockerfile(spec: TestSpec, use_wheelhouse: bool = False) -> str:
+    wheelhouse_copy = (
+        "COPY ./wheelhouse /root/pip-wheelhouse\n" if use_wheelhouse else ""
+    )
+    wheelhouse_environment = (
+        "ENV PIP_NO_INDEX=1\n"
+        "ENV PIP_FIND_LINKS=/root/pip-wheelhouse\n"
+        if use_wheelhouse
+        else ""
+    )
     return (
         f"FROM --platform={docker_platform(spec)} {spec.env_image_key}\n\n"
+        "ARG PIP_DEFAULT_TIMEOUT=120\n"
+        "ARG PIP_RETRIES=20\n\n"
+        f"{wheelhouse_copy}"
+        f"{wheelhouse_environment}"
         "COPY ./repo /testbed\n"
         "COPY ./setup_local_repo.sh /root/\n"
         "RUN /bin/bash /root/setup_local_repo.sh\n\n"
@@ -237,6 +265,7 @@ def build_image(
     spec: TestSpec,
     log_dir: Path,
     force: bool,
+    wheelhouse: Path | None,
 ) -> dict[str, object]:
     base_commit = str(row["base_commit"])
     image = spec.instance_image_key
@@ -275,7 +304,13 @@ def build_image(
         (context / "setup_local_repo.sh").write_text(
             local_setup_script(spec, base_commit)
         )
-        (context / "Dockerfile").write_text(local_dockerfile(spec))
+        if wheelhouse is not None:
+            if not wheelhouse.is_dir():
+                raise ValueError(f"Wheelhouse not found: {wheelhouse}")
+            shutil.copytree(wheelhouse, context / "wheelhouse")
+        (context / "Dockerfile").write_text(
+            local_dockerfile(spec, use_wheelhouse=wheelhouse is not None)
+        )
         build_docker_context(
             image,
             docker_platform(spec),
@@ -313,6 +348,7 @@ def main() -> None:
     parser.add_argument("--log-dir", required=True)
     parser.add_argument("--output", required=True)
     parser.add_argument("--split", default="test")
+    parser.add_argument("--wheelhouse", type=Path)
     args = parser.parse_args()
 
     log_dir = Path(args.log_dir).resolve()
@@ -340,7 +376,15 @@ def main() -> None:
         row = rows_by_id[instance_id]
         spec = specs_by_id[instance_id]
         print(f"Building {spec.instance_image_key} from {row['base_commit']}")
-        results.append(build_image(row, spec, log_dir, args.force))
+        results.append(
+            build_image(
+                row,
+                spec,
+                log_dir,
+                args.force,
+                args.wheelhouse.resolve() if args.wheelhouse else None,
+            )
+        )
 
     output = Path(args.output).resolve()
     output.parent.mkdir(parents=True, exist_ok=True)

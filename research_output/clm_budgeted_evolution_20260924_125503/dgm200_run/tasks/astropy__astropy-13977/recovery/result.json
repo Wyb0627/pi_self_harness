@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "instanceId": "astropy__astropy-13977",
+  "method": "repair-first-causal-slice",
+  "status": "repair_error",
+  "candidatePaths": [
+    "astropy/units/core.py",
+    "astropy/units/quantity_helper/helpers.py",
+    "astropy/units/tests/test_quantity_ufuncs.py"
+  ],
+  "changedPaths": [],
+  "inputTokens": 78627,
+  "outputTokens": 30391,
+  "latencySeconds": 116.3874725,
+  "attempts": 1,
+  "tokenTelemetryAvailable": true,
+  "failureHash": "b4134e01487a953e9e3c41828ba851068dd8f38f33bb225da4e0abf7f7d0c63e",
+  "patch": "",
+  "proposedEdits": [
+    {
+      "path": "astropy/units/quantity.py",
+      "old": "            out_array = check_output(out, unit, inputs, function=function)",
+      "new": "            try:\n                out_array = check_output(out, unit, inputs, function=function)\n            except Exception:\n                if hasattr(out, \"__array_ufunc__\") and not isinstance(\n                    out, (Quantity, np.ndarray, np.generic)\n                ):\n                    return NotImplemented\n                raise"
+    },
+    {
+      "path": "astropy/units/quantity.py",
+      "old": "                arrays.append(converter(input_) if converter else input_)",
+      "new": "                try:\n                    arrays.append(converter(input_) if converter else input_)\n                except Exception:\n                    if hasattr(input_, \"__array_ufunc__\") and not isinstance(\n                        input_, (Quantity, np.ndarray, np.generic)\n                    ):\n                        return NotImplemented\n                    raise"
+    }
+  ],
+  "explanation": "When Quantity.__array_ufunc__ cannot store a result in a non-Quantity duck-typed output, or cannot convert a non-Quantity duck-typed input, it should return NotImplemented so that the other object's __array_ufunc__ can handle the operation. These changes wrap the output check and input conversion steps and defer to such duck-typed objects instead of raising.",
+  "applicationError": "ValueError: Expected one exact match in astropy/units/quantity.py, found 0"
+}

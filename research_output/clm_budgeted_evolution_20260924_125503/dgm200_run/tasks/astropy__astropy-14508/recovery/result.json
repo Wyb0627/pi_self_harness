@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "instanceId": "astropy__astropy-14508",
+  "method": "repair-first-causal-slice",
+  "status": "completed",
+  "candidatePaths": [
+    "CHANGES.rst",
+    "astropy/io/fits/tests/test_header.py",
+    "astropy/io/fits/card.py"
+  ],
+  "changedPaths": [
+    "astropy/io/fits/card.py"
+  ],
+  "inputTokens": 109987,
+  "outputTokens": 24943,
+  "latencySeconds": 93.559176959,
+  "attempts": 1,
+  "tokenTelemetryAvailable": true,
+  "failureHash": "e7833b227bd63e4a328ebc6cbea583e7be137f235511fbee63c8bdf686ee0772",
+  "patch": "diff --git a/astropy/io/fits/card.py b/astropy/io/fits/card.py\nindex 118bfce..85ab4a1 100644\n--- a/astropy/io/fits/card.py\n+++ b/astropy/io/fits/card.py\n@@ -1299,7 +1299,11 @@ def _format_value(value):\n \n def _format_float(value):\n     \"\"\"Format a floating number to make sure it gets the decimal point.\"\"\"\n-    value_str = f\"{value:.16G}\"\n+    value_str = str(value)\n+    if len(value_str) > 20:\n+        value_str = f\"{value:.16G}\"\n+    if \"e\" in value_str:\n+        value_str = value_str.replace(\"e\", \"E\")\n     if \".\" not in value_str and \"E\" not in value_str:\n         value_str += \".0\"\n     elif \"E\" in value_str:\n",
+  "proposedEdits": [
+    {
+      "path": "astropy/io/fits/card.py",
+      "old": "    value_str = f\"{value:.16G}\"\n    if \".\" not in value_str and \"E\" not in value_str:\n        value_str += \".0\"\n    elif \"E\" in value_str:",
+      "new": "    value_str = str(value)\n    if len(value_str) > 20:\n        value_str = f\"{value:.16G}\"\n    if \"e\" in value_str:\n        value_str = value_str.replace(\"e\", \"E\")\n    if \".\" not in value_str and \"E\" not in value_str:\n        value_str += \".0\"\n    elif \"E\" in value_str:"
+    }
+  ],
+  "explanation": "Use Python's shortest float string representation when it fits in the 20-character field, falling back to the existing 16G formatting for longer values, and normalize lowercase exponents to uppercase for FITS compliance."
+}

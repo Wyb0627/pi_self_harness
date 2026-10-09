@@ -1,0 +1,39 @@
+{
+  "status": "completed",
+  "resolved": false,
+  "candidatePaths": [
+    "django/__init__.py",
+    "django/db/models/query.py",
+    "django/db/models/deletion.py"
+  ],
+  "feedbackEvaluation": {
+    "status": "completed",
+    "resolved": false,
+    "protocol": "feedback_probe",
+    "officialEvaluatorRun": true,
+    "usedInertFeedbackProbe": true,
+    "identitySha256": "7c8a44fd5a9fc5e7b411cb3e86fb48df427406f0d4ee49369be9f5b499b3b8a3",
+    "submittedPatchSha256": "83cf0a5cbb2908a731fbc4ab4078121e7c627db9a41c63dc52d24f61fd360ce2",
+    "runId": "dgm200-feedback_probe-7c8a44fd5a9fc5e7",
+    "modelNameOrPath": "pi-rf-clm-feedback-probe-7c8a44fd5a9f",
+    "returnCode": 0,
+    "durationSeconds": 32.552,
+    "reportPath": "/Users/bytedance/codes/pi/research_output/clm_budgeted_evolution_20260924_125503/dgm200_run/logs/run_evaluation/dgm200-feedback_probe-7c8a44fd5a9fc5e7/pi-rf-clm-feedback-probe-7c8a44fd5a9f/django__django-11087/report.json",
+    "testOutputPath": "/Users/bytedance/codes/pi/research_output/clm_budgeted_evolution_20260924_125503/dgm200_run/logs/run_evaluation/dgm200-feedback_probe-7c8a44fd5a9fc5e7/pi-rf-clm-feedback-probe-7c8a44fd5a9f/django__django-11087/test_output.txt"
+  },
+  "evaluation": {
+    "status": "completed",
+    "resolved": false,
+    "protocol": "recovery",
+    "officialEvaluatorRun": true,
+    "usedInertFeedbackProbe": false,
+    "identitySha256": "3e18de6856821928f56d0c9f5dbb62feefb4bf7bb3bbdf649677e4264b482ccf",
+    "submittedPatchSha256": "79211d11980f98c1a3e5cbfb146c721decf72d170933f6af4da584b1a25353c0",
+    "runId": "dgm200-recovery-3e18de6856821928",
+    "modelNameOrPath": "pi-rf-clm-feedback-1-3e18de685682",
+    "returnCode": 0,
+    "durationSeconds": 34.446,
+    "reportPath": "/Users/bytedance/codes/pi/research_output/clm_budgeted_evolution_20260924_125503/dgm200_run/logs/run_evaluation/dgm200-recovery-3e18de6856821928/pi-rf-clm-feedback-1-3e18de685682/django__django-11087/report.json",
+    "testOutputPath": "/Users/bytedance/codes/pi/research_output/clm_budgeted_evolution_20260924_125503/dgm200_run/logs/run_evaluation/dgm200-recovery-3e18de6856821928/pi-rf-clm-feedback-1-3e18de685682/django__django-11087/test_output.txt"
+  }
+}

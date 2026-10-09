@@ -1,0 +1,7 @@
+diff --git a/.rf_clm_feedback_probe b/.rf_clm_feedback_probe
+new file mode 100644
+index 0000000..23397e3
+--- /dev/null
++++ b/.rf_clm_feedback_probe
+@@ -0,0 +1 @@
++feedback probe for astropy__astropy-13398

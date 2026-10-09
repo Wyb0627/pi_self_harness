@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "instanceId": "astropy__astropy-7606",
+  "method": "repair-first-causal-slice",
+  "status": "completed",
+  "candidatePaths": [
+    "astropy/units/core.py"
+  ],
+  "changedPaths": [
+    "astropy/units/core.py"
+  ],
+  "inputTokens": 37538,
+  "outputTokens": 18743,
+  "latencySeconds": 106.784626125,
+  "attempts": 1,
+  "tokenTelemetryAvailable": true,
+  "failureHash": "c687395d545cda8896adb2819f6db6ab1f9ca57abf6bca48291759630cc8ec09",
+  "patch": "diff --git a/astropy/units/core.py b/astropy/units/core.py\nindex e9bd986..c0b0ab8 100644\n--- a/astropy/units/core.py\n+++ b/astropy/units/core.py\n@@ -1710,7 +1710,10 @@ class UnrecognizedUnit(IrreducibleUnit):\n         _unrecognized_operator\n \n     def __eq__(self, other):\n-        other = Unit(other, parse_strict='silent')\n+        try:\n+            other = Unit(other, parse_strict='silent')\n+        except (ValueError, TypeError):\n+            return False\n         return isinstance(other, UnrecognizedUnit) and self.name == other.name\n \n     def __ne__(self, other):\n",
+  "proposedEdits": [
+    {
+      "path": "astropy/units/core.py",
+      "old": "        try:\n            other = Unit(other, parse_strict='silent')\n        except (ValueError, UnitsError, TypeError):\n            return False\n        return isinstance(other, UnrecognizedUnit) and self.name == other.name",
+      "new": "        try:\n            other = Unit(other, parse_strict='silent')\n        except (ValueError, TypeError):\n            return False\n        return isinstance(other, UnrecognizedUnit) and self.name == other.name"
+    }
+  ],
+  "explanation": "UnrecognizedUnit equality only needs to suppress unit construction/type errors; catching UnitsError is unnecessary here and caused the regression. Catching TypeError still makes comparison with None return False."
+}

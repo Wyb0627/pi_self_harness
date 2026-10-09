@@ -1,0 +1,7 @@
+[
+  {
+    "instance_id": "django__django-10097",
+    "model_name_or_path": "pi-rf-clm-feedback-1-eabd8116f857",
+    "model_patch": "diff --git a/django/core/validators.py b/django/core/validators.py\nindex 92394a7..55f0e1e 100644\n--- a/django/core/validators.py\n+++ b/django/core/validators.py\n@@ -92,9 +92,13 @@ class URLValidator(RegexValidator):\n     )\n     host_re = '(' + hostname_re + domain_re + tld_re + '|localhost)'\n \n+    # Userinfo pattern. This pattern is used for the userinfo part of the URL.\n+    userinfo_re = r'[a-z0-9\\.\\-_~!$&\\'()*+,;=]'\n+\n     regex = _lazy_re_compile(\n         r'^(?:[a-z0-9\\.\\-\\+]*)://'  # scheme is validated separately\n-        r'(?:\\S+(?::\\S*)?@)?'  # user:pass authentication\n+        r'(?:(?:' + userinfo_re + r')*' +\n+        r'(?::(?:' + userinfo_re + r')*)?@)?'  # user:pass authentication\n         r'(?:' + ipv4_re + '|' + ipv6_re + '|' + host_re + ')'\n         r'(?::\\d{2,5})?'  # port\n         r'(?:[/?#][^\\s]*)?'  # resource path\n"
+  }
+]

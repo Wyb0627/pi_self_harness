@@ -1,0 +1,37 @@
+{
+  "status": "completed",
+  "resolved": true,
+  "candidatePaths": [
+    "django/core/validators.py"
+  ],
+  "feedbackEvaluation": {
+    "status": "completed",
+    "resolved": true,
+    "protocol": "feedback_probe",
+    "officialEvaluatorRun": true,
+    "usedInertFeedbackProbe": true,
+    "identitySha256": "3292376a2acf13b0eb83ab61bf69c706743672c117550a8fc6b7f405348421ee",
+    "submittedPatchSha256": "1f08227c899f9d7ec7490120253b68979584232e29311640d956c14b0e3a93ad",
+    "runId": "dgm200-feedback_probe-3292376a2acf13b0",
+    "modelNameOrPath": "pi-rf-clm-feedback-probe-3292376a2acf",
+    "returnCode": 0,
+    "durationSeconds": 235.774,
+    "reportPath": "/Users/bytedance/codes/pi/research_output/clm_budgeted_evolution_20260924_125503/dgm200_run/logs/run_evaluation/dgm200-feedback_probe-3292376a2acf13b0/pi-rf-clm-feedback-probe-3292376a2acf/django__django-10097/report.json",
+    "testOutputPath": "/Users/bytedance/codes/pi/research_output/clm_budgeted_evolution_20260924_125503/dgm200_run/logs/run_evaluation/dgm200-feedback_probe-3292376a2acf13b0/pi-rf-clm-feedback-probe-3292376a2acf/django__django-10097/test_output.txt"
+  },
+  "evaluation": {
+    "status": "completed",
+    "resolved": true,
+    "protocol": "recovery",
+    "officialEvaluatorRun": true,
+    "usedInertFeedbackProbe": false,
+    "identitySha256": "eabd8116f857e3eb2f2cc2ff6ae2cd7538a9a83efc7028f3c8f54b736a7f0ef3",
+    "submittedPatchSha256": "8bfd2ed8977e285be7ac6adca5f6ef1244a61b61a8cabf2bc28f0d071e849f1e",
+    "runId": "dgm200-recovery-eabd8116f857e3eb",
+    "modelNameOrPath": "pi-rf-clm-feedback-1-eabd8116f857",
+    "returnCode": 0,
+    "durationSeconds": 236.128,
+    "reportPath": "/Users/bytedance/codes/pi/research_output/clm_budgeted_evolution_20260924_125503/dgm200_run/logs/run_evaluation/dgm200-recovery-eabd8116f857e3eb/pi-rf-clm-feedback-1-eabd8116f857/django__django-10097/report.json",
+    "testOutputPath": "/Users/bytedance/codes/pi/research_output/clm_budgeted_evolution_20260924_125503/dgm200_run/logs/run_evaluation/dgm200-recovery-eabd8116f857e3eb/pi-rf-clm-feedback-1-eabd8116f857/django__django-10097/test_output.txt"
+  }
+}

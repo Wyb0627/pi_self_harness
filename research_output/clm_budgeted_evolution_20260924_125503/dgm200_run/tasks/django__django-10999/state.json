@@ -1,0 +1,9 @@
+{
+  "schemaVersion": 1,
+  "instanceId": "django__django-10999",
+  "status": "completed",
+  "updatedAtUnix": 1791527958.885809,
+  "image": "sweb.eval.arm64.django__django-10999:latest",
+  "originalResolved": false,
+  "recoveryResolved": true
+}

@@ -232,15 +232,18 @@ Offline experiments found:
   It reduced probe calls by 42.86%-49.89% versus the previous failure-first
   path; every paired 95% bootstrap interval for call reduction excluded zero.
 - On DGM's 10-task SWE-bench Verified development subset, isolated Pi 0.85.1
-  with DeepSeek solved 5/10. Three one-call causal-slice repairs all passed the
-  official grader, raising the combined result to 8/10. The best released DGM
-  node solves 4/10 on those task IDs, but uses a different model and agent
-  substrate.
+  with DeepSeek solved 5/10. After the official evaluator exposed hidden
+  failure information, three one-call causal-slice repairs all passed a second
+  official grading, raising the feedback-assisted recovery result to 8/10.
+  This is a diagnostic upper bound, not a standard one-submission SWE-bench
+  score. The best released DGM node solves 4/10 on those task IDs, but uses a
+  different model and agent substrate.
 - All 15 package tests pass, including exact dependency-safe replay-plan
   verification and abstention when that plan does not repair the failure.
 
-The 8/10 result is development-set evidence, not a full matched evolution
-claim. A publication-level comparison still requires same-model DGM-style
-evolution, multiple seeds, and the untouched 140-task holdout. Endpoint cost
-dominance is also unverified because the model gateway exceeded the requested
-repair output-token cap.
+The 8/10 result uses one round of hidden official evaluator feedback and must
+not be compared directly with DGM's standard 50% endpoint. A
+publication-level comparison still requires a no-feedback primary protocol,
+same-model DGM-style evolution, multiple seeds, and the untouched 140-task
+holdout. Endpoint cost dominance is also unverified because the model gateway
+exceeded the requested repair output-token cap.

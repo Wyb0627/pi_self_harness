@@ -340,3 +340,186 @@ must satisfy the pre-registered joint quality and cost criteria.
     is resolved or independently priced.
 - STATUS: **DGM-SMALL DEVELOPMENT QUALITY PASSED; CONFIRMATORY AND ENDPOINT
   COST CLAIMS REMAIN OPEN.**
+
+## E15: Evaluator-Feedback Audit Correction and DGM-200 Freeze
+
+- AUDIT CORRECTION:
+  - the three RF-CLM repair prompts consumed hidden failure information from
+    the official SWE-bench evaluator after the original Pi patches were
+    graded;
+  - therefore the 8/10 result is a one-round evaluator-feedback recovery upper
+    bound, not a standard one-submission SWE-bench score;
+  - the earlier direct 8/10 versus DGM 4/10 framing is withdrawn as a
+    protocol-matched comparison.
+- FROZEN DATA:
+  - DGM source commit:
+    `682eb38a3eb232f4396924cacd0a083bf1444cf8`;
+  - disjoint task panels: 10 small, 50 medium, 140 big;
+  - SWE-bench Verified revision:
+    `c104f840cc67f8b6eec6f759ebc8b2693d585d4a`;
+  - ordered 200-task ID hash:
+    `421c950302366954005dab020cdc89ca0d6ae1f0423e2b662637f7790a31d0d7`;
+  - frozen manifest hash:
+    `3fb913fbc73a05c1f7cae3b708c976374632820b58377aab5de08b742f96c967`;
+  - manifest order exactly matches the released DGM 200-task
+    `submitted_ids`.
+- PROTOCOL:
+  - P1 is original Pi one-shot with no official evaluator feedback;
+  - P2 is Pi plus exactly one RF-CLM official evaluator-feedback repair and is
+    always labeled feedback-assisted;
+  - P2 is not placed in a direct standard-score table beside DGM's 50%.
+- ISOLATION AUDIT:
+  - Pi 0.85.1's built-in file tools accept absolute paths, parent traversal,
+    home expansion, and external symlinks;
+  - the benchmark runner now replaces them with workspace-confined tools and
+    executes shell commands inside the task image with no network;
+  - any excluded-path modification is retained as a protocol violation and
+    omitted from the submitted patch.
+- STATUS: **DATA AND PROTOCOL FROZEN; PAID 200-TASK EXECUTION NOT STARTED.**
+
+## E16: DGM-200 Launch and TPM Pacing Amendment
+
+- AUTHORIZATION: user approved an 80,000,000 reported-token cap and
+  concurrency one.
+- INFRASTRUCTURE: Colima verified at 8 CPU and approximately 16 GB RAM;
+  the Docker root is `/var/lib/docker`. A no-network task-image smoke passed
+  before paid execution.
+- EARLY VALIDATION:
+  - tasks 1-3 completed with official evaluator results;
+  - original Pi resolved 1/3;
+  - feedback-assisted RF-CLM resolved 3/3, repairing both unresolved tasks;
+  - one initial recovery attempt failed before model invocation because the
+    temporary SWE-bench venv lacked `openai`; installing the existing
+    environment's exact `openai==2.48.0` fixed the runtime, and the task was
+    resumed without repeating its original Pi call or evaluator.
+- TPM INCIDENT:
+  - task 5 (`astropy__astropy-13453`) received
+    `RATE_LIMIT_TPM_EXCEEDED` with zero reported usage and no patch;
+  - the gateway reported a 1,000,000 TPM limit and current TPM of 1,106,521;
+  - the entire invalid task directory was moved to
+    `dgm200_run/invalid_attempts/astropy__astropy-13453.tpm429-20260925T022019Z`;
+  - the invalid attempt is excluded and will be rerun from its frozen input.
+- AMENDMENT: add a fixed 90-second delay between tasks. This is an operational
+  pacing change only; prompts, model, information boundaries, task order,
+  per-task budgets, and official grading remain unchanged.
+- INTRA-TASK TPM FOLLOW-UP:
+  - the valid task-5 rerun produced 487,145 reported tokens and a patch before
+    a later request received another TPM 429;
+  - the existing patch passed the official evaluator, so this attempt remains
+    in P1 rather than being quarantined;
+  - starting after task 5, the local SSE adapter retries only HTTP 429
+    responses up to three times, waiting at least 65 seconds and replaying the
+    identical request body;
+  - `dgm200_run/runtime_amendments.json` records the proxy hashes and exact
+    applicability boundary.
+- IMAGE-BUILD NETWORK FOLLOW-UP:
+  - task 6 (`astropy__astropy-13579`) had two pre-generation Docker build
+    failures after repeated 15-second PyPI read/TLS timeouts;
+  - no model call occurred in either failed build attempt;
+  - starting with the task-6 retry, prerequisite and instance Dockerfiles use
+    build-only `PIP_DEFAULT_TIMEOUT=120` and `PIP_RETRIES=20` arguments;
+  - dependency versions, source commits, target architectures, and runtime
+    behavior are unchanged.
+- STATUS: **RUNNING.** Do not analyze endpoint quality until all 200 tasks
+  have valid P1 and P2 terminal states.
+
+### E16 follow-up: terminal repair-error accounting
+
+- The resumed pass reused tasks 1-5, then recorded PyPI-only image-build
+  failures for tasks 6 and 7. Task 6's image completed in a separate
+  prebuild process and is now cached; task 7 remains queued for a no-model
+  prebuild retry.
+- Task 8 completed P1 with an empty patch after 512,000 budget-counted tokens.
+  Its inert feedback probe completed, but the single repair response proposed
+  an exact replacement whose `old` text appeared three times. The repair is a
+  P2 failure, not an evaluator or Docker failure, and no second repair call is
+  permitted.
+- The old runner raised before writing the response usage. Exact input/output
+  tokens for this one call are irrecoverable from local evidence. The run
+  reserves 512,000 conservative tokens against the global cap and marks the
+  repair-token distribution incomplete instead of imputing values.
+- The runner now persists model telemetry before applying edits. The
+  orchestrator treats `repair_error` as a completed unresolved P2 outcome;
+  only evaluator and execution failures trigger infrastructure retry/stop
+  logic. This is a bookkeeping and resumability correction, not an algorithm
+  or prompt change.
+- Verification after the correction: 44/44 Python tests passed; Python
+  compilation and `git diff --check` passed.
+
+### E16 follow-up: deterministic image dependency cache
+
+- Task 12 reproduced the PyPI empty-index failure before any model request.
+  A local wheelhouse was populated from official PyPI for the exact Astropy
+  Python 3.9 ARM64 build requirements and frozen with a SHA-256 manifest.
+- Instance setup and the official evaluator now use that wheelhouse with
+  `PIP_NO_INDEX=1`. The evaluator repeats the editable install, so the
+  wheelhouse remains in the image for that step. It contains only public build
+  dependencies, never task source or hidden evaluation data.
+- The task-13 verification image built in 48.457 seconds, had ARM64
+  architecture, exact base commit
+  `a3f4ae6cd24d5ecdf49f213d77b3513dd509a06c`, no Git remote, and all
+  wheelhouse hashes verified inside the no-network container.
+- The orchestrator now retries image-only failures twice, does not sleep after
+  already-completed task skips, and measures the wall cap from the original
+  run start across resumptions.
+- Verification: 45/45 Python tests, Python compilation, and
+  `git diff --check` passed. Root checks again passed through all pre-tsgo
+  gates and failed only on the existing model-catalog `unknown`/`never`
+  errors.
+
+### E16 follow-up: commit-specific Cython wheel
+
+- Task 16 (`astropy__astropy-14995`) pins `Cython==0.29.34`; the frozen
+  wheelhouse contained only Cython 0.29.30, so all three image-build attempts
+  failed before model invocation.
+- Execution was stopped before task 17. The exact CPython 3.9 ARM64 wheel was
+  identified from PyPI release metadata, downloaded through the Tsinghua PyPI
+  mirror, and verified against PyPI's published SHA-256
+  `5718319a01489688fdd22ddebb8e2fcbbd60be5f30de4336ea7063c3ae29fbe5`.
+- The wheelhouse manifest now hashes to
+  `bbc5cc9269f4e705fbebdb6b0a9d4d5a15b257817481fb1ec85957710767b07e`;
+  all listed artifacts pass `shasum -a 256 -c`.
+- This supplies the task's already-pinned public build dependency. It does not
+  change task source, dependency resolution, prompts, model calls, or grading,
+  and the infrastructure attempts remain excluded from quality metrics.
+
+### E16 follow-up: Astropy 1.3 x86_64 compatibility images
+
+- Tasks 17-20 share an Astropy 1.3 environment that pins Python 3.6 and
+  `setuptools==38.2.4`. SWE-bench selected ARM64 from the ARM64 host, but that
+  exact setuptools build is unavailable on current ARM64 Conda channels.
+- SWE-bench architecture selection is host-dependent: the same TestSpec uses
+  x86_64 on an x86_64 host. A temporary wrapper therefore prebuilt only these
+  four evaluator images as x86_64, preserving their official setup scripts,
+  pinned dependencies, source commits, and evaluator commands.
+- The official evaluator independently regenerates TestSpecs. A persisted
+  Python launcher with SHA-256
+  `127ffd035fce1fb43401de94aaa21032430e56326bb60e222c6fdaa9d7edb82c`
+  applies the same x86_64 host report only when `run_evaluation` receives one
+  of these four IDs; every other Python invocation and task is unchanged.
+- QEMU produced random GCC signal-11 failures. One temporary `CFLAGS=-O1`
+  attempt also failed and produced no image. Colima was restarted with
+  Virtualization.framework Rosetta support; all final images then used the
+  standard `-O3` compiler flags.
+- Final image verification confirmed amd64 architecture, exact base commits,
+  no Git remotes, and valid wheelhouse hashes for all four tasks. No model call
+  occurred during failed or successful prebuild attempts.
+- The user-paused interval from Unix `1790316408` to `1791514558`
+  (1,198,150 seconds) is excluded from the 86,400-second active wall-time cap.
+  The original start time remains recorded in `run_state.json`; token limits,
+  prompts, task order, and per-task timeouts are unchanged.
+- Accuracy results remain protocol-comparable. Runtime results will be
+  reported by architecture/emulation stratum because x86_64 Rosetta and
+  native ARM64 evaluator timings are not directly interchangeable.
+
+### E16 follow-up: task-17 user interruption
+
+- The first valid-image attempt for task 17 was externally terminated with
+  exit `-9` before `result.json` was atomically written. Its 12 completed
+  turns report 101,767 tokens; an in-flight request has no recoverable usage.
+- The entire attempt is quarantined under
+  `dgm200_run/invalid_attempts/astropy__astropy-7166.user-interrupt-20261009T111347`
+  and is excluded from accuracy, latency, and patch metrics.
+- The global token budget reserves the full 512,000-token per-task ceiling for
+  this invalid attempt. The reservation will be attached to the valid task-17
+  result before advancing to task 18, then the frozen task is rerun once.

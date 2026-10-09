@@ -159,6 +159,8 @@
   },
   "validity": {
     "official_swebench_grader": true,
+    "official_evaluator_feedback_to_repair": true,
+    "standard_one_submission_comparable": false,
     "future_git_history_available_to_pi": false,
     "external_network_available_to_pi": false,
     "same_tasks": true,
@@ -167,6 +169,6 @@
     "confirmatory_multi_seed_run": false,
     "held_out_140_task_evaluation": false,
     "endpoint_low_cost_claim": false,
-    "note": "This supports a DGM-small development-set quality result, not a matched full DGM evolution or held-out benchmark claim. The gateway also reported 20K-52K output tokens per repair despite an 8192 max_tokens request."
+    "note": "The 8/10 result is a feedback-assisted diagnostic upper bound: each repair consumed hidden official evaluator failure information after the original Pi submission. It is not a standard one-submission SWE-bench score and is not directly comparable with DGM's published 50%. The gateway also reported 20K-52K output tokens per repair despite an 8192 max_tokens request."
   }
 }

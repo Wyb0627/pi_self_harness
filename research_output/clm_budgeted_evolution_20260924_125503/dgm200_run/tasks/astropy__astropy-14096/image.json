@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "prerequisite_images": [
+    {
+      "image": "sweb.base.arm64:latest",
+      "architecture": "arm64",
+      "status": "reused"
+    },
+    {
+      "image": "sweb.env.arm64.428468730904ff6b4232aa:latest",
+      "architecture": "arm64",
+      "status": "reused"
+    }
+  ],
+  "images": [
+    {
+      "instance_id": "astropy__astropy-14096",
+      "base_commit": "1a4462d72eb03f30dc83a879b1dd57aac8b2c18b",
+      "env_image": "sweb.env.arm64.428468730904ff6b4232aa:latest",
+      "instance_image": "sweb.eval.arm64.astropy__astropy-14096:latest",
+      "architecture": "arm64",
+      "history_depth": 2,
+      "status": "built",
+      "duration_seconds": 601.27,
+      "log": "/Users/bytedance/codes/pi/research_output/clm_budgeted_evolution_20260924_125503/dgm200_run/tasks/astropy__astropy-14096/image_logs/astropy__astropy-14096.build.log"
+    }
+  ]
+}

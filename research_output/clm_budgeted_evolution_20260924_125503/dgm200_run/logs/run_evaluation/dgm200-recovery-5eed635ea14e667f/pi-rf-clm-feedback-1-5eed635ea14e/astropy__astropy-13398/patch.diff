@@ -1,0 +1,104 @@
+diff --git a/astropy/coordinates/builtin_frames/__init__.py b/astropy/coordinates/builtin_frames/__init__.py
+index 6fd688c..9345ccb 100644
+--- a/astropy/coordinates/builtin_frames/__init__.py
++++ b/astropy/coordinates/builtin_frames/__init__.py
+@@ -35,6 +35,12 @@ from .hadec import HADec
+ from .gcrs import GCRS, PrecessedGeocentric
+ from .cirs import CIRS
+ from .itrs import ITRS
++from astropy.coordinates.attributes import EarthLocationAttribute
++
++# Allow ITRS frames to be topocentric by specifying a location.
++ITRS.location = EarthLocationAttribute(default=None)
++ITRS.location.__set_name__(ITRS, 'location')
++ITRS.frame_attributes['location'] = ITRS.location
+ from .hcrs import HCRS
+ from .equatorial import TEME, TETE
+ 
+@@ -56,6 +62,86 @@ from . import ecliptic_transforms
+ from .lsr import LSR, GalacticLSR, LSRK, LSRD
+ 
+ from astropy.coordinates.baseframe import frame_transform_graph
++from astropy.coordinates.transformations import FunctionTransformWithFiniteDifference
++
++# Keep references to the original geocentric CIRS<->ITRS transforms, which are
++# replaced below with versions that also handle a topocentric ITRS location.
++_original_cirs_to_itrs = frame_transform_graph.get_transform(CIRS, ITRS)
++_original_itrs_to_cirs = frame_transform_graph.get_transform(ITRS, CIRS)
++
++
++def _cirs_location_cartesian(location, obstime):
++    """Return the geocentric position of ``location`` in CIRS axes."""
++    return location.get_itrs(obstime).transform_to(
++        CIRS(obstime=obstime)).cartesian
++
++
++@frame_transform_graph.transform(FunctionTransformWithFiniteDifference, CIRS, ITRS)
++def cirs_to_itrs(cirs_coo, itrs_frame):
++    # Same location: a pure rotation, so keep directions intact.
++    if (cirs_coo.location is not None and itrs_frame.location is not None
++            and np.all(cirs_coo.location == itrs_frame.location)):
++        cirs_no_loc = CIRS(cirs_coo.data, obstime=cirs_coo.obstime)
++        rotated = _original_cirs_to_itrs(cirs_no_loc,
++                                         ITRS(obstime=itrs_frame.obstime))
++        return itrs_frame.realize_frame(rotated.data)
++
++    # At least one frame has an origin translation.  Use geocentric CIRS for
++    # the rotation and then shift to the requested ITRS origin.
++    if cirs_coo.location is not None:
++        loc_cirs = _cirs_location_cartesian(cirs_coo.location, cirs_coo.obstime)
++        geo_cirs = CIRS(cirs_coo.cartesian + loc_cirs, obstime=cirs_coo.obstime)
++    else:
++        geo_cirs = cirs_coo
++
++    geo_itrs = _original_cirs_to_itrs(geo_cirs, ITRS(obstime=itrs_frame.obstime))
++    cart = geo_itrs.cartesian
++    if itrs_frame.location is not None:
++        cart = cart - itrs_frame.location.get_itrs(itrs_frame.obstime).cartesian
++    return itrs_frame.realize_frame(cart)
++
++
++@frame_transform_graph.transform(FunctionTransformWithFiniteDifference, ITRS, CIRS)
++def itrs_to_cirs(itrs_coo, cirs_frame):
++    # Same location: pure rotation.
++    if (itrs_coo.location is not None and cirs_frame.location is not None
++            and np.all(itrs_coo.location == cirs_frame.location)):
++        itrs_no_loc = ITRS(itrs_coo.data, obstime=itrs_coo.obstime)
++        rotated = _original_itrs_to_cirs(itrs_no_loc,
++                                         CIRS(obstime=cirs_frame.obstime))
++        return cirs_frame.realize_frame(rotated.data)
++
++    if itrs_coo.location is not None:
++        geo_cart = (itrs_coo.cartesian
++                    + itrs_coo.location.get_itrs(itrs_coo.obstime).cartesian)
++        geo_itrs = ITRS(geo_cart, obstime=itrs_coo.obstime)
++    else:
++        geo_itrs = itrs_coo
++
++    geo_cirs = _original_itrs_to_cirs(geo_itrs, CIRS(obstime=cirs_frame.obstime))
++    if cirs_frame.location is None:
++        return cirs_frame.realize_frame(geo_cirs.cartesian)
++
++    loc_cirs = _cirs_location_cartesian(cirs_frame.location, cirs_frame.obstime)
++    return cirs_frame.realize_frame(geo_cirs.cartesian - loc_cirs)
++
++
++@frame_transform_graph.transform(FunctionTransformWithFiniteDifference, ITRS, AltAz)
++@frame_transform_graph.transform(FunctionTransformWithFiniteDifference, ITRS, HADec)
++def itrs_to_observed(itrs_coo, observed_frame):
++    cirs_topo = itrs_coo.transform_to(
++        CIRS(obstime=observed_frame.obstime, location=observed_frame.location))
++    return cirs_topo.transform_to(observed_frame)
++
++
++@frame_transform_graph.transform(FunctionTransformWithFiniteDifference, AltAz, ITRS)
++@frame_transform_graph.transform(FunctionTransformWithFiniteDifference, HADec, ITRS)
++def observed_to_itrs(observed_coo, itrs_frame):
++    cirs_topo = observed_coo.transform_to(
++        CIRS(obstime=observed_coo.obstime, location=observed_coo.location))
++    return cirs_topo.transform_to(itrs_frame)
++
++import numpy as np
+ 
+ # we define an __all__ because otherwise the transformation modules
+ # get included

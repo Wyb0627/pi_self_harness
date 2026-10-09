@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "instanceId": "astropy__astropy-13236",
+  "method": "repair-first-causal-slice",
+  "candidatePaths": [
+    "astropy/table/table.py",
+    "docs/changes/table/13236.other.rst",
+    "astropy/table/operations.py"
+  ],
+  "changedPaths": [
+    "astropy/table/table.py"
+  ],
+  "inputTokens": 77077,
+  "outputTokens": 16066,
+  "latencySeconds": 67.342626084,
+  "attempts": 1,
+  "failureHash": "571d7b63eab51d8ac423f154b57e830d6c8768d59983382a47ba17e78e62b307",
+  "patch": "diff --git a/astropy/table/table.py b/astropy/table/table.py\nindex 5afe212..39c3ccd 100644\n--- a/astropy/table/table.py\n+++ b/astropy/table/table.py\n@@ -1239,12 +1239,6 @@ class Table:\n                                 f'{fully_qualified_name} '\n                                 'did not return a valid mixin column')\n \n-        # Structured ndarray gets viewed as a mixin unless already a valid\n-        # mixin class\n-        if (not isinstance(data, Column) and not data_is_mixin\n-                and isinstance(data, np.ndarray) and len(data.dtype) > 1):\n-            data = data.view(NdarrayMixin)\n-            data_is_mixin = True\n \n         # Get the final column name using precedence.  Some objects may not\n         # have an info attribute. Also avoid creating info as a side effect.\n",
+  "explanation": "Remove the auto-conversion of structured ndarrays to NdarrayMixin, including the candidate's FutureWarning, so structured arrays are stored as regular Column/MaskedColumn objects as required by the updated tests."
+}
