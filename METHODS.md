@@ -1,12 +1,44 @@
 # Methods
 
+## Pre-registered 60/140 Dynamic-Sampling Evaluation
+- **Purpose**: Compare a DGM-compatible fixed evaluation policy with dynamic
+  paired sampling from a clean initial Pi strategy artifact; true
+  multigeneration rollback is a separately Phase-2-gated extension.
+- **Core logic**: The online controller may see only
+  D_evolve = small(10) + medium(50). For each mutation, it compares the
+  parent and child on one frozen task union plus a controller-private residual
+  audit; only
+  after the search freezes may the final artifact run once on
+  D_test = big(140). The headline comparison is final-agent held-out quality
+  and the complete search-plus-endpoint ledger, not the selected-batch score.
+- **Key code**:
+  ~~~python
+  # Required future execution boundary; no production adapter exists yet.
+  selection = controller.run_selection(parent=parent, child=child)
+  decision = run_final_pipeline(
+      selection=selection, executor=paired_executor,
+      parent=parent, child=child, policy=decision_policy,
+      catalogue=evolve_catalogue, vectors=evolve_vectors,
+  )
+  ~~~
+- **Notes**: Phase 1 runs A0/A1/A2 only; A3 requires a tested lineage
+  diagnosis/restore/replay oracle before it may be the headline arm. P0 has a
+  separate shared-cost 140-task reference endpoint for each matched seed/time
+  block. A descriptive 200 result combines that locked 140 endpoint with a new
+  identity-matched 60-task endpoint supplement, never a rerun of D_test. The
+  protocol calls the controller ablations A0 through A3 to avoid collision with
+  existing rollback-policy labels. It requires a role-filtered catalogue and
+  D_test zero visibility before any paid run. See
+  DYNAMIC_SAMPLING_60_140_EXPERIMENT_PROTOCOL.md.
+
 ## Agentic Adaptive Evaluation Sampling
 - **Purpose**: Select a small mutation-specific SWE-bench batch for a DGM-style
   evolution while preserving an auditable paired accept/rollback gate.
 - **Core logic**: A frozen tool-calling model iteratively retrieves tasks from
   parent bad-case evidence, parent-to-child diff, lexical search, and semantic
   search. It may adapt to earlier paired public evidence, but every round is
-  append-only and an independent deterministic audit is added after it stops.
+  append-only and a controller-private deterministic residual audit is added
+  after it stops.
 - **Key code**:
   ~~~python
   selection = controller.run_selection()
@@ -24,7 +56,7 @@
 
 ## Facility-Location Coverage and Audit
 - **Purpose**: Prevent a causal/regression-focused batch from collapsing onto
-  near-duplicate issues while retaining an independently selected blind-spot
+  near-duplicate issues while retaining a controller-private residual-pool
   check.
 - **Core logic**: For L2-normalized task embeddings, the selected set covers a
   catalogue task through its most similar representative. Greedy marginal
