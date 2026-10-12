@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="use-iframe" content="true">
+<meta name="html-box-height-mode" content="auto">
+<meta name="description" content="三档 DGM 复现的管理预算闸门与论文公开费用锚点对比：5千、5万、15万美元是模型假设的累计上限，2.2万美元与至少4.2万美元是论文公开值及其推导下界。">
+<title>完整论文复现闸门将占用八成剩余额度</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  :root{--brand:#2f6fed;--brand-2:#60a5fa;--amber:#f59e0b;--green:#10b981;--red:#ef4444;--hot:#b42318;--ink:#1f2d3d;--ink-2:#334155;--mute:#94a3b8;--line:#e8edf3}
+  body{background:#fff;font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;padding:6px;color:var(--ink)}
+  #c{width:100%;height:430px}
+  .evidence{max-width:960px;margin:0 auto 8px;display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:0 12px}
+  .note{border:1px solid var(--line);border-radius:9px;padding:9px 11px;font-size:11px;line-height:1.55;color:var(--ink-2);background:linear-gradient(180deg,#fff,#fbfcfe)}
+  .note b{display:block;margin-bottom:2px;font-size:12px}
+  .fact{border-left:4px solid var(--brand)}
+  .assumption{border-left:4px solid var(--amber)}
+  .fact b{color:var(--brand)}
+  .assumption b{color:#b56b00}
+  @media(max-width:640px){#c{height:470px}.evidence{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div id="c"></div>
+<div class="evidence">
+  <div class="note fact"><b>论文 / 代码公开值</b>单次 SWE 主运行约 $22,000；完整论文复现仅能确认 ≥$42,000 的费用下界。论文与仓库均未披露完整 token 账本；当前仓库默认 160 次 child attempts，与论文 80 offspring 不一致。</div>
+  <div class="note assumption"><b>模型假设 · 管理闸门，不是成本预测</b>$5,000 / $50,000 / $150,000 是分阶段累计支出上限；占当前剩余额度 $182,315.75 的 2.7% / 27.4% / 82.3%。GPT-5.5 内部结算价未知，需由 pilot 实测后替换。</div>
+</div>
+<script src="https://unpkg.byted-static.com/echarts/5.5.1/dist/echarts.min.js" integrity="sha384-Mx5lkUEQPM1pOJCwFtUICyX45KNojXbkWdYhkKUKsbv391mavbfoAmONbzkgYPzR" crossorigin="anonymous"></script>
+<script>
+  var chart = echarts.init(document.getElementById('c'), null, {renderer:'svg'});
+  var CATS = ['最小验证\n余额占比 2.7%','主结果复现\n余额占比 27.4%','完整论文复现\n余额占比 82.3%'];
+  chart.setOption({
+    title:{text:'完整论文复现闸门将占用八成剩余额度',subtext:'单位：千美元 · 当前剩余额度 $182,315.75 · 闸门≠预计费用',left:'center',textStyle:{fontSize:16,color:'#1f2d3d'},subtextStyle:{color:'#94a3b8'}},
+    legend:{top:48,data:['模型假设：管理闸门','论文公开值 / 推导下界'],textStyle:{color:'#334155'}},
+    tooltip:{trigger:'axis',axisPointer:{type:'shadow'},formatter:function(items){var i=items[0].dataIndex;var pub=['未披露','SWE 主 run 约 $22k','已披露组件下界 ≥$42k'][i];return '<b>'+CATS[i].replace('\n',' · ')+'</b><br/>模型假设闸门：$'+items[0].value+'k<br/>论文公开口径：'+pub;}},
+    grid:{left:128,right:72,top:92,bottom:42},
+    xAxis:{type:'value',name:'千美元',max:165,axisLabel:{formatter:'${value}k'},splitLine:{lineStyle:{color:'#e8edf3'}}},
+    yAxis:{type:'category',data:CATS,axisLabel:{color:'#334155',lineHeight:17}},
+    series:[
+      {name:'模型假设：管理闸门',type:'bar',barWidth:20,data:[5,50,150],itemStyle:{color:'#f59e0b',borderRadius:[0,4,4,0]},label:{show:true,position:'right',color:'#334155',formatter:function(p){return '$'+p.value+'k';}}},
+      {name:'论文公开值 / 推导下界',type:'scatter',symbol:'diamond',symbolSize:16,data:[[null,0],[22,1],[42,2]],itemStyle:{color:'#2f6fed'},label:{show:true,position:'top',color:'#2f6fed',formatter:function(p){return p.dataIndex===1?'论文：$22k':p.dataIndex===2?'论文下界：≥$42k':'';}}}
+    ]
+  });
+  window.addEventListener('resize',function(){chart.resize();});
+</script>
+</body>
+</html>

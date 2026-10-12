@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="use-iframe" content="true">
+<meta name="html-box-height-mode" content="auto">
+<meta name="description" content="DGM 从 archive 选择父代，经诊断与自修改、分阶段 benchmark、有效性过滤和评分入档，再回到下一代选择的演化闭环。">
+<title>DGM 的成本来自反复评测，而非一次代码生成</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --brand:#2f6fed;--brand-2:#60a5fa;--amber:#f59e0b;--green:#10b981;
+    --red:#ef4444;--hot:#b42318;--ink:#1f2d3d;--ink-2:#334155;--mute:#94a3b8;--line:#e8edf3;
+  }
+  body{background:#fff;font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;color:var(--ink);padding:16px 12px}
+  .f-title{font-size:19px;font-weight:800;text-align:center;margin-bottom:2px}
+  .f-sub{font-size:12px;color:var(--mute);text-align:center;margin-bottom:18px}
+  .flow{display:flex;flex-wrap:wrap;align-items:stretch;justify-content:center;gap:6px;max-width:1000px;margin:0 auto}
+  .step{flex:1 1 150px;min-width:140px;max-width:230px;border:1px solid var(--line);border-radius:11px;padding:12px 13px;background:linear-gradient(180deg,#fff,#fbfcfe);position:relative}
+  .step .no{width:22px;height:22px;border-radius:50%;background:var(--brand);color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;margin-bottom:8px}
+  .step b{display:block;font-size:13.5px;font-weight:800;margin-bottom:4px}
+  .step span{font-size:11.5px;color:var(--ink-2);line-height:1.5}
+  .step.hot{border-color:var(--hot);box-shadow:0 0 0 1px var(--hot) inset}
+  .step.hot .no{background:var(--hot)}
+  .step.hot b{color:var(--hot)}
+  .arrow{display:flex;align-items:center;justify-content:center;color:var(--brand-2);font-size:20px;font-weight:800;flex:0 0 auto;padding:0 2px}
+  .loop-note{max-width:1000px;margin:14px auto 0;text-align:center;font-size:11px;color:var(--mute)}
+  @media(max-width:640px){
+    .flow{flex-direction:column;align-items:stretch}
+    .step{max-width:none}
+    .arrow{transform:rotate(90deg);padding:2px 0}
+  }
+</style>
+</head>
+<body>
+  <div class="f-title">DGM 的成本来自反复评测，而非一次代码生成</div>
+  <div class="f-sub">每个 child 都经历诊断、自修改与分阶段任务评估；只有可运行且保留编辑能力者入档</div>
+  <div class="flow">
+    <div class="step"><div class="no">1</div><b>从 archive 选父代</b><span>按性能与新颖性加权、有放回抽样；历史弱节点仍可成为 stepping stone</span></div>
+    <div class="arrow">→</div>
+    <div class="step"><div class="no">2</div><b>诊断并修改 agent</b><span>o1 分析失败日志，coding agent 修改自身工具、提示词或工作流，生成 child</span></div>
+    <div class="arrow">→</div>
+    <div class="step hot"><div class="no">3</div><b>运行分阶段 benchmark</b><span>先过 10-task 基础门，再按得分扩至 60/200 tasks；多轮工具调用使成本在此放大</span></div>
+    <div class="arrow">→</div>
+    <div class="step"><div class="no">4</div><b>过滤、评分并入档</b><span>不能运行或失去代码编辑能力的 child 被丢弃；有效节点保留分数、代码与日志</span></div>
+    <div class="arrow">→</div>
+    <div class="step"><div class="no">5</div><b>进入下一代搜索</b><span>更新 archive 的性能与子代计数，再次抽取 parent，形成分叉而非单线爬山</span></div>
+  </div>
+  <div class="loop-note">闭环 · 第 5 步回到第 1 步；论文为每 benchmark 80 个 offspring，当前仓库默认可尝试 80×2＝160 个 child，复现前必须锁定口径</div>
+</body>
+</html>

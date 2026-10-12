@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="use-iframe" content="true">
+<meta name="html-box-height-mode" content="auto">
+<meta name="description" content="GPT-5.5 基准情景下，Terminal-Bench 2.0 单轮从 10M 到 100M token 的预计费用仅占部门剩余额度 0.041% 至 0.411%">
+<title>即使单轮达到 100M token，费用仍不足剩余额度的 0.5%</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:#fff;font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;padding:6px}
+  #c{width:100%;height:440px}
+</style>
+</head>
+<body>
+<div id="c"></div>
+<script src="https://unpkg.byted-static.com/echarts/5.5.1/dist/echarts.min.js" integrity="sha384-Mx5lkUEQPM1pOJCwFtUICyX45KNojXbkWdYhkKUKsbv391mavbfoAmONbzkgYPzR" crossorigin="anonymous"></script>
+<script>
+  var PALETTE = ['#2f6fed','#f59e0b','#10b981','#ef4444','#60a5fa','#94a3b8'];
+  var chart = echarts.init(document.getElementById('c'), null, { renderer: 'svg' });
+
+  var CATS = ['10M token','30M token','60M token','100M token'];
+  var DATA = [
+    { value:75, remain:'0.041%', total:'0.008%' },
+    { value:225, remain:'0.123%', total:'0.025%' },
+    { value:450, remain:'0.247%', total:'0.050%' },
+    { value:750, remain:'0.411%', total:'0.083%', itemStyle:{color:'#b42318'} }
+  ];
+
+  chart.setOption({
+    color: PALETTE,
+    title: {
+      text:'即使单轮达到 100M token，费用仍不足剩余额度的 0.5%',
+      subtext:'GPT-5.5 标准 API；输入/输出=90%/10%、无缓存｜部门剩余额度 $182,315.75',
+      left:'center',
+      textStyle:{fontSize:16,color:'#1f2d3d',fontWeight:600},
+      subtextStyle:{color:'#94a3b8',fontSize:11}
+    },
+    tooltip: {
+      trigger:'axis',
+      axisPointer:{type:'shadow'},
+      formatter:function(params){
+        var p=params[0], d=DATA[p.dataIndex];
+        return '<b>'+p.name+'</b><br/>预计费用：$'+d.value.toLocaleString()+'<br/>占剩余额度：'+d.remain+'<br/>占总预算：'+d.total;
+      }
+    },
+    grid:{left:105,right:185,top:82,bottom:46},
+    xAxis:{
+      type:'value',name:'预计费用（美元）',max:850,
+      axisLine:{show:true,lineStyle:{color:'#e8edf3'}},
+      axisLabel:{color:'#64748b',formatter:'${value}'},
+      splitLine:{lineStyle:{color:'#eef2f7'}},
+      nameTextStyle:{color:'#64748b'}
+    },
+    yAxis:{
+      type:'category',data:CATS,
+      axisTick:{show:false},axisLine:{show:false},
+      axisLabel:{color:'#334155',fontWeight:600}
+    },
+    series:[{
+      type:'bar',data:DATA,barWidth:28,
+      itemStyle:{color:'#2f6fed',borderRadius:[0,5,5,0]},
+      label:{
+        show:true,position:'right',distance:10,
+        formatter:function(p){var d=DATA[p.dataIndex];return '{cost|$'+d.value.toLocaleString()+'}  {share|'+d.remain+' 剩余额度}';},
+        rich:{
+          cost:{color:'#1f2d3d',fontSize:12,fontWeight:700},
+          share:{color:'#64748b',fontSize:11,backgroundColor:'#f1f5f9',padding:[3,6],borderRadius:4}
+        }
+      }
+    }],
+    graphic:[{
+      type:'text',right:18,bottom:8,
+      style:{text:'综合价 $7.50 / 1M 总 token',fill:'#94a3b8',font:'11px sans-serif'}
+    }]
+  });
+  window.addEventListener('resize', function(){ chart.resize(); });
+</script>
+</body>
+</html>
