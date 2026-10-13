@@ -523,3 +523,267 @@ must satisfy the pre-registered joint quality and cost criteria.
 - The global token budget reserves the full 512,000-token per-task ceiling for
   this invalid attempt. The reservation will be attached to the valid task-17
   result before advancing to task 18, then the frozen task is rerun once.
+
+### E16 follow-up: cross-Python wheelhouse compatibility
+
+- Tasks 138-140 use Python 3.8.20. Their evaluator-image builds failed before
+  model invocation because the offline wheelhouse offered only `wheel==0.48.0`
+  and `packaging==26.3`, both requiring Python 3.9 or newer.
+- Each task exhausted the frozen three image-build attempts. Three consecutive
+  infrastructure errors then stopped the orchestrator at 137 completed tasks.
+- Public compatibility wheels were added without removing the existing Python
+  3.9 artifacts. Offline resolver checks now select the highest compatible
+  build toolchain for Python 3.6, 3.8, and 3.9. This changes no task source,
+  task dependencies, prompts, model calls, patches, tests, or grading.
+- The updated wheelhouse manifest hashes to
+  `80e4b3ee4ceb998563283e4692798a99f64855c1a77d6f91cb205a8cc18f882b`;
+  every listed artifact passes SHA-256 verification.
+- The infrastructure pause from Unix `1791617448` to
+  `1791774476.871686` (157,028.872 seconds) is excluded from the active
+  86,400-second wall-time cap.
+
+### E16 follow-up: wall-clock cap extension
+
+- The run reached the original 86,400-second active wall-clock cap after 168
+  of 200 frozen tasks. At that point, Original Pi had resolved 87/168 and the
+  feedback-assisted RF-CLM upper bound had resolved 119/168.
+- The user explicitly confirmed a revised global active wall-clock cap of
+  108,000 seconds. The 80,000,000-token cap, concurrency-one execution, task
+  order, prompts, task sources, test selection, patch policy, attribution
+  policy, and no-repeat model-call rule are unchanged.
+- The stopped interval from Unix `1791790011.124946` to
+  `1791795329.407000` (5318.282 seconds) is excluded from
+  active wall-clock accounting because no benchmark, evaluator, image-build,
+  or model process ran during that interval.
+- Execution resumes from `django__django-14771`, leaving 32
+  tasks.
+
+### E16 follow-up: Sphinx 5.1 wheelhouse completion
+
+- The first two Sphinx evaluator-image builds (`sphinx-doc__sphinx-10449` and
+  `sphinx-doc__sphinx-10466`) failed before any model call because the offline
+  wheelhouse did not contain `sphinxcontrib-applehelp`, which is a declared
+  Sphinx 5.1 install dependency. The third Sphinx build
+  (`sphinx-doc__sphinx-10673`) was interrupted before completion to avoid a
+  third repeated infrastructure failure.
+- Public Python 3.9 ARM64 or universal wheels were added for the declared
+  Sphinx 5.1 install and test dependencies missing from the offline wheelhouse,
+  including the `sphinxcontrib-*` packages, `docutils<0.19`, `snowballstemmer`,
+  `babel`, `alabaster`, `imagesize`, `requests`, `importlib-metadata`,
+  `pytest`, `html5lib`, and `cython`.
+- This changes no task source, task dependency declarations, prompts, model
+  calls, patches, tests, or grading. It only makes the declared environment
+  resolvable under the existing `PIP_NO_INDEX` wheelhouse policy.
+- The updated wheelhouse manifest hashes to
+  `baf7879e2baeb36f09c8211b595e8246321a574365d86b0b0e5cdffa130d2ef6`;
+  every listed artifact passes SHA-256 verification, and an offline resolver
+  check for Python 3.9 ARM64 resolves the Sphinx requirements from the local
+  wheelhouse.
+- The infrastructure pause from Unix `1791799390.323926` to
+  `1791799678.484804` (288.161 seconds) is excluded from active wall-clock
+  accounting because no benchmark, evaluator, image-build, or model process ran
+  during wheelhouse completion and manifest verification.
+
+### E16 follow-up: Sphinx pytest exceptiongroup dependency
+
+- The retry for `sphinx-doc__sphinx-10449` advanced past the Sphinx install
+  dependencies, then failed before any model call because `pytest==8.4.2`
+  requires `exceptiongroup>=1` on Python 3.9 and that wheel was still absent
+  from the offline wheelhouse.
+- Added the public universal wheel `exceptiongroup-1.3.0-py3-none-any.whl`.
+  Existing `typing_extensions-4.16.0` already satisfies its Python 3.9
+  dependency.
+- The updated wheelhouse manifest hashes to
+  `56dc1c696dae6ea2ca170cee93c80529f09fdc0003a6c77b1286d2ded6370fb2`;
+  every listed artifact passes SHA-256 verification, and an offline resolver
+  check confirms `pytest==8.4.2` resolves its Python 3.9 runtime dependencies
+  from the local wheelhouse.
+- This changes no task source, task dependency declarations, prompts, model
+  calls, patches, tests, or grading. It only completes the declared pytest
+  runtime dependency under the existing `PIP_NO_INDEX` wheelhouse policy.
+- The infrastructure pause from Unix `1791800886` to `1791801168`
+  (282 seconds) is excluded from active wall-clock accounting because no
+  benchmark, evaluator, image-build, or model process ran during wheelhouse
+  completion and manifest verification.
+
+### E16 follow-up: Sphinx flit-core build backend dependency
+
+- The build for `sphinx-doc__sphinx-11510` failed before any model call because
+  the frozen checkout declares a PEP 517 build dependency on
+  `flit_core>=3.7`, and that wheel was absent from the offline wheelhouse under
+  `PIP_NO_INDEX`.
+- Added the public universal wheel `flit_core-4.1.0-py3-none-any.whl`, which
+  supports Python 3.9 (`Requires-Python: >=3.8`).
+- The updated wheelhouse manifest hashes to
+  `d7303f1d7039b4a36ea53cc9db7b7b31f76cd2f65db3892fa82d28e3374c0e0a`;
+  every listed artifact passes SHA-256 verification, and an offline resolver
+  check confirms `flit_core>=3.7` resolves from the local wheelhouse.
+- This changes no task source, task dependency declarations, prompts, model
+  calls, patches, tests, or grading. It only completes the declared build
+  backend dependency under the existing `PIP_NO_INDEX` wheelhouse policy.
+- The infrastructure pause from Unix `1791803073` to `1791803707`
+  (634 seconds) is excluded from active wall-clock accounting because no
+  benchmark, evaluator, image-build, or model process ran during wheelhouse
+  completion and manifest verification.
+
+### E16 follow-up: restart blocked by missing API-key environment
+
+- A restart attempt after the `flit_core` wheelhouse repair failed during
+  runtime validation because `ROLLBACK_ENDPOINT_API_KEY` was not present in
+  the current shell.
+- The existing model proxy on `127.0.0.1:8765` remained alive, but the proxy
+  forwards the caller's Authorization header and does not provide the key to
+  new benchmark runner processes.
+- The DeepSeek key was restored from `llm_api_samples/chat_sample.py`,
+  validated by SHA-256 fingerprint without logging its value, and persisted
+  under the macOS Keychain service `pi.rollback-endpoint-api-key`.
+- No benchmark, evaluator, image-build, or model process ran from Unix
+  `1791803707` to `1791859764` (56,057 seconds); the interval is excluded from
+  active wall-clock accounting.
+- The orchestrator implements its cap as `now - startedAtUnix` rather than
+  reading `excludedExternalPauseSeconds`; `startedAtUnix` was advanced by the
+  same 56,057 seconds so its effective cap remains the user-approved 108,000
+  active seconds. No task, model, token, or cap-limit setting changed.
+
+### E16 follow-up: legacy Sphinx contrib constraints
+
+- `sphinx-doc__sphinx-7454` failed before any model call because its frozen
+  setup script constrains older Sphinx contrib/template versions while the
+  offline wheelhouse only contained newer incompatible releases.
+- Added public wheels for `alabaster==0.7.11`, `Jinja2==2.11.3`,
+  `MarkupSafe==2.0.1` (Linux ARM64), `sphinxcontrib-applehelp==1.0.7`,
+  `sphinxcontrib-devhelp==1.0.5`, `sphinxcontrib-htmlhelp==2.0.4`,
+  `sphinxcontrib-qthelp==1.0.6`, and
+  `sphinxcontrib-serializinghtml==1.1.9`.
+- Every wheelhouse artifact passes SHA-256 verification; the manifest now
+  hashes to `90623bb8fb206fac1bd8434050292467eab253a07dfdd437c58d339a06b8fce9`.
+  Exact offline wheel resolution succeeds. The contrib wheels' `Sphinx>=5`
+  requirement is supplied by the frozen editable Sphinx checkout itself during
+  evaluator-image installation.
+- The infrastructure pause from Unix `1791860825` to `1791861082`
+  (257 seconds) is excluded from active wall-clock accounting. No task source,
+  test selection, prompt, model call, or grading behavior changed.
+
+### E16 follow-up: Sphinx pytest-cov dependency
+
+- The retry for `sphinx-doc__sphinx-7454` reached the frozen test dependency
+  `pytest-cov` and failed before any model call because neither
+  `pytest-cov==7.1.0` nor its required `coverage>=7.10.6` wheel was available
+  under `PIP_NO_INDEX`.
+- Added the public `pytest_cov-7.1.0-py3-none-any.whl` and the official
+  Python 3.9 Linux ARM64
+  `coverage-7.10.7-cp39-cp39-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl`.
+  Each local SHA-256 matches PyPI release metadata:
+  `a0461110b7865f9a271aa1b51e516c9a95de9d696734a2f71e3e78f46e1d4678`
+  and
+  `c7315339eae3b24c2d2fa1ed7d7a38654cba34a13ef19fbcb9425da46d3dc594`.
+- Every wheelhouse artifact passes SHA-256 verification. The manifest now
+  hashes to `d0645761eee6262a79e77739f41f0b33db94f7aca41af77774c4ff0a459a4bd2`,
+  and an offline Linux ARM64/Python 3.9 resolver check selects
+  `pytest-cov==7.1.0`, `coverage==7.10.7`, and the existing compatible pytest
+  dependency closure.
+- This only completes frozen declared test dependencies in the existing
+  offline wheelhouse. It does not change task source, test selection, prompts,
+  model calls, patches, or grading. The infrastructure pause beginning at Unix
+  `1791861398` ended at `1791861609` (211 seconds) and is excluded from active
+  wall-clock accounting because no benchmark, evaluator, image-build, or model
+  process ran during wheelhouse completion and verification.
+
+### E16 follow-up: Sphinx 3.0 test dependency closure
+
+- The next `sphinx-doc__sphinx-7454` image retry reached `typed_ast` and failed
+  before any model call because that declared `[test]` dependency was absent
+  from the offline wheelhouse.
+- `typed_ast==1.5.5` is the highest public release with a CPython 3.9 Linux
+  ARM64 wheel. Its SHA-256
+  `1efebbbf4604ad1283e963e8915daa240cb4bf5067053cf2f0baadc4d4fb51b8`
+  matches PyPI metadata, and it declares only `Requires-Python: >=3.6`.
+- The same installer trace exposed an earlier compatibility assumption as
+  incorrect: the frozen source reports `Sphinx==3.0.1.dev20261013`, while the
+  highest contrib releases permitted by its existing `<=` setup-script
+  constraints declare `Sphinx>=5`. The source and its constraints were not
+  modified. Instead, the local wheelhouse now additionally provides the
+  compatible historical public releases:
+  `sphinxcontrib-applehelp==1.0.2`,
+  `sphinxcontrib-devhelp==1.0.2`, `sphinxcontrib-htmlhelp==1.0.3`,
+  `sphinxcontrib-qthelp==1.0.3`, and
+  `sphinxcontrib-serializinghtml==1.1.4`. None declares `Sphinx>=5`, so pip
+  can choose a compatible candidate while evaluating the frozen editable
+  project.
+- Every artifact in the expanded wheelhouse passes SHA-256 verification; the
+  manifest now hashes to
+  `7c90906cf11732b0b31faaabda4b767d44cbcb79e64a582363c4c0c6428c1c0b`.
+- A direct official evaluator-image build passed using the exact base commit
+  `aca3f825f2e4a8817190f3c885a242a285aa0dba`, a depth-2 checkout with no
+  remote, and native ARM64 image
+  `sha256:c982a69308c33b8b0ae91cbdec955ec6b295da3e39a8baca38541fdd50c322cc`.
+  Its build duration was 29.091 seconds and its installer selected all five
+  compatible historical contrib versions.
+- The infrastructure pause from Unix `1791861912` to `1791862114`
+  (202 seconds) is excluded from active wall-clock accounting. The following
+  direct image build is counted as active execution time. No task source, test
+  selection, prompt, model call, patch, or grading behavior changed.
+
+### E16 follow-up: Sphinx 4.1 docutils constraint
+
+- Task 194 (`sphinx-doc__sphinx-9229`) exhausted its three image-only retries
+  before any model call. Its frozen Sphinx 4.1 checkout requires
+  `docutils>=0.14,<0.18`, while the offline wheelhouse contained only
+  `docutils==0.18.1`.
+- Added the public universal wheel
+  `docutils-0.17.1-py2.py3-none-any.whl`. Its local SHA-256
+  `cf316c8370a737a022b72b56874f6602acf974a37a9fba42ec2876387549fc61`
+  matches the official PyPI 0.17.1 release metadata.
+- The expanded manifest hashes to
+  `87b6fa28bb16400d9d2ecb859e8da5da96a3cdb17b9642c8cb07e5241086c1da`;
+  every wheel passes SHA-256 verification, and an offline Linux
+  ARM64/Python 3.9 resolver check selects `docutils==0.17.1`.
+- A direct no-model evaluator-image rebuild passed from the exact frozen base
+  commit `876fa81e0a038cda466925b85ccf6c5452e0f685`, creating native ARM64
+  image `sha256:20dca1ef3587c0847fafb9733eb46c9a00a5f9681196829da3f8aecd64b17fcd`
+  in 27.53 seconds. The image has no Git remote, validates every wheelhouse
+  hash at runtime, and imports `docutils==0.17.1` in its `testbed`
+  environment.
+- This completes a frozen declared dependency under the existing
+  `PIP_NO_INDEX` policy. No task source, dependency declaration, test
+  selection, prompt, model call, patch, or grading behavior changed.
+
+### E16 follow-up: Sphinx 4.2/4.3 contrib metadata compatibility
+
+- Tasks 199 and 200 reached evaluator-image installation without a model call
+  but could not resolve their frozen Sphinx 4.2/4.3 source under
+  `PIP_NO_INDEX`. The existing frozen setup script permits
+  `sphinxcontrib-htmlhelp<=2.0.4` and
+  `sphinxcontrib-serializinghtml<=1.1.9`; its highest candidates in those
+  ranges declare `Sphinx>=5`, conflicting with the editable frozen source.
+- PyPI metadata identifies the latest compatible candidates within those
+  unchanged ranges as `sphinxcontrib-htmlhelp==2.0.1` (SHA-256
+  `c38cb46dccf316c79de6e5515e1770414b797162b23cd3d06e67020e1d2a6903`)
+  and `sphinxcontrib-serializinghtml==1.1.5` (SHA-256
+  `352a9a00ae864471d3a7ead8d7d79f5fc0b57e8b3f95e9867eb9eb28999b92fd`).
+  Neither declares `Sphinx>=5`; later versions 2.0.2 and 1.1.6,
+  respectively, do.
+- Created
+  `dgm200_run/build_wheelhouse/sphinx-4-legacy-contrib-compat-v2`, a
+  public-artifact compatibility view that excludes only the incompatible
+  candidates `htmlhelp==2.0.4` and `serializinghtml==1.1.9`, selects the
+  verified compatible wheels, and has SHA-256 manifest
+  `b547ea98b685df4bd89051a9dcc11ff8652ff0ec314262317332cc29a696f3a4`.
+  Every artifact in the view passes the manifest check.
+- Direct no-model evaluator-image builds passed for both exact commits:
+  - `sphinx-doc__sphinx-9461` at
+    `939c7bb7ff7c53a4d27df067cea637540f0e1dad`, ARM64 image
+    `sha256:ded43fdcc52df19921dc2237dd33bdae3043cb937421c256178f9f750d77de4a`,
+    33.410 seconds;
+  - `sphinx-doc__sphinx-9698` at
+    `f050a7775dfc9000f55d023d36d925a8d02ccfa8`, ARM64 image
+    `sha256:95a534262ece152a24bd2bdc4da7497d1e12a8bbea0755366d4c2897d588b265`,
+    22.941 seconds.
+- Each image has no Git remote, validates its copied wheelhouse manifest at
+  runtime, and installs the expected frozen Sphinx version with
+  `htmlhelp==2.0.1` and `serializinghtml==1.1.5`. The direct image-build time
+  remains active execution time; only the four no-process intervals totaling
+  488 seconds are excluded from the wall-clock cap.
+- This restores environment resolvability without changing task source,
+  frozen setup commands, dependency declarations, test selection, prompts,
+  model calls, submitted patches, or official grading.

@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "startedAtUnix": 1791503710.686769,
-  "completedAtUnix": null,
+  "startedAtUnix": 1791766552.554428,
+  "completedAtUnix": 1791874141.17595,
   "originalStartedAtUnix": 1790299342.344259,
-  "excludedExternalPauseSeconds": 1204368.34251,
+  "excludedExternalPauseSeconds": 1468126.2101689328,
   "pauseAccounting": [
     {
       "pausedAtUnix": 1790316408,
@@ -14,6 +14,100 @@
       "pausedAtUnix": 1791515628.65749,
       "resumedAtUnix": 1791521847,
       "reason": "User interrupted the task-17 runner and later requested continuation; no benchmark process ran during this interval."
+    },
+    {
+      "pausedAtUnix": 1791570456.503,
+      "resumedAtUnix": 1791612957.92826,
+      "reason": "Host reboot at 2026-10-10 02:28 terminated Colima, proxy, orchestrator, and task 128; no benchmark process ran during this interval. Resume was delayed while restoring the host terminal, Python runtime, proxy, and Colima; no benchmark, evaluator, image-build, or model process ran. Resume was delayed while restoring the host terminal, Python runtime, proxy, and Colima; no benchmark, evaluator, image-build, or model process ran. Resume was delayed while restoring the host terminal, Python runtime, proxy, and Colima; no benchmark, evaluator, image-build, or model process ran."
+    },
+    {
+      "pausedAtUnix": 1791617448,
+      "resumedAtUnix": 1791774476.871686,
+      "reason": "Orchestrator stopped after three consecutive evaluator-image build failures caused by Python-incompatible wheelhouse entries; no benchmark, evaluator, image-build, or model process ran after stop."
+    },
+    {
+      "amendmentId": "wall-clock-cap-108000-extension",
+      "pausedAtUnix": 1791790011.124946,
+      "resumedAtUnix": 1791795329.407,
+      "reason": "Orchestrator stopped at the original 86,400-second wall-clock cap after 168 completed tasks; no benchmark, evaluator, image-build, or model process ran before the user-confirmed 108,000-second resume."
+    },
+    {
+      "amendmentId": "sphinx-5.1-wheelhouse-dependencies",
+      "pausedAtUnix": 1791799390.323926,
+      "resumedAtUnix": 1791799678.484804,
+      "reason": "Orchestrator and active Sphinx image build were stopped after repeated evaluator-image failures caused by missing offline Sphinx dependency wheels; no benchmark, evaluator, image-build, or model process ran during wheelhouse completion and manifest verification."
+    },
+    {
+      "amendmentId": "sphinx-py39-pytest-exceptiongroup",
+      "pausedAtUnix": 1791800886,
+      "resumedAtUnix": 1791801168,
+      "reason": "Orchestrator and active Sphinx image build were stopped after a missing offline pytest runtime dependency was identified; no benchmark, evaluator, image-build, or model process ran during wheelhouse completion and manifest verification."
+    },
+    {
+      "amendmentId": "sphinx-py39-flit-core-build-backend",
+      "pausedAtUnix": 1791803073,
+      "resumedAtUnix": 1791803707,
+      "reason": "Orchestrator and active Sphinx image build were stopped after a missing offline PEP 517 build-backend dependency was identified; no benchmark, evaluator, image-build, or model process ran during wheelhouse completion and manifest verification."
+    },
+    {
+      "amendmentId": "credential-env-restore-blocker",
+      "pausedAtUnix": 1791803707,
+      "resumedAtUnix": 1791859764,
+      "reason": "A restart attempt after the Sphinx flit-core wheelhouse repair failed during runtime validation because ROLLBACK_ENDPOINT_API_KEY was unavailable in the current shell; no benchmark, evaluator, image-build, or model process ran until the user restored the key and it was persisted in macOS Keychain."
+    },
+    {
+      "amendmentId": "sphinx-legacy-contrib-constraints",
+      "pausedAtUnix": 1791860825,
+      "resumedAtUnix": 1791861082,
+      "reason": "Orchestrator and the active legacy Sphinx image build were stopped after an offline version-constraint conflict was identified; no benchmark, evaluator, image-build, or model process ran while the wheelhouse was completed and verified."
+    },
+    {
+      "amendmentId": "sphinx-py39-pytest-cov",
+      "pausedAtUnix": 1791861398,
+      "resumedAtUnix": 1791861609,
+      "reason": "Orchestrator and the active legacy Sphinx image build were stopped after a missing offline pytest-cov dependency was identified; no benchmark, evaluator, image-build, or model process runs during wheelhouse completion and manifest verification."
+    },
+    {
+      "amendmentId": "sphinx-3.0-contrib-and-typed-ast",
+      "pausedAtUnix": 1791861912,
+      "resumedAtUnix": 1791862114,
+      "reason": "Orchestrator and the active Sphinx 3.0 image build were stopped after the next missing typed-ast dependency and an incompatible latest-allowed sphinxcontrib version family were identified; no benchmark, evaluator, image-build, or model process ran while the compatible offline wheelhouse was completed and verified."
+    },
+    {
+      "amendmentId": "sphinx-4.1-docutils-0.17.1",
+      "pausedAtUnix": 1791869163,
+      "resumedAtUnix": 1791869244.35755,
+      "reason": "The orchestrator had stopped after the Sphinx 4.1 pre-model evaluator-image failure; no benchmark, evaluator, image-build, or model process ran before the direct verification build."
+    },
+    {
+      "amendmentId": "sphinx-4.1-docutils-0.17.1",
+      "pausedAtUnix": 1791869272,
+      "resumedAtUnix": 1791869386,
+      "reason": "The direct evaluator-image build had completed; no benchmark, evaluator, image-build, or model process ran before restart."
+    },
+    {
+      "amendmentId": "sphinx-4.2-htmlhelp-compatibility",
+      "pausedAtUnix": 1791872147,
+      "resumedAtUnix": 1791872321,
+      "reason": "The orchestrator was stopped after the pre-model Sphinx 4.2/4.3 evaluator-image dependency conflict; no benchmark, evaluator, image-build, or model process ran while a compatible offline wheelhouse view was prepared and hash-verified."
+    },
+    {
+      "amendmentId": "sphinx-4.2-contrib-compatibility",
+      "pausedAtUnix": 1791872411,
+      "resumedAtUnix": 1791872440,
+      "reason": "The direct no-model image verification had stopped after exposing a second Sphinx>=5 metadata conflict; no benchmark, evaluator, image-build, or model process ran while the compatible wheelhouse view was completed and hash-verified."
+    },
+    {
+      "amendmentId": "sphinx-4.2-serializinghtml-compatibility",
+      "pausedAtUnix": 1791872493,
+      "resumedAtUnix": 1791872574,
+      "reason": "The direct no-model image verification had stopped after exposing the frozen serializinghtml lower-bound requirement; no benchmark, evaluator, image-build, or model process ran while the compatible wheelhouse view was completed and hash-verified."
+    },
+    {
+      "amendmentId": "sphinx-4.2-contrib-metadata-compatibility",
+      "pausedAtUnix": 1791872650,
+      "resumedAtUnix": 1791872854,
+      "reason": "The direct evaluator-image verification had completed; no benchmark, evaluator, image-build, or model process ran while the verified compatibility evidence was recorded before retry."
     }
   ]
 }
