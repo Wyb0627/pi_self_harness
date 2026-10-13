@@ -8,19 +8,23 @@
 
 ## 0. ⚠️ 必读：先处理两件事
 
-### 0.1 公司 API 密钥已泄露到公开 git 历史（安全）
+### 0.1 公司 API 密钥曾泄露到公开 git 历史（已处理，但有残留）
 
-本仓库 (`Wyb0627/pi_self_harness`) 是 **public**。以下已推送到 `origin/main` 的历史提交内嵌了公司 aicolate/tiktok-row 网关的明文 `secret_id`/`secret_key`：
+本仓库 (`Wyb0627/pi_self_harness`) 是 **public**。历史上两个已推送到 `origin/main` 的提交曾内嵌公司 aicolate/tiktok-row 网关的明文 `secret_id`/`secret_key`：
 
-- `222280c07` → `rollback_mvp/config.py` 旧版本（硬编码 key）
-- `86c546fe7` → `rollback_mvp/__pycache__/config.cpython-313.pyc`（key 编译进字节码）
+- `222280c07`（旧 SHA）→ `rollback_mvp/config.py` 旧版本（硬编码 key）
+- `86c546fe7`（旧 SHA）→ `rollback_mvp/__pycache__/config.cpython-313.pyc`（key 编译进字节码）
 
-当前 HEAD 的 [config.py](rollback_mvp/config.py) 已改为纯环境变量读取、无密钥。但历史仍公开可见。
+**已完成的处理（2026-10-13）：**
+1. 用 `git filter-repo` 重写了 `main` 的全部历史：删除所有 `*.pyc`，并把两组 secret key 与 `secret_id` 值替换为 `REDACTED`。
+2. force-push 重写后的 `main`（新 HEAD）。
+3. 删除了仍指向旧 secret 历史的公开分支 `codex/dgm200-results-archive`。
+4. 当前 HEAD 的 [config.py](rollback_mvp/config.py) 本就是纯环境变量读取、无密钥。
+5. 本地 `llm_api_samples/`（被 gitignore）含明文 key，**从未提交，也不要提交**。调用模式见 §5.3 脱敏示例。
 
-**行动项（仓库外，必须人工完成）：**
-1. **立即到网关控制台吊销/轮换**这两组泄露的 `secret_id`/`secret_key`。这是唯一彻底止血手段。
-2. 如需清除历史：用 `git filter-repo` 或 GitHub 的敏感数据移除流程重写并 force-push，再让所有协作者重新 clone。本仓库**从不**自动 force-push 或改写公开历史。
-3. 本地 `llm_api_samples/`（被 gitignore）也含明文 key，**不要**提交。调用模式见 §5.3 的脱敏示例。
+**仍需人工完成（关键）：**
+1. **到网关控制台吊销/轮换这两组 `secret_id`/`secret_key`**。因为 key 曾公开暴露过，轮换是唯一彻底止血手段——即使历史已清，也必须假设它已泄露。
+2. **残留点**：PR #1 已 merge，GitHub 会永久保留 `refs/pull/1/head`（指向旧 secret 提交 `3705b4f6a`），**force-push 和删分支都删不掉它**，仍可按 SHA 公开 fetch。彻底清除需要联系 GitHub Support 清缓存视图并 GC，或直接**删除/重建该公开仓库**。好在该仓库 star/fork/watcher 均为 0，暴露面有限；但 key 轮换后此残留即失效，是最省事的闭环方式。
 
 ### 0.2 两份大数据不在 git 里，还机前必须手动迁移
 
@@ -101,25 +105,30 @@ python3 -m pip install swebench          # 仅 build_local_swebench_images.py �
 
 **用途**：E1–E11 全部离线实验、`rollback_mvp/` 里除 DGM200 外的所有 benchmark，都从这里读 DGM 的真实进化树和每任务分数——**零 Docker、零重跑**。
 
-**来源**：DGM 开源项目 `github.com/jennyzzt/dgm`（论文 arXiv:2505.22954，Sakana AI）。实验用的是其 SWE 结果包 `swe_results.zip`。
+**来源（已核实）**：DGM 开源项目 `github.com/jennyzzt/dgm`（论文 arXiv:2505.22954，Sakana AI）。其 README 的 "Logs from Experiments" 一节指向一个 **Google Drive 文件夹**，里面是论文全部实验的 foundation-model 输出日志：
+
+- https://drive.google.com/drive/folders/1Kcu9TbIa9Z50pJ7S6hH9omzzD1pxIYZC
+
+我们本地的 `DGM_results/`（`swe_results/` + `polyglot_results/`）就是这个 Drive 文件夹的内容。日志**不在 git / release asset / HF 上**，只能从该 Drive 下载。
 
 **期望布局**（代码按此硬路径查找，见 [config.py](rollback_mvp/config.py) `DGM_SWE_ROOT`）：
 
 ```
 DGM_results/
-├── swe_results.zip              # 原始包 (~1.0 GB)
-└── swe_results/
-    ├── swe_dgm/                 # ← 主数据：完整进化树，每节点含
-    │                            #   parent_commit / entry / self_evo.md /
-    │                            #   model_patch.diff / predictions/*.md /
-    │                            #   overall_performance
-    ├── swe_dgm_nodarwin/
-    └── swe_dgm_noselfimprove/
+├── swe_results.zip              # 从 Drive 下载的原始包 (~1.0 GB)
+├── swe_results/
+│   ├── swe_dgm/                 # ← 主数据：90 个节点的完整进化树，每节点含
+│   │                            #   parent_commit / entry / self_evo.md /
+│   │                            #   model_patch.diff / predictions/*.md /
+│   │                            #   overall_performance
+│   ├── swe_dgm_nodarwin/
+│   └── swe_dgm_noselfimprove/
+└── polyglot_results/            # Polyglot 对照（当前实验未直接用）
 ```
 
-**预处理**：解压 `swe_results.zip` 到 `DGM_results/swe_results/`，确认 `DGM_results/swe_results/swe_dgm/` 存在即可，无需其它转换。
+**预处理**：从上面 Drive 下载后解压 `swe_results.zip` 到 `DGM_results/swe_results/`，确认 `DGM_results/swe_results/swe_dgm/` 存在（约 90 个节点目录）即可，无需其它转换。
 
-> **强烈建议**：这 6.9 GB 还机前直接拷到个人存储（整个 `DGM_results/` 目录），比从公开渠道重新下载/解压省事且可保证字节一致。
+> **强烈建议**：这 6.9 GB 还机前直接拷到个人存储（整个 `DGM_results/` 目录）。Drive 虽可重下，但拷贝能保证字节一致、省去重下/解压时间。
 
 ### 4.2 SWE-bench Verified（DGM-200 冻结清单的来源）
 
