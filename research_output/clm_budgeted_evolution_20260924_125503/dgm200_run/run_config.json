@@ -18,10 +18,10 @@
   "evaluatorTimeoutSeconds": 1800,
   "imageBuildTimeoutSeconds": 7200,
   "imageBuildRetries": 2,
-  "imageBuildRetryDelaySeconds": 30,
-  "buildWheelhouse": "/Users/bytedance/codes/pi/research_output/clm_budgeted_evolution_20260924_125503/dgm200_run/build_wheelhouse/astropy-py39-arm64",
+  "imageBuildRetryDelaySeconds": 30.0,
+  "buildWheelhouse": "/Users/bytedance/codes/pi/research_output/clm_budgeted_evolution_20260924_125503/dgm200_run/build_wheelhouse/sphinx-4-legacy-contrib-compat-v2",
   "globalTokenCap": 80000000,
-  "globalWallSeconds": 86400,
+  "globalWallSeconds": 108000,
   "interTaskDelaySeconds": 90.0,
   "costPerMillionTokens": {
     "input": null,

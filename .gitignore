@@ -57,3 +57,10 @@ __pycache__/
 /research_output/**/dgm200_run/invalid_attempts/*/workspace/
 /research_output/**/dgm200_run/build_wheelhouse/
 /research_output/**/pi_home/**/auth.json
+
+# Regenerable DGM200 evaluator artifacts; retain only aggregate audit metadata.
+/research_output/**/dgm200_run/logs/
+/research_output/**/dgm200_run/tasks/
+/research_output/**/dgm200_run/invalid_attempts/
+/research_output/**/dgm200_run/direct_verify_*/
+/research_output/**/dgm200_run/*dgm200-*.json
