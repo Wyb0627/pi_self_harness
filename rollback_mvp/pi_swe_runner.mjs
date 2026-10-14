@@ -1,6 +1,13 @@
 import { execFileSync, spawn } from "node:child_process";
 import { createHash } from "node:crypto";
-import { constants, mkdirSync, readFileSync, realpathSync, writeFileSync } from "node:fs";
+import {
+	constants,
+	mkdirSync,
+	readFileSync,
+	realpathSync,
+	renameSync,
+	writeFileSync,
+} from "node:fs";
 import {
 	access,
 	lstat,
@@ -28,10 +35,12 @@ import {
 	createReadToolDefinition,
 	createWriteToolDefinition,
 } from "../pi-rollback/node_modules/@earendil-works/pi-coding-agent/dist/index.js";
+import { loadCandidateToolDefinitions } from "./candidate_tool_runtime.mjs";
 
 const { values } = parseArgs({
 	options: {
 		"agent-dir": { type: "string" },
+		"candidate-artifact": { type: "string" },
 		"docker-host": { type: "string" },
 		"exclude-prefix": {
 			type: "string",
@@ -71,8 +80,8 @@ for (const name of required) {
 }
 const apiKey = process.env.ROLLBACK_ENDPOINT_API_KEY;
 if (!apiKey) throw new Error("ROLLBACK_ENDPOINT_API_KEY is required.");
-if (!values["no-shell"] && !values["sandbox-image"]) {
-	throw new Error("--sandbox-image is required unless --no-shell is set.");
+if ((!values["no-shell"] || values["candidate-artifact"]) && !values["sandbox-image"]) {
+	throw new Error("--sandbox-image is required for shell or candidate tools.");
 }
 
 const agentDir = resolve(values["agent-dir"]);
@@ -101,8 +110,11 @@ const modelRuntime = await ModelRuntime.create({
 	modelsStorePath: `${agentDir}/models-store.json`,
 });
 await modelRuntime.setRuntimeApiKey(values["model-provider"], apiKey);
-const model = modelRuntime.getModel(values["model-provider"], values["model-id"]);
-if (!model) throw new Error(`Model unavailable: ${values["model-provider"]}/${values["model-id"]}`);
+const configuredModel = modelRuntime.getModel(values["model-provider"], values["model-id"]);
+if (!configuredModel) {
+	throw new Error(`Model unavailable: ${values["model-provider"]}/${values["model-id"]}`);
+}
+const model = { ...configuredModel, maxTokens: maxOutputTokens };
 
 const settingsManager = SettingsManager.inMemory({
 	compaction: { enabled: true },
@@ -160,6 +172,15 @@ const confinedFileTools = [
 	createFindToolDefinition(workspace, { operations: confinedFindOperations }),
 	createLsToolDefinition(workspace, { operations: confinedLsOperations }),
 ];
+const candidateTools = values["candidate-artifact"]
+	? loadCandidateToolDefinitions({
+			artifactPath: values["candidate-artifact"],
+			workspace,
+			image: values["sandbox-image"],
+			dockerHost: values["docker-host"],
+			instanceId: values["instance-id"],
+		})
+	: [];
 const restrictedBash = defineTool({
 	name: "sandbox_bash",
 	label: "Sandbox Bash",
@@ -212,10 +233,21 @@ const { session } = await createAgentSession({
 	model,
 	thinkingLevel: "off",
 	modelRuntime,
-	tools: values["no-shell"]
-		? ["read", "edit", "write", "grep", "find", "ls"]
-		: ["read", "edit", "write", "grep", "find", "ls", "sandbox_bash"],
-	customTools: values["no-shell"] ? confinedFileTools : [...confinedFileTools, restrictedBash],
+	tools: [
+		"read",
+		"edit",
+		"write",
+		"grep",
+		"find",
+		"ls",
+		...(values["no-shell"] ? [] : ["sandbox_bash"]),
+		...candidateTools.map((tool) => tool.name),
+	],
+	customTools: [
+		...confinedFileTools,
+		...(values["no-shell"] ? [] : [restrictedBash]),
+		...candidateTools,
+	],
 	resourceLoader,
 	sessionManager: SessionManager.inMemory(workspace),
 	settingsManager,
@@ -322,7 +354,9 @@ const result = {
 	outputTokens,
 	cacheReadTokens,
 	cacheWriteTokens,
+	tokenTelemetryAvailable: true,
 	toolCalls,
+	candidateToolNames: candidateTools.map((tool) => tool.name),
 	maxOutputTokens,
 	maxTotalTokens,
 	budgetAborted,
@@ -340,7 +374,9 @@ const result = {
 	patch: evaluationPatch,
 	fullPatch: patch,
 };
-writeFileSync(outputPath, `${JSON.stringify(result, null, 2)}\n`);
+const temporaryOutputPath = `${outputPath}.tmp-${process.pid}`;
+writeFileSync(temporaryOutputPath, `${JSON.stringify(result, null, 2)}\n`);
+renameSync(temporaryOutputPath, outputPath);
 if (error || providerError) process.exitCode = 1;
 
 function rejectCommand(command, cwd) {
