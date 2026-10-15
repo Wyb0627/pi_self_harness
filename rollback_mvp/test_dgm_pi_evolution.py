@@ -19,6 +19,7 @@ from rollback_mvp.dgm_evolve.experiment import (
     classify_runner_result,
     dgm_parent_weight,
     endpoint_order,
+    mutation_failure_reason,
     select_parent_hashes,
     validate_evolve_manifest,
     validate_strategy,
@@ -215,6 +216,29 @@ class FakeP2GateExperiment(DgmPiExperiment):
         return observations
 
 
+class InvalidMutationExperiment(FakeDgmPiExperiment):
+    def _mutate(self, parent_hash, slot, evolve_manifest, task_path):
+        self.ledger.append(
+            f"mutation:{slot:04d}",
+            {
+                "budget_scope": "search",
+                "kind": "mutation_proposer",
+                "reported_tokens": 10,
+                "conservative_token_charge": 0,
+                "active_seconds": 0.1,
+                "api_calls": 1,
+                "task_executions": 0,
+                "status": "invalid",
+            },
+        )
+        return {
+            "valid": False,
+            "parentArtifactHash": parent_hash,
+            "budgetAborted": True,
+            "tokenTelemetryAvailable": True,
+        }
+
+
 class SplitContractTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
@@ -359,6 +383,28 @@ class DgmPolicyTest(unittest.TestCase):
             0,
         )
         self.assertFalse(missing.valid)
+
+    def test_invalid_mutation_reason_is_total_for_budget_abort(self) -> None:
+        self.assertEqual(
+            mutation_failure_reason(
+                {
+                    "valid": False,
+                    "budgetAborted": True,
+                    "tokenTelemetryAvailable": True,
+                }
+            ),
+            "Mutation proposer exceeded its frozen token budget.",
+        )
+        self.assertEqual(
+            mutation_failure_reason(
+                {
+                    "valid": False,
+                    "parseError": "invalid JSON",
+                    "tokenTelemetryAvailable": True,
+                }
+            ),
+            "invalid JSON",
+        )
 
     def test_matched_pilot_defaults_to_ten_slots_without_global_token_stop(
         self,
@@ -680,6 +726,42 @@ class LedgerAndPreparationTest(unittest.TestCase):
             self.assertEqual(summary["p0_reference"]["resolved"], 0)
             self.assertEqual(summary["final_harness"]["resolved"], 2)
             self.assertEqual(summary["paired"]["absolute_accuracy_difference"], 1.0)
+
+    def test_invalid_mutations_without_error_field_advance_and_seal(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            output = Path(temporary) / "run"
+            config = ExperimentConfig(
+                run_id="invalid-mutations",
+                experiment_seed=7,
+                proposal_slots=2,
+                proposals_per_wave=2,
+                inter_task_delay_seconds=0,
+                smoke=True,
+                smoke_small_tasks=1,
+                smoke_medium_tasks=0,
+                smoke_endpoint_tasks=1,
+            )
+            experiment = InvalidMutationExperiment(
+                config,
+                runtime_paths(output),
+                progress_factory=lambda items, _description, _total: items,
+            )
+            experiment.prepare()
+            seal = experiment.run_search()
+            self.assertEqual(seal["completed_proposal_slots"], 2)
+            self.assertEqual(seal["archive_entries"], 1)
+            self.assertEqual(
+                json.loads(
+                    (
+                        output
+                        / "search"
+                        / "slots"
+                        / "0000"
+                        / "terminal.json"
+                    ).read_text()
+                )["reason"],
+                "Mutation proposer exceeded its frozen token budget.",
+            )
 
 
 if __name__ == "__main__":

@@ -338,6 +338,20 @@ def classify_runner_result(
     )
 
 
+def mutation_failure_reason(result: Mapping[str, Any]) -> str:
+    for field in ("error", "parseError", "providerError"):
+        value = result.get(field)
+        if isinstance(value, str) and value.strip():
+            return value
+    if result.get("budgetAborted"):
+        return "Mutation proposer exceeded its frozen token budget."
+    if result.get("timeoutAborted"):
+        return "Mutation proposer exceeded its frozen time budget."
+    if result.get("tokenTelemetryAvailable") is not True:
+        return "Mutation proposer returned incomplete token telemetry."
+    return "Mutation proposer returned valid=false without a specific error."
+
+
 def utc_timestamp() -> str:
     return time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
 
@@ -1130,7 +1144,7 @@ class DgmPiExperiment:
                     "wave": wave,
                     "parent_artifact_hash": parent_hash,
                     "terminal_state": "CANDIDATE_INVALID_REJECTED",
-                    "reason": mutation["error"],
+                    "reason": mutation_failure_reason(mutation),
                 }
                 atomic_json(terminal_path, terminal)
                 self.events.append("candidate_invalid", terminal)
