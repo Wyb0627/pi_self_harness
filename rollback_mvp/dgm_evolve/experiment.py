@@ -28,6 +28,7 @@ from rollback_mvp.adaptive_eval.schemas import hash_json
 from rollback_mvp.adaptive_eval.state import (
     AppendOnlyState,
     atomic_json,
+    atomic_write,
     freeze_file_once,
 )
 from rollback_mvp.dgm_evolve.artifacts import (
@@ -67,6 +68,7 @@ from rollback_mvp.orchestrate_endpoint_200 import (
 
 
 SCHEMA_VERSION = 1
+PROTOCOL_REVISION = "matched-dgm-pi-v2"
 FULL_MANIFEST_SHA256 = (
     "3fb913fbc73a05c1f7cae3b708c976374632820b58377aab5de08b742f96c967"
 )
@@ -80,6 +82,21 @@ EXPECTED_SWEBENCH_REVISION = "dc4c087c2b9e4cefebf2e3d201d27e362d899e0f"
 DEFAULT_MODEL_PROVIDER = "rollback-deepseek"
 DEFAULT_MODEL_ID = "byteplus/deepseek-v4-flash-ga"
 EXPERIMENT_ARMS = {"dgm", "p2"}
+P0_TASK_CONFIG_FIELDS = (
+    "model_provider",
+    "model_id",
+    "per_task_token_cap",
+    "per_task_output_token_cap",
+    "agent_timeout_seconds",
+    "evaluator_timeout_seconds",
+    "image_build_timeout_seconds",
+    "image_build_retries",
+    "image_build_retry_delay_seconds",
+    "inter_task_delay_seconds",
+    "task_rollout_count",
+    "concurrency",
+    "smoke",
+)
 
 
 class DgmEvolutionError(RuntimeError):
@@ -116,7 +133,7 @@ class ExperimentConfig:
     per_task_token_cap: int = 512_000
     per_task_output_token_cap: int = 65_536
     mutation_token_cap: int = 64_000
-    mutation_output_token_cap: int = 16_384
+    mutation_output_token_cap: int = 32_768
     agent_timeout_seconds: int = 3_600
     mutation_timeout_seconds: int = 900
     evaluator_timeout_seconds: int = 1_800
@@ -670,6 +687,14 @@ class DgmPiExperiment:
     def search_seal_path(self) -> Path:
         return self.output_root / "search-seal.json"
 
+    @property
+    def p0_import_contract_path(self) -> Path:
+        return self.output_root / "p0-import-contract.json"
+
+    @property
+    def p0_import_completion_path(self) -> Path:
+        return self.output_root / "p0-import-complete.json"
+
     @contextmanager
     def execution_lease(self, command: str) -> Iterator[None]:
         lock_path = self.output_root / ".execution.lock"
@@ -707,13 +732,26 @@ class DgmPiExperiment:
             finally:
                 lock_file.close()
 
-    def prepare(self) -> dict[str, Any]:
+    def prepare(
+        self,
+        *,
+        import_p0_from: Path | None = None,
+    ) -> dict[str, Any]:
         protocol_lock_path = self.output_root / "protocol-lock.json"
         if protocol_lock_path.exists():
             protocol_lock = self._load_json(protocol_lock_path)
             if protocol_lock.get("config_hash") != self.config.config_hash:
                 raise ConfigurationError(
                     "Existing protocol lock uses a different experiment config"
+                )
+            if import_p0_from is not None:
+                self._import_p0(import_p0_from)
+            elif (
+                self.p0_import_contract_path.exists()
+                and not self.p0_import_completion_path.exists()
+            ):
+                raise ConfigurationError(
+                    "P0 import contract exists without a completion record"
                 )
             return protocol_lock
         manifest, manifest_hash = load_manifest(self.paths.full_manifest)
@@ -739,6 +777,7 @@ class DgmPiExperiment:
         )
         fixed_policy = {
             "schema_version": SCHEMA_VERSION,
+            "protocol_revision": PROTOCOL_REVISION,
             "name": f"held-out-adapted-{self.config.arm}-on-pi",
             "arm": self.config.arm,
             "mutable_surface": [
@@ -760,6 +799,11 @@ class DgmPiExperiment:
                 "highest score_60; then earliest insertion ordinal; then artifact hash"
             ),
             "endpoint_rule": "P0 and final artifact each run once on sealed big-140",
+            "p0_reuse_rule": (
+                "explicit pre-search audited import only; preserve source observation "
+                "identity and bind exact evolve panel, task stack, evidence, archive, "
+                "and cost ledger"
+            ),
             "search_global_token_stop": self.config.search_token_cap,
             "search_active_seconds_cap": self.config.search_active_seconds_cap,
             "candidate_tools": (
@@ -928,6 +972,7 @@ class DgmPiExperiment:
         )
         protocol_lock = {
             "schema_version": SCHEMA_VERSION,
+            "protocol_revision": PROTOCOL_REVISION,
             "run_id": self.config.run_id,
             "arm": f"held-out-adapted-{self.config.arm}-on-pi",
             "confirmatory_status": "exploratory-single-seed",
@@ -957,6 +1002,8 @@ class DgmPiExperiment:
                     "p0_artifact_hash": p0_hash,
                 },
             )
+        if import_p0_from is not None:
+            self._import_p0(import_p0_from)
         return protocol_lock
 
     def preflight(self, *, require_paid_runtime: bool) -> dict[str, Any]:
@@ -988,6 +1035,11 @@ class DgmPiExperiment:
             raise ConfigurationError(
                 "D_test content exists in the online-search frozen input directory"
             )
+        if (
+            self.p0_import_contract_path.exists()
+            or self.p0_import_completion_path.exists()
+        ):
+            self._validate_completed_p0_import()
         if self._swebench_revision() != EXPECTED_SWEBENCH_REVISION:
             raise ConfigurationError("SWE-bench runner revision mismatch")
         if not self.paths.agent_dir.is_dir():
@@ -1032,6 +1084,11 @@ class DgmPiExperiment:
             )
         if self.search_seal_path.exists():
             return self._load_json(self.search_seal_path)
+        if (
+            self.p0_import_contract_path.exists()
+            or self.p0_import_completion_path.exists()
+        ):
+            self._validate_completed_p0_import()
         evolve = self._load_json(self.frozen_inputs / "evolve-60-manifest.json")
         validate_evolve_manifest(evolve)
         runtime_inputs = self.output_root / "runtime" / "evolve-inputs"
@@ -2197,6 +2254,966 @@ class DgmPiExperiment:
             },
         )
 
+    def _import_p0(self, source_root: Path) -> dict[str, Any]:
+        source_root = source_root.resolve()
+        if source_root == self.output_root:
+            raise ConfigurationError("P0 import source cannot be the target run")
+        if self.p0_import_completion_path.exists():
+            contract = self._load_json(self.p0_import_contract_path)
+            if contract.get("source", {}).get("run_root") != str(source_root):
+                raise ConfigurationError(
+                    "Completed P0 import is bound to a different source run"
+                )
+            completion = self._validate_completed_p0_import()
+            self._ensure_p0_import_event(contract, completion)
+            return completion
+        forbidden = (
+            self.search_state_path,
+            self.search_seal_path,
+            self.output_root / "search-invalid.json",
+            self.output_root / "search",
+            self._endpoint_state_path(),
+            self.output_root / "endpoints",
+        )
+        if any(path.exists() for path in forbidden):
+            raise ConfigurationError("P0 import is allowed only before search starts")
+        if (
+            not self.p0_import_contract_path.exists()
+            and (
+                self.archive_path.exists()
+                or (self.output_root / "observations" / "search-p0").exists()
+                or bool(self.ledger.records)
+            )
+        ):
+            raise ConfigurationError(
+                "P0 import requires an otherwise pristine prepared target"
+            )
+
+        contract, copies, archive_entry, source_ledger_records = (
+            self._validate_p0_import_source(source_root)
+        )
+        freeze_file_once(self.p0_import_contract_path, contract)
+        p0_hash = contract["panel"]["p0_artifact_hash"]
+        target_panel_root = (
+            self.output_root / "observations" / "search-p0" / p0_hash
+        )
+        for source_path, relative_path, expected_sha256 in copies:
+            target_path = target_panel_root / relative_path
+            if target_path.exists():
+                if (
+                    not target_path.is_file()
+                    or target_path.is_symlink()
+                    or sha256_file(target_path) != expected_sha256
+                ):
+                    raise ConfigurationError(
+                        f"Imported P0 evidence differs from contract: {target_path}"
+                    )
+                continue
+            atomic_write(target_path, source_path.read_bytes())
+            if sha256_file(target_path) != expected_sha256:
+                raise ConfigurationError(
+                    f"Imported P0 evidence copy failed verification: {target_path}"
+                )
+
+        source_binding = contract["source"]
+        imported_ledger = []
+        source_prefix = source_binding["protocol_lock_sha256"][:16]
+        for source_record in source_ledger_records:
+            source_charge_id = source_record["charge_id"]
+            target_charge_id = (
+                f"p0-import:{source_prefix}:{source_charge_id}"
+            )
+            payload = {
+                **source_record["payload"],
+                "imported_from": {
+                    "run_id": source_binding["run_id"],
+                    "source_charge_id": source_charge_id,
+                    "source_entry_hash": source_record["entry_hash"],
+                    "source_protocol_lock_sha256": source_binding[
+                        "protocol_lock_sha256"
+                    ],
+                },
+            }
+            target_record = self.ledger.append(target_charge_id, payload)
+            imported_ledger.append(
+                {
+                    "source_charge_id": source_charge_id,
+                    "source_entry_hash": source_record["entry_hash"],
+                    "target_charge_id": target_charge_id,
+                    "target_entry_hash": target_record["entry_hash"],
+                }
+            )
+
+        if self.archive_path.exists():
+            if self._load_archive() != [archive_entry]:
+                raise ConfigurationError(
+                    "Target archive differs from imported P0 contract"
+                )
+        else:
+            self._write_archive([archive_entry])
+        completion_payload = {
+            "schema_version": SCHEMA_VERSION,
+            "protocol_revision": PROTOCOL_REVISION,
+            "completed_at": utc_timestamp(),
+            "contract_hash": contract["contract_hash"],
+            "p0_artifact_hash": p0_hash,
+            "panel_hash": contract["panel"]["panel_hash"],
+            "archive_hash": hash_json([dataclasses.asdict(archive_entry)]),
+            "imported_ledger": imported_ledger,
+            "imported_ledger_hash": hash_json(imported_ledger),
+        }
+        completion = {
+            **completion_payload,
+            "completion_hash": hash_json(completion_payload),
+        }
+        freeze_file_once(self.p0_import_completion_path, completion)
+        self._validate_completed_p0_import()
+        self._ensure_p0_import_event(contract, completion)
+        return completion
+
+    def _validate_p0_import_source(
+        self,
+        source_root: Path,
+    ) -> tuple[
+        dict[str, Any],
+        list[tuple[Path, str, str]],
+        ArchiveEntry,
+        list[dict[str, Any]],
+    ]:
+        required_source_paths = (
+            source_root / "protocol-lock.json",
+            source_root / "search-invalid.json",
+            source_root / "archive.json",
+            source_root / "global-cost-ledger.jsonl",
+            source_root / "frozen-inputs" / "experiment-config.json",
+            source_root / "frozen-inputs" / "execution-stack.json",
+            source_root / "frozen-inputs" / "evolve-60-manifest.json",
+        )
+        if any(not path.is_file() for path in required_source_paths):
+            raise ConfigurationError(
+                "P0 import source lacks required protocol or evidence files"
+            )
+        forbidden_source_paths = (
+            source_root / "search-seal.json",
+            source_root / "endpoint-consumption.json",
+            source_root / "frozen-inputs" / "test-140-manifest.json",
+            source_root
+            / "endpoints"
+            / "frozen-inputs"
+            / "test-140-manifest.json",
+        )
+        if any(path.exists() for path in forbidden_source_paths):
+            raise ConfigurationError(
+                "P0 import source has search-seal or D_test consumption state"
+            )
+
+        source_invalid = self._load_json(source_root / "search-invalid.json")
+        self._require_self_hash(
+            source_invalid,
+            hash_field="record_hash",
+            label="source search-invalid",
+        )
+        if (
+            source_invalid.get("terminal_state")
+            != "SEARCH_INFRASTRUCTURE_INVALID"
+            or source_invalid.get("classification") != "infrastructure_invalid"
+            or source_invalid.get("p0_reusable") is not True
+            or source_invalid.get("search_mutations_reusable") is not False
+        ):
+            raise ConfigurationError(
+                "P0 import source is not terminally infrastructure-invalid"
+            )
+        events_path = source_root / "state" / "events"
+        if not events_path.is_dir():
+            raise ConfigurationError("P0 import source lacks an event chain")
+        source_events = AppendOnlyState(source_root / "state").events
+        if not any(
+            event.event_type == "search_invalid"
+            and event.payload.get("record_hash") == source_invalid["record_hash"]
+            for event in source_events
+        ):
+            raise ConfigurationError(
+                "Source search-invalid record is absent from the event chain"
+            )
+
+        source_protocol_path = source_root / "protocol-lock.json"
+        source_protocol = self._load_json(source_protocol_path)
+        source_config_path = (
+            source_root / "frozen-inputs" / "experiment-config.json"
+        )
+        source_config_payload = self._load_json(source_config_path)
+        source_config = source_config_payload.get("config")
+        if (
+            not isinstance(source_config, dict)
+            or hash_json(source_config) != source_config_payload.get("config_hash")
+            or source_protocol.get("config_hash")
+            != source_config_payload.get("config_hash")
+            or source_protocol.get("run_id") != source_config.get("run_id")
+        ):
+            raise ConfigurationError("Source experiment config binding is invalid")
+        target_protocol = self._load_json(self.output_root / "protocol-lock.json")
+        target_config_payload = self._load_json(
+            self.frozen_inputs / "experiment-config.json"
+        )
+        target_config = target_config_payload["config"]
+
+        source_evolve_path = (
+            source_root / "frozen-inputs" / "evolve-60-manifest.json"
+        )
+        source_evolve = self._load_json(source_evolve_path)
+        target_evolve = self._load_json(
+            self.frozen_inputs / "evolve-60-manifest.json"
+        )
+        validate_evolve_manifest(source_evolve)
+        validate_evolve_manifest(target_evolve)
+        if source_evolve != target_evolve:
+            raise ConfigurationError(
+                "Source and target D_evolve manifests are not identical"
+            )
+        source_execution_path = (
+            source_root / "frozen-inputs" / "execution-stack.json"
+        )
+        source_execution = self._load_json(source_execution_path)
+        target_execution = self._load_json(
+            self.frozen_inputs / "execution-stack.json"
+        )
+        if (
+            hash_json(source_execution)
+            != source_protocol.get("execution_stack_hash")
+            or hash_json(target_execution)
+            != target_protocol.get("execution_stack_hash")
+            or source_execution != target_execution
+        ):
+            raise ConfigurationError(
+                "Source and target task execution stacks are not identical"
+            )
+        source_p0 = source_protocol.get("p0_artifact_hash")
+        target_p0 = target_protocol.get("p0_artifact_hash")
+        if not isinstance(source_p0, str) or source_p0 != target_p0:
+            raise ConfigurationError(
+                "Source and target P0 artifacts are not identical"
+            )
+        source_task_contract = self._p0_task_execution_contract(
+            source_config,
+            source_execution,
+            source_evolve,
+            source_p0,
+        )
+        target_task_contract = self._p0_task_execution_contract(
+            target_config,
+            target_execution,
+            target_evolve,
+            target_p0,
+        )
+        if source_task_contract != target_task_contract:
+            raise ConfigurationError(
+                "Source and target P0 task execution contracts differ"
+            )
+        self._validate_source_p0_artifact(source_root, source_p0)
+        self._artifact_content(target_p0)
+
+        source_archive_path = source_root / "archive.json"
+        source_archive = self._load_json(source_archive_path)
+        source_archive_entries = [
+            ArchiveEntry(
+                **{
+                    **entry,
+                    "functioning_child_slots": tuple(
+                        entry.get("functioning_child_slots", ())
+                    ),
+                }
+            )
+            for entry in source_archive.get("entries", ())
+        ]
+        if source_archive.get("archive_hash") != hash_json(
+            [dataclasses.asdict(entry) for entry in source_archive_entries]
+        ):
+            raise ConfigurationError("Source archive hash mismatch")
+        if len(source_archive_entries) != 1:
+            raise ConfigurationError(
+                "P0 import source archive must contain only P0"
+            )
+        archive_entry = source_archive_entries[0]
+        if (
+            archive_entry.artifact_hash != source_p0
+            or archive_entry.parent_artifact_hash is not None
+            or archive_entry.evaluated_tasks != 60
+            or archive_entry.functioning_child_count != 0
+            or archive_entry.functioning_child_slots
+            or archive_entry.insertion_ordinal != 0
+        ):
+            raise ConfigurationError("Source P0 archive entry is invalid")
+
+        ordered_ids = [
+            entry["record"]["instance_id"]
+            for entry in source_evolve["records"]
+        ]
+        source_panel_root = (
+            source_root / "observations" / "search-p0" / source_p0
+        )
+        if not source_panel_root.is_dir() or source_panel_root.is_symlink():
+            raise ConfigurationError("Source P0 observation panel is missing")
+        actual_ids = sorted(
+            path.name
+            for path in source_panel_root.iterdir()
+            if path.is_dir() and not path.is_symlink()
+        )
+        if actual_ids != sorted(ordered_ids):
+            raise ConfigurationError(
+                "Source P0 observation panel does not contain exact D_evolve IDs"
+            )
+
+        source_role_hash = hash_json(source_evolve)
+        source_execution_hash = hash_json(source_execution)
+        observation_records = []
+        copies: list[tuple[Path, str, str]] = []
+        observations_by_identity: dict[str, TaskObservation] = {}
+        for entry in source_evolve["records"]:
+            row = entry["record"]
+            instance_id = row["instance_id"]
+            task_dir = source_panel_root / instance_id
+            required = {
+                "identity.json": task_dir / "identity.json",
+                "invocation.json": task_dir / "invocation.json",
+                "result.json": task_dir / "result.json",
+                "observation.json": task_dir / "observation.json",
+            }
+            if any(
+                not path.is_file() or path.is_symlink()
+                for path in required.values()
+            ):
+                raise ConfigurationError(
+                    f"Source P0 evidence is incomplete: {instance_id}"
+                )
+            identity = self._load_json(required["identity.json"])
+            expected_identity = {
+                "schema_version": SCHEMA_VERSION,
+                "run_id": source_protocol["run_id"],
+                "config_hash": source_protocol["config_hash"],
+                "artifact_hash": source_p0,
+                "instance_id": instance_id,
+                "repo": row["repo"],
+                "base_commit": row["base_commit"],
+                "phase": "search-p0",
+                "budget_scope": "search",
+                "role_manifest_hash": source_role_hash,
+                "model_provider": source_config["model_provider"],
+                "model_id": source_config["model_id"],
+                "execution_stack_hash": source_execution_hash,
+                "artifact_content_hash": source_p0,
+                "per_task_output_token_cap": source_config[
+                    "per_task_output_token_cap"
+                ],
+                "per_task_token_cap": source_config["per_task_token_cap"],
+                "agent_timeout_seconds": source_config[
+                    "agent_timeout_seconds"
+                ],
+                "evaluator_timeout_seconds": source_config[
+                    "evaluator_timeout_seconds"
+                ],
+                "rollout": 0,
+            }
+            for name, expected in expected_identity.items():
+                if identity.get(name) != expected:
+                    raise ConfigurationError(
+                        f"Source P0 identity mismatch for {instance_id}: {name}"
+                    )
+            if (
+                not isinstance(identity.get("image"), str)
+                or not identity["image"]
+                or not isinstance(identity.get("image_digest"), str)
+                or not identity["image_digest"]
+            ):
+                raise ConfigurationError(
+                    f"Source P0 image identity is incomplete: {instance_id}"
+                )
+            identity_hash = hash_json(identity)
+            raw_observation = self._load_json(required["observation.json"])
+            observation = self._task_observation_from_record(
+                raw_observation,
+                required["observation.json"],
+            )
+            if (
+                observation.identity_hash != identity_hash
+                or observation.instance_id != instance_id
+                or observation.artifact_hash != source_p0
+                or observation.phase != "search-p0"
+                or not observation.valid
+            ):
+                raise ConfigurationError(
+                    f"Source P0 observation binding is invalid: {instance_id}"
+                )
+            result = self._load_json(required["result.json"])
+            invocation = self._load_json(required["invocation.json"])
+            if (
+                invocation.get("identity_hash") != identity_hash
+                or invocation.get("result_sha256")
+                != sha256_file(required["result.json"])
+            ):
+                raise ConfigurationError(
+                    f"Source P0 invocation binding is invalid: {instance_id}"
+                )
+            return_code = result.get("runnerExitCode")
+            if isinstance(return_code, bool) or not isinstance(return_code, int):
+                raise ConfigurationError(
+                    f"Source P0 runner exit code is invalid: {instance_id}"
+                )
+            classification = classify_runner_result(result, return_code)
+            if (
+                not classification.valid
+                or observation.token_telemetry_complete
+                != classification.telemetry_complete
+                or observation.reported_tokens
+                != total_reported_tokens(result)
+                or observation.patch_sha256
+                != sha256_bytes(str(result.get("patch") or "").encode())
+            ):
+                raise ConfigurationError(
+                    f"Source P0 result disagrees with observation: {instance_id}"
+                )
+            optional_paths = {}
+            evaluator_invocation = task_dir / "evaluator-invocation.json"
+            if evaluator_invocation.exists():
+                optional_paths["evaluator-invocation.json"] = evaluator_invocation
+            if classification.should_grade_patch:
+                evaluation_protocol = f"search-p0-{source_p0[:12]}"
+                evaluation_path = (
+                    task_dir / evaluation_protocol / "evaluation.json"
+                )
+                if (
+                    not evaluator_invocation.is_file()
+                    or evaluator_invocation.is_symlink()
+                    or not evaluation_path.is_file()
+                    or evaluation_path.is_symlink()
+                ):
+                    raise ConfigurationError(
+                        f"Source P0 evaluator evidence is incomplete: {instance_id}"
+                    )
+                evaluation = self._load_json(evaluation_path)
+                if (
+                    evaluation.get("status") != "completed"
+                    or bool(evaluation.get("resolved"))
+                    != observation.resolved
+                    or evaluation.get("submittedPatchSha256")
+                    != observation.patch_sha256
+                    or observation.status != "completed"
+                ):
+                    raise ConfigurationError(
+                        f"Source P0 evaluator disagrees with observation: {instance_id}"
+                    )
+                optional_paths[
+                    f"{evaluation_protocol}/evaluation.json"
+                ] = evaluation_path
+                prediction_path = (
+                    task_dir / evaluation_protocol / "prediction.json"
+                )
+                if prediction_path.is_file() and not prediction_path.is_symlink():
+                    optional_paths[
+                        f"{evaluation_protocol}/prediction.json"
+                    ] = prediction_path
+            elif (
+                observation.resolved
+                or observation.status != classification.status
+            ):
+                raise ConfigurationError(
+                    f"Source P0 observed-zero outcome is invalid: {instance_id}"
+                )
+
+            evidence_files = {}
+            for relative_path, path in {**required, **optional_paths}.items():
+                if not path.is_file() or path.is_symlink():
+                    raise ConfigurationError(
+                        f"Unsafe source P0 evidence path: {path}"
+                    )
+                digest = sha256_file(path)
+                panel_relative = f"{instance_id}/{relative_path}"
+                evidence_files[relative_path] = digest
+                copies.append((path, panel_relative, digest))
+            evidence_hash = hash_json(evidence_files)
+            observation_records.append(
+                {
+                    "instance_id": instance_id,
+                    "identity_hash": identity_hash,
+                    "observation_hash": observation.observation_hash,
+                    "resolved": observation.resolved,
+                    "evidence_files": evidence_files,
+                    "evidence_hash": evidence_hash,
+                }
+            )
+            observations_by_identity[identity_hash] = observation
+
+        resolved = sum(
+            int(record["resolved"]) for record in observation_records
+        )
+        if (
+            archive_entry.resolved_60 != resolved
+            or archive_entry.score_60 != resolved / 60
+        ):
+            raise ConfigurationError(
+                "Source archive score disagrees with P0 observations"
+            )
+
+        source_ledger = CostLedger(
+            source_root / "global-cost-ledger.jsonl"
+        )
+        ledger_by_charge = {
+            record["charge_id"]: record for record in source_ledger.records
+        }
+        selected_charge_ids = set()
+        for identity_hash, observation in observations_by_identity.items():
+            charge_id = f"task:{identity_hash}"
+            record = ledger_by_charge.get(charge_id)
+            if record is None:
+                raise ConfigurationError(
+                    f"Source P0 ledger lacks task charge: {observation.instance_id}"
+                )
+            payload = record["payload"]
+            if (
+                payload.get("budget_scope") != "search"
+                or payload.get("kind") != "task_agent_and_evaluator"
+                or payload.get("artifact_hash") != source_p0
+                or payload.get("instance_id") != observation.instance_id
+                or payload.get("phase") != "search-p0"
+                or payload.get("reported_tokens")
+                != observation.reported_tokens
+                or payload.get("valid") is not True
+                or bool(payload.get("resolved")) != observation.resolved
+                or payload.get("task_executions") != 1
+                or payload.get("api_calls") != 1
+            ):
+                raise ConfigurationError(
+                    f"Source P0 task ledger binding is invalid: "
+                    f"{observation.instance_id}"
+                )
+            selected_charge_ids.add(charge_id)
+            if float(source_config["inter_task_delay_seconds"]) > 0:
+                delay_id = (
+                    f"delay:search:search-p0:{source_p0}:"
+                    f"{observation.instance_id}"
+                )
+                delay = ledger_by_charge.get(delay_id)
+                if (
+                    delay is None
+                    or delay["payload"].get("kind") != "request_pacing"
+                    or delay["payload"].get("budget_scope") != "search"
+                    or delay["payload"].get("api_calls") != 0
+                    or delay["payload"].get("task_executions") != 0
+                ):
+                    raise ConfigurationError(
+                        f"Source P0 pacing ledger is invalid: "
+                        f"{observation.instance_id}"
+                    )
+                selected_charge_ids.add(delay_id)
+        source_ledger_records = [
+            record
+            for record in source_ledger.records
+            if record["charge_id"] in selected_charge_ids
+        ]
+        expected_ledger_records = 60 * (
+            2 if float(source_config["inter_task_delay_seconds"]) > 0 else 1
+        )
+        if len(source_ledger_records) != expected_ledger_records:
+            raise ConfigurationError("Source P0 ledger selection is incomplete")
+        ledger_summary = {
+            "records": len(source_ledger_records),
+            "reported_tokens": sum(
+                int(record["payload"].get("reported_tokens", 0))
+                for record in source_ledger_records
+            ),
+            "conservative_token_charge": sum(
+                int(
+                    record["payload"].get(
+                        "conservative_token_charge",
+                        0,
+                    )
+                )
+                for record in source_ledger_records
+            ),
+            "active_seconds": round(
+                sum(
+                    float(record["payload"].get("active_seconds", 0))
+                    for record in source_ledger_records
+                ),
+                3,
+            ),
+            "api_calls": sum(
+                int(record["payload"].get("api_calls", 0))
+                for record in source_ledger_records
+            ),
+            "task_executions": sum(
+                int(record["payload"].get("task_executions", 0))
+                for record in source_ledger_records
+            ),
+        }
+        ledger_bindings = [
+            {
+                "charge_id": record["charge_id"],
+                "entry_hash": record["entry_hash"],
+                "payload_hash": hash_json(record["payload"]),
+            }
+            for record in source_ledger_records
+        ]
+        panel_payload = {
+            "p0_artifact_hash": source_p0,
+            "task_count": 60,
+            "ordered_instance_ids": ordered_ids,
+            "ordered_instance_ids_sha256": sha256_ids(ordered_ids),
+            "resolved": resolved,
+            "observations": observation_records,
+            "observations_hash": hash_json(observation_records),
+        }
+        panel = {
+            **panel_payload,
+            "panel_hash": hash_json(panel_payload),
+        }
+        source_binding = {
+            "run_root": str(source_root),
+            "run_id": source_protocol["run_id"],
+            "config_hash": source_protocol["config_hash"],
+            "protocol_lock_sha256": sha256_file(source_protocol_path),
+            "experiment_config_sha256": sha256_file(source_config_path),
+            "execution_stack_sha256": sha256_file(source_execution_path),
+            "evolve_manifest_sha256": sha256_file(source_evolve_path),
+            "archive_sha256": sha256_file(source_archive_path),
+            "archive_hash": source_archive["archive_hash"],
+            "search_invalid_sha256": sha256_file(
+                source_root / "search-invalid.json"
+            ),
+            "search_invalid_record_hash": source_invalid["record_hash"],
+            "final_event_hash": source_events[-1].event_hash,
+        }
+        target_binding = {
+            "run_root": str(self.output_root),
+            "run_id": target_protocol["run_id"],
+            "config_hash": target_protocol["config_hash"],
+            "protocol_lock_sha256": sha256_file(
+                self.output_root / "protocol-lock.json"
+            ),
+            "task_execution_contract": target_task_contract,
+            "task_execution_contract_hash": hash_json(
+                target_task_contract
+            ),
+        }
+        contract_payload = {
+            "schema_version": SCHEMA_VERSION,
+            "protocol_revision": PROTOCOL_REVISION,
+            "kind": "audited_p0_import",
+            "source": source_binding,
+            "target": target_binding,
+            "panel": panel,
+            "source_ledger": {
+                "summary": ledger_summary,
+                "bindings": ledger_bindings,
+                "bindings_hash": hash_json(ledger_bindings),
+            },
+            "declaration": (
+                "Only the exact D_evolve P0 panel, compact execution evidence, "
+                "archive entry, and attributable costs are imported. Source "
+                "observation identities are preserved. No D_test content or "
+                "mutation result is imported."
+            ),
+        }
+        contract = {
+            **contract_payload,
+            "contract_hash": hash_json(contract_payload),
+        }
+        return contract, copies, archive_entry, source_ledger_records
+
+    def _validate_completed_p0_import(self) -> dict[str, Any]:
+        if (
+            not self.p0_import_contract_path.is_file()
+            or not self.p0_import_completion_path.is_file()
+        ):
+            raise ConfigurationError(
+                "P0 import requires both contract and completion records"
+            )
+        contract = self._load_json(self.p0_import_contract_path)
+        self._require_self_hash(
+            contract,
+            hash_field="contract_hash",
+            label="P0 import contract",
+        )
+        completion = self._load_json(self.p0_import_completion_path)
+        self._require_self_hash(
+            completion,
+            hash_field="completion_hash",
+            label="P0 import completion",
+        )
+        if completion.get("contract_hash") != contract["contract_hash"]:
+            raise ConfigurationError("P0 import completion contract mismatch")
+        protocol = self._load_json(self.output_root / "protocol-lock.json")
+        if (
+            contract.get("target", {}).get("run_id") != self.config.run_id
+            or contract.get("target", {}).get("config_hash")
+            != self.config.config_hash
+            or contract.get("target", {}).get("protocol_lock_sha256")
+            != sha256_file(self.output_root / "protocol-lock.json")
+            or completion.get("p0_artifact_hash")
+            != protocol.get("p0_artifact_hash")
+        ):
+            raise ConfigurationError("P0 import target binding mismatch")
+        if (
+            (self.frozen_inputs / "test-140-manifest.json").exists()
+            or (
+                self.output_root
+                / "endpoints"
+                / "frozen-inputs"
+                / "test-140-manifest.json"
+            ).exists()
+        ):
+            raise ConfigurationError("D_test content exists during P0 import")
+
+        panel = contract["panel"]
+        p0_hash = panel["p0_artifact_hash"]
+        evolve = self._load_json(
+            self.frozen_inputs / "evolve-60-manifest.json"
+        )
+        ordered_ids = [
+            entry["record"]["instance_id"] for entry in evolve["records"]
+        ]
+        if (
+            panel.get("ordered_instance_ids") != ordered_ids
+            or panel.get("ordered_instance_ids_sha256") != sha256_ids(ordered_ids)
+            or panel.get("task_count") != 60
+        ):
+            raise ConfigurationError("Imported P0 panel differs from D_evolve")
+        target_panel_root = (
+            self.output_root / "observations" / "search-p0" / p0_hash
+        )
+        for observation in panel["observations"]:
+            instance_id = observation["instance_id"]
+            evidence_files = observation["evidence_files"]
+            if hash_json(evidence_files) != observation["evidence_hash"]:
+                raise ConfigurationError(
+                    f"Imported evidence manifest hash mismatch: {instance_id}"
+                )
+            for relative_path, expected_sha256 in evidence_files.items():
+                relative = Path(relative_path)
+                if relative.is_absolute() or ".." in relative.parts:
+                    raise ConfigurationError(
+                        f"Unsafe imported evidence path: {relative_path}"
+                    )
+                path = target_panel_root / instance_id / relative
+                if (
+                    not path.is_file()
+                    or path.is_symlink()
+                    or sha256_file(path) != expected_sha256
+                ):
+                    raise ConfigurationError(
+                        f"Imported evidence hash mismatch: {path}"
+                    )
+            raw = self._load_json(
+                target_panel_root
+                / instance_id
+                / "observation.json"
+            )
+            imported = self._task_observation_from_record(
+                raw,
+                target_panel_root
+                / instance_id
+                / "observation.json",
+            )
+            if (
+                imported.identity_hash != observation["identity_hash"]
+                or imported.observation_hash
+                != observation["observation_hash"]
+                or imported.resolved != observation["resolved"]
+            ):
+                raise ConfigurationError(
+                    f"Imported P0 observation mismatch: {instance_id}"
+                )
+        if hash_json(panel["observations"]) != panel["observations_hash"]:
+            raise ConfigurationError("Imported P0 observation panel hash mismatch")
+        panel_payload = {
+            key: value
+            for key, value in panel.items()
+            if key != "panel_hash"
+        }
+        if hash_json(panel_payload) != panel["panel_hash"]:
+            raise ConfigurationError("Imported P0 panel self-hash mismatch")
+
+        archive = self._load_archive()
+        if (
+            len(archive) != 1
+            or archive[0].artifact_hash != p0_hash
+            or archive[0].resolved_60 != panel["resolved"]
+            or archive[0].evaluated_tasks != 60
+            or completion.get("archive_hash")
+            != hash_json([dataclasses.asdict(archive[0])])
+        ):
+            raise ConfigurationError("Imported P0 archive binding mismatch")
+        ledger_by_charge = {
+            record["charge_id"]: record for record in self.ledger.records
+        }
+        imported_ledger = completion.get("imported_ledger")
+        if (
+            not isinstance(imported_ledger, list)
+            or hash_json(imported_ledger)
+            != completion.get("imported_ledger_hash")
+        ):
+            raise ConfigurationError("Imported P0 ledger completion is invalid")
+        expected_source_bindings = [
+            (binding["charge_id"], binding["entry_hash"])
+            for binding in contract["source_ledger"]["bindings"]
+        ]
+        actual_source_bindings = [
+            (
+                binding["source_charge_id"],
+                binding["source_entry_hash"],
+            )
+            for binding in imported_ledger
+        ]
+        if actual_source_bindings != expected_source_bindings:
+            raise ConfigurationError(
+                "Imported P0 ledger differs from source contract"
+            )
+        for binding in imported_ledger:
+            target_record = ledger_by_charge.get(binding["target_charge_id"])
+            if (
+                target_record is None
+                or target_record["entry_hash"] != binding["target_entry_hash"]
+                or target_record["payload"].get("imported_from", {}).get(
+                    "source_entry_hash"
+                )
+                != binding["source_entry_hash"]
+            ):
+                raise ConfigurationError(
+                    "Imported P0 target ledger binding mismatch"
+                )
+        return completion
+
+    def _ensure_p0_import_event(
+        self,
+        contract: Mapping[str, Any],
+        completion: Mapping[str, Any],
+    ) -> None:
+        if any(
+            event.event_type == "p0_imported"
+            and event.payload.get("contract_hash")
+            == contract["contract_hash"]
+            for event in self.events.events
+        ):
+            return
+        self.events.append(
+            "p0_imported",
+            {
+                "contract_path": self.p0_import_contract_path.name,
+                "contract_hash": contract["contract_hash"],
+                "completion_path": self.p0_import_completion_path.name,
+                "completion_hash": completion["completion_hash"],
+                "source_run_id": contract["source"]["run_id"],
+                "p0_artifact_hash": contract["panel"]["p0_artifact_hash"],
+                "tasks": contract["panel"]["task_count"],
+                "resolved": contract["panel"]["resolved"],
+            },
+        )
+
+    @staticmethod
+    def _p0_task_execution_contract(
+        config: Mapping[str, Any],
+        execution_stack: Mapping[str, Any],
+        evolve_manifest: Mapping[str, Any],
+        p0_artifact_hash: str,
+    ) -> dict[str, Any]:
+        missing = [
+            field for field in P0_TASK_CONFIG_FIELDS if field not in config
+        ]
+        if missing:
+            raise ConfigurationError(
+                f"P0 task execution config lacks fields: {missing}"
+            )
+        if config["smoke"]:
+            raise ConfigurationError("A smoke P0 panel cannot be imported")
+        return {
+            "schema_version": SCHEMA_VERSION,
+            "config": {
+                field: config[field] for field in P0_TASK_CONFIG_FIELDS
+            },
+            "execution_stack_hash": hash_json(execution_stack),
+            "evolve_manifest_hash": hash_json(evolve_manifest),
+            "evolve_ordered_instance_ids_sha256": evolve_manifest[
+                "ordered_instance_ids_sha256"
+            ],
+            "p0_artifact_hash": p0_artifact_hash,
+        }
+
+    def _validate_source_p0_artifact(
+        self,
+        source_root: Path,
+        p0_artifact_hash: str,
+    ) -> None:
+        artifact_path = source_root / "artifacts" / p0_artifact_hash
+        strategy_path = artifact_path / "strategy.md"
+        tools_path = artifact_path / "tools.json"
+        lineage_path = artifact_path / "lineage.json"
+        record_path = (
+            source_root
+            / "artifact-records"
+            / f"{p0_artifact_hash}.json"
+        )
+        for path in (strategy_path, tools_path, lineage_path, record_path):
+            if not path.is_file() or path.is_symlink():
+                raise ConfigurationError(
+                    f"Source P0 artifact evidence is missing: {path}"
+                )
+        tools = self._load_json(tools_path)
+        lineage = self._load_json(lineage_path)
+        record = self._load_json(record_path)
+        if (
+            strategy_path.read_text() != ""
+            or tools != {"schema_version": 1, "tools": []}
+            or lineage != []
+            or ArtifactContent(strategy="", tools=()).content_hash
+            != p0_artifact_hash
+            or record.get("artifact_hash") != p0_artifact_hash
+            or record.get("strategy_sha256") != sha256_bytes(b"")
+            or record.get("tools_manifest_hash") != hash_json(tools)
+        ):
+            raise ConfigurationError("Source P0 artifact binding is invalid")
+
+    @staticmethod
+    def _require_self_hash(
+        record: Mapping[str, Any],
+        *,
+        hash_field: str,
+        label: str,
+    ) -> None:
+        expected = record.get(hash_field)
+        unhashed = {
+            key: value for key, value in record.items() if key != hash_field
+        }
+        if not isinstance(expected, str) or hash_json(unhashed) != expected:
+            raise ConfigurationError(f"{label} self-hash mismatch")
+
+    @staticmethod
+    def _task_observation_from_record(
+        raw: Mapping[str, Any],
+        path: Path,
+    ) -> TaskObservation:
+        expected_fields = set(TaskObservation.__dataclass_fields__)
+        if set(raw) != expected_fields:
+            raise ConfigurationError(
+                f"Observation fields differ from schema: {path}"
+            )
+        observation_hash = raw.get("observation_hash")
+        if (
+            hash_json(
+                {
+                    key: value
+                    for key, value in raw.items()
+                    if key != "observation_hash"
+                }
+            )
+            != observation_hash
+        ):
+            raise ConfigurationError(f"Observation hash mismatch: {path}")
+        try:
+            return TaskObservation(**raw)
+        except TypeError as error:
+            raise ConfigurationError(
+                f"Observation schema is invalid: {path}"
+            ) from error
+
     def _evaluate_records(
         self,
         *,
@@ -2772,14 +3789,7 @@ class DgmPiExperiment:
             )
         ):
             raw = self._load_json(path)
-            observations.append(
-                TaskObservation(
-                    **{
-                        key: raw[key]
-                        for key in TaskObservation.__dataclass_fields__
-                    }
-                )
-            )
+            observations.append(self._task_observation_from_record(raw, path))
         unique = {observation.instance_id: observation for observation in observations}
         return list(unique.values())
 
@@ -2803,12 +3813,7 @@ class DgmPiExperiment:
             / "observation.json"
         )
         raw = self._load_json(path)
-        return TaskObservation(
-            **{
-                key: raw[key]
-                for key in TaskObservation.__dataclass_fields__
-            }
-        )
+        return self._task_observation_from_record(raw, path)
 
     def _write_artifact(
         self,

@@ -44,6 +44,7 @@ ALLOWED_HANDLER_IMPORTS = {
     "hashlib",
     "json",
     "math",
+    "os",
     "pathlib",
     "re",
     "statistics",
@@ -54,8 +55,44 @@ PROHIBITED_HANDLER_CALLS = {
     "__import__",
     "breakpoint",
     "compile",
+    "delattr",
     "eval",
     "exec",
+    "getattr",
+    "globals",
+    "locals",
+    "setattr",
+    "vars",
+}
+PROHIBITED_HANDLER_ATTRIBUTES = {
+    "_getframe",
+    "abort",
+    "execl",
+    "execle",
+    "execlp",
+    "execlpe",
+    "execv",
+    "execve",
+    "execvp",
+    "execvpe",
+    "fork",
+    "forkpty",
+    "kill",
+    "killpg",
+    "modules",
+    "popen",
+    "posix_spawn",
+    "posix_spawnp",
+    "spawnl",
+    "spawnle",
+    "spawnlp",
+    "spawnlpe",
+    "spawnv",
+    "spawnve",
+    "spawnvp",
+    "spawnvpe",
+    "startfile",
+    "system",
 }
 
 
@@ -427,6 +464,10 @@ def _validate_parameter_definition(
 def _validate_handler_ast(tree: ast.AST) -> None:
     for node in ast.walk(tree):
         if isinstance(node, (ast.Import, ast.ImportFrom)):
+            if any(alias.name == "*" for alias in node.names):
+                raise ArtifactValidationError(
+                    "Tool handler wildcard imports are not allowed"
+                )
             names = (
                 [alias.name for alias in node.names]
                 if isinstance(node, ast.Import)
@@ -438,15 +479,34 @@ def _validate_handler_ast(tree: ast.AST) -> None:
                     raise ArtifactValidationError(
                         f"Tool handler import is not allowed: {imported}"
                     )
+            if (
+                isinstance(node, ast.ImportFrom)
+                and (node.module or "").split(".", 1)[0] == "os"
+            ):
+                for alias in node.names:
+                    if alias.name in PROHIBITED_HANDLER_ATTRIBUTES:
+                        raise ArtifactValidationError(
+                            "Tool handler os process import is not allowed: "
+                            f"{alias.name}"
+                        )
         if isinstance(node, ast.Call) and isinstance(node.func, ast.Name):
             if node.func.id in PROHIBITED_HANDLER_CALLS:
                 raise ArtifactValidationError(
                     f"Tool handler call is not allowed: {node.func.id}"
                 )
-        if isinstance(node, ast.Attribute) and node.attr.startswith("__"):
+        if isinstance(node, ast.Name) and node.id in PROHIBITED_HANDLER_CALLS:
             raise ArtifactValidationError(
-                f"Tool handler dunder access is not allowed: {node.attr}"
+                f"Tool handler dynamic name is not allowed: {node.id}"
             )
+        if isinstance(node, ast.Attribute):
+            if node.attr.startswith("__"):
+                raise ArtifactValidationError(
+                    f"Tool handler dunder access is not allowed: {node.attr}"
+                )
+            if node.attr in PROHIBITED_HANDLER_ATTRIBUTES:
+                raise ArtifactValidationError(
+                    f"Tool handler process access is not allowed: {node.attr}"
+                )
 
 
 def _validate_general_text(

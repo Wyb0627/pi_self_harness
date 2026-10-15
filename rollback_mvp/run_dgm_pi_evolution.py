@@ -28,6 +28,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--run-id", required=True)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument(
+        "--import-p0-from",
+        type=Path,
+        help="Explicitly import an audited P0 panel during prepare only.",
+    )
+    parser.add_argument(
         "--manifest",
         type=Path,
         default=repo_root
@@ -94,7 +99,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--per-task-token-cap", type=int, default=512_000)
     parser.add_argument("--per-task-output-token-cap", type=int, default=65_536)
     parser.add_argument("--mutation-token-cap", type=int, default=64_000)
-    parser.add_argument("--mutation-output-token-cap", type=int, default=16_384)
+    parser.add_argument("--mutation-output-token-cap", type=int, default=32_768)
     parser.add_argument("--agent-timeout-seconds", type=int, default=3_600)
     parser.add_argument("--mutation-timeout-seconds", type=int, default=900)
     parser.add_argument("--evaluator-timeout-seconds", type=int, default=1_800)
@@ -190,8 +195,15 @@ def main() -> int:
     args = parse_args()
     experiment = DgmPiExperiment(build_config(args), build_paths(args))
     if args.command == "prepare":
-        print(json.dumps(experiment.prepare(), indent=2))
+        print(
+            json.dumps(
+                experiment.prepare(import_p0_from=args.import_p0_from),
+                indent=2,
+            )
+        )
         return 0
+    if args.import_p0_from is not None:
+        raise SystemExit("--import-p0-from is valid only with prepare")
     protocol_lock = args.output.resolve() / "protocol-lock.json"
     if not protocol_lock.is_file():
         raise SystemExit(

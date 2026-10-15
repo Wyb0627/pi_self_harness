@@ -14,7 +14,7 @@ const { values } = parseArgs({
 	options: {
 		"agent-dir": { type: "string" },
 		"evidence-file": { type: "string" },
-		"max-output-tokens": { type: "string", default: "16384" },
+		"max-output-tokens": { type: "string", default: "32768" },
 		"max-total-tokens": { type: "string", default: "64000" },
 		"model-id": { type: "string", default: "byteplus/deepseek-v4-flash-ga" },
 		"model-provider": { type: "string", default: "rollback-deepseek" },
@@ -74,6 +74,7 @@ const resourceLoader = new DefaultResourceLoader({
 			"Propose one project-reusable behavioral change: a strategy section, one human-readable tool, or both.",
 			"A tool must be a genuine coding aid, not a task answer. Its Python handler reads one JSON object from stdin and writes exactly one JSON object with content and optional details.",
 			"The handler runs inside a network-disabled, read-only container except for /testbed. It must not use network, subprocesses, shells, package installation, Git history, lifecycle hooks, or host paths.",
+			"Python os is allowed for non-process filesystem inspection such as os.walk, os.listdir, os.stat, and os.path. Process, shell, signal, dynamic attribute, and sys.modules access are rejected.",
 			"Do not mention benchmark names, task IDs, gold patches, evaluator internals, hidden tests, or specific issue solutions in generated artifact content.",
 			"Return exactly one JSON object with exactly these fields:",
 			'{"mutation_summary":"short description","strategy_patch":"reusable strategy section or empty string","tool":null,"depends_on":[],"probe_task_ids":[]}',

@@ -37,7 +37,11 @@ from rollback_mvp.dgm_evolve.rf_clm import (
 )
 from rollback_mvp.adaptive_eval.schemas import hash_json
 from rollback_mvp.adaptive_eval.state import atomic_json
-from rollback_mvp.orchestrate_endpoint_200 import load_manifest
+from rollback_mvp.orchestrate_endpoint_200 import (
+    load_manifest,
+    sha256_bytes,
+    sha256_file,
+)
 
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -67,6 +71,188 @@ def runtime_paths(output: Path) -> RuntimePaths:
         mutation_runner=ROOT / "rollback_mvp" / "pi_strategy_mutator.mjs",
         swebench_python=sys.executable,
     )
+
+
+def create_importable_p0_source(output: Path) -> DgmPiExperiment:
+    config = ExperimentConfig(
+        run_id="source-p0",
+        experiment_seed=7,
+        proposal_slots=2,
+        proposals_per_wave=2,
+        mutation_output_token_cap=16_384,
+        inter_task_delay_seconds=1.0,
+    )
+    experiment = DgmPiExperiment(
+        config,
+        runtime_paths(output),
+        progress_factory=lambda items, _description, _total: items,
+    )
+    protocol = experiment.prepare()
+    evolve = json.loads(
+        (output / "frozen-inputs" / "evolve-60-manifest.json").read_text()
+    )
+    execution_stack = json.loads(
+        (output / "frozen-inputs" / "execution-stack.json").read_text()
+    )
+    p0_hash = protocol["p0_artifact_hash"]
+    role_hash = hash_json(evolve)
+    execution_stack_hash = hash_json(execution_stack)
+    for entry in evolve["records"]:
+        row = entry["record"]
+        instance_id = row["instance_id"]
+        task_dir = (
+            output
+            / "observations"
+            / "search-p0"
+            / p0_hash
+            / instance_id
+        )
+        identity = {
+            "schema_version": 1,
+            "run_id": config.run_id,
+            "config_hash": config.config_hash,
+            "artifact_hash": p0_hash,
+            "instance_id": instance_id,
+            "repo": row["repo"],
+            "base_commit": row["base_commit"],
+            "phase": "search-p0",
+            "budget_scope": "search",
+            "role_manifest_hash": role_hash,
+            "model_provider": config.model_provider,
+            "model_id": config.model_id,
+            "execution_stack_hash": execution_stack_hash,
+            "image": f"test-image:{instance_id}",
+            "image_digest": f"sha256:{hash_json(instance_id)}",
+            "artifact_content_hash": p0_hash,
+            "per_task_output_token_cap": config.per_task_output_token_cap,
+            "per_task_token_cap": config.per_task_token_cap,
+            "agent_timeout_seconds": config.agent_timeout_seconds,
+            "evaluator_timeout_seconds": config.evaluator_timeout_seconds,
+            "rollout": 0,
+        }
+        identity_hash = hash_json(identity)
+        result = {
+            "inputTokens": 1,
+            "outputTokens": 1,
+            "cacheReadTokens": 0,
+            "cacheWriteTokens": 0,
+            "tokenTelemetryAvailable": True,
+            "budgetAborted": False,
+            "timeoutAborted": False,
+            "providerError": None,
+            "error": None,
+            "policyViolations": [],
+            "patch": "",
+            "durationMs": 100,
+            "runnerExitCode": 0,
+        }
+        result_path = task_dir / "result.json"
+        atomic_json(task_dir / "identity.json", identity)
+        atomic_json(result_path, result)
+        atomic_json(
+            task_dir / "invocation.json",
+            {
+                "schema_version": 1,
+                "identity_hash": identity_hash,
+                "status": "result_persisted",
+                "started_at": "2026-10-15T00:00:00Z",
+                "image_build_seconds": 0.0,
+                "result_sha256": sha256_file(result_path),
+            },
+        )
+        unhashed = {
+            "instance_id": instance_id,
+            "artifact_hash": p0_hash,
+            "phase": "search-p0",
+            "resolved": False,
+            "status": "empty_patch_observed_zero",
+            "valid": True,
+            "reported_tokens": 2,
+            "token_telemetry_complete": True,
+            "image_build_seconds": 0.0,
+            "agent_duration_seconds": 0.1,
+            "evaluator_duration_seconds": 0.0,
+            "patch_sha256": sha256_bytes(b""),
+            "identity_hash": identity_hash,
+        }
+        atomic_json(
+            task_dir / "observation.json",
+            {**unhashed, "observation_hash": hash_json(unhashed)},
+        )
+        experiment.ledger.append(
+            f"task:{identity_hash}",
+            {
+                "budget_scope": "search",
+                "kind": "task_agent_and_evaluator",
+                "artifact_hash": p0_hash,
+                "instance_id": instance_id,
+                "phase": "search-p0",
+                "reported_tokens": 2,
+                "conservative_token_charge": 0,
+                "active_seconds": 0.2,
+                "image_build_seconds": 0.0,
+                "agent_seconds": 0.1,
+                "evaluator_seconds": 0.0,
+                "api_calls": 1,
+                "task_executions": 1,
+                "status": "empty_patch_observed_zero",
+                "valid": True,
+                "resolved": False,
+            },
+        )
+        experiment.ledger.append(
+            f"delay:search:search-p0:{p0_hash}:{instance_id}",
+            {
+                "budget_scope": "search",
+                "kind": "request_pacing",
+                "reported_tokens": 0,
+                "conservative_token_charge": 0,
+                "active_seconds": 1.0,
+                "api_calls": 0,
+                "task_executions": 0,
+                "status": "completed",
+            },
+        )
+    archive_entry = ArchiveEntry(
+        artifact_hash=p0_hash,
+        parent_artifact_hash=None,
+        score_60=0.0,
+        resolved_60=0,
+        evaluated_tasks=60,
+        functioning_child_count=0,
+        functioning_child_slots=(),
+        insertion_ordinal=0,
+    )
+    experiment._write_archive([archive_entry])
+    experiment.events.append(
+        "p0_evaluated",
+        {
+            "artifact_hash": p0_hash,
+            "resolved": 0,
+            "tasks": 60,
+        },
+    )
+    invalid_payload = {
+        "schema_version": 1,
+        "terminal_state": "SEARCH_INFRASTRUCTURE_INVALID",
+        "classification": "infrastructure_invalid",
+        "reason": "Synthetic mutation protocol mismatch.",
+        "p0_reusable": True,
+        "search_mutations_reusable": False,
+    }
+    invalid = {
+        **invalid_payload,
+        "record_hash": hash_json(invalid_payload),
+    }
+    atomic_json(output / "search-invalid.json", invalid)
+    experiment.events.append(
+        "search_invalid",
+        {
+            "record_hash": invalid["record_hash"],
+            "search_invalid_path": "search-invalid.json",
+        },
+    )
+    return experiment
 
 
 class FakeDgmPiExperiment(DgmPiExperiment):
@@ -237,6 +423,14 @@ class InvalidMutationExperiment(FakeDgmPiExperiment):
             "budgetAborted": True,
             "tokenTelemetryAvailable": True,
         }
+
+
+class NoP0RerunExperiment(DgmPiExperiment):
+    def _evaluate_records(self, **_kwargs):
+        raise AssertionError("Imported P0 must not be evaluated again")
+
+    def _mutate(self, *_args, **_kwargs):
+        raise AssertionError("Search cap should stop before mutation")
 
 
 class SplitContractTest(unittest.TestCase):
@@ -412,6 +606,7 @@ class DgmPolicyTest(unittest.TestCase):
         config = ExperimentConfig(run_id="pilot", experiment_seed=7)
         self.assertEqual(config.proposal_slots, 10)
         self.assertIsNone(config.search_token_cap)
+        self.assertEqual(config.mutation_output_token_cap, 32_768)
 
     def test_dgm_and_p2_share_execution_budgets(self) -> None:
         dgm = ExperimentConfig(run_id="dgm", experiment_seed=7, arm="dgm")
@@ -498,6 +693,42 @@ class ArtifactAndRfClmTest(unittest.TestCase):
         assert unsafe is not None
         with self.assertRaisesRegex(ArtifactValidationError, "import"):
             validate_candidate_tool(unsafe, ())
+
+    def test_tool_validation_allows_safe_os_and_blocks_process_escapes(
+        self,
+    ) -> None:
+        original = self.delta(1, tool_name="inspect_text").tool
+        assert original is not None
+        safe = dataclasses.replace(
+            original,
+            handler_code=(
+                "import json\n"
+                "import os\n"
+                "import sys\n"
+                "request = json.load(sys.stdin)\n"
+                "files = []\n"
+                "for root, _, names in os.walk('/testbed'):\n"
+                "    files.extend(os.path.join(root, name) for name in names)\n"
+                "print(json.dumps({'content': str(len(files))}))\n"
+            ),
+        )
+        validate_candidate_tool(safe, ())
+        unsafe_handlers = (
+            "import os\nos.system('sh')\n",
+            "from os import popen\npopen('sh')\n",
+            "import os\ngetattr(os, 'system')('sh')\n",
+            "import sys\nsys.modules['os'].system('sh')\n",
+        )
+        for handler in unsafe_handlers:
+            with self.subTest(handler=handler):
+                with self.assertRaisesRegex(
+                    ArtifactValidationError,
+                    "not allowed",
+                ):
+                    validate_candidate_tool(
+                        dataclasses.replace(original, handler_code=handler),
+                        (),
+                    )
 
     def test_rf_clm_removes_earlier_cause_and_replays_independent_change(
         self,
@@ -682,6 +913,121 @@ class LedgerAndPreparationTest(unittest.TestCase):
             _, test, _ = build_split_contract(full, full_hash)
             for entry in test["records"]:
                 self.assertNotIn(entry["record"]["instance_id"], frozen_text)
+
+    def test_audited_p0_import_reuses_panel_without_agent_calls(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            source = root / "source"
+            target = root / "target"
+            create_importable_p0_source(source)
+            config = ExperimentConfig(
+                run_id="target-p0",
+                experiment_seed=7,
+                proposal_slots=2,
+                proposals_per_wave=2,
+                search_active_seconds_cap=1,
+                inter_task_delay_seconds=1.0,
+            )
+            experiment = NoP0RerunExperiment(
+                config,
+                runtime_paths(target),
+                progress_factory=lambda items, _description, _total: items,
+            )
+            experiment.prepare(import_p0_from=source)
+            self.assertTrue(experiment.preflight(require_paid_runtime=False)["valid"])
+            self.assertEqual(len(experiment._load_archive()), 1)
+            self.assertEqual(
+                len(
+                    list(
+                        (target / "observations" / "search-p0").glob(
+                            "*/*/observation.json"
+                        )
+                    )
+                ),
+                60,
+            )
+            self.assertEqual(experiment.ledger.totals("search")["api_calls"], 60)
+            self.assertEqual(
+                experiment.ledger.totals("search")["task_executions"],
+                60,
+            )
+            contract = json.loads(
+                (target / "p0-import-contract.json").read_text()
+            )
+            self.assertEqual(contract["panel"]["task_count"], 60)
+            self.assertEqual(
+                contract["source_ledger"]["summary"]["records"],
+                120,
+            )
+            full, full_hash = load_manifest(MANIFEST)
+            _, test, _ = build_split_contract(full, full_hash)
+            serialized_contract = json.dumps(contract, sort_keys=True)
+            for entry in test["records"]:
+                self.assertNotIn(
+                    entry["record"]["instance_id"],
+                    serialized_contract,
+                )
+            seal = experiment.run_search()
+            self.assertEqual(seal["completed_proposal_slots"], 0)
+            self.assertEqual(seal["archive_entries"], 1)
+
+    def test_p0_import_rejects_tampering_and_d_test_state(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            source = root / "source"
+            create_importable_p0_source(source)
+            observation_path = next(
+                (source / "observations" / "search-p0").glob(
+                    "*/*/observation.json"
+                )
+            )
+            observation = json.loads(observation_path.read_text())
+            observation["resolved"] = True
+            atomic_json(observation_path, observation)
+            experiment = DgmPiExperiment(
+                ExperimentConfig(
+                    run_id="tampered-target",
+                    experiment_seed=7,
+                    proposal_slots=2,
+                    proposals_per_wave=2,
+                    inter_task_delay_seconds=1.0,
+                ),
+                runtime_paths(root / "tampered-target"),
+                progress_factory=lambda items, _description, _total: items,
+            )
+            with self.assertRaisesRegex(
+                ConfigurationError,
+                "Observation hash mismatch",
+            ):
+                experiment.prepare(import_p0_from=source)
+
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            source = root / "source"
+            create_importable_p0_source(source)
+            atomic_json(
+                source
+                / "endpoints"
+                / "frozen-inputs"
+                / "test-140-manifest.json",
+                {"role": "test"},
+            )
+            experiment = DgmPiExperiment(
+                ExperimentConfig(
+                    run_id="d-test-target",
+                    experiment_seed=7,
+                    proposal_slots=2,
+                    proposals_per_wave=2,
+                    inter_task_delay_seconds=1.0,
+                ),
+                runtime_paths(root / "d-test-target"),
+                progress_factory=lambda items, _description, _total: items,
+            )
+            with self.assertRaisesRegex(
+                ConfigurationError,
+                "D_test",
+            ):
+                experiment.prepare(import_p0_from=source)
 
     def test_fake_end_to_end_search_seals_before_endpoint_and_reports_gain(
         self,

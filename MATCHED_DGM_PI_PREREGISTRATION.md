@@ -2,6 +2,13 @@
 
 Date frozen: 2026-10-14
 
+Protocol-v2 amendment frozen: 2026-10-15, before any valid child or D_test
+evaluation. The first run is infrastructure-invalid because the mutation
+operator repeatedly produced outputs incompatible with the frozen output cap
+and handler allowlist. Protocol v2 raises only the mutation output cap, aligns
+the safe handler policy with the proposer, and permits audited reuse of the
+already completed P0 panel.
+
 ## Question
 
 Does project-specific Pi harness evolution improve one-pass performance on the
@@ -19,6 +26,8 @@ The mutable artifact contains:
 - Generated handlers run only through a trusted host proxy in the task image
   with `network=none`, a read-only candidate mount, and a read-write task
   workspace. They cannot become Pi lifecycle hooks or execute on the host.
+  `os` is allowed for ordinary filesystem inspection, while process, shell,
+  signal, dynamic attribute, and `sys.modules` access are statically rejected.
 
 The two evolution arms share mutation, task-agent, model, container, per-call,
 slot, and wall limits:
@@ -60,6 +69,11 @@ hidden evaluator feedback entering mutation invalidates the run.
 - D_test: literal DGM big 140.
 - D_test is materialized only after `search-seal.json` exists.
 - Historical DGM200 outputs are forbidden mutation input and cache evidence.
+- A completed P0 evolve-60 panel may be imported only from a terminally marked
+  infrastructure-invalid matched run. The import must bind the exact ordered
+  IDs, P0 artifact, task execution stack and settings, observation/evidence
+  hashes, source archive, and attributable ledger entries. Source observation
+  identities remain unchanged; no mutation or D_test artifact is imported.
 
 ## DGM Search Policy
 
@@ -93,7 +107,7 @@ hidden evaluator feedback entering mutation invalidates the run.
 | Shared P0 big-140 reference | 80,000,000 | 108,000 s |
 
 Per task: 512,000 total reported tokens, 65,536 output tokens, and 3,600
-seconds. Mutation: 64,000 total reported tokens, 16,384 output tokens, and 900
+seconds. Mutation: 64,000 total reported tokens, 32,768 output tokens, and 900
 seconds. Search stops on the 10-slot limit or active wall limit, not a global
 token threshold. Actual token use remains fully logged. Endpoint reserves are
 non-transferable.
