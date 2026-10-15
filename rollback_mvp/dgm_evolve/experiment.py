@@ -369,6 +369,17 @@ def mutation_failure_reason(result: Mapping[str, Any]) -> str:
     return "Mutation proposer returned valid=false without a specific error."
 
 
+def mutation_infrastructure_failure_reason(
+    result: Mapping[str, Any],
+) -> str | None:
+    provider_error = result.get("providerError")
+    if isinstance(provider_error, str) and provider_error.strip():
+        return provider_error
+    if result.get("tokenTelemetryAvailable") is not True:
+        return "Mutation proposer returned incomplete token telemetry."
+    return None
+
+
 def utc_timestamp() -> str:
     return time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
 
@@ -1195,6 +1206,44 @@ class DgmPiExperiment:
 
             mutation = self._mutate(parent_hash, next_slot, evolve, task_path)
             if not mutation["valid"]:
+                infrastructure_reason = mutation_infrastructure_failure_reason(
+                    mutation
+                )
+                if infrastructure_reason is not None:
+                    invalid_payload = {
+                        "schema_version": SCHEMA_VERSION,
+                        "terminal_state": "SEARCH_INFRASTRUCTURE_INVALID",
+                        "classification": "infrastructure_invalid",
+                        "invalidated_at": utc_timestamp(),
+                        "reason": infrastructure_reason,
+                        "p0_reusable": True,
+                        "search_mutations_reusable": False,
+                        "d_test_consumed": False,
+                        "failed_slot": next_slot,
+                        "parent_artifact_hash": parent_hash,
+                        "cost": self.ledger.totals("search"),
+                    }
+                    invalid = {
+                        **invalid_payload,
+                        "record_hash": hash_json(invalid_payload),
+                    }
+                    atomic_json(search_invalid_path, invalid)
+                    self.events.append(
+                        "search_invalid",
+                        {
+                            "classification": invalid["classification"],
+                            "p0_reusable": invalid["p0_reusable"],
+                            "record_hash": invalid["record_hash"],
+                            "search_invalid_path": search_invalid_path.name,
+                            "search_invalid_sha256": sha256_file(
+                                search_invalid_path
+                            ),
+                        },
+                    )
+                    raise ObservationInvalid(
+                        f"Mutation infrastructure failure in slot "
+                        f"{next_slot}: {infrastructure_reason}"
+                    )
                 terminal = {
                     "schema_version": SCHEMA_VERSION,
                     "slot": next_slot,
@@ -1766,6 +1815,13 @@ class DgmPiExperiment:
         return result
 
     def run_endpoint(self) -> dict[str, Any]:
+        search_invalid_path = self.output_root / "search-invalid.json"
+        if search_invalid_path.exists():
+            invalid = self._load_json(search_invalid_path)
+            raise ObservationInvalid(
+                f"Endpoint cannot consume an invalid search: "
+                f"{invalid.get('reason')}"
+            )
         seal = self._load_json(self.search_seal_path)
         endpoint_state_path = self._endpoint_state_path()
         endpoint_identity = hash_json(

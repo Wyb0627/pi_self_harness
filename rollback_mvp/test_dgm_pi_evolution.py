@@ -13,6 +13,7 @@ from rollback_mvp.dgm_evolve.experiment import (
     CostLedger,
     DgmPiExperiment,
     ExperimentConfig,
+    ObservationInvalid,
     RuntimePaths,
     TaskObservation,
     build_split_contract,
@@ -421,6 +422,30 @@ class InvalidMutationExperiment(FakeDgmPiExperiment):
             "valid": False,
             "parentArtifactHash": parent_hash,
             "budgetAborted": True,
+            "tokenTelemetryAvailable": True,
+        }
+
+
+class ProviderFailureExperiment(FakeDgmPiExperiment):
+    def _mutate(self, parent_hash, slot, evolve_manifest, task_path):
+        del evolve_manifest, task_path
+        self.ledger.append(
+            f"mutation:{slot:04d}",
+            {
+                "budget_scope": "search",
+                "kind": "mutation_proposer",
+                "reported_tokens": 0,
+                "conservative_token_charge": 0,
+                "active_seconds": 0.1,
+                "api_calls": 1,
+                "task_executions": 0,
+                "status": "invalid",
+            },
+        )
+        return {
+            "valid": False,
+            "parentArtifactHash": parent_hash,
+            "providerError": "502 certificate verify failed",
             "tokenTelemetryAvailable": True,
         }
 
@@ -1108,6 +1133,56 @@ class LedgerAndPreparationTest(unittest.TestCase):
                 )["reason"],
                 "Mutation proposer exceeded its frozen token budget.",
             )
+
+    def test_provider_failure_invalidates_search_and_blocks_endpoint(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            output = Path(temporary) / "run"
+            experiment = ProviderFailureExperiment(
+                ExperimentConfig(
+                    run_id="provider-failure",
+                    experiment_seed=7,
+                    proposal_slots=2,
+                    proposals_per_wave=2,
+                    inter_task_delay_seconds=0,
+                    smoke=True,
+                    smoke_small_tasks=1,
+                    smoke_medium_tasks=0,
+                    smoke_endpoint_tasks=1,
+                ),
+                runtime_paths(output),
+                progress_factory=lambda items, _description, _total: items,
+            )
+            experiment.prepare()
+            with self.assertRaisesRegex(
+                ObservationInvalid,
+                "Mutation infrastructure failure in slot 0",
+            ):
+                experiment.run_search()
+            invalid = json.loads(
+                (output / "search-invalid.json").read_text()
+            )
+            self.assertEqual(
+                invalid["terminal_state"],
+                "SEARCH_INFRASTRUCTURE_INVALID",
+            )
+            self.assertTrue(invalid["p0_reusable"])
+            self.assertFalse(invalid["search_mutations_reusable"])
+            self.assertEqual(
+                invalid["record_hash"],
+                hash_json(
+                    {
+                        key: value
+                        for key, value in invalid.items()
+                        if key != "record_hash"
+                    }
+                ),
+            )
+            self.assertFalse((output / "search-seal.json").exists())
+            with self.assertRaisesRegex(
+                ObservationInvalid,
+                "Endpoint cannot consume an invalid search",
+            ):
+                experiment.run_endpoint()
 
 
 if __name__ == "__main__":
