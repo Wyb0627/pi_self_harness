@@ -13,7 +13,13 @@ from .controller import (
 )
 from .embedding_client import FakeEmbeddingClient, embed_catalogue
 from .retrieval import LexicalIndex, SemanticIndex
-from .schemas import CandidateChangeCard, EmbeddingSpec, ExperimentConfig, SCHEMA_VERSION
+from .schemas import (
+    CandidateChangeCard,
+    CoverageSelectionMode,
+    EmbeddingSpec,
+    ExperimentConfig,
+    SCHEMA_VERSION,
+)
 from .schemas import hash_json, source_diff_hash, source_tree_hash
 from .selector_agent import ScriptedSelectorClient, SelectorToolLoop, SelectorTurn
 
@@ -151,6 +157,7 @@ class ControllerTest(unittest.TestCase):
         )
         config = ExperimentConfig(
             schema_version=SCHEMA_VERSION,
+            coverage_selection_mode=CoverageSelectionMode.GREEDY,
             task_budget=1,
             max_rounds=2,
             max_tasks_per_round=1,
@@ -171,6 +178,7 @@ class ControllerTest(unittest.TestCase):
             parent_artifact_hash=parent_hash,
             child_artifact_hash=child_hash,
             diff_hash=diff_hash,
+            repo="astropy/astropy",
             changed_paths=("src/tool.ts",),
             changed_symbols=("tool",),
             dependency_change="none",
@@ -224,6 +232,10 @@ class ControllerTest(unittest.TestCase):
             second = second_controller.run_selection()
             self.assertEqual(first.selection_manifest_hash, second.selection_manifest_hash)
             self.assertEqual(first.frozen_plan.final_task_ids, second.frozen_plan.final_task_ids)
+            manifest = json.loads(Path(first.selection_manifest_path).read_text())
+            self.assertEqual(
+                manifest["config"]["coverage_selection_mode"], "greedy"
+            )
             self.assertEqual(first_evaluator.calls[0][1], first.frozen_plan.pre_audit_task_ids)
             prompt = json.dumps(first_client.prompts)
             self.assertNotIn(first.audit.seed_derivation, prompt)

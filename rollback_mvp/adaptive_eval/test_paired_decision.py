@@ -17,6 +17,7 @@ from .paired_executor import (
     PairedExecutor,
 )
 from .schemas import (
+    CoverageSelectionMode,
     DecisionOutcome,
     DecisionPolicy,
     PairExecutionError,
@@ -82,6 +83,7 @@ class PairedDecisionTest(unittest.TestCase):
         )
         cls.config = ExperimentConfig(
             schema_version=SCHEMA_VERSION,
+            coverage_selection_mode=CoverageSelectionMode.GREEDY,
             task_budget=2,
             max_rounds=2,
             max_tasks_per_round=2,

@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>动态版 Pi：动态采样 + 动态回退（面试讲稿）</title>
+<style>
+  :root{
+    --bg:#0d1117; --panel:#161b22; --panel2:#1c2230; --ink:#e6edf3; --muted:#9aa7b4;
+    --accent:#58a6ff; --accent2:#3fb950; --warn:#f0b429; --danger:#ff7b72;
+    --line:#30363d; --mono:"SF Mono",ui-monospace,"JetBrains Mono",Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB",sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:var(--bg);color:var(--ink);font-family:var(--sans);overflow:hidden}
+  .deck{position:relative;width:100vw;height:100vh}
+  .slide{position:absolute;inset:0;padding:48px 64px 72px;opacity:0;visibility:hidden;
+    transition:opacity .35s ease;display:flex;flex-direction:column;overflow:hidden}
+  .slide.active{opacity:1;visibility:visible}
+  .slide h1{font-size:40px;line-height:1.15;letter-spacing:.3px}
+  .slide h2{font-size:30px;margin-bottom:4px;display:flex;align-items:center;gap:12px}
+  .slide h3{font-size:19px;color:var(--accent);margin:14px 0 8px;font-weight:600}
+  .tag{font-size:12px;font-weight:700;letter-spacing:.6px;padding:4px 10px;border-radius:20px;
+    text-transform:uppercase;flex:none}
+  .tag.core{background:rgba(63,185,80,.16);color:var(--accent2);border:1px solid rgba(63,185,80,.4)}
+  .tag.appx{background:rgba(88,166,255,.14);color:var(--accent);border:1px solid rgba(88,166,255,.35)}
+  .tag.warn{background:rgba(240,180,41,.14);color:var(--warn);border:1px solid rgba(240,180,41,.4)}
+  .kicker{color:var(--muted);font-size:15px;margin-bottom:18px;letter-spacing:.5px}
+  .lead{font-size:19px;line-height:1.55;color:var(--ink)}
+  .muted{color:var(--muted)}
+  .cols{display:grid;grid-template-columns:1fr 1fr;gap:22px;flex:1;min-height:0}
+  .cols.wide{grid-template-columns:1.15fr .85fr}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 20px}
+  .card.io{background:var(--panel2)}
+  .card h3{margin-top:0}
+  ul{list-style:none;display:flex;flex-direction:column;gap:9px}
+  li{font-size:16px;line-height:1.45;padding-left:20px;position:relative;color:var(--ink)}
+  li::before{content:"▸";position:absolute;left:0;color:var(--accent);font-size:13px;top:3px}
+  li.ok::before{content:"✓";color:var(--accent2)}
+  li.no::before{content:"✗";color:var(--danger)}
+  li.red{color:#ffd7d3}
+  li.red::before{content:"●";color:var(--danger)}
+  b{color:#fff;font-weight:700}
+  .hl{color:var(--warn);font-weight:600}
+  .hl2{color:var(--accent2);font-weight:600}
+  code,.mono{font-family:var(--mono)}
+  .formula{background:#0a0e14;border:1px solid var(--line);border-left:3px solid var(--accent);
+    border-radius:8px;padding:14px 16px;font-family:var(--mono);font-size:16px;line-height:1.7;
+    color:#d7e2ee;margin:6px 0 10px;white-space:pre-wrap;overflow-x:auto}
+  .formula .op{color:var(--accent)}
+  .formula .cm{color:var(--muted)}
+  .legend{background:rgba(88,166,255,.05);border:1px dashed rgba(88,166,255,.3);border-radius:8px;padding:12px 14px}
+  .legend .lt{font-size:12px;letter-spacing:.6px;text-transform:uppercase;color:var(--accent);margin-bottom:8px;font-weight:700;display:flex;align-items:center;gap:8px}
+  .legend dl{display:grid;grid-template-columns:auto 1fr;gap:5px 14px;font-size:14.5px;line-height:1.4}
+  .legend dt{font-family:var(--mono);color:var(--warn);white-space:nowrap}
+  .legend dd{color:var(--ink)}
+  table{width:100%;border-collapse:collapse;font-size:15.5px}
+  th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line)}
+  th{color:var(--muted);font-weight:600;font-size:13px;letter-spacing:.4px;text-transform:uppercase}
+  td.num{text-align:right;font-family:var(--mono)}
+  .big{color:var(--accent2);font-weight:700}
+  .flow{display:flex;align-items:stretch;gap:0;margin:4px 0}
+  .flow .step{flex:1;background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+  .flow .step .who{font-size:11px;letter-spacing:.5px;text-transform:uppercase;font-weight:700;margin-bottom:6px}
+  .flow .who.llm{color:var(--accent)}
+  .flow .who.det{color:var(--accent2)}
+  .flow .arrow{display:flex;align-items:center;color:var(--muted);font-size:22px;padding:0 10px}
+  .pill{display:inline-block;font-family:var(--mono);font-size:13px;padding:2px 8px;border-radius:6px;
+    background:rgba(88,166,255,.12);color:var(--accent);border:1px solid rgba(88,166,255,.25)}
+  .footer{position:absolute;bottom:20px;left:64px;right:64px;display:flex;justify-content:space-between;
+    align-items:center;font-size:13px;color:var(--muted);border-top:1px solid var(--line);padding-top:12px}
+  .progress{position:absolute;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .35s}
+  .nav{display:flex;gap:8px;align-items:center}
+  .nav button{background:var(--panel2);border:1px solid var(--line);color:var(--ink);border-radius:6px;
+    width:30px;height:26px;cursor:pointer;font-size:14px}
+  .nav button:hover{border-color:var(--accent)}
+  .title-wrap{flex:1;display:flex;flex-direction:column;justify-content:center;gap:22px}
+  .title-wrap .sub{font-size:20px;color:var(--muted);line-height:1.5}
+  .chips{display:flex;gap:12px;flex-wrap:wrap;margin-top:6px}
+  .chip{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 18px;font-size:15px}
+  .chip b{color:var(--accent2)}
+  .note{font-size:13.5px;color:var(--muted);margin-top:8px;line-height:1.45}
+  .split-note{background:rgba(240,180,41,.07);border:1px solid rgba(240,180,41,.28);border-radius:10px;
+    padding:14px 18px;font-size:16px;line-height:1.5}
+  .two-list{display:grid;grid-template-columns:1fr 1fr;gap:10px 28px}
+  .kbd{font-family:var(--mono);font-size:12px;background:var(--panel2);border:1px solid var(--line);
+    border-radius:4px;padding:1px 6px}
+</style>
+</head>
+<body>
+<div class="deck" id="deck">
+
+  <!-- ===== SLIDE 1: TITLE + RESULT ===== -->
+  <section class="slide active">
+    <div class="kicker">自进化 Agent Harness · 基于 pi + DeepSeek-v4-flash · DGM-200 评测</div>
+    <div class="title-wrap">
+      <h1>动态版 Pi 为什么比原版 Pi 更强？<br>动态采样 + 动态回退 两套机制</h1>
+      <div class="sub">把 DGM 式"固定子集评测 + 只增不删 archive"<br>升级为"按改动动态选任务 + 可执行反事实回退"</div>
+      <div class="chips">
+        <div class="chip">P1 原版 Pi（one-shot）：准确率 <b>50.0%</b>（100/200）</div>
+        <div class="chip">P2 动态版 Pi（+RF-CLM 回退）：准确率 <b>69.5%</b>（139/200）</div>
+        <div class="chip">+39 题全为 P2 新增 · McNemar p=0.0</div>
+      </div>
+      <div class="note">证据：paired bootstrap 95% 区间 [+14.0, +25.0] pp；recovery-only=39、original-only=0。
+      P2 token +8.19%、增量直接执行 +4.82h。数据来自 dgm200_run/summary.json。</div>
+    </div>
+    <div class="footer"><span>动态版 Pi · 面试讲稿</span><span class="nav"><span id="pageA"></span></span></div>
+  </section>
+
+  <!-- ===== SLIDE 2: CORE PAGE 1 — DYNAMIC SAMPLING ===== -->
+  <section class="slide">
+    <h2><span class="tag core">核心页 1</span> 动态采样机制 — Agentic Adaptive Evaluation</h2>
+    <div class="split-note" style="margin:10px 0 14px">
+      <b>一句话：</b>DGM 用固定子集（10→60→200）评每个新版本；我们改成
+      <span class="hl">为每一次改动，动态挑最能暴露它收益 / 回归的任务</span>，再用 parent/child
+      <span class="hl">配对</span>决策这次改动是保留还是回退。
+    </div>
+    <div class="cols">
+      <div class="card io">
+        <h3>输入</h3>
+        <ul>
+          <li>冻结任务目录：DGM 200 道 SWE-bench Verified（hash 锚定，153 Django / 25 Sphinx / 22 Astropy）</li>
+          <li><code>TaskCard</code>（问题文本 + BM25 词项 + 1024-D 向量）</li>
+          <li><code>CandidateChangeCard</code>：父→子 diff、改动路径 / 符号</li>
+          <li><code>BadCaseCard</code>：父代失败案例</li>
+          <li class="red">隔离：selector 看不到 gold patch / test patch / 私有评测日志 / D_test</li>
+        </ul>
+      </div>
+      <div class="card io">
+        <h3>输出</h3>
+        <ul>
+          <li><b>一个冻结的任务集</b>（selector 选中 + 独立 audit）</li>
+          <li>每个任务带 <code>retrieval_role</code> + 自然语言 rationale</li>
+          <li>parent/child 在该集上的<b>配对执行结果</b></li>
+          <li class="ok">三态决策：<span class="hl2">ACCEPT / ROLLBACK / ESCALATE</span>（+ fail-closed 的 INVALID）</li>
+          <li class="muted">附带 Coverage / Redundancy 审计报告</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer"><span>动态采样 · 定位与 I/O</span><span id="pageB"></span></div>
+  </section>
+
+  <!-- ===== SLIDE 3: THE KEY QUESTION — WHO USES THE FORMULAS ===== -->
+  <section class="slide">
+    <h2><span class="tag core">核心页 1 · 关键</span> 公式对应什么？LLM 不是看分数做决定</h2>
+    <div class="split-note" style="margin:10px 0 14px">
+      设计原则（文档原文）：<span class="hl">"The model may propose what to inspect.
+      Immutable execution evidence decides."</span>
+      LLM 做<b>检索规划 + 假设生成</b>；公式是围绕它的<b>确定性仲裁器 + 报告器</b>。
+    </div>
+    <div class="flow">
+      <div class="step">
+        <div class="who llm">① LLM Selector（冻结）</div>
+        <div style="font-size:14.5px;line-height:1.45">
+          <b>自己写 query、自己选调哪个工具</b>（<code>search_lexical</code>/<code>search_semantic</code>）、
+          调几次、何时停 → 输出<b>带角色+理由的任务集</b>。
+          <span class="hl">不吐标量分、不做裁决。</span>
+        </div>
+      </div>
+      <div class="arrow">→</div>
+      <div class="step">
+        <div class="who det">② 确定性仲裁（非 LLM）</div>
+        <div style="font-size:14.5px;line-height:1.45">
+          repair/regression 假设按角色<b>字典序</b>优先；
+          竞争容量时按 <code>ΔCoverage</code> 挑；
+          多样性用贪心补；追加 <b>LLM 看不到的 audit</b>。
+        </div>
+      </div>
+      <div class="arrow">→</div>
+      <div class="step">
+        <div class="who det">③ 确定性决策引擎（非 LLM）</div>
+        <div style="font-size:14.5px;line-height:1.45">
+          配对执行后，用 <b>bootstrap + McNemar</b>
+          出 ACCEPT/ROLLBACK/ESCALATE。
+          <span class="hl2">全程不调 LLM。</span>
+        </div>
+      </div>
+    </div>
+    <div class="cols" style="margin-top:14px">
+      <div class="card">
+        <h3>每条公式归谁、干什么</h3>
+        <table>
+          <tr><th>公式</th><th>谁算</th><th>agentic 角色</th></tr>
+          <tr><td class="mono">BM25 / cosine</td><td class="hl2">代码</td><td>工具<b>内部</b>算法；LLM 调检索后给<b>返回候选</b>排序（不负责选工具）</td></tr>
+          <tr><td class="mono">ΔCoverage(x｜S)</td><td class="hl2">代码</td><td>①LLM 可<b>只读调用</b>辅助推理<br>②代码仲裁 / 填多样性</td></tr>
+          <tr><td class="mono">Coverage / Redundancy</td><td class="hl2">代码</td><td>冻结后<b>只报告 / 审计</b></td></tr>
+          <tr><td class="mono">delta / bootstrap / McNemar</td><td class="hl2">代码</td><td>最终<b>三态裁决</b></td></tr>
+        </table>
+        <div class="note"><b>方向：</b>LLM 驱动"写 query / 选工具 / 查几次 / 何时停"（agentic）；BM25·cosine 只是工具<b>内部</b>给候选排序，不参与选工具。</div>
+      </div>
+      <div class="card">
+        <h3>为什么不用一个加权总分？</h3>
+        <ul>
+          <li class="no">不做 <code>a·repair + b·regression + c·diversity</code></li>
+          <li>四个检索角色<b>量纲不可比</b>，加权会引入脆弱、无依据的系数</li>
+          <li class="ok">改用<b>字典序 + 边际覆盖填充</b>：可解释、可消融</li>
+          <li>LLM 唯一能主动碰的公式是把 <code>marginal_coverage</code> 当<b>只读工具</b>查，仍只吐"带理由的集合"</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer"><span>动态采样 · LLM vs 确定性分工（回答你的问题）</span><span id="pageC"></span></div>
+  </section>
+
+  <!-- ===== SLIDE 3.5: TWO-TIER SELECTION + STOPPING + UNIT ===== -->
+  <section class="slide">
+    <h2><span class="tag core">核心页 1 · 补充</span> 两梯队选择 · 停机条件 · 评估对象</h2>
+    <div class="flow" style="margin:8px 0 14px">
+      <div class="step">
+        <div class="who llm">梯队 1 · LLM 直接假设（agentic 主力）</div>
+        <div style="font-size:14px;line-height:1.45">
+          LLM 提议 <code>repair_cause</code> + <code>regression</code> 任务，每个须带
+          <code>evidence_reference</code>（必须指向它检索过的结果，<b>不能凭空提</b>）。
+          正常情况（提议数 ≤ 容量）<b>全部保留</b>。
+          <span class="hl">ΔCoverage 在这梯队不做筛选</span>，只：①超容量时取舍 ②零增益重复须写
+          <code>necessary_distinct_reason</code>，否则 fail-closed。
+        </div>
+      </div>
+      <div class="arrow">→</div>
+      <div class="step">
+        <div class="who det">梯队 2 · ΔCoverage 贪心补位（确定性）</div>
+        <div style="font-size:14px;line-height:1.45">
+          <b>仅当梯队 1 没填满 <code>target</code> 才触发</b>。候选池 = <b>LLM inspected 子集</b>；
+          <b>池空才回退全集 U</b>。每步选边际覆盖最大者，零增益候选直接拒。
+          <span class="hl2">这步可消融</span>（见右下）。
+        </div>
+      </div>
+    </div>
+    <div class="cols">
+      <div class="card">
+        <h3>inspected 候选池怎么构造</h3>
+        <ul>
+          <li>任务进池 ⟺ 出现在 LLM 检索结果：<code>search_lexical</code>/<code>search_semantic</code> 命中、<code>get_task(id)</code>、<code>marginal_coverage</code> 参数</li>
+          <li class="no"><code>get_bad_case</code>/<code>get_change</code>/<code>inspect_round_results</code> 不进池</li>
+          <li class="ok">纯 LLM 驱动：LLM 搜什么，池里就有什么</li>
+          <li>池同时限定「LLM 能提什么」+「补位候选来源」</li>
+        </ul>
+        <h3 style="margin-top:10px">停机条件（≠ ΔCoverage 饱和）</h3>
+        <ul>
+          <li><code>task_budget</code> 用尽</li>
+          <li>LLM <code>finish_round</code>，理由须以 <code>evidence_saturation:</code> 开头</li>
+          <li><code>max_rounds</code> / <code>selector_token_budget</code> / <code>selector_time_limit</code> 任一触顶</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>评估对象是「一次改动」，不是某个 task</h3>
+        <ul>
+          <li>统计单位 = 一条边 <span class="pill">P → C</span>（parent vs child 两版本）</li>
+          <li>初始已选集 <b>S = ∅</b>；种子 = <code>CandidateChangeCard</code>(diff) + <code>BadCaseCard</code></li>
+          <li class="no">没有"当前正在做的 task"这回事</li>
+          <li>U = 冻结候选全集：<b>当前 200</b> / 协议本意 <b>D_evolve=60</b></li>
+        </ul>
+        <div class="split-note" style="margin-top:12px;font-size:14px">
+          <b>消融直觉成立：</b>设计文档 §10 已预注册"去掉 facility-location 补位"。
+          去掉后 LLM 少提时 batch 变小，风险是可能塌缩到近重复 trace / 漏覆盖——值得实测。
+        </div>
+      </div>
+    </div>
+    <div class="footer"><span>动态采样 · 两梯队 / 停机 / 评估单位</span><span id="pageC2"></span></div>
+  </section>
+
+  <!-- ===== SLIDE 4: CORE PAGE 2 — ROLLBACK ===== -->
+  <section class="slide">
+    <h2><span class="tag core">核心页 2</span> 动态回退机制 — Repair-First CLM</h2>
+    <div class="split-note" style="margin:10px 0 14px">
+      <b>一句话：</b>DGM 没有"回退"这个动作（archive 只增、按分数重选 parent）。我们把进化史建成
+      <span class="hl">可回放的 patch 谱系</span>，用<span class="hl">可执行反事实 replay</span>
+      直接定位"一最小充分移除集"，退到最早移除点之前，再重放不依赖它的后续有效改动。
+    </div>
+    <div class="cols wide">
+      <div class="card io">
+        <h3>输入 / 输出</h3>
+        <ul>
+          <li><b>入</b>：线性 lineage（每 patch 一节点，带 changedFiles / dependsOn）</li>
+          <li><b>入</b>：<code>FailureBundle</code>（失败摘要、candidate slice、LLM 软先验 priorOrder、sliceAuditRecall）</li>
+          <li><b>入</b>：<code>probe()</code> — 给定 active patch 集合 → 是否复现失败（可执行验证，奇数次多数票去噪）</li>
+          <li class="ok"><b>出</b>：<code>removedPatchIds</code>（最小充分移除集）+ <code>RollbackPlan</code></li>
+          <li class="ok"><b>出</b>：method ∈ {singleton / sliced-ddmin / full-ddmin / abstain}</li>
+          <li class="red"><b>apply 默认 dry-run，必须用户确认，严禁动 git 历史</b></li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>三因子 + 硬门控</h3>
+        <ul>
+          <li><b>A 候选先验</b>：LLM 只排序 / 缩小候选，<span class="hl">不硬删</span></li>
+          <li><b>B 反事实验证</b>：先验 singleton 移除 → 不够才对移除集跑 <code>ddmin</code></li>
+          <li><b>C rollback-and-replay</b>：落点=最早移除 patch 的父节点；后续 patch 按依赖拓扑重放</li>
+          <li class="red">成本门控：<code>slice ≤ 30% 且 recall ≥ 95%</code> 才用 sliced ddmin，否则退回 full ddmin</li>
+        </ul>
+        <div class="note">结果：Repair-First 比旧 failure-first <span class="hl2">减少 42.86%–49.89% probes</span>；
+        clean repair=1.000，5%/10% 噪声 repair=0.973/0.970（均在 2-point non-inferiority margin 内）。</div>
+      </div>
+    </div>
+    <div class="footer"><span>动态回退 · 定位与 I/O</span><span id="pageD"></span></div>
+  </section>
+
+  <!-- ===== SLIDE 5: APPENDIX A — SAMPLING FORMULAS + NOTATION ===== -->
+  <section class="slide">
+    <h2><span class="tag appx">附录 A</span> 动态采样公式 + notation 图例</h2>
+    <div class="cols">
+      <div>
+        <h3>相似度（语义检索的基础量）</h3>
+        <div class="formula"><span class="op">sim</span>(i, j) = max(0, cosine(emb(i), emb(j)))</div>
+        <div class="legend">
+          <div class="lt">notation ✓ 全部符号已解释</div>
+          <dl>
+            <dt>i, j</dt><dd>两个任务（TaskCard）</dd>
+            <dt>emb(·)</dt><dd>任务的 L2 归一化 1024-D Qwen3 向量</dd>
+            <dt>cosine(a,b)</dt><dd>归一化向量点积 = 余弦相似度</dd>
+            <dt>max(0,·)</dt><dd>负值截断为 0，使 sim ∈ [0,1]</dd>
+          </dl>
+        </div>
+        <h3>覆盖度（facility-location，衡量代表性）</h3>
+        <div class="formula"><span class="op">Coverage</span>(S) = (1/|U|) · Σ<sub>u∈U</sub> max<sub>s∈S</sub> sim(u, s)</div>
+        <div class="legend">
+          <div class="lt">notation ✓</div>
+          <dl>
+            <dt>S</dt><dd>已选中的任务集合</dd>
+            <dt>U</dt><dd>universe：冻结的可选任务全集</dd>
+            <dt>|U|</dt><dd>U 中任务数量</dd>
+            <dt>u</dt><dd>universe 中的一个任务</dd>
+            <dt>s</dt><dd>S 中的一个任务</dd>
+            <dt>max<sub>s∈S</sub> sim(u,s)</dt><dd>u 在 S 中最像的"代表"</dd>
+          </dl>
+        </div>
+      </div>
+      <div>
+        <h3>边际覆盖（加入 x 的增益，仲裁用）</h3>
+        <div class="formula"><span class="op">ΔCoverage</span>(x | S) =
+ (1/|U|) · Σ<sub>u∈U</sub> max(0, sim(u,x) − max<sub>s∈S</sub> sim(u,s))</div>
+        <div class="legend">
+          <div class="lt">notation ✓</div>
+          <dl>
+            <dt>x</dt><dd>一个尚未被选中的候选任务</dd>
+            <dt>x | S</dt><dd>"在已选 S 的条件下" x 的增量</dd>
+            <dt>max(0,·)</dt><dd>只计正增益（diminishing returns）</dd>
+          </dl>
+        </div>
+        <h3>冗余度（只报告，不进决策）</h3>
+        <div class="formula"><span class="op">Redundancy</span>(S) = (1/|S|) · Σ<sub>s∈S</sub> max<sub>t∈S, t≠s</sub> sim(s, t)</div>
+        <div class="legend">
+          <div class="lt">notation ✓</div>
+          <dl>
+            <dt>t</dt><dd>S 中另一个任务（≠ s）</dd>
+            <dt>|S|</dt><dd>已选集合大小；<2 时定义为 0</dd>
+          </dl>
+        </div>
+        <div class="note">近 1 = 多数任务有近似邻居（塌缩）；低 = 分布开。冗余不从任何 LLM 分里扣，只暴露"选择塌缩"。</div>
+      </div>
+    </div>
+    <div class="footer"><span>动态采样 · 公式 notation</span><span id="pageE"></span></div>
+  </section>
+
+  <!-- ===== SLIDE 6: APPENDIX B — BM25 + DECISION FORMULAS ===== -->
+  <section class="slide">
+    <h2><span class="tag appx">附录 B</span> BM25 检索 + 三态决策公式 + notation</h2>
+    <div class="cols">
+      <div>
+        <h3>词法检索 BM25（lexical 候选排序）</h3>
+        <div class="formula"><span class="op">score</span>(q,d) = Σ<sub>w∈q</sub> IDF(w) · f(w,d)·(k₁+1)
+          ────────────────────
+          f(w,d) + k₁·(1 − b + b·|d|/avgdl)
+
+IDF(w) = log(1 + (N − df(w) + 0.5)/(df(w) + 0.5))</div>
+        <div class="legend">
+          <div class="lt">notation ✓ 全部符号已解释</div>
+          <dl>
+            <dt>q, d</dt><dd>查询 / 文档（任务卡文本）</dd>
+            <dt>w</dt><dd>查询中的一个词项（term）</dd>
+            <dt>f(w,d)</dt><dd>词 w 在文档 d 中的频次</dd>
+            <dt>|d|</dt><dd>文档 d 的词长</dd>
+            <dt>avgdl</dt><dd>语料平均文档长度</dd>
+            <dt>N</dt><dd>文档总数（=200）</dd>
+            <dt>df(w)</dt><dd>含词 w 的文档数</dd>
+            <dt>k₁, b</dt><dd>BM25 参数（代码取 k₁=1.2, b=0.75）</dd>
+          </dl>
+        </div>
+        <div class="note">词法与语义是<b>两路分开</b>的结果流，不混成一个加权分；LLM 自己看两路再决定要不要再查。</div>
+      </div>
+      <div>
+        <h3>配对差值与三态决策（确定性）</h3>
+        <div class="formula">δ(task) = Y(child,task) − Y(parent,task) <span class="cm">∈ {−1,0,1}</span>
+Δ̄ = mean<sub>task</sub> δ(task)   <span class="cm"># 配对均值</span>
+[L, U*] = paired-bootstrap 95% CI of Δ̄
+
+<span class="op">ACCEPT</span>   : L &gt; acceptance_margin  且 audit 通过
+<span class="op">ROLLBACK</span> : U* ≤ rollback_margin
+<span class="op">ESCALATE</span> : 其余（或 targeted 与 audit 矛盾）</div>
+        <div class="legend">
+          <div class="lt">notation ✓</div>
+          <dl>
+            <dt>Y(v,task)</dt><dd>版本 v 是否解出该任务 ∈ {0,1}</dd>
+            <dt>δ(task)</dt><dd>child 减 parent 的单任务差</dd>
+            <dt>Δ̄</dt><dd>所有配对任务差的均值</dd>
+            <dt>L, U*</dt><dd>bootstrap 置信区间的下 / 上界</dd>
+            <dt>audit 通过</dt><dd>audit 任务上均值 ≥ audit_guard_min_delta</dd>
+            <dt>McNemar</dt><dd>只在 discordant 对（parent-only+child-only）上做精确检验</dd>
+          </dl>
+        </div>
+        <div class="note">margin / 置信水平 / bootstrap 种子都是<b>预注册</b>的策略值，代码里没有魔法阈值。</div>
+      </div>
+    </div>
+    <div class="footer"><span>动态采样 · BM25 与决策 notation</span><span id="pageF"></span></div>
+  </section>
+
+  <!-- ===== SLIDE 7: APPENDIX C — ROLLBACK FORMULAS + NOTATION ===== -->
+  <section class="slide">
+    <h2><span class="tag appx">附录 C</span> 动态回退公式：ddmin / 门控 / 成本 + notation</h2>
+    <div class="cols">
+      <div>
+        <h3>probe 去噪 + 修复判据</h3>
+        <div class="formula">probe(P).failed = ( votes &gt; repeats / 2 )   <span class="cm"># 多数票</span>
+repairs(R) = ¬ probe( allPatches ∖ R ).failed</div>
+        <div class="legend">
+          <div class="lt">notation ✓</div>
+          <dl>
+            <dt>P</dt><dd>一组 active patch id</dd>
+            <dt>votes</dt><dd>多次重复里判定"失败"的次数</dd>
+            <dt>repeats</dt><dd>probe 重复次数（奇数）</dd>
+            <dt>R</dt><dd>候选"移除集"</dd>
+            <dt>allPatches ∖ R</dt><dd>全集去掉 R 后仍激活的 patch</dd>
+            <dt>repairs(R)</dt><dd>移除 R 后失败是否消失</dd>
+          </dl>
+        </div>
+        <h3>sliced ddmin 硬门控</h3>
+        <div class="formula">sliceFraction = |candidates| / |allPatches|
+启用 sliced  ⟺  sliceFraction ≤ 0.30
+             且  sliceAuditRecall ≥ 0.95
+否则 → full ddmin（准确优先）</div>
+        <div class="legend">
+          <div class="lt">notation ✓</div>
+          <dl>
+            <dt>candidates</dt><dd>先验给出的候选 patch 子集</dd>
+            <dt>sliceAuditRecall</dt><dd>历史审计里 slice 覆盖真因的召回率</dd>
+          </dl>
+        </div>
+      </div>
+      <div>
+        <h3>ddmin（最小充分移除集）</h3>
+        <ul>
+          <li>granularity 从 2 起，试<b>子块</b> / <b>补集</b>能否仍 repairs()</li>
+          <li>能则缩小搜索空间，逐步细化到<b>最小集合</b></li>
+          <li>先走先验 <code>singleton</code> 快路径；不行再整体 ddmin</li>
+        </ul>
+        <h3>RollbackPlan 的重放跳过规则</h3>
+        <div class="formula">rollbackCkpt = parent(最早被移除的 patch)
+replay 跳过 patch 的 3 种原因：
+  · causal           （本身在移除集里）
+  · dependency       （dependsOn 了被移除项）
+  · overlapping-files（改了与移除项相同文件）</div>
+        <h3>成本模型（第 3 条 claim）</h3>
+        <div class="formula">C_total = M × c_node</div>
+        <div class="legend">
+          <div class="lt">notation ✓</div>
+          <dl>
+            <dt>C_total</dt><dd>到达目标分数的总评测成本</dd>
+            <dt>M</dt><dd>被评测的节点数</dd>
+            <dt>c_node</dt><dd>每节点评测成本</dd>
+            <dt>杠杆2（主）</dt><dd>回退剪污染子树 → 降 M，全局改动也受益</dd>
+            <dt>杠杆1（条件）</dt><dd>partial 复评 → 降 c_node，仅局部改动有效</dd>
+          </dl>
+        </div>
+      </div>
+    </div>
+    <div class="footer"><span>动态回退 · 公式 notation</span><span id="pageG"></span></div>
+  </section>
+
+  <!-- ===== SLIDE 8: HONEST BOUNDARIES ===== -->
+  <section class="slide">
+    <h2><span class="tag warn">必讲</span> 诚实边界 + 数据来源</h2>
+    <div class="cols">
+      <div class="card" style="border-color:rgba(240,180,41,.4)">
+        <h3 style="color:var(--warn)">主动声明的边界（讲出来是加分）</h3>
+        <ul>
+          <li class="red">P2 的 69.5% 用了<b>一轮隐藏官方 evaluator 反馈</b>，是"恢复上界(recovery upper bound)"，<b>不是</b>标准单次提交 SWE-bench 分数</li>
+          <li class="no">不能据此宣称打赢 DGM 或原版 Pi</li>
+          <li>P1=原版 Pi 单提交才是严格可比基线（50.0%）</li>
+          <li>动态采样当前实现仍把 200 全集暴露给 selector，<b>60/140 隔离</b>是待做的实现门</li>
+          <li>A3 多代回退仍需 Phase-2 release gate 才能作为 headline</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>时间与规模（防"两周"误解）</h3>
+        <ul>
+          <li>18.23 天日历跨度里 <b>16.99 天是显式暂停</b>（用户暂停 / Docker 恢复 / 依赖修复 / 凭据恢复）</li>
+          <li>协议记录活跃墙钟 <span class="hl2">29.89 小时</span></li>
+          <li>直接执行 <span class="hl2">13.57 小时</span>（P1 8.75h + P2 增量 4.82h）</li>
+          <li>"两周"是 DGM 论文开放式进化描述，<b>非可比时间基线</b></li>
+        </ul>
+        <h3>数据来源</h3>
+        <ul>
+          <li class="muted">dgm200_run/summary.json · dgm200_performance_comparison.md</li>
+          <li class="muted">AGENTIC_ADAPTIVE_EVALUATION_DESIGN.md · EVOLUTION_ROLLBACK_DIRECTION.md</li>
+          <li class="muted">代码：rollback_mvp/adaptive_eval/ · pi-rollback/src/</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer"><span>动态版 Pi · 结束</span><span id="pageH"></span></div>
+  </section>
+
+  <div class="progress" id="progress"></div>
+</div>
+
+<script>
+  const slides=[...document.querySelectorAll('.slide')];
+  let i=0;
+  const counters=['pageA','pageB','pageC','pageC2','pageD','pageE','pageF','pageG','pageH'].map(id=>document.getElementById(id));
+  function render(){
+    slides.forEach((s,n)=>s.classList.toggle('active',n===i));
+    document.getElementById('progress').style.width=((i+1)/slides.length*100)+'%';
+    counters.forEach(c=>{if(c)c.textContent=(i+1)+' / '+slides.length;});
+  }
+  function go(d){i=Math.max(0,Math.min(slides.length-1,i+d));render();}
+  document.addEventListener('keydown',e=>{
+    if(['ArrowRight','ArrowDown','PageDown',' '].includes(e.key)){e.preventDefault();go(1);}
+    else if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(-1);}
+    else if(e.key==='Home'){i=0;render();}
+    else if(e.key==='End'){i=slides.length-1;render();}
+  });
+  document.addEventListener('click',e=>{if(e.target.closest('.footer,.nav'))return;go(1);});
+  render();
+</script>
+</body>
+</html>

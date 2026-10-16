@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>动态采样 = 一次改动驱动的 Agentic Search（精简版）</title>
+<style>
+  :root{
+    --bg:#0d1117; --panel:#161b22; --panel2:#1c2230; --ink:#e6edf3; --muted:#9aa7b4;
+    --accent:#58a6ff; --accent2:#3fb950; --warn:#f0b429; --danger:#ff7b72; --line:#30363d;
+    --mono:"SF Mono",ui-monospace,"JetBrains Mono",Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB",sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:var(--bg);color:var(--ink);font-family:var(--sans);overflow:hidden}
+  .deck{position:relative;width:100vw;height:100vh}
+  .slide{position:absolute;inset:0;padding:46px 60px 68px;opacity:0;visibility:hidden;
+    transition:opacity .35s ease;display:flex;flex-direction:column;overflow:hidden}
+  .slide.active{opacity:1;visibility:visible}
+  h1{font-size:40px;line-height:1.18;letter-spacing:.3px}
+  h2{font-size:29px;margin-bottom:6px;display:flex;align-items:center;gap:12px}
+  h3{font-size:18px;color:var(--accent);margin:0 0 10px;font-weight:600}
+  .tag{font-size:12px;font-weight:700;letter-spacing:.6px;padding:4px 10px;border-radius:20px;text-transform:uppercase;flex:none}
+  .tag.in{background:rgba(88,166,255,.14);color:var(--accent);border:1px solid rgba(88,166,255,.35)}
+  .tag.tool{background:rgba(63,185,80,.16);color:var(--accent2);border:1px solid rgba(63,185,80,.4)}
+  .tag.out{background:rgba(240,180,41,.14);color:var(--warn);border:1px solid rgba(240,180,41,.4)}
+  .kicker{color:var(--muted);font-size:15px;margin-bottom:16px;letter-spacing:.5px}
+  .lead{font-size:19px;line-height:1.55}
+  .muted{color:var(--muted)}
+  .cols{display:grid;grid-template-columns:1fr 1fr;gap:20px;flex:1;min-height:0}
+  .cols.w{grid-template-columns:1.25fr .75fr}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 20px}
+  .card.io{background:var(--panel2)}
+  ul{list-style:none;display:flex;flex-direction:column;gap:8px}
+  li{font-size:15.5px;line-height:1.45;padding-left:19px;position:relative}
+  li::before{content:"▸";position:absolute;left:0;color:var(--accent);font-size:12px;top:4px}
+  li.ok::before{content:"✓";color:var(--accent2)}
+  li.no::before{content:"✗";color:var(--danger)}
+  li.red{color:#ffd7d3}li.red::before{content:"●";color:var(--danger)}
+  b{color:#fff}.hl{color:var(--warn);font-weight:600}.hl2{color:var(--accent2);font-weight:600}
+  code,.mono{font-family:var(--mono)}
+  .prompt{background:#0a0e14;border:1px solid var(--line);border-left:3px solid var(--accent);
+    border-radius:8px;padding:16px 18px;font-family:var(--mono);font-size:14px;line-height:1.7;color:#d7e2ee;white-space:pre-wrap;overflow:auto;flex:1}
+  .prompt .k{color:var(--accent)}.prompt .c{color:var(--muted)}.prompt .v{color:#9ad8a0}
+  .chips{display:flex;gap:12px;flex-wrap:wrap;margin-top:8px}
+  .chip{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 16px;font-size:15px}
+  .chip b{color:var(--accent2)}
+  .flow{display:flex;align-items:stretch;gap:0;margin:6px 0 2px}
+  .flow .step{flex:1;background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:13px 15px}
+  .flow .who{font-size:11px;letter-spacing:.5px;text-transform:uppercase;font-weight:700;margin-bottom:6px}
+  .who.llm{color:var(--accent)}.who.det{color:var(--accent2)}
+  .flow .arrow{display:flex;align-items:center;color:var(--muted);font-size:22px;padding:0 10px}
+  table{width:100%;border-collapse:collapse;font-size:14.5px}
+  th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{color:var(--muted);font-weight:600;font-size:12px;letter-spacing:.4px;text-transform:uppercase}
+  .note{font-size:13px;color:var(--muted);margin-top:10px;line-height:1.45}
+  .big-note{background:rgba(240,180,41,.07);border:1px solid rgba(240,180,41,.28);border-radius:10px;padding:14px 18px;font-size:16px;line-height:1.5}
+  .footer{position:absolute;bottom:18px;left:60px;right:60px;display:flex;justify-content:space-between;align-items:center;font-size:13px;color:var(--muted);border-top:1px solid var(--line);padding-top:11px}
+  .progress{position:absolute;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .35s}
+  .title-wrap{flex:1;display:flex;flex-direction:column;justify-content:center;gap:20px}
+  .pill{display:inline-block;font-family:var(--mono);font-size:13px;padding:2px 8px;border-radius:6px;background:rgba(88,166,255,.12);color:var(--accent);border:1px solid rgba(88,166,255,.25)}
+</style>
+</head>
+<body>
+<div class="deck" id="deck">
+
+  <!-- 1. ESSENCE -->
+  <section class="slide active">
+    <div class="kicker">动态采样机制 · 精简版（agentic search 视角）</div>
+    <div class="title-wrap">
+      <h1>一句话:动态采样 = 以"一次 harness 改动"<br>为 query 的 Agentic Search</h1>
+      <div class="lead muted">
+        输入一次改动的证据(diff + 历史失败)→ LLM 用检索工具自主搜任务 →
+        直接提出一批任务 → 让 <span class="pill">parent vs child</span> 在这批任务上配对跑 →
+        确定性裁决:<span class="hl2">保留 / 回退 / 升级</span>。
+      </div>
+      <div class="chips">
+        <div class="chip">主干:<b>LLM 检索 + 提议</b></div>
+        <div class="chip">量尺用途:<b>配对测量</b>,不是排序</div>
+        <div class="chip">coverage 等:<b>次要护栏</b>,可消融</div>
+      </div>
+      <div class="note">结果锚点:P1 原版 Pi 50.0% → P2 动态版(含 RF-CLM 回退)69.5%(+39 题,McNemar p=0.0)。</div>
+    </div>
+    <div class="footer"><span>动态采样 · 精简版</span><span id="p1"></span></div>
+  </section>
+
+  <!-- 2. INPUT: PROMPT CONSTRUCTION -->
+  <section class="slide">
+    <h2><span class="tag in">① 输入</span> Agentic Search 的初始 prompt 构建</h2>
+    <div class="cols w">
+      <div class="prompt"><span class="c"># selector 每轮看到的上下文(public_prompt)</span>
+{
+  <span class="k">"protocol"</span>: <span class="v">"agentic-adaptive-selector-v1"</span>,
+  <span class="k">"change"</span>: {                 <span class="c"># ← 核心 query:这次改动</span>
+    changed_paths, changed_symbols,
+    dependency_change,
+    <span class="k">mutation_summary</span>       <span class="c"># 改动在干什么(自然语言)</span>
+  },
+  <span class="k">"bad_case_ids"</span>: [...],       <span class="c"># 父代历史失败(可展开取详情)</span>
+  <span class="k">"eligible_task_ids"</span>: [...200], <span class="c"># 可选任务全集 U</span>
+  <span class="k">"selected_task_ids"</span>: [...],   <span class="c"># 本轮已选(初始为空)</span>
+  <span class="k">"prior_round_summaries"</span>: {},  <span class="c"># 上轮 P/C 配对结果(跨轮自适应)</span>
+  <span class="k">"call_history"</span>: [...],        <span class="c"># 本轮已调过的工具+返回</span>
+  <span class="k">"remaining_task_budget"</span>: 8,
+  <span class="k">"remaining_rounds"</span>: 3
+}</div>
+      <div class="card io">
+        <h3>上下文=这次改动的"证据包"</h3>
+        <ul>
+          <li><b>change</b>(<code>CandidateChangeCard</code>):父→子 diff、改了哪些路径/符号、改动摘要 —— <span class="hl">这就是 query 的来源</span></li>
+          <li><b>bad_case</b>(<code>BadCaseCard</code>):父代在哪些任务上、以什么失败模式挂过</li>
+          <li><b>U</b>:冻结候选任务全集(现 200;协议本意 60)</li>
+          <li class="muted">+ 预算 / 已选 / 调用历史 / 上轮结果</li>
+        </ul>
+        <div class="note"><b>没有"根源 task 输入"</b>:起点是一次改动 <span class="pill">P→C</span>,不是某个任务。任务是被这次改动"召来"的量尺。</div>
+      </div>
+    </div>
+    <div class="footer"><span>初始 prompt = 改动证据包</span><span id="p2"></span></div>
+  </section>
+
+  <!-- 3. SEARCH TOOLS -->
+  <section class="slide">
+    <h2><span class="tag tool">② 工具</span> LLM 可调的 search / 只读工具</h2>
+    <div class="cols">
+      <div class="card">
+        <h3>检索工具(搜任务)</h3>
+        <table>
+          <tr><th>工具</th><th>算法</th><th>搜什么</th></tr>
+          <tr><td class="mono">search_lexical<br>(query, filters, limit)</td><td class="mono">BM25</td><td>字面命中:异常类、API、路径、工具名</td></tr>
+          <tr><td class="mono">search_semantic<br>(query, limit)</td><td class="mono">cosine</td><td>语义相近:换措辞也召回</td></tr>
+        </table>
+        <h3 style="margin-top:16px">取证工具(读证据,不入候选池)</h3>
+        <table>
+          <tr><td class="mono">get_change()</td><td>读这次改动 diff</td></tr>
+          <tr><td class="mono">get_bad_case(id)</td><td>读某条父代失败详情</td></tr>
+          <tr><td class="mono">get_task(id)</td><td>读某任务卡(入池)</td></tr>
+          <tr><td class="mono">inspect_round_results(r)</td><td>看上一轮 P/C 配对结果</td></tr>
+        </table>
+      </div>
+      <div class="card">
+        <h3>决策/收尾工具</h3>
+        <table>
+          <tr><td class="mono">propose_tasks(proposals)</td><td><b>输出:直接提一批要选的任务</b></td></tr>
+          <tr><td class="mono">finish_round(reason, stop)</td><td>结束本轮;停须 <code>evidence_saturation:</code></td></tr>
+          <tr><td class="mono">marginal_coverage(...)</td><td class="muted">次要:只读查"补盲区"增益</td></tr>
+        </table>
+        <div class="big-note" style="margin-top:16px">
+          <b>谁驱动搜索?全程 LLM。</b><br>
+          自己写 query、自己选调哪个工具、调几次、读完再改写、何时停 —— 这正是 "agentic" 的含义。
+          BM25/cosine 只是工具<b>内部</b>给返回候选排序,不替 LLM 做决定。
+        </div>
+      </div>
+    </div>
+    <div class="footer"><span>工具集 · LLM 全程驱动</span><span id="p3"></span></div>
+  </section>
+
+  <!-- 4. OUTPUT + DECISION -->
+  <section class="slide">
+    <h2><span class="tag out">③ 输出</span> 提议 → 配对测量 → 三态裁决</h2>
+    <div class="prompt" style="flex:none;margin-bottom:14px"><span class="c"># propose_tasks 的输出:带角色和理由的任务集(不是分数)</span>
+[ { <span class="k">instance_id</span>: <span class="v">"django-11099"</span>, <span class="k">retrieval_role</span>: <span class="v">"repair_cause"</span>,
+    <span class="k">evidence_reference</span>: <span class="v">"round-0-call-1"</span>,  <span class="c"># 必须指向检索过的结果,不能凭空提</span>
+    <span class="k">expected_signal</span>: <span class="v">"child 应修复此压缩丢约束失败"</span>, <span class="k">rationale</span>: <span class="v">"..."</span> },
+  { <span class="k">instance_id</span>: <span class="v">"sphinx-8475"</span>,  <span class="k">retrieval_role</span>: <span class="v">"regression"</span>, ... } ]</div>
+    <div class="flow">
+      <div class="step"><div class="who llm">LLM 直接选</div><div style="font-size:14px;line-height:1.45">propose_tasks 给出任务集。够用就<b>全保留</b>(贪心只在超预算砍/欠预算补时才动)。</div></div>
+      <div class="arrow">→</div>
+      <div class="step"><div class="who det">配对执行(量尺)</div><div style="font-size:14px;line-height:1.45">P 和 C 各在这批任务上跑:<br><code>δ = Y(C) − Y(P)</code> 逐任务。<b>量尺=测量,不排序</b>。</div></div>
+      <div class="arrow">→</div>
+      <div class="step"><div class="who det">确定性裁决</div><div style="font-size:14px;line-height:1.45">bootstrap + McNemar →<br><span class="hl2">ACCEPT / ROLLBACK / ESCALATE</span>。LLM 不参与。</div></div>
+    </div>
+    <div class="note" style="margin-top:12px">
+      输出不含标量分、不做裁决;LLM 只负责"检索 + 提议"。+ 一组 LLM 看不到的独立 audit 任务混入量尺防盲区。
+      <b>Coverage/Redundancy</b> 在量尺冻结后只算一次写报告,<span class="hl">不进任何决策,是可消融的次要护栏</span>。
+    </div>
+    <div class="footer"><span>输出 → 决策 · 量尺的真实作用</span><span id="p4"></span></div>
+  </section>
+
+  <!-- 5. SCOPE + BOUNDARY -->
+  <section class="slide">
+    <h2><span class="tag out">边界</span> 进化范围 · 诚实声明</h2>
+    <div class="cols">
+      <div class="card">
+        <h3>现在进化的是什么?</h3>
+        <ul>
+          <li class="ok"><b>实际能跑</b>:<span class="hl">策略 / prompt 层</span>(唯一可变面 = <code>strategy.md</code>)</li>
+          <li><b>设计目标</b>:整个 harness(源码 + tools + prompts + 依赖)</li>
+          <li class="red"><b>卡在哪</b>:进化 tool/源码需把 child 关进<b>容器隔离</b>,否则进化代码会在宿主 Pi 进程执行 —— 这道门还没建</li>
+          <li>P2 那次 69.5% 进化的也不是 tool,是 RF-CLM <b>反馈辅助修复</b></li>
+        </ul>
+      </div>
+      <div class="card" style="border-color:rgba(240,180,41,.4)">
+        <h3 style="color:var(--warn)">主动声明的边界(讲出来加分)</h3>
+        <ul>
+          <li class="red">P2 的 69.5% 用了<b>一轮隐藏官方评测反馈</b>,是"恢复上界",<b>非</b>标准单提交分数</li>
+          <li class="no">不能据此宣称打赢 DGM / 原版 Pi;P1=50.0% 才是严格可比基线</li>
+          <li>动态采样 60/140 隔离、A3 多代回退仍是<b>待实现门</b></li>
+          <li class="muted">数据:summary.json · AGENTIC_...DESIGN.md · 代码 rollback_mvp/adaptive_eval/</li>
+        </ul>
+      </div>
+    </div>
+    <div class="big-note" style="margin-top:16px">
+      <b>一句话总括:</b>动态采样本质就是「以一次改动的 diff + 历史失败为 query 的 agentic 检索」,
+      产出一批任务当<b>配对量尺</b>,再用确定性统计裁决保留还是回退。coverage/audit 是护栏,不是主干。
+    </div>
+    <div class="footer"><span>动态采样 · 精简版 完</span><span id="p5"></span></div>
+  </section>
+
+  <div class="progress" id="progress"></div>
+</div>
+<script>
+  const slides=[...document.querySelectorAll('.slide')];let i=0;
+  const counters=['p1','p2','p3','p4','p5'].map(id=>document.getElementById(id));
+  function render(){
+    slides.forEach((s,n)=>s.classList.toggle('active',n===i));
+    document.getElementById('progress').style.width=((i+1)/slides.length*100)+'%';
+    counters.forEach(c=>{if(c)c.textContent=(i+1)+' / '+slides.length;});
+  }
+  function go(d){i=Math.max(0,Math.min(slides.length-1,i+d));render();}
+  document.addEventListener('keydown',e=>{
+    if(['ArrowRight','ArrowDown','PageDown',' '].includes(e.key)){e.preventDefault();go(1);}
+    else if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(-1);}
+    else if(e.key==='Home'){i=0;render();}else if(e.key==='End'){i=slides.length-1;render();}
+  });
+  document.addEventListener('click',e=>{if(e.target.closest('.footer'))return;go(1);});
+  render();
+</script>
+</body>
+</html>

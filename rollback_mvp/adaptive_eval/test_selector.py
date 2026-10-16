@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import dataclasses
 import json
-import math
 import tempfile
 import unittest
 from pathlib import Path
@@ -12,13 +11,16 @@ from .embedding_client import FakeEmbeddingClient, embed_catalogue
 from .retrieval import LexicalIndex, SemanticIndex
 from .schemas import (
     CandidateChangeCard,
+    CoverageSelectionMode,
     EmbeddingSpec,
     ExperimentConfig,
     SCHEMA_VERSION,
     SelectorError,
+    ValidationError,
 )
 from .selector_agent import (
     ScriptedSelectorClient,
+    SelectorRound,
     SelectorToolLoop,
     SelectorTurn,
 )
@@ -77,12 +79,20 @@ class SelectorLoopTest(unittest.TestCase):
     def tearDownClass(cls) -> None:
         cls.embedding_temporary.cleanup()
 
-    def config(self, *, task_budget: int = 1, token_budget: int = 100) -> ExperimentConfig:
+    def config(
+        self,
+        *,
+        task_budget: int = 1,
+        max_tasks_per_round: int = 1,
+        token_budget: int = 100,
+        coverage_selection_mode: CoverageSelectionMode = CoverageSelectionMode.GREEDY,
+    ) -> ExperimentConfig:
         return ExperimentConfig(
             schema_version=SCHEMA_VERSION,
+            coverage_selection_mode=coverage_selection_mode,
             task_budget=task_budget,
             max_rounds=2,
-            max_tasks_per_round=1,
+            max_tasks_per_round=max_tasks_per_round,
             audit_size=1,
             max_tool_calls_per_round=5,
             per_task_timeout_seconds=60,
@@ -97,7 +107,7 @@ class SelectorLoopTest(unittest.TestCase):
             embedding_manifest_hash=HASH_C,
         )
 
-    def loop(self, client: ScriptedSelectorClient, **config: int) -> SelectorToolLoop:
+    def loop(self, client: ScriptedSelectorClient, **config: object) -> SelectorToolLoop:
         spec = EmbeddingSpec(
             sidecar_url="http://127.0.0.1:9999/v1/embeddings",
             sidecar_manifest_hash=HASH_C,
@@ -112,6 +122,7 @@ class SelectorLoopTest(unittest.TestCase):
                 parent_artifact_hash=HASH_A,
                 child_artifact_hash=HASH_B,
                 diff_hash=HASH_C,
+                repo="astropy/astropy",
                 changed_paths=("packages/coding-agent/src/tool.ts",),
                 changed_symbols=("runTool",),
                 dependency_change="none",
@@ -123,6 +134,54 @@ class SelectorLoopTest(unittest.TestCase):
             config=self.config(**config),
             client=client,
         )
+
+    def run_proposal_round(
+        self,
+        *,
+        inspected_ids: tuple[str, ...],
+        proposal_ids: tuple[str, ...],
+        target: int,
+        mode: CoverageSelectionMode,
+    ) -> tuple[SelectorRound, ScriptedSelectorClient]:
+        evidence_call = {
+            instance_id: f"round-0-call-{index}"
+            for index, instance_id in enumerate(inspected_ids)
+        }
+        client = ScriptedSelectorClient(
+            [
+                *[
+                    action("get_task", {"instance_id": instance_id})
+                    for instance_id in inspected_ids
+                ],
+                action(
+                    "propose_tasks",
+                    {
+                        "proposals": [
+                            {
+                                "instance_id": instance_id,
+                                "retrieval_role": "regression",
+                                "evidence_reference": evidence_call[instance_id],
+                                "expected_signal": "Exercise changed behavior.",
+                                "rationale": "Direct mutation-specific probe.",
+                                "necessary_distinct_reason": "",
+                            }
+                            for instance_id in proposal_ids
+                        ]
+                    },
+                ),
+                action(
+                    "finish_round",
+                    {"stop_reason": "round evidence ready", "stop_after_round": False},
+                ),
+            ]
+        )
+        result = self.loop(
+            client,
+            task_budget=target,
+            max_tasks_per_round=target,
+            coverage_selection_mode=mode,
+        ).run_round(round_id=0, selected_ids=(), prior_round_summaries={})
+        return result, client
 
     def test_tool_loop_validates_proposals_and_uses_lexicographic_coverage(self) -> None:
         first, second = self.catalogue.task_ids[:2]
@@ -169,6 +228,89 @@ class SelectorLoopTest(unittest.TestCase):
         self.assertNotIn("audit_seed", prompt_text)
         self.assertNotIn("audit_candidate", prompt_text)
         self.assertNotIn("audit_ids", prompt_text)
+        self.assertEqual(client.prompts[0]["coverage_selection_mode"], "greedy")
+        self.assertEqual(client.prompts[0]["round_task_capacity"], 1)
+
+    def test_full_direct_budget_selects_same_ids_in_both_modes(self) -> None:
+        ordered = tuple(sorted(self.catalogue.task_ids[:3]))
+        proposal_ids = (ordered[2], ordered[1])
+        greedy, _ = self.run_proposal_round(
+            inspected_ids=proposal_ids,
+            proposal_ids=proposal_ids,
+            target=2,
+            mode=CoverageSelectionMode.GREEDY,
+        )
+        agent_only, _ = self.run_proposal_round(
+            inspected_ids=proposal_ids,
+            proposal_ids=proposal_ids,
+            target=2,
+            mode=CoverageSelectionMode.AGENT_ONLY,
+        )
+        self.assertEqual(
+            tuple(item.proposal.instance_id for item in greedy.selected_tasks),
+            proposal_ids,
+        )
+        self.assertEqual(
+            tuple(item.proposal.instance_id for item in agent_only.selected_tasks),
+            proposal_ids,
+        )
+
+    def test_over_capacity_agent_only_preserves_proposal_order(self) -> None:
+        ordered = tuple(sorted(self.catalogue.task_ids[:3]))
+        proposal_ids = tuple(reversed(ordered))
+        greedy, _ = self.run_proposal_round(
+            inspected_ids=proposal_ids,
+            proposal_ids=proposal_ids,
+            target=2,
+            mode=CoverageSelectionMode.GREEDY,
+        )
+        agent_only, _ = self.run_proposal_round(
+            inspected_ids=proposal_ids,
+            proposal_ids=proposal_ids,
+            target=2,
+            mode=CoverageSelectionMode.AGENT_ONLY,
+        )
+        self.assertEqual(
+            tuple(item.proposal.instance_id for item in greedy.selected_tasks),
+            ordered[:2],
+        )
+        self.assertEqual(
+            tuple(item.proposal.instance_id for item in agent_only.selected_tasks),
+            proposal_ids[:2],
+        )
+
+    def test_under_capacity_agent_only_does_not_fill(self) -> None:
+        first, second = self.catalogue.task_ids[:2]
+        greedy, _ = self.run_proposal_round(
+            inspected_ids=(first, second),
+            proposal_ids=(first,),
+            target=2,
+            mode=CoverageSelectionMode.GREEDY,
+        )
+        agent_only, _ = self.run_proposal_round(
+            inspected_ids=(first, second),
+            proposal_ids=(first,),
+            target=2,
+            mode=CoverageSelectionMode.AGENT_ONLY,
+        )
+        self.assertEqual(len(greedy.selected_tasks), 2)
+        self.assertEqual(
+            greedy.selected_tasks[1].selection_source, "coverage_completion"
+        )
+        self.assertEqual(
+            tuple(item.proposal.instance_id for item in agent_only.selected_tasks),
+            (first,),
+        )
+        self.assertEqual(agent_only.selected_tasks[0].selection_source, "agent_direct")
+
+    def test_coverage_selection_mode_changes_config_hash(self) -> None:
+        greedy = self.config()
+        agent_only = dataclasses.replace(
+            greedy, coverage_selection_mode=CoverageSelectionMode.AGENT_ONLY
+        )
+        self.assertNotEqual(greedy.config_hash, agent_only.config_hash)
+        with self.assertRaisesRegex(ValidationError, "CoverageSelectionMode"):
+            dataclasses.replace(greedy, coverage_selection_mode="greedy")
 
     def test_invalid_json_unknown_tool_unknown_id_and_budget_fail_closed(self) -> None:
         invalid = SelectorTurn(

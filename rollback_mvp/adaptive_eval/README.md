@@ -10,6 +10,9 @@ lexical and semantic scores, or select audit tasks with a model.
 - Builds public-only task cards, pure-Python BM25, and a separate semantic index.
 - Enforces the pinned 1024-D normalized Qwen sidecar response contract.
 - Runs a strict selector tool loop with immutable rounds and explicit budgets.
+- Requires a hash-bound `coverage_selection_mode`: `greedy` performs
+  facility-location arbitration/completion, while `agent_only` preserves direct
+  proposal order and leaves under-capacity rounds unfilled.
 - Samples the deterministic independent audit only after selector termination.
 - Freezes one final manifest for parent, child, and every counterfactual.
 - Runs identity-bound paired artifacts and deterministic ACCEPT/ROLLBACK/ESCALATE.
@@ -32,7 +35,13 @@ use scripted selector, fake embeddings/evaluators, and fake container runtime.
 ```bash
 python3 -m rollback_mvp.adaptive_eval.cli validate-catalogue
 python3 -m unittest discover -s rollback_mvp/adaptive_eval -t . -p 'test_*.py' -v
+python3 -m rollback_mvp.adaptive_eval.coverage_ablation \
+  --output research_output/adaptive_eval_coverage_ablation_20261014
 ```
+
+The coverage ablation command is a mechanism-only fixed-trace replay with
+synthetic embeddings. It verifies arbitration isolation and task-count effects;
+it does not call a paid model or estimate SWE-bench quality.
 
 ## Run artifacts
 

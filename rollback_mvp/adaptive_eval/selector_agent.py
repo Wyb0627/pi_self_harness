@@ -16,6 +16,7 @@ from .schemas import (
     BadCaseCard,
     CandidateChangeCard,
     CatalogueManifest,
+    CoverageSelectionMode,
     ExperimentConfig,
     RetrievalRole,
     SelectedTask,
@@ -252,6 +253,11 @@ class SelectorToolLoop:
             "round_id": round_id,
             "catalogue_hash": self.catalogue.catalogue_hash,
             "eligible_task_ids": self.catalogue.task_ids,
+            "change_repo": self.change.repo,
+            "same_repo_constraint": (
+                f"Every proposed and inspected task must belong to repository "
+                f"{self.change.repo!r}. Cross-repository proposals are rejected fail-closed."
+            ),
             "selected_task_ids": tuple(selected_ids),
             "change": dataclasses.asdict(self.change),
             "bad_case_ids": tuple(sorted(self.bad_cases)),
@@ -268,6 +274,11 @@ class SelectorToolLoop:
             ],
             "remaining_task_budget": self.config.task_budget - len(selected_ids),
             "remaining_rounds": self.config.max_rounds - round_id,
+            "round_task_capacity": min(
+                self.config.task_budget - len(selected_ids),
+                self.config.max_tasks_per_round,
+            ),
+            "coverage_selection_mode": self.config.coverage_selection_mode,
         }
 
     def run_round(
@@ -537,6 +548,12 @@ class SelectorToolLoop:
                 raise SelectorError(f"Invalid proposal {index}: {error}") from error
             if proposal.instance_id not in self.catalogue.by_id:
                 raise SelectorError(f"Unknown proposed task ID: {proposal.instance_id}")
+            proposed_repo = self.catalogue.by_id[proposal.instance_id].repo
+            if proposed_repo != self.change.repo:
+                raise SelectorError(
+                    f"Proposed task {proposal.instance_id} repo {proposed_repo!r} "
+                    f"does not match change repo {self.change.repo!r}"
+                )
             if proposal.instance_id in selected_ids:
                 raise SelectorError(f"Task was already selected: {proposal.instance_id}")
             if proposal.evidence_reference not in references:
@@ -577,6 +594,28 @@ class SelectorToolLoop:
             in {RetrievalRole.REPAIR_CAUSE, RetrievalRole.REGRESSION}
         ]
         proposal_by_id = {proposal.instance_id: proposal for proposal in proposed}
+        if self.config.coverage_selection_mode is CoverageSelectionMode.AGENT_ONLY:
+            chosen: list[SelectedTask] = []
+            running_selected = list(selected_ids)
+            for proposal in direct[:target]:
+                gain = marginal_coverage(
+                    proposal.instance_id,
+                    running_selected,
+                    self.catalogue.task_ids,
+                    self.vectors,
+                )
+                chosen.append(
+                    SelectedTask(
+                        proposal=proposal,
+                        marginal_coverage=gain,
+                        selection_source="agent_direct",
+                    )
+                )
+                running_selected.append(proposal.instance_id)
+            if not chosen:
+                raise SelectorError("Agent-only arbitration selected no direct tasks")
+            return tuple(chosen)
+
         if len(direct) <= target:
             direct_ranked_list: list[tuple[str, float]] = []
             direct_selected = list(selected_ids)
@@ -617,17 +656,26 @@ class SelectorToolLoop:
 
         capacity = target - len(chosen)
         if capacity:
+            same_repo_ids = {
+                card.instance_id
+                for card in self.catalogue.cards
+                if card.repo == self.change.repo
+            }
             candidate_pool = [
                 instance_id
                 for instance_id in inspected_ids
-                if instance_id not in running_selected
+                if instance_id not in running_selected and instance_id in same_repo_ids
             ]
             if not candidate_pool:
                 candidate_pool = [
                     instance_id
                     for instance_id in self.catalogue.task_ids
-                    if instance_id not in running_selected
+                    if instance_id not in running_selected and instance_id in same_repo_ids
                 ]
+            if not candidate_pool:
+                raise SelectorError(
+                    f"No same-repo ({self.change.repo!r}) candidates remain for coverage completion"
+                )
             ranked = greedy_by_marginal_coverage(
                 candidate_pool,
                 running_selected,

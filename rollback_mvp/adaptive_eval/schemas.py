@@ -62,6 +62,11 @@ class RetrievalRole(StrEnum):
     REPRESENTATIVE_COVERAGE = "representative_coverage"
 
 
+class CoverageSelectionMode(StrEnum):
+    GREEDY = "greedy"
+    AGENT_ONLY = "agent_only"
+
+
 class DecisionOutcome(StrEnum):
     ACCEPT = "ACCEPT"
     ROLLBACK = "ROLLBACK"
@@ -230,6 +235,7 @@ class CandidateChangeCard:
     parent_artifact_hash: str
     child_artifact_hash: str
     diff_hash: str
+    repo: str
     changed_paths: tuple[str, ...]
     changed_symbols: tuple[str, ...]
     dependency_change: str
@@ -240,6 +246,7 @@ class CandidateChangeCard:
     def __post_init__(self) -> None:
         for name in ("parent_artifact_hash", "child_artifact_hash", "diff_hash"):
             require_sha256(getattr(self, name), name)
+        require_nonempty(self.repo, "repo")
         require_unique_strings(self.changed_paths, "changed_paths")
         require_unique_strings(self.changed_symbols, "changed_symbols")
         for name in ("dependency_change", "mutation_summary", "source_revision", "created_at"):
@@ -312,6 +319,7 @@ class EmbeddingSpec:
 @dataclass(frozen=True, slots=True)
 class ExperimentConfig:
     schema_version: int
+    coverage_selection_mode: CoverageSelectionMode
     task_budget: int
     max_rounds: int
     max_tasks_per_round: int
@@ -331,6 +339,10 @@ class ExperimentConfig:
     def __post_init__(self) -> None:
         if self.schema_version != SCHEMA_VERSION:
             raise ValidationError(f"Unsupported config schema_version: {self.schema_version}")
+        if not isinstance(self.coverage_selection_mode, CoverageSelectionMode):
+            raise ValidationError(
+                "coverage_selection_mode must be a CoverageSelectionMode"
+            )
         positive = (
             "task_budget",
             "max_rounds",

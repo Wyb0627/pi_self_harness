@@ -214,15 +214,26 @@ or selector-token budget. Every value is required in a versioned experiment
 configuration.
 
 Within each non-audit round, selection is lexicographic rather than a weighted
-score sum. The selector returns an ordered set of direct repair/regression
-hypotheses. If hypotheses compete for remaining capacity, the controller chooses
-the candidate with greatest marginal coverage and uses instance ID only as a
-stable final tie-break. If capacity remains after direct hypotheses, it fills
-from the inspected candidate pool by marginal coverage; if that pool is empty,
-it uses the full eligible catalogue. A direct hypothesis with zero marginal
-coverage remains valid only when its evidence explicitly says why the apparent
-duplicate is a necessary distinct regression probe. This has no per-route quota
-or coefficient, while keeping diversity enforceable and explainable.
+score sum. `coverage_selection_mode` is a required, hash-bound experiment
+parameter with two modes:
+
+- `greedy`: the selector returns an ordered set of direct repair/regression
+  hypotheses. If hypotheses compete for remaining capacity, the controller
+  chooses the candidate with greatest marginal coverage and uses instance ID
+  only as a stable final tie-break. If capacity remains after direct
+  hypotheses, it fills from the inspected candidate pool by marginal coverage;
+  if that pool is empty, it uses the full eligible catalogue. A direct
+  hypothesis with zero marginal coverage remains valid only when its evidence
+  explicitly says why the apparent duplicate is a necessary distinct
+  regression probe.
+- `agent_only`: the controller preserves direct proposal order, truncates at
+  round capacity, and never fills an under-capacity round. Marginal coverage is
+  still recorded after selection for reporting, but it neither reorders nor
+  rejects proposals.
+
+The selector prompt exposes the active mode and exact round capacity. Changing
+the mode changes the configuration hash, so evidence from the two arms cannot
+be mixed. Neither mode adds a per-route quota or weighted score.
 
 ### 4.4 Controller pseudocode
 
@@ -282,9 +293,11 @@ DeltaCoverage(x | S) = (1 / |U|) * sum over u in U of
 ~~~
 
 Facility location has diminishing returns: a near-duplicate contributes little
-after a related task is selected. It fills remaining capacity after direct
-repair/regression hypotheses without a diversity coefficient. A zero-gain task
-is rejected unless it has a documented direct causal/regression rationale.
+after a related task is selected. In `greedy` mode it fills remaining capacity
+after direct repair/regression hypotheses without a diversity coefficient. A
+zero-gain task is rejected unless it has a documented direct
+causal/regression rationale. In `agent_only` mode these values are report-only
+and do not affect task selection.
 
 Example: after a Django migration case, another nearly identical migration case
 usually has low marginal coverage. A Sphinx documentation case may have much
@@ -562,6 +575,36 @@ per-repository distribution, audit outcomes, parent/child contingency counts,
 retrieval/execution tokens, cost, latency, escalation rate, and final all-task
 or held-out endpoint separately. Do not present the adaptive selected subset as
 an unbiased 200-task score.
+
+### 10.1 Facility-location ablation pre-registration and current evidence
+
+The facility-location arm changes only `coverage_selection_mode`; selector
+model, prompts other than the declared mode, task universe, budgets, and
+candidate evidence remain frozen.
+
+Predictions:
+
+- If direct proposals exactly fill round capacity, `greedy` and `agent_only`
+  select identical task IDs.
+- If proposals exceed capacity, the modes may differ because only `greedy`
+  reorders by marginal coverage.
+- If proposals underfill capacity, `agent_only` executes fewer paired tasks;
+  selector tokens are unchanged for a fixed action trace.
+
+Kill criteria:
+
+- Any task-ID difference in the exact-capacity replay means the ablation is not
+  isolated.
+- Do not remove facility-location completion if underfilled real rounds save
+  less than 20% execution cost, or if the held-out/reference endpoint shows
+  materially worse regret or false-accept behavior.
+
+The deterministic mechanism replay at
+`research_output/adaptive_eval_coverage_ablation_20261014/` passes the isolation
+check. Its under-capacity toy case selects one planned task instead of two,
+while selector traces and token counts remain unchanged. This is not endpoint
+evidence: no real selector API, paired SWE-bench execution, wall-time
+measurement, or quality measurement was run.
 
 ## 11. Non-goals
 

@@ -38,7 +38,9 @@
   parent bad-case evidence, parent-to-child diff, lexical search, and semantic
   search. It may adapt to earlier paired public evidence, but every round is
   append-only and a controller-private deterministic residual audit is added
-  after it stops.
+  after it stops. The required `coverage_selection_mode` parameter chooses
+  either deterministic coverage arbitration (`greedy`) or direct model proposal
+  order without completion (`agent_only`).
 - **Key code**:
   ~~~python
   selection = controller.run_selection()
@@ -53,15 +55,19 @@
   closed. An adaptive batch is an operational gate, not an unbiased full-set
   estimate. The implementation is in `rollback_mvp/adaptive_eval/controller.py`
   and `selector_agent.py`; every selector prompt/response/tool result is retained.
+  The mode is included in the configuration hash and selector-visible round
+  contract.
 
 ## Facility-Location Coverage and Audit
 - **Purpose**: Prevent a causal/regression-focused batch from collapsing onto
   near-duplicate issues while retaining a controller-private residual-pool
   check.
 - **Core logic**: For L2-normalized task embeddings, the selected set covers a
-  catalogue task through its most similar representative. Greedy marginal
-  coverage fills remaining capacity; average nearest-neighbor similarity is
-  logged as redundancy rather than folded into an opaque score.
+  catalogue task through its most similar representative. In `greedy` mode,
+  marginal coverage resolves over-capacity direct proposals and fills remaining
+  capacity. In `agent_only` mode, direct proposals retain model order, are
+  truncated at capacity, and are never completed. Average nearest-neighbor
+  similarity and post-selection coverage remain reportable in both modes.
 - **Key code**:
   ~~~python
   def marginal_coverage(candidate, selected, universe):
@@ -80,7 +86,12 @@
 - **Notes**: Lexical retrieval handles exact errors, paths, tools, and symbols;
   local Qwen embedding handles semantic paraphrases. The audit seed derives
   from frozen run identities and cannot be selected by the model. See
-  AGENTIC_ADAPTIVE_EVALUATION_DESIGN.md for the full contract.
+  AGENTIC_ADAPTIVE_EVALUATION_DESIGN.md for the full contract. The
+  mechanism-only replay in
+  `research_output/adaptive_eval_coverage_ablation_20261014/` confirmed that
+  exact-capacity direct proposals produce identical IDs, while an under-capacity
+  toy round reduced the planned task count from two to one. It does not
+  establish endpoint quality or wall-time savings.
 
 ## Frozen DGM-200 Catalogue and Embedding Index
 - **Purpose**: Bind retrieval to the exact public DGM task universe without
