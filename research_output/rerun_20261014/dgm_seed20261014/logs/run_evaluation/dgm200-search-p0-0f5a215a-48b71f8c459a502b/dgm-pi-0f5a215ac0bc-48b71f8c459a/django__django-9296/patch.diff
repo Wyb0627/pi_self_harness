@@ -1,0 +1,15 @@
+diff --git a/django/core/paginator.py b/django/core/paginator.py
+index 1f92da5..a091683 100644
+--- a/django/core/paginator.py
++++ b/django/core/paginator.py
+@@ -82,6 +82,10 @@ class Paginator:
+         """
+         return Page(*args, **kwargs)
+ 
++    def __iter__(self):
++        for page_num in self.page_range:
++            yield self.page(page_num)
++
+     @cached_property
+     def count(self):
+         """Return the total number of objects, across all pages."""

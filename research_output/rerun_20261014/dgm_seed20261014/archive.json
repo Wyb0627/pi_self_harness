@@ -1,0 +1,16 @@
+{
+  "archive_hash": "eca98de953538bacd0ae648c1aa84688687a35ada2402f437702fa5f6608c6c5",
+  "entries": [
+    {
+      "artifact_hash": "0f5a215ac0bce1aac54cc709e1a86e5e16f6f10547b78b30c711af30726a4c1b",
+      "evaluated_tasks": 60,
+      "functioning_child_count": 0,
+      "functioning_child_slots": [],
+      "insertion_ordinal": 0,
+      "parent_artifact_hash": null,
+      "resolved_60": 19,
+      "score_60": 0.31666666666666665
+    }
+  ],
+  "schema_version": 1
+}

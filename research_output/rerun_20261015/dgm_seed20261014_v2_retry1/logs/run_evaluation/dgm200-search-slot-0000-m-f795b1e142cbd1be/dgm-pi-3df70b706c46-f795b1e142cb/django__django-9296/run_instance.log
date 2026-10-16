@@ -1,0 +1,52 @@
+2026-10-15 14:03:07,060 - INFO - Environment image sweb.env.arm64.a18371b03f944585b4f08c:latest found for django__django-9296
+Building instance image sweb.eval.arm64.django__django-9296:latest for django__django-9296
+2026-10-15 14:03:07,074 - INFO - Image sweb.eval.arm64.django__django-9296:latest already exists, skipping build.
+2026-10-15 14:03:07,074 - INFO - Creating container for django__django-9296...
+2026-10-15 14:03:07,091 - INFO - Container for django__django-9296 created: 25441328828db3552d281097b0197ff102e6653e0648d21885ffe78c8c287490
+2026-10-15 14:03:07,158 - INFO - Container for django__django-9296 started: 25441328828db3552d281097b0197ff102e6653e0648d21885ffe78c8c287490
+2026-10-15 14:03:07,159 - INFO - Intermediate patch for django__django-9296 written to logs/run_evaluation/dgm200-search-slot-0000-m-f795b1e142cbd1be/dgm-pi-3df70b706c46-f795b1e142cb/django__django-9296/patch.diff, now applying to container...
+2026-10-15 14:03:07,282 - INFO - Failed to apply patch to container, trying again...
+2026-10-15 14:03:07,311 - INFO - >>>>> Applied Patch:
+patching file django/core/paginator.py
+
+2026-10-15 14:03:07,725 - INFO - Git diff before:
+diff --git a/django/core/paginator.py b/django/core/paginator.py
+index 1f92da5..fe69375 100644
+--- a/django/core/paginator.py
++++ b/django/core/paginator.py
+@@ -98,6 +98,10 @@ class Paginator:
+         hits = max(1, self.count - self.orphans)
+         return ceil(hits / self.per_page)
+ 
++    def __iter__(self):
++        for page_num in self.page_range:
++            yield self.page(page_num)
++
+     @property
+     def page_range(self):
+         """
+2026-10-15 14:03:07,726 - INFO - Eval script for django__django-9296 written to logs/run_evaluation/dgm200-search-slot-0000-m-f795b1e142cbd1be/dgm-pi-3df70b706c46-f795b1e142cb/django__django-9296/eval.sh; copying to container...
+2026-10-15 14:03:10,641 - INFO - Test runtime: 2.84 seconds
+2026-10-15 14:03:10,642 - INFO - Test output for django__django-9296 written to logs/run_evaluation/dgm200-search-slot-0000-m-f795b1e142cbd1be/dgm-pi-3df70b706c46-f795b1e142cb/django__django-9296/test_output.txt
+2026-10-15 14:03:10,672 - INFO - Git diff after:
+diff --git a/django/core/paginator.py b/django/core/paginator.py
+index 1f92da5..fe69375 100644
+--- a/django/core/paginator.py
++++ b/django/core/paginator.py
+@@ -98,6 +98,10 @@ class Paginator:
+         hits = max(1, self.count - self.orphans)
+         return ceil(hits / self.per_page)
+ 
++    def __iter__(self):
++        for page_num in self.page_range:
++            yield self.page(page_num)
++
+     @property
+     def page_range(self):
+         """
+2026-10-15 14:03:10,672 - INFO - Grading answer for django__django-9296...
+2026-10-15 14:03:10,677 - INFO - report: {'django__django-9296': {'patch_is_None': False, 'patch_exists': True, 'patch_successfully_applied': True, 'resolved': True, 'tests_status': {'FAIL_TO_PASS': {'success': ['test_paginator_iteration (pagination.tests.PaginationTests)'], 'failure': []}, 'PASS_TO_PASS': {'success': ['test_count_does_not_silence_attribute_error (pagination.tests.PaginationTests)', 'test_count_does_not_silence_type_error (pagination.tests.PaginationTests)', 'test_float_integer_page (pagination.tests.PaginationTests)', 'test_get_page (pagination.tests.PaginationTests)', 'Paginator.get_page() with an empty object_list.', 'test_get_page_empty_object_list_and_allow_empty_first_page_false (pagination.tests.PaginationTests)', 'test_get_page_hook (pagination.tests.PaginationTests)', 'test_invalid_page_number (pagination.tests.PaginationTests)', 'test_no_content_allow_empty_first_page (pagination.tests.PaginationTests)', 'test_page_indexes (pagination.tests.PaginationTests)', 'test_page_range_iterator (pagination.tests.PaginationTests)', 'test_page_sequence (pagination.tests.PaginationTests)', 'test_paginate_misc_classes (pagination.tests.PaginationTests)', 'test_paginator (pagination.tests.PaginationTests)', 'test_first_page (pagination.tests.ModelPaginationTests)', 'test_last_page (pagination.tests.ModelPaginationTests)', 'test_page_getitem (pagination.tests.ModelPaginationTests)', 'test_paginating_empty_queryset_does_not_warn (pagination.tests.ModelPaginationTests)', 'test_paginating_unordered_object_list_raises_warning (pagination.tests.ModelPaginationTests)', 'test_paginating_unordered_queryset_raises_warning (pagination.tests.ModelPaginationTests)'], 'failure': []}, 'FAIL_TO_FAIL': {'success': [], 'failure': []}, 'PASS_TO_FAIL': {'success': [], 'failure': []}}}}
+Result for django__django-9296: resolved: True
+2026-10-15 14:03:10,678 - INFO - Attempting to stop container sweb.eval.django__django-9296.dgm200-search-slot-0000-m-f795b1e142cbd1be...
+2026-10-15 14:03:25,828 - INFO - Attempting to remove container sweb.eval.django__django-9296.dgm200-search-slot-0000-m-f795b1e142cbd1be...
+2026-10-15 14:03:25,851 - INFO - Container sweb.eval.django__django-9296.dgm200-search-slot-0000-m-f795b1e142cbd1be removed.

@@ -1,0 +1,13 @@
+{
+  "event_hash": "3d1f71ff3ba0c91ad30b0186d206ff5c4b9c67490a96bd84ea0d9fa33117c66c",
+  "event_type": "search_invalid",
+  "payload": {
+    "classification": "infrastructure_invalid",
+    "p0_reusable": true,
+    "record_hash": "352686c3fea3244bc0e077a103cf04b01dfaaafe5d2ec6e522cb542945efdbfa",
+    "search_invalid_path": "search-invalid.json",
+    "search_invalid_sha256": "35e6a9abe2d7469ddfba697ad5a3e2c63f19f3e4d9dc34fda503366d6fd5196e"
+  },
+  "previous_hash": "8fa30a65b6e2a25054f58cd679ca4a77d82669dc03ed1de5b55ded5cd1ef5737",
+  "sequence": 8
+}

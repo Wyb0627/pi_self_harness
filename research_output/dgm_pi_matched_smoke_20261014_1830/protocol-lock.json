@@ -1,0 +1,17 @@
+{
+  "arm": "held-out-adapted-dgm-on-pi",
+  "cold_start_attestation_hash": "823d431101b20b45adc710fdf71e26ea7e2f5c681607b2ed20d5cf3716e2e08d",
+  "config_hash": "bc68181a35a2d55b044604fd0bdbd5de401330f1aa88df53f8c2af669c09a16a",
+  "confirmatory_status": "exploratory-single-seed",
+  "d_test_visibility": "post-search-seal endpoint worker only",
+  "execution_stack_hash": "ebf8d7083e93392ca58717d62afde5714d64c9e21819f1480c6831cebc5c16f4",
+  "final_endpoint_budget_scope": "endpoint:final",
+  "fixed_policy_hash": "4df655f6aa6feb64dbb93f0a62c9ff53148b87cc175d4d5d990dbc0bcc4e8c2d",
+  "model_revision_limitation": "Provider exposes model ID but no immutable serving revision.",
+  "p0_artifact_hash": "5eb48a6ee49d31a9eacf1fde5cfdd7bada079ffbdc9d1bbf4705088c3b7a9200",
+  "reference_endpoint_budget_scope": "endpoint:p0",
+  "run_id": "dgm-pi-smoke-20261014-1830",
+  "schema_version": 1,
+  "search_budget_scope": "search",
+  "split_binding_hash": "a0136c5b2c7b4b86c6c375bd02f8a67ac7c3c67797030340c9f9aa81b1529134"
+}

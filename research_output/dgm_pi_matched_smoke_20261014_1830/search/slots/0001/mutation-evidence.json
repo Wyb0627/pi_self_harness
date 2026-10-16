@@ -1,0 +1,23 @@
+{
+  "constraints": {
+    "forbid_benchmark_specific_instructions": true,
+    "forbid_task_ids": true,
+    "general_only": true,
+    "mutable_file": "strategy.md"
+  },
+  "evaluated_count": 1,
+  "parent_artifact_hash": "5eb48a6ee49d31a9eacf1fde5cfdd7bada079ffbdc9d1bbf4705088c3b7a9200",
+  "parent_score": 0.0,
+  "parent_strategy": "",
+  "public_failure_cases": [
+    {
+      "instance_id": "django__django-10973",
+      "problem_statement": "Use subprocess.run and PGPASSWORD for client in postgres backend\nDescription\n\t\n​subprocess.run was added in python 3.5 (which is the minimum version since Django 2.1). This function allows you to pass a custom environment for the subprocess.\nUsing this in django.db.backends.postgres.client to set PGPASSWORD simplifies the code and makes it more reliable.\n",
+      "repo": "django/django",
+      "status": "task_budget_exhausted_observed_zero"
+    }
+  ],
+  "resolved_count": 0,
+  "schema_version": 1,
+  "slot": 1
+}

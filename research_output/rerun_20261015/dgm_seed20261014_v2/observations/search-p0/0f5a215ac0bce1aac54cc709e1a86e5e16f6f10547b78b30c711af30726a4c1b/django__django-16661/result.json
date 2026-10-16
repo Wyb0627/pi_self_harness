@@ -1,0 +1,33 @@
+{
+  "budgetAborted": true,
+  "cacheReadTokens": 436480,
+  "cacheWriteTokens": 0,
+  "candidateToolNames": [],
+  "completedAt": "2026-10-14T11:11:05.543Z",
+  "durationMs": 217208,
+  "fullPatch": "diff --git a/repro.py b/repro.py\nnew file mode 100644\nindex 0000000..6ff9f3a\n--- /dev/null\n+++ b/repro.py\n@@ -0,0 +1,51 @@\n+import django\n+from django.conf import settings\n+\n+settings.configure(\n+    DEBUG=True,\n+    DATABASES={},\n+    INSTALLED_APPS=[\n+        \"django.contrib.admin\",\n+        \"django.contrib.auth\",\n+        \"django.contrib.contenttypes\",\n+        \"django.contrib.sessions\",\n+        \"django.contrib.messages\",\n+        \"django.contrib.staticfiles\",\n+    ],\n+    SECRET_KEY=\"x\",\n+    USE_TZ=True,\n+)\n+django.setup()\n+\n+from django.contrib.admin.options import ModelAdmin\n+from django.db import models\n+from django.test.utils import isolate_apps\n+\n+\n+@isolate_apps(\"modeladmin\")\n+def run():\n+    class Country(models.Model):\n+        name = models.CharField(max_length=256)\n+\n+    class Place(models.Model):\n+        country = models.ForeignKey(Country, models.CASCADE)\n+\n+    class Restaurant(models.Model):\n+        place = models.OneToOneField(Place, models.CASCADE, primary_key=True)\n+\n+    class Waiter(models.Model):\n+        restaurant = models.ForeignKey(Restaurant, models.CASCADE)\n+\n+    class WaiterAdmin(ModelAdmin):\n+        list_filter = [\n+            \"restaurant__place__country\",\n+        ]\n+\n+    class Site:\n+        pass\n+\n+    ma = WaiterAdmin(Waiter, Site())\n+    print(\"lookup_allowed:\", ma.lookup_allowed(\"restaurant__place__country\", \"test_value\"))\n+\n+\n+run()\n",
+  "inputTokens": 54770,
+  "instanceId": "django__django-16661",
+  "maxOutputTokens": 65536,
+  "maxTotalTokens": 512000,
+  "modelId": "byteplus/deepseek-v4-flash-ga",
+  "modelProvider": "rollback-deepseek",
+  "noShell": false,
+  "outputTokens": 35557,
+  "patch": "",
+  "policyViolations": [
+    {
+      "patch": "diff --git a/repro.py b/repro.py\nnew file mode 100644\nindex 0000000..6ff9f3a\n--- /dev/null\n+++ b/repro.py\n@@ -0,0 +1,51 @@\n+import django\n+from django.conf import settings\n+\n+settings.configure(\n+    DEBUG=True,\n+    DATABASES={},\n+    INSTALLED_APPS=[\n+        \"django.contrib.admin\",\n+        \"django.contrib.auth\",\n+        \"django.contrib.contenttypes\",\n+        \"django.contrib.sessions\",\n+        \"django.contrib.messages\",\n+        \"django.contrib.staticfiles\",\n+    ],\n+    SECRET_KEY=\"x\",\n+    USE_TZ=True,\n+)\n+django.setup()\n+\n+from django.contrib.admin.options import ModelAdmin\n+from django.db import models\n+from django.test.utils import isolate_apps\n+\n+\n+@isolate_apps(\"modeladmin\")\n+def run():\n+    class Country(models.Model):\n+        name = models.CharField(max_length=256)\n+\n+    class Place(models.Model):\n+        country = models.ForeignKey(Country, models.CASCADE)\n+\n+    class Restaurant(models.Model):\n+        place = models.OneToOneField(Place, models.CASCADE, primary_key=True)\n+\n+    class Waiter(models.Model):\n+        restaurant = models.ForeignKey(Restaurant, models.CASCADE)\n+\n+    class WaiterAdmin(ModelAdmin):\n+        list_filter = [\n+            \"restaurant__place__country\",\n+        ]\n+\n+    class Site:\n+        pass\n+\n+    ma = WaiterAdmin(Waiter, Site())\n+    print(\"lookup_allowed:\", ma.lookup_allowed(\"restaurant__place__country\", \"test_value\"))\n+\n+\n+run()\n",
+      "type": "forbidden-path-modification"
+    }
+  ],
+  "providerError": "This operation was aborted",
+  "runnerExitCode": 1,
+  "sandboxImage": "sweb.eval.arm64.django__django-16661:latest",
+  "schemaVersion": 1,
+  "startedAt": "2026-10-14T11:07:28.335Z",
+  "strategyHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "timeoutAborted": false,
+  "tokenTelemetryAvailable": true,
+  "toolCalls": 25
+}

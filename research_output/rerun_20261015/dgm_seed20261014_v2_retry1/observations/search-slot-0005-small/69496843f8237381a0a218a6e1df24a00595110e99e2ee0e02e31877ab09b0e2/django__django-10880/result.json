@@ -1,0 +1,30 @@
+{
+  "budgetAborted": false,
+  "cacheReadTokens": 82944,
+  "cacheWriteTokens": 0,
+  "candidateToolNames": [
+    "code_search",
+    "regex_contract_audit"
+  ],
+  "completedAt": "2026-10-15T13:13:05.568Z",
+  "durationMs": 47615,
+  "fullPatch": "diff --git a/django/db/models/aggregates.py b/django/db/models/aggregates.py\nindex ac0b62d..ea88c54 100644\n--- a/django/db/models/aggregates.py\n+++ b/django/db/models/aggregates.py\n@@ -68,7 +68,7 @@ class Aggregate(Func):\n         return []\n \n     def as_sql(self, compiler, connection, **extra_context):\n-        extra_context['distinct'] = 'DISTINCT' if self.distinct else ''\n+        extra_context['distinct'] = 'DISTINCT ' if self.distinct else ''\n         if self.filter:\n             if connection.features.supports_aggregate_filter_clause:\n                 filter_sql, filter_params = self.filter.as_sql(compiler, connection)\n",
+  "inputTokens": 14686,
+  "instanceId": "django__django-10880",
+  "maxOutputTokens": 65536,
+  "maxTotalTokens": 512000,
+  "modelId": "byteplus/deepseek-v4-flash-ga",
+  "modelProvider": "rollback-deepseek",
+  "noShell": false,
+  "outputTokens": 4861,
+  "patch": "diff --git a/django/db/models/aggregates.py b/django/db/models/aggregates.py\nindex ac0b62d..ea88c54 100644\n--- a/django/db/models/aggregates.py\n+++ b/django/db/models/aggregates.py\n@@ -68,7 +68,7 @@ class Aggregate(Func):\n         return []\n \n     def as_sql(self, compiler, connection, **extra_context):\n-        extra_context['distinct'] = 'DISTINCT' if self.distinct else ''\n+        extra_context['distinct'] = 'DISTINCT ' if self.distinct else ''\n         if self.filter:\n             if connection.features.supports_aggregate_filter_clause:\n                 filter_sql, filter_params = self.filter.as_sql(compiler, connection)\n",
+  "policyViolations": [],
+  "runnerExitCode": 0,
+  "sandboxImage": "sweb.eval.arm64.django__django-10880:latest",
+  "schemaVersion": 1,
+  "startedAt": "2026-10-15T13:12:17.953Z",
+  "strategyHash": "bd8d2370ae6b950a30b89b8c642302a7498e909e1aecee97975899801d544bd3",
+  "timeoutAborted": false,
+  "tokenTelemetryAvailable": true,
+  "toolCalls": 11
+}

@@ -1,0 +1,11 @@
+{
+  "event_hash": "ad9bcb65d0942e19e0b8dd8abd00813f08fcd57cac6309ad207d269ebfdf6fe0",
+  "event_type": "prepared",
+  "payload": {
+    "config_hash": "7d92d8528b0e1d4d161d82646579100f6743d07e4eb33b65a1b85ec941e4d02a",
+    "p0_artifact_hash": "0f5a215ac0bce1aac54cc709e1a86e5e16f6f10547b78b30c711af30726a4c1b",
+    "protocol_lock_hash": "ff0a5e28a9d6f02256be63b50d1c29bcc76faee7ce3f767287d82373cc377c2d"
+  },
+  "previous_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+  "sequence": 0
+}

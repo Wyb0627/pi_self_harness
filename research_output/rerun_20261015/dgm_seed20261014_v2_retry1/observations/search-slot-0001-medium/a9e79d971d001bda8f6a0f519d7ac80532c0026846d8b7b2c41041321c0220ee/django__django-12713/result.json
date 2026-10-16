@@ -1,0 +1,30 @@
+{
+  "budgetAborted": false,
+  "cacheReadTokens": 9984,
+  "cacheWriteTokens": 0,
+  "candidateToolNames": [
+    "source_inspector"
+  ],
+  "completedAt": "2026-10-15T08:55:26.354Z",
+  "durationMs": 10828,
+  "fullPatch": "",
+  "inputTokens": 7507,
+  "instanceId": "django__django-12713",
+  "maxOutputTokens": 65536,
+  "maxTotalTokens": 512000,
+  "modelId": "byteplus/deepseek-v4-flash-ga",
+  "modelProvider": "rollback-deepseek",
+  "noShell": false,
+  "outputTokens": 679,
+  "patch": "",
+  "policyViolations": [],
+  "providerError": "403 \"request is rejected by ROW Operations Gateway, please take a look at this doc(https://bytedance.larkoffice.com/docx/UD38dOZG3olQbbxdpyEclrRknMS) if you have any questions\"",
+  "runnerExitCode": 1,
+  "sandboxImage": "sweb.eval.arm64.django__django-12713:latest",
+  "schemaVersion": 1,
+  "startedAt": "2026-10-15T08:55:15.525Z",
+  "strategyHash": "a814de85318798da3e245e0f4e35bc4e3c8fc44ebdee5db1d8af4898939e117f",
+  "timeoutAborted": false,
+  "tokenTelemetryAvailable": true,
+  "toolCalls": 5
+}

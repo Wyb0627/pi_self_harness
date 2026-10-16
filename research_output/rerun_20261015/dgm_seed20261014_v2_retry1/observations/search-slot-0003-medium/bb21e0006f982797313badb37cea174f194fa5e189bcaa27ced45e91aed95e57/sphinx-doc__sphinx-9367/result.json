@@ -1,0 +1,30 @@
+{
+  "budgetAborted": false,
+  "cacheReadTokens": 68352,
+  "cacheWriteTokens": 0,
+  "candidateToolNames": [
+    "callable_contract",
+    "code_search"
+  ],
+  "completedAt": "2026-10-15T11:27:24.652Z",
+  "durationMs": 50541,
+  "fullPatch": "diff --git a/sphinx/pycode/ast.py b/sphinx/pycode/ast.py\nindex f541ec0..48505e3 100644\n--- a/sphinx/pycode/ast.py\n+++ b/sphinx/pycode/ast.py\n@@ -214,7 +214,10 @@ class _UnparseVisitor(ast.NodeVisitor):\n \n     def visit_Tuple(self, node: ast.Tuple) -> str:\n         if node.elts:\n-            return \"(\" + \", \".join(self.visit(e) for e in node.elts) + \")\"\n+            if len(node.elts) == 1:\n+                return \"(%s,)\" % self.visit(node.elts[0])\n+            else:\n+                return \"(\" + \", \".join(self.visit(e) for e in node.elts) + \")\"\n         else:\n             return \"()\"\n \n",
+  "inputTokens": 17248,
+  "instanceId": "sphinx-doc__sphinx-9367",
+  "maxOutputTokens": 65536,
+  "maxTotalTokens": 512000,
+  "modelId": "byteplus/deepseek-v4-flash-ga",
+  "modelProvider": "rollback-deepseek",
+  "noShell": false,
+  "outputTokens": 4506,
+  "patch": "diff --git a/sphinx/pycode/ast.py b/sphinx/pycode/ast.py\nindex f541ec0..48505e3 100644\n--- a/sphinx/pycode/ast.py\n+++ b/sphinx/pycode/ast.py\n@@ -214,7 +214,10 @@ class _UnparseVisitor(ast.NodeVisitor):\n \n     def visit_Tuple(self, node: ast.Tuple) -> str:\n         if node.elts:\n-            return \"(\" + \", \".join(self.visit(e) for e in node.elts) + \")\"\n+            if len(node.elts) == 1:\n+                return \"(%s,)\" % self.visit(node.elts[0])\n+            else:\n+                return \"(\" + \", \".join(self.visit(e) for e in node.elts) + \")\"\n         else:\n             return \"()\"\n \n",
+  "policyViolations": [],
+  "runnerExitCode": 0,
+  "sandboxImage": "sweb.eval.arm64.sphinx-doc__sphinx-9367:latest",
+  "schemaVersion": 1,
+  "startedAt": "2026-10-15T11:26:34.111Z",
+  "strategyHash": "e925574904955546f15307878ea80f282aea7848af4d8378b105bd3c7d572036",
+  "timeoutAborted": false,
+  "tokenTelemetryAvailable": true,
+  "toolCalls": 9
+}

@@ -1,0 +1,30 @@
+{
+  "budgetAborted": true,
+  "cacheReadTokens": 443136,
+  "cacheWriteTokens": 0,
+  "candidateToolNames": [
+    "code_search"
+  ],
+  "completedAt": "2026-10-15T06:24:18.618Z",
+  "durationMs": 282610,
+  "fullPatch": "diff --git a/_scratch/repro/app/__init__.py b/_scratch/repro/app/__init__.py\nnew file mode 100644\nindex 0000000..e69de29\ndiff --git a/_scratch/repro/app/models.py b/_scratch/repro/app/models.py\nnew file mode 100644\nindex 0000000..8a2bfd4\n--- /dev/null\n+++ b/_scratch/repro/app/models.py\n@@ -0,0 +1,11 @@\n+from django.db import models\n+\n+class Item(models.Model):\n+    uid = models.AutoField(primary_key=True, editable=False)\n+    f = models.BooleanField(default=False)\n+    def reset(self):\n+        self.uid = None\n+        self.f = False\n+\n+class Derived(Item):\n+    pass\ndiff --git a/_scratch/repro/repro.py b/_scratch/repro/repro.py\nnew file mode 100644\nindex 0000000..e3e2002\n--- /dev/null\n+++ b/_scratch/repro/repro.py\n@@ -0,0 +1,18 @@\n+import os, django\n+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'settings')\n+django.setup()\n+from django.core.management import call_command\n+call_command('makemigrations', 'app', verbosity=0)\n+call_command('migrate', verbosity=0, run_syncdb=True)\n+from app.models import Item, Derived\n+\n+derived = Derived.objects.create(f=True)\n+print('created derived pk=', derived.pk, 'uid=', derived.uid, 'item_ptr_id=', derived.item_ptr_id)\n+item = Item.objects.get(pk=derived.pk)\n+obj1 = item.derived\n+obj1.reset()\n+obj1.save()\n+print('after reset+save: obj1.pk=', obj1.pk, 'uid=', obj1.uid, 'item_ptr_id=', obj1.item_ptr_id)\n+print('old Item row f=', Item.objects.get(pk=derived.pk).f, '(expect True)')\n+print('Derived rows:', list(Derived.objects.values_list('item_ptr_id', flat=True)))\n+print('Item rows:', list(Item.objects.values_list('uid', 'f')))\ndiff --git a/_scratch/repro/settings.py b/_scratch/repro/settings.py\nnew file mode 100644\nindex 0000000..b35873f\n--- /dev/null\n+++ b/_scratch/repro/settings.py\n@@ -0,0 +1,4 @@\n+SECRET_KEY = 'x'\n+INSTALLED_APPS = ['app']\n+DATABASES = {'default': {'ENGINE': 'django.db.backends.sqlite3', 'NAME': 'db.sqlite3'}}\n+USE_TZ = True\n",
+  "inputTokens": 60199,
+  "instanceId": "django__django-12273",
+  "maxOutputTokens": 65536,
+  "maxTotalTokens": 512000,
+  "modelId": "byteplus/deepseek-v4-flash-ga",
+  "modelProvider": "rollback-deepseek",
+  "noShell": false,
+  "outputTokens": 39588,
+  "patch": "diff --git a/_scratch/repro/app/__init__.py b/_scratch/repro/app/__init__.py\nnew file mode 100644\nindex 0000000..e69de29\ndiff --git a/_scratch/repro/app/models.py b/_scratch/repro/app/models.py\nnew file mode 100644\nindex 0000000..8a2bfd4\n--- /dev/null\n+++ b/_scratch/repro/app/models.py\n@@ -0,0 +1,11 @@\n+from django.db import models\n+\n+class Item(models.Model):\n+    uid = models.AutoField(primary_key=True, editable=False)\n+    f = models.BooleanField(default=False)\n+    def reset(self):\n+        self.uid = None\n+        self.f = False\n+\n+class Derived(Item):\n+    pass\ndiff --git a/_scratch/repro/repro.py b/_scratch/repro/repro.py\nnew file mode 100644\nindex 0000000..e3e2002\n--- /dev/null\n+++ b/_scratch/repro/repro.py\n@@ -0,0 +1,18 @@\n+import os, django\n+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'settings')\n+django.setup()\n+from django.core.management import call_command\n+call_command('makemigrations', 'app', verbosity=0)\n+call_command('migrate', verbosity=0, run_syncdb=True)\n+from app.models import Item, Derived\n+\n+derived = Derived.objects.create(f=True)\n+print('created derived pk=', derived.pk, 'uid=', derived.uid, 'item_ptr_id=', derived.item_ptr_id)\n+item = Item.objects.get(pk=derived.pk)\n+obj1 = item.derived\n+obj1.reset()\n+obj1.save()\n+print('after reset+save: obj1.pk=', obj1.pk, 'uid=', obj1.uid, 'item_ptr_id=', obj1.item_ptr_id)\n+print('old Item row f=', Item.objects.get(pk=derived.pk).f, '(expect True)')\n+print('Derived rows:', list(Derived.objects.values_list('item_ptr_id', flat=True)))\n+print('Item rows:', list(Item.objects.values_list('uid', 'f')))\ndiff --git a/_scratch/repro/settings.py b/_scratch/repro/settings.py\nnew file mode 100644\nindex 0000000..b35873f\n--- /dev/null\n+++ b/_scratch/repro/settings.py\n@@ -0,0 +1,4 @@\n+SECRET_KEY = 'x'\n+INSTALLED_APPS = ['app']\n+DATABASES = {'default': {'ENGINE': 'django.db.backends.sqlite3', 'NAME': 'db.sqlite3'}}\n+USE_TZ = True\n",
+  "policyViolations": [],
+  "providerError": "This operation was aborted",
+  "runnerExitCode": 1,
+  "sandboxImage": "sweb.eval.arm64.django__django-12273:latest",
+  "schemaVersion": 1,
+  "startedAt": "2026-10-15T06:19:36.007Z",
+  "strategyHash": "af051feb0d3041c9c41a99f22ca71062093da67e27fa02a01a79dbb8b7c197e6",
+  "timeoutAborted": false,
+  "tokenTelemetryAvailable": true,
+  "toolCalls": 25
+}

@@ -1,0 +1,22 @@
+{
+  "event_hash": "1c86e934c522f1db842e409138b661e81ed517da0170f8b691158aba5627abc0",
+  "event_type": "slot_terminal",
+  "payload": {
+    "adaptive_gate": {
+      "accepted": true,
+      "arm": "dgm",
+      "artifact_hash": "bb21e0006f982797313badb37cea174f194fa5e189bcaa27ced45e91aed95e57",
+      "schema_version": 1,
+      "terminal_state": "GATE_NOT_APPLICABLE"
+    },
+    "child_artifact_hash": "bb21e0006f982797313badb37cea174f194fa5e189bcaa27ced45e91aed95e57",
+    "parent_artifact_hash": "3df70b706c460d6478d71bc2b90a517e58defb2e5dcbc6df1dd1952ffbd9bef9",
+    "reason": "django__django-9296: provider_or_runner_invalid",
+    "schema_version": 1,
+    "slot": 3,
+    "terminal_state": "EDGE_EVALUATION_INVALID",
+    "wave": 1
+  },
+  "previous_hash": "6c194e5b017790cef21f04aeafecea021cee46362ea39e02ee9aa5036bae7357",
+  "sequence": 5
+}

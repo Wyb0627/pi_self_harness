@@ -1,0 +1,29 @@
+{
+  "budgetAborted": false,
+  "cacheReadTokens": 143872,
+  "cacheWriteTokens": 0,
+  "candidateToolNames": [
+    "code_search"
+  ],
+  "completedAt": "2026-10-15T07:46:59.617Z",
+  "durationMs": 52624,
+  "fullPatch": "diff --git a/sphinx/builders/linkcheck.py b/sphinx/builders/linkcheck.py\nindex 9b54afc..1083e82 100644\n--- a/sphinx/builders/linkcheck.py\n+++ b/sphinx/builders/linkcheck.py\n@@ -166,6 +166,7 @@ class CheckExternalLinksBuilder(Builder):\n                     # Read the whole document and see if #anchor exists\n                     response = requests.get(req_url, stream=True, config=self.app.config,\n                                             auth=auth_info, **kwargs)\n+                    response.raise_for_status()\n                     found = check_anchor(response, unquote(anchor))\n \n                     if not found:\n",
+  "inputTokens": 23541,
+  "instanceId": "sphinx-doc__sphinx-8269",
+  "maxOutputTokens": 65536,
+  "maxTotalTokens": 512000,
+  "modelId": "byteplus/deepseek-v4-flash-ga",
+  "modelProvider": "rollback-deepseek",
+  "noShell": false,
+  "outputTokens": 4648,
+  "patch": "diff --git a/sphinx/builders/linkcheck.py b/sphinx/builders/linkcheck.py\nindex 9b54afc..1083e82 100644\n--- a/sphinx/builders/linkcheck.py\n+++ b/sphinx/builders/linkcheck.py\n@@ -166,6 +166,7 @@ class CheckExternalLinksBuilder(Builder):\n                     # Read the whole document and see if #anchor exists\n                     response = requests.get(req_url, stream=True, config=self.app.config,\n                                             auth=auth_info, **kwargs)\n+                    response.raise_for_status()\n                     found = check_anchor(response, unquote(anchor))\n \n                     if not found:\n",
+  "policyViolations": [],
+  "runnerExitCode": 0,
+  "sandboxImage": "sweb.eval.arm64.sphinx-doc__sphinx-8269:latest",
+  "schemaVersion": 1,
+  "startedAt": "2026-10-15T07:46:06.992Z",
+  "strategyHash": "af051feb0d3041c9c41a99f22ca71062093da67e27fa02a01a79dbb8b7c197e6",
+  "timeoutAborted": false,
+  "tokenTelemetryAvailable": true,
+  "toolCalls": 15
+}

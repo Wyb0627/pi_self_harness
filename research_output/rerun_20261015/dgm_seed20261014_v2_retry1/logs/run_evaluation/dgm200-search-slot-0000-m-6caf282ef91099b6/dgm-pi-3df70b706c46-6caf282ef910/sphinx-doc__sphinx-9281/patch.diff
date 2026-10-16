@@ -1,0 +1,25 @@
+diff --git a/CHANGES b/CHANGES
+index 6441001..a73eac9 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -50,6 +50,7 @@ Features added
+ Bugs fixed
+ ----------
+ 
++* #9281: autodoc: Python Enum values are not rendered correctly
+ * #8872: autodoc: stacked singledispatches are wrongly rendered
+ * #8597: autodoc: a docsting having metadata only should be treated as
+   undocumented
+diff --git a/sphinx/util/inspect.py b/sphinx/util/inspect.py
+index a415a70..170e966 100644
+--- a/sphinx/util/inspect.py
++++ b/sphinx/util/inspect.py
+@@ -457,6 +457,8 @@ def object_description(object: Any) -> str:
+         else:
+             return "frozenset({%s})" % ", ".join(object_description(x)
+                                                  for x in sorted_values)
++    if isinstance(object, enum.Enum):
++        return "%s.%s" % (object.__class__.__name__, object.name)
+     try:
+         s = repr(object)
+     except Exception as exc:

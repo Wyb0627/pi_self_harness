@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "prerequisite_images": [
+    {
+      "image": "sweb.base.arm64:latest",
+      "architecture": "arm64",
+      "status": "reused"
+    },
+    {
+      "image": "sweb.env.arm64.c6d251a05e0af7688b64fd:latest",
+      "architecture": "arm64",
+      "status": "reused"
+    }
+  ],
+  "images": [
+    {
+      "instance_id": "sphinx-doc__sphinx-7748",
+      "base_commit": "9988d5ce267bf0df4791770b469431b1fb00dcdd",
+      "env_image": "sweb.env.arm64.c6d251a05e0af7688b64fd:latest",
+      "instance_image": "sweb.eval.arm64.sphinx-doc__sphinx-7748:latest",
+      "architecture": "arm64",
+      "history_depth": 2,
+      "status": "built",
+      "duration_seconds": 43.194,
+      "log": "/Users/bytedance/codes/pi/research_output/rerun_20261014/dgm_seed20261014/runtime/images/sphinx-doc__sphinx-7748/image_logs/sphinx-doc__sphinx-7748.build.log"
+    }
+  ]
+}

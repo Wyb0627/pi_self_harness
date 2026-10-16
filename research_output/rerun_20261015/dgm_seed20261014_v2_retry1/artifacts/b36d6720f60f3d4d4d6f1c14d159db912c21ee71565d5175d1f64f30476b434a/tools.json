@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "tools": [
+    {
+      "description": "Search a read-only source tree for a Python regular expression and return matching file paths with line-numbered context snippets. Useful for locating field, widget, and form rendering code without external commands.",
+      "handler": "handlers/source_grep.py",
+      "label": "Read-only source grep",
+      "name": "source_grep",
+      "parameters": {
+        "additionalProperties": false,
+        "properties": {
+          "context_lines": {
+            "type": "integer"
+          },
+          "glob": {
+            "type": "string"
+          },
+          "max_matches": {
+            "type": "integer"
+          },
+          "query": {
+            "type": "string"
+          },
+          "root": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "query"
+        ],
+        "type": "object"
+      },
+      "timeout_seconds": 25
+    }
+  ]
+}

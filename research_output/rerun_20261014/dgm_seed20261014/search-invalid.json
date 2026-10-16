@@ -1,0 +1,43 @@
+{
+  "classification": "infrastructure_invalid",
+  "d_test_consumed": false,
+  "evidence": {
+    "completed_p0_tasks": 60,
+    "functioning_children": 0,
+    "observed_output_tokens": [
+      18686,
+      18104,
+      17956,
+      13932,
+      20142
+    ],
+    "output_cap_tokens": 16384,
+    "p0_resolved": 19,
+    "pause_record_sha256": "fec7d05fc1bd68d780f4e4426a106e45aa944f7a10a4a6210385ca829e2a34fb",
+    "sampled_mutation_slots": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "source_archive_entries": 1,
+    "token_cap_invalidations": 4,
+    "tool_policy_invalidations": 1
+  },
+  "invalidated_at": "2026-10-15T03:21:27Z",
+  "p0_reusable": true,
+  "reason": "Mutation proposer and artifact validator were systematically incompatible: four of five sampled mutations exceeded the 16,384 output cap, and the only under-cap mutation used os as prompted but os was not allowed.",
+  "record_hash": "352686c3fea3244bc0e077a103cf04b01dfaaafe5d2ec6e522cb542945efdbfa",
+  "replacement_protocol": {
+    "audited_p0_import_required": true,
+    "fresh_search_required": true,
+    "mutation_output_token_cap": 32768,
+    "mutation_total_token_cap": 64000,
+    "protocol_revision": "matched-dgm-pi-v2",
+    "safe_os_with_process_ast_denylist": true
+  },
+  "schema_version": 1,
+  "search_mutations_reusable": false,
+  "terminal_state": "SEARCH_INFRASTRUCTURE_INVALID"
+}

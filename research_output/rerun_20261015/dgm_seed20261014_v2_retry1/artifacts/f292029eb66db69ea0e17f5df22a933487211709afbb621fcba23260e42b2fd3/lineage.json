@@ -1,0 +1,92 @@
+[
+  {
+    "depends_on": [],
+    "entry_task_id": "sphinx-doc__sphinx-11510",
+    "mutation_id": "m-0000-1fe24010c967",
+    "mutation_summary": "Add a reusable static code-search tool and a code-path tracing strategy for diagnosing hooks/options whose effects are lost downstream.",
+    "repo": "sphinx-doc/sphinx",
+    "strategy_patch": "## Static code-path tracing for missing effects\n\nWhen a report describes a hook, callback, event, option, or transform that should change output but does not, use the `code_search` tool to locate the relevant code path statically instead of guessing.\n\n1. Search for the exact name from the report (hook, option, event, directive). If it is not present, search for nearby aliases and abbreviations.\n2. Separate definition sites from call sites using the surrounding lines returned by the search. Record the file:line pairs.\n3. Trace the data-flow from the call site to the output stage. Look for intermediate readers, cached copies, or secondary parse paths that may bypass the changed value; search for terms such as 'read', 'include', 'copy', 'cache', 'append'.\n4. Before editing, write a one-sentence hypothesis naming the stage where the effect is lost and the file where the fix belongs.\n5. After making a change, re-run the same searches to verify that the edited path is reachable from the original call site.\n\nUse this workflow for every issue where an extension or builder hook appears to fire but its effect does not reach the final document.",
+    "tool": {
+      "description": "Search repository text and source files with a regular expression and return file, line, surrounding context, and match counts. This is a static grep-like capability for tracing symbols, hooks, event names, and options without executing code.",
+      "handler_code": "import json\nimport os\nimport re\nimport sys\n\nSKIP_DIRS = {'.git', '.hg', '.svn', '__pycache__', '.tox', '.nox', '.venv', 'node_modules', '_build', 'build', 'dist'}\nDEFAULT_EXTS = ('py', 'rst', 'txt', 'cfg', 'ini', 'html', 'js', 'css')\n\ndef emit_error(message):\n    print(json.dumps({'content': message, 'details': {'match_count': 0}}))\n\ndef main():\n    try:\n        raw = sys.stdin.read()\n        data = json.loads(raw)\n    except Exception as exc:\n        emit_error('Could not read input JSON: ' + str(exc))\n        return\n\n    pattern = data.get('pattern')\n    if not isinstance(pattern, str) or not pattern:\n        emit_error('Parameter pattern is required.')\n        return\n\n    root = data.get('path')\n    if not isinstance(root, str) or not root:\n        root = '/testbed'\n\n    ext_arg = data.get('extensions')\n    if not isinstance(ext_arg, str) or not ext_arg.strip():\n        ext_arg = ','.join(DEFAULT_EXTS)\n    ext_set = set()\n    for part in ext_arg.split(','):\n        part = part.strip().lower()\n        if part:\n            if part.startswith('.'):\n                part = part[1:]\n            ext_set.add(part)\n\n    try:\n        context_lines = int(data.get('context_lines', 2))\n    except Exception:\n        context_lines = 2\n    context_lines = max(0, min(context_lines, 10))\n\n    try:\n        max_results = int(data.get('max_results', 100))\n    except Exception:\n        max_results = 100\n    max_results = max(1, min(max_results, 200))\n\n    case_sensitive = data.get('case_sensitive', True)\n    if not isinstance(case_sensitive, bool):\n        case_sensitive = True\n    flags = 0 if case_sensitive else re.IGNORECASE\n\n    try:\n        rx = re.compile(pattern, flags)\n    except re.error as exc:\n        emit_error('Invalid regular expression: ' + str(exc))\n        return\n\n    root = os.path.abspath(root)\n    root = os.path.realpath(root)\n    testbed = os.path.realpath('/testbed')\n    if root != testbed and not root.startswith(testbed + os.sep):\n        emit_error('Path must be inside /testbed.')\n        return\n    if not os.path.isdir(root):\n        emit_error('Path is not a directory: ' + root)\n        return\n\n    matches = []\n    scanned_files = 0\n    for dirpath, dirnames, filenames in os.walk(root):\n        dirnames[:] = sorted(d for d in dirnames if d not in SKIP_DIRS and not d.startswith('.'))\n        for filename in sorted(filenames):\n            if '.' not in filename:\n                continue\n            ext = filename.rsplit('.', 1)[1].lower()\n            if ext not in ext_set:\n                continue\n            filepath = os.path.join(dirpath, filename)\n            scanned_files += 1\n            try:\n                with open(filepath, 'r', encoding='utf-8', errors='replace') as handle:\n                    lines = handle.readlines()\n            except Exception:\n                continue\n            relpath = os.path.relpath(filepath, root)\n            for lineno, line in enumerate(lines, start=1):\n                if rx.search(line):\n                    start = max(1, lineno - context_lines)\n                    end = min(len(lines), lineno + context_lines)\n                    context = []\n                    for current in range(start, end + 1):\n                        context.append({'line': current, 'text': lines[current - 1].rstrip()})\n                    matches.append({\n                        'path': relpath,\n                        'line': lineno,\n                        'text': line.rstrip(),\n                        'context': context\n                    })\n                    if len(matches) >= max_results:\n                        break\n            if len(matches) >= max_results:\n                break\n        if len(matches) >= max_results:\n            break\n\n    content_lines = []\n    content_lines.append('Searched ' + str(scanned_files) + ' files under ' + root + ' for pattern: ' + pattern)\n    if matches:\n        content_lines.append('Found ' + str(len(matches)) + ' matching line(s), showing up to ' + str(len(matches)) + '.')\n        for match in matches:\n            content_lines.append(match['path'] + ':' + str(match['line']) + ': ' + match['text'])\n    else:\n        content_lines.append('No matches found.')\n\n    details = {\n        'scanned_files': scanned_files,\n        'match_count': len(matches),\n        'matches': matches\n    }\n    print(json.dumps({'content': chr(10).join(content_lines), 'details': details}))\n\nif __name__ == '__main__':\n    main()",
+      "label": "Static code search",
+      "name": "code_search",
+      "parameters": {
+        "additionalProperties": false,
+        "properties": {
+          "case_sensitive": {
+            "description": "Whether matching is case-sensitive; defaults to true.",
+            "type": "boolean"
+          },
+          "context_lines": {
+            "description": "Number of lines of context to include around each match, from 0 to 10.",
+            "type": "integer"
+          },
+          "extensions": {
+            "description": "Comma-separated file extensions to include; defaults to py,rst,txt,cfg,ini,html,js,css.",
+            "type": "string"
+          },
+          "max_results": {
+            "description": "Maximum number of matches to return, from 1 to 200.",
+            "type": "integer"
+          },
+          "path": {
+            "description": "Root directory to search; must be under /testbed and defaults to /testbed.",
+            "type": "string"
+          },
+          "pattern": {
+            "description": "Regular expression to search for in file contents.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "pattern"
+        ],
+        "type": "object"
+      },
+      "timeout_seconds": 60
+    }
+  },
+  {
+    "depends_on": [
+      "m-0000-1fe24010c967"
+    ],
+    "entry_task_id": "django__django-12708",
+    "mutation_id": "m-0006-0ee07f80c7f5",
+    "mutation_summary": "Add an AST symbol-map tool and an identity-mismatch tracing strategy for schema/migration failures.",
+    "repo": "django/django",
+    "strategy_patch": "## Static code-path tracing for missing effects\n\nWhen a report describes a hook, callback, event, option, or transform that should change output but does not, use the `code_search` tool to locate the relevant code path statically instead of guessing.\n\n1. Search for the exact name from the report (hook, option, event, directive). If it is not present, search for nearby aliases and abbreviations.\n2. Separate definition sites from call sites using the surrounding lines returned by the search. Record the file:line pairs.\n3. Trace the data-flow from the call site to the output stage. Look for intermediate readers, cached copies, or secondary parse paths that may bypass the changed value; search for terms such as 'read', 'include', 'copy', 'cache', 'append'.\n4. Before editing, write a one-sentence hypothesis naming the stage where the effect is lost and the file where the fix belongs.\n5. After making a change, re-run the same searches to verify that the edited path is reachable from the original call site.\n\nUse this workflow for every issue where an extension or builder hook appears to fire but its effect does not reach the final document.\n\n## Trace identity mismatches in database schema operations\n\nWhen a migration or schema operation fails because an index, constraint, or column is reported as ambiguous, missing, or duplicated, treat the problem as an identity-matching failure rather than a SQL or data problem.\n\n1. Identify the exact operation that failed (for example, deleting a composite index, altering a field, or removing a constraint) and the backend method named in the traceback.\n2. Use `symbol_map` with the method name to find its definition and all callers. Then use `code_search` for related nouns from the error message (`constraint`, `index`, `unique`, `fields`) in the same file to locate every place the method collects or filters candidates.\n3. List every property used to consider two schema elements equal. Common identities are: database name, field list, constraint kind, and condition. A match on fields alone is not an identity; two different constraints can legitimately share the same fields.\n4. Determine whether the failing operation distinguishes the element it wants from other elements that share fields. If candidate collection returns multiple elements, check whether each candidate carries a type marker or kind attribute that the operation ignored.\n5. Before editing, write one sentence describing the intended identity of the schema element and which existing predicate in the code gets it wrong (for example, matching only fields, or not filtering by constraint kind).\n6. After editing, search for tests that exercise the same backend method for both unique and non-unique composed indexes, then re-run the searches to confirm the changed filter is applied on every code path that collects candidates.",
+    "tool": {
+      "description": "Parse Python source files in the repository and report definitions and references for a symbol. Useful for separating definition sites from call sites and tracing callers of backend schema methods without executing code.",
+      "handler_code": "import ast\nimport json\nimport os\nimport sys\n\nSKIP_DIRS = {'.git', '.hg', '.svn', '__pycache__', '.tox', '.nox', '.venv', 'node_modules', '_build', 'build', 'dist'}\n\ndef emit_error(message):\n    print(json.dumps({'content': message, 'details': {}}))\n\ndef main():\n    try:\n        data = json.loads(sys.stdin.read())\n    except Exception as exc:\n        emit_error('Could not read input JSON: ' + str(exc))\n        return\n\n    symbol = data.get('symbol')\n    if not isinstance(symbol, str) or not symbol:\n        emit_error('Parameter symbol is required.')\n        return\n\n    root = data.get('path')\n    if not isinstance(root, str) or not root:\n        root = '/testbed'\n    root = os.path.realpath(root)\n    testbed = os.path.realpath('/testbed')\n    if root != testbed and not root.startswith(testbed + os.sep):\n        emit_error('Path must be inside /testbed.')\n        return\n    if not os.path.isdir(root):\n        emit_error('Path is not a directory: ' + root)\n        return\n\n    kind = data.get('kind')\n    if not isinstance(kind, str):\n        kind = 'all'\n    kind = kind.strip().lower()\n    if kind not in ('all', 'definitions', 'references'):\n        emit_error('kind must be one of: all, definitions, references.')\n        return\n\n    try:\n        max_results = int(data.get('max_results', 200))\n    except Exception:\n        max_results = 200\n    max_results = max(1, min(max_results, 500))\n\n    definitions = []\n    references = []\n    scanned_files = 0\n\n    for dirpath, dirnames, filenames in os.walk(root):\n        dirnames[:] = sorted(d for d in dirnames if d not in SKIP_DIRS and not d.startswith('.'))\n        for filename in sorted(filenames):\n            if not filename.endswith('.py'):\n                continue\n            filepath = os.path.join(dirpath, filename)\n            try:\n                with open(filepath, 'r', encoding='utf-8', errors='replace') as handle:\n                    source = handle.read()\n            except Exception:\n                continue\n            scanned_files += 1\n            try:\n                tree = ast.parse(source, filename=filepath)\n            except Exception:\n                continue\n            relpath = os.path.relpath(filepath, root)\n            lines = source.splitlines()\n\n            if kind in ('all', 'definitions'):\n                for node in ast.walk(tree):\n                    if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)):\n                        if node.name == symbol:\n                            node_kind = 'class' if isinstance(node, ast.ClassDef) else 'function'\n                            text = ''\n                            if 1 <= node.lineno <= len(lines):\n                                text = lines[node.lineno - 1].strip()\n                            definitions.append({\n                                'path': relpath,\n                                'line': node.lineno,\n                                'kind': node_kind,\n                                'text': text\n                            })\n                            if len(definitions) >= max_results:\n                                break\n                if len(definitions) >= max_results:\n                    break\n\n            if kind in ('all', 'references'):\n                for node in ast.walk(tree):\n                    if isinstance(node, ast.Name) and node.id == symbol:\n                        ref_kind = 'name'\n                    elif isinstance(node, ast.Attribute) and node.attr == symbol:\n                        ref_kind = 'attribute'\n                    elif isinstance(node, (ast.Import, ast.ImportFrom)):\n                        ref_kind = None\n                        for alias in node.names:\n                            if alias.asname == symbol or alias.name == symbol:\n                                ref_kind = 'import'\n                                break\n                        if ref_kind is None:\n                            continue\n                    else:\n                        continue\n                    text = ''\n                    if 1 <= node.lineno <= len(lines):\n                        text = lines[node.lineno - 1].strip()\n                    references.append({\n                        'path': relpath,\n                        'line': node.lineno,\n                        'kind': ref_kind,\n                        'text': text\n                    })\n                    if len(references) >= max_results:\n                        break\n                if len(references) >= max_results:\n                    break\n        if len(definitions) >= max_results or len(references) >= max_results:\n            break\n\n    result_defs = definitions[:max_results]\n    result_refs = references[:max_results]\n    content_lines = []\n    content_lines.append('Scanned ' + str(scanned_files) + ' Python files under ' + root + ' for symbol: ' + symbol)\n    if kind in ('all', 'definitions'):\n        content_lines.append('Definitions (' + str(len(definitions)) + ' found, showing ' + str(len(result_defs)) + '):')\n        for match in result_defs:\n            content_lines.append(match['path'] + ':' + str(match['line']) + ' [' + match['kind'] + '] ' + match['text'])\n    if kind in ('all', 'references'):\n        content_lines.append('References (' + str(len(references)) + ' found, showing ' + str(len(result_refs)) + '):')\n        for match in result_refs:\n            content_lines.append(match['path'] + ':' + str(match['line']) + ' [' + match['kind'] + '] ' + match['text'])\n    if not result_defs and not result_refs:\n        content_lines.append('No definitions or references found.')\n\n    details = {\n        'scanned_files': scanned_files,\n        'definition_count': len(definitions),\n        'reference_count': len(references),\n        'definitions': result_defs,\n        'references': result_refs\n    }\n    print(json.dumps({'content': chr(10).join(content_lines), 'details': details}))\n\nif __name__ == '__main__':\n    main()\n",
+      "label": "Python symbol map",
+      "name": "symbol_map",
+      "parameters": {
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "description": "What to return: all, definitions, or references; defaults to all.",
+            "type": "string"
+          },
+          "max_results": {
+            "description": "Maximum matches per category, from 1 to 500; defaults to 200.",
+            "type": "integer"
+          },
+          "path": {
+            "description": "Root directory to scan; must be under /testbed and defaults to /testbed.",
+            "type": "string"
+          },
+          "symbol": {
+            "description": "Exact symbol name to look up.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "symbol"
+        ],
+        "type": "object"
+      },
+      "timeout_seconds": 60
+    }
+  }
+]

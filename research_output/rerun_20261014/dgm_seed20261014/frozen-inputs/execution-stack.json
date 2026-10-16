@@ -1,0 +1,19 @@
+{
+  "agent_auth_shape_sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+  "agent_models_sha256": "bfd834523d43655717f0750d199a7db966c3ddc8db5428b5ba6c3930d5c7dde8",
+  "agent_models_store_sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+  "candidate_tool_runtime_sha256": "1a594a4650a03b57aac50081260395362acd5c3e0beb2ce6aa25f3be30d73d09",
+  "image_builder_sha256": "2c4c32a00b01b7a68a8bcba969a9c139ddff56647f4ad60811349406619c6921",
+  "node_version": "v26.5.0",
+  "orchestrator_sha256": "547eb163376aed5c6b849e7c59aef35e7826b9aaa489b5f341b4d1f24ccb8def",
+  "pi_package_dist_tree_hash": "37f824228786e430aa135b2d11c8de83bfb3661c806b6a4e44cb0dbaee95b4ed",
+  "pi_package_json_sha256": "f1738e4b42203e5f22bcb513f13fb2fb224f1e98d1f129ff042f87048665a94c",
+  "pi_rollback_package_lock_sha256": "8705b2a3768814a55a1f981775b781f6a9bd170cee0bf5e2e9bfaa1c8084c3b5",
+  "pi_runner_sha256": "66bfdc8499d35f08c05f13142a12157a7ae703053088718b0bded3a5e1da3cb7",
+  "schema_version": 1,
+  "swebench_python": "/Library/Frameworks/Python.framework/Versions/3.13/bin/python3.13",
+  "swebench_python_freeze_sha256": "00f10b78be4fe4d9889e4011032a78fcd1cedfa9998466bf0346d960f2c76f1d",
+  "swebench_python_sha256": "ee3c4103b97e32a98e98cfad7f6ca4d09b2ab2dc16f3d28e18b54a4a0244efe0",
+  "swebench_python_version": "Python 3.13.14",
+  "swebench_revision": "dc4c087c2b9e4cefebf2e3d201d27e362d899e0f"
+}

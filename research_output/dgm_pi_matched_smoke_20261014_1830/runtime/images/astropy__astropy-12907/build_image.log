@@ -1,0 +1,722 @@
+$ /tmp/pi-swebench-runtime/bin/python /Users/bytedance/codes/pi/rollback_mvp/build_local_swebench_images.py --dataset /Users/bytedance/codes/pi/research_output/dgm_pi_matched_smoke_20261014_1830/endpoints/frozen-inputs/materialized/frozen_swebench_dataset.json --instance-id astropy__astropy-12907 --log-dir /Users/bytedance/codes/pi/research_output/dgm_pi_matched_smoke_20261014_1830/runtime/images/astropy__astropy-12907/image_logs --output /Users/bytedance/codes/pi/research_output/dgm_pi_matched_smoke_20261014_1830/runtime/images/astropy__astropy-12907/image.json --build-missing-env
+Building sweb.eval.arm64.astropy__astropy-12907:latest from d16bfe05a744909de4b27f5875fe0d4ed41ce607
+DEPRECATED: The legacy builder is deprecated and will be removed in a future release.
+            Install the buildx component to build images with BuildKit:
+            https://docs.docker.com/go/buildx/
+
+Sending build context to Docker daemon  45.35MB
+
+Step 1/7 : FROM --platform=linux/arm64/v8 sweb.env.arm64.428468730904ff6b4232aa:latest
+ ---> 5a8d3c9313e0
+Step 2/7 : ARG PIP_DEFAULT_TIMEOUT=120
+ ---> Running in 332a16e28438
+ ---> Removed intermediate container 332a16e28438
+ ---> 08ddf75b3b6e
+Step 3/7 : ARG PIP_RETRIES=20
+ ---> Running in 2c07b2368cbe
+ ---> Removed intermediate container 2c07b2368cbe
+ ---> 13e4793ce729
+Step 4/7 : COPY ./repo /testbed
+ ---> f305e724bf01
+Step 5/7 : COPY ./setup_local_repo.sh /root/
+ ---> 1b9324b3030a
+Step 6/7 : RUN /bin/bash /root/setup_local_repo.sh
+ ---> Running in 7032c1a71d2b
+[91m++ git -C /testbed rev-parse HEAD
+[0m[91m+ test d16bfe05a744909de4b27f5875fe0d4ed41ce607 = d16bfe05a744909de4b27f5875fe0d4ed41ce607
+[0m[91m++ git -C /testbed remote
+[0m[91m+ test -z ''
++ chmod -R 777 /testbed
+[0m[91m+ cd /testbed
++ git reset --hard d16bfe05a744909de4b27f5875fe0d4ed41ce607
+[0mHEAD is now at d16bfe0 Merge pull request #12900 from Cadair/custom_compound_model
+[91m+ source /opt/miniconda3/bin/activate
+++ _CONDA_ROOT=/opt/miniconda3
+[0m[91m++ . /opt/miniconda3/etc/profile.d/conda.sh
++++ export CONDA_EXE=/opt/miniconda3/bin/conda
++++ CONDA_EXE=/opt/miniconda3/bin/conda
++++ export _CE_M=
++++ _CE_M=
++++ export _CE_CONDA=
++++ _CE_CONDA=
++++ export CONDA_PYTHON_EXE=/opt/miniconda3/bin/python
++++ CONDA_PYTHON_EXE=/opt/miniconda3/bin/python
+[0m[91m+++ '[' -z '' ']'
++++ export CONDA_SHLVL=0
++++ CONDA_SHLVL=0
++++ '[' -n '' ']'
+[0m[91m+++++ dirname /opt/miniconda3/bin/conda
+[0m[91m++++ dirname /opt/miniconda3/bin
+[0m[91m+++ PATH=/opt/miniconda3/condabin:/opt/miniconda3/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
++++ export PATH
++++ '[' -z '' ']'
++++ PS1=
+++ conda activate
+++ local cmd=activate
+++ case "$cmd" in
+++ __conda_activate activate
+[0m[91m++ '[' -n '' ']'
+++ local ask_conda
+[0m[91m+++ PS1=
++++ __conda_exe shell.posix activate
+[0m[91m+++ /opt/miniconda3/bin/conda shell.posix activate
+[0m[91m++ ask_conda='PS1='\''(base) '\''
+export PATH='\''/opt/miniconda3/bin:/opt/miniconda3/condabin:/opt/miniconda3/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'\''
+export CONDA_PREFIX='\''/opt/miniconda3'\''
+export CONDA_SHLVL='\''1'\''
+export CONDA_DEFAULT_ENV='\''base'\''
+export CONDA_PROMPT_MODIFIER='\''(base) '\''
+export CONDA_EXE='\''/opt/miniconda3/bin/conda'\''
+export _CE_M='\'''\''
+export _CE_CONDA='\'''\''
+export CONDA_PYTHON_EXE='\''/opt/miniconda3/bin/python'\'''
+++ eval 'PS1='\''(base) '\''
+export PATH='\''/opt/miniconda3/bin:/opt/miniconda3/condabin:/opt/miniconda3/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'\''
+export CONDA_PREFIX='\''/opt/miniconda3'\''
+export CONDA_SHLVL='\''1'\''
+export CONDA_DEFAULT_ENV='\''base'\''
+export CONDA_PROMPT_MODIFIER='\''(base) '\''
+export CONDA_EXE='\''/opt/miniconda3/bin/conda'\''
+export _CE_M='\'''\''
+export _CE_CONDA='\'''\''
+export CONDA_PYTHON_EXE='\''/opt/miniconda3/bin/python'\'''
++++ PS1='(base) '
++++ export PATH=/opt/miniconda3/bin:/opt/miniconda3/condabin:/opt/miniconda3/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
++++ PATH=/opt/miniconda3/bin:/opt/miniconda3/condabin:/opt/miniconda3/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
++++ export CONDA_PREFIX=/opt/miniconda3
++++ CONDA_PREFIX=/opt/miniconda3
++++ export CONDA_SHLVL=1
++++ CONDA_SHLVL=1
++++ export CONDA_DEFAULT_ENV=base
++++ CONDA_DEFAULT_ENV=base
++++ export 'CONDA_PROMPT_MODIFIER=(base) '
++++ CONDA_PROMPT_MODIFIER='(base) '
++++ export CONDA_EXE=/opt/miniconda3/bin/conda
++++ CONDA_EXE=/opt/miniconda3/bin/conda
++++ export _CE_M=
++++ _CE_M=
++++ export _CE_CONDA=
++++ _CE_CONDA=
++++ export CONDA_PYTHON_EXE=/opt/miniconda3/bin/python
++++ CONDA_PYTHON_EXE=/opt/miniconda3/bin/python
+++ __conda_hashr
+++ '[' -n '' ']'
+[0m[91m++ '[' -n '' ']'
+++ hash -r
+[0m[91m+ conda activate testbed
++ local cmd=activate
++ case "$cmd" in
++ __conda_activate activate testbed
++ '[' -n '' ']'
++ local ask_conda
+[0m[91m++ PS1='(base) '
+++ __conda_exe shell.posix activate testbed
+[0m[91m++ /opt/miniconda3/bin/conda shell.posix activate testbed
+[0m[91m+ ask_conda='PS1='\''(testbed) '\''
+export PATH='\''/opt/miniconda3/envs/testbed/bin:/opt/miniconda3/condabin:/opt/miniconda3/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'\''
+export CONDA_PREFIX='\''/opt/miniconda3/envs/testbed'\''
+export CONDA_SHLVL='\''2'\''
+export CONDA_DEFAULT_ENV='\''testbed'\''
+export CONDA_PROMPT_MODIFIER='\''(testbed) '\''
+export CONDA_PREFIX_1='\''/opt/miniconda3'\''
+export CONDA_EXE='\''/opt/miniconda3/bin/conda'\''
+export _CE_M='\'''\''
+export _CE_CONDA='\'''\''
+export CONDA_PYTHON_EXE='\''/opt/miniconda3/bin/python'\'''
++ eval 'PS1='\''(testbed) '\''
+export PATH='\''/opt/miniconda3/envs/testbed/bin:/opt/miniconda3/condabin:/opt/miniconda3/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'\''
+export CONDA_PREFIX='\''/opt/miniconda3/envs/testbed'\''
+export CONDA_SHLVL='\''2'\''
+export CONDA_DEFAULT_ENV='\''testbed'\''
+export CONDA_PROMPT_MODIFIER='\''(testbed) '\''
+export CONDA_PREFIX_1='\''/opt/miniconda3'\''
+export CONDA_EXE='\''/opt/miniconda3/bin/conda'\''
+export _CE_M='\'''\''
+export _CE_CONDA='\'''\''
+export CONDA_PYTHON_EXE='\''/opt/miniconda3/bin/python'\'''
+++ PS1='(testbed) '
+++ export PATH=/opt/miniconda3/envs/testbed/bin:/opt/miniconda3/condabin:/opt/miniconda3/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+++ PATH=/opt/miniconda3/envs/testbed/bin:/opt/miniconda3/condabin:/opt/miniconda3/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+++ export CONDA_PREFIX=/opt/miniconda3/envs/testbed
+++ CONDA_PREFIX=/opt/miniconda3/envs/testbed
+++ export CONDA_SHLVL=2
+++ CONDA_SHLVL=2
+++ export CONDA_DEFAULT_ENV=testbed
+++ CONDA_DEFAULT_ENV=testbed
+++ export 'CONDA_PROMPT_MODIFIER=(testbed) '
+++ CONDA_PROMPT_MODIFIER='(testbed) '
+++ export CONDA_PREFIX_1=/opt/miniconda3
+++ CONDA_PREFIX_1=/opt/miniconda3
+++ export CONDA_EXE=/opt/miniconda3/bin/conda
+++ CONDA_EXE=/opt/miniconda3/bin/conda
+++ export _CE_M=
+++ _CE_M=
+++ export _CE_CONDA=
+++ _CE_CONDA=
+++ export CONDA_PYTHON_EXE=/opt/miniconda3/bin/python
+++ CONDA_PYTHON_EXE=/opt/miniconda3/bin/python
++ __conda_hashr
+[0mCurrent environment: testbed
+[91m+ '[' -n '' ']'
++ '[' -n '' ']'
++ hash -r
++ echo 'Current environment: testbed'
++ sed -i 's/requires = \["setuptools",/requires = \["setuptools==68.0.0",/' pyproject.toml
+[0m[91m+ python -m pip install -e '.[test]' --verbose
+[0mUsing pip 26.0.1 from /opt/miniconda3/envs/testbed/lib/python3.9/site-packages/pip (python 3.9)
+Obtaining file:///testbed
+  Checking if build backend supports build_editable: started
+[91m  Running command Checking if build backend supports build_editable
+[0m  Checking if build backend supports build_editable: finished with status 'done'
+  Preparing editable metadata (pyproject.toml): started
+[91m  Running command Preparing editable metadata (pyproject.toml)
+[0m[91m  Traceback (most recent call last):
+    File "/opt/miniconda3/envs/testbed/lib/python3.9/site-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py", line 389, in <module>
+[0m[91m      main()
+[0m[91m    File "/opt/miniconda3/envs/testbed/lib/python3.9/site-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py", line 373, in main
+      json_out["return_val"] = hook(**hook_input["kwargs"])
+[0m[91m    File "/opt/miniconda3/envs/testbed/lib/python3.9/site-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py", line 209, in prepare_metadata_for_build_editable
+      return hook(metadata_directory, config_settings)
+[0m[91m    File "/opt/miniconda3/envs/testbed/lib/python3.9/site-packages/setuptools/build_meta.py", line 454, in prepare_metadata_for_build_editable
+      return self.prepare_metadata_for_build_wheel(
+    File "/opt/miniconda3/envs/testbed/lib/python3.9/site-packages/setuptools/build_meta.py", line 380, in prepare_metadata_for_build_wheel
+[0m[91m      self.run_setup()
+[0m[91m    File "/opt/miniconda3/envs/testbed/lib/python3.9/site-packages/setuptools/build_meta.py", line 338, in run_setup
+      exec(code, locals())
+[0m[91m    File "<string>", line 66, in <module>
+  ModuleNotFoundError: No module named 'extension_helpers'
+[0m[91m  error: subprocess-exited-with-error
+  
+  × Preparing editable metadata (pyproject.toml) did not run successfully.
+  │ exit code: 1
+  ╰─> No available output.
+  
+  note: This error originates from a subprocess, and is likely not a problem with pip.
+[0m[91m  full command: /opt/miniconda3/envs/testbed/bin/python /opt/miniconda3/envs/testbed/lib/python3.9/site-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py prepare_metadata_for_build_editable /tmp/tmp8kpgkz8h
+[0m[91m  cwd: /testbed
+[0m  Preparing editable metadata (pyproject.toml): finished with status 'error'
+  Link requires a different Python (3.9.25 not in: '>=3.10'): https://files.pythonhosted.org/packages/70/7a/be4bd8bcbb24ea475856dd68159d78b03b2bb53dae369f69c9606b8888f5/pip-26.1-py3-none-any.whl (from https://pypi.org/simple/pip/) (requires-python:>=3.10)
+  Link requires a different Python (3.9.25 not in: '>=3.10'): https://files.pythonhosted.org/packages/73/7e/d2b04004e1068ad4fdfa2f227b839b5d03e602e47cdbbf49de71137c9546/pip-26.1.tar.gz (from https://pypi.org/simple/pip/) (requires-python:>=3.10)
+  Link requires a different Python (3.9.25 not in: '>=3.10'): https://files.pythonhosted.org/packages/3a/eb/fea4d1d51c49832120f7f285d07306db3960f423a2612c6057caf3e8196f/pip-26.1.1-py3-none-any.whl (from https://pypi.org/simple/pip/) (requires-python:>=3.10)
+  Link requires a different Python (3.9.25 not in: '>=3.10'): https://files.pythonhosted.org/packages/b6/48/cb9b7a682f6fe01a4221e1728941dd4ac3cd9090a17db3779d6ff490b602/pip-26.1.1.tar.gz (from https://pypi.org/simple/pip/) (requires-python:>=3.10)
+  Link requires a different Python (3.9.25 not in: '>=3.10'): https://files.pythonhosted.org/packages/5d/95/6b5cb3461ea5673ba0995989746db58eb18b91b54dbf331e72f569540946/pip-26.1.2-py3-none-any.whl (from https://pypi.org/simple/pip/) (requires-python:>=3.10)
+  Link requires a different Python (3.9.25 not in: '>=3.10'): https://files.pythonhosted.org/packages/01/91/47e7d486260f618783899587af63ccf7980fb60245c3e63dd4571c6b57ad/pip-26.1.2.tar.gz (from https://pypi.org/simple/pip/) (requires-python:>=3.10)
+  Link requires a different Python (3.9.25 not in: '>=3.10'): https://files.pythonhosted.org/packages/62/36/a3aed958d60531cb442b7ab4596cda7b3621cfb916f8ae1d6769795c7dc1/pip-26.2-py3-none-any.whl (from https://pypi.org/simple/pip/) (requires-python:>=3.10)
+  Link requires a different Python (3.9.25 not in: '>=3.10'): https://files.pythonhosted.org/packages/db/96/e6f8e9d9d7b9cc4457092712a7e919c3186aa2c2fa9ffed2c5d29cc947e8/pip-26.2.tar.gz (from https://pypi.org/simple/pip/) (requires-python:>=3.10)
+  Link requires a different Python (3.9.25 not in: '>=3.10'): https://files.pythonhosted.org/packages/f3/6e/1736e5b4ae2b778ef2f81c47d797de9f891d4d8acb047a24ca37a60294dd/pip-26.2.1-py3-none-any.whl (from https://pypi.org/simple/pip/) (requires-python:>=3.10)
+  Link requires a different Python (3.9.25 not in: '>=3.10'): https://files.pythonhosted.org/packages/ae/15/4500e320e6b101ec3b719ae85b697d9940b6cda672bc555bd6016fc60c6f/pip-26.2.1.tar.gz (from https://pypi.org/simple/pip/) (requires-python:>=3.10)
+[91merror: metadata-generation-failed
+
+× Encountered error while generating package metadata.
+╰─> from file:///testbed
+
+note: This is an issue with the package mentioned above, not pip.
+hint: See above for details.
+[0mThe command '/bin/sh -c /bin/bash /root/setup_local_repo.sh' returned a non-zero code: 1
+Traceback (most recent call last):
+  File "/Users/bytedance/codes/pi/rollback_mvp/build_local_swebench_images.py", line 405, in <module>
+    main()
+    ~~~~^^
+  File "/Users/bytedance/codes/pi/rollback_mvp/build_local_swebench_images.py", line 380, in main
+    build_image(
+    ~~~~~~~~~~~^
+        row,
+        ^^^^
+    ...<3 lines>...
+        args.wheelhouse.resolve() if args.wheelhouse else None,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/bytedance/codes/pi/rollback_mvp/build_local_swebench_images.py", line 314, in build_image
+    build_docker_context(
+    ~~~~~~~~~~~~~~~~~~~~^
+        image,
+        ^^^^^^
+    ...<2 lines>...
+        log_path,
+        ^^^^^^^^^
+    )
+    ^
+  File "/Users/bytedance/codes/pi/rollback_mvp/build_local_swebench_images.py", line 134, in build_docker_context
+    raise subprocess.CalledProcessError(return_code, process.args)
+subprocess.CalledProcessError: Command '['docker', 'build', '--platform', 'linux/arm64/v8', '--tag', 'sweb.eval.arm64.astropy__astropy-12907:latest', '.']' returned non-zero exit status 1.
+$ /tmp/pi-swebench-runtime/bin/python /Users/bytedance/codes/pi/rollback_mvp/build_local_swebench_images.py --dataset /Users/bytedance/codes/pi/research_output/dgm_pi_matched_smoke_20261014_1830/endpoints/frozen-inputs/materialized/frozen_swebench_dataset.json --instance-id astropy__astropy-12907 --log-dir /Users/bytedance/codes/pi/research_output/dgm_pi_matched_smoke_20261014_1830/runtime/images/astropy__astropy-12907/image_logs --output /Users/bytedance/codes/pi/research_output/dgm_pi_matched_smoke_20261014_1830/runtime/images/astropy__astropy-12907/image.json --build-missing-env
+Building sweb.eval.arm64.astropy__astropy-12907:latest from d16bfe05a744909de4b27f5875fe0d4ed41ce607
+DEPRECATED: The legacy builder is deprecated and will be removed in a future release.
+            Install the buildx component to build images with BuildKit:
+            https://docs.docker.com/go/buildx/
+
+Sending build context to Docker daemon  45.35MB
+
+Step 1/7 : FROM --platform=linux/arm64/v8 sweb.env.arm64.428468730904ff6b4232aa:latest
+ ---> 5a8d3c9313e0
+Step 2/7 : ARG PIP_DEFAULT_TIMEOUT=120
+ ---> Using cache
+ ---> 08ddf75b3b6e
+Step 3/7 : ARG PIP_RETRIES=20
+ ---> Using cache
+ ---> 13e4793ce729
+Step 4/7 : COPY ./repo /testbed
+ ---> af9b7e7f23ac
+Step 5/7 : COPY ./setup_local_repo.sh /root/
+ ---> 2da5015b4ba0
+Step 6/7 : RUN /bin/bash /root/setup_local_repo.sh
+ ---> Running in d22b87ffbae1
+[91m++ git -C /testbed rev-parse HEAD
+[0m[91m+ test d16bfe05a744909de4b27f5875fe0d4ed41ce607 = d16bfe05a744909de4b27f5875fe0d4ed41ce607
+[0m[91m++ git -C /testbed remote
+[0m[91m+ test -z ''
++ chmod -R 777 /testbed
+[0m[91m+ cd /testbed
++ git reset --hard d16bfe05a744909de4b27f5875fe0d4ed41ce607
+[0mHEAD is now at d16bfe0 Merge pull request #12900 from Cadair/custom_compound_model
+[91m+ source /opt/miniconda3/bin/activate
+++ _CONDA_ROOT=/opt/miniconda3
+++ . /opt/miniconda3/etc/profile.d/conda.sh
+[0m[91m+++ export CONDA_EXE=/opt/miniconda3/bin/conda
++++ CONDA_EXE=/opt/miniconda3/bin/conda
++++ export _CE_M=
++++ _CE_M=
++++ export _CE_CONDA=
++++ _CE_CONDA=
++++ export CONDA_PYTHON_EXE=/opt/miniconda3/bin/python
++++ CONDA_PYTHON_EXE=/opt/miniconda3/bin/python
+[0m[91m+++ '[' -z '' ']'
++++ export CONDA_SHLVL=0
++++ CONDA_SHLVL=0
++++ '[' -n '' ']'
+[0m[91m+++++ dirname /opt/miniconda3/bin/conda
+[0m[91m++++ dirname /opt/miniconda3/bin
+[0m[91m+++ PATH=/opt/miniconda3/condabin:/opt/miniconda3/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
++++ export PATH
++++ '[' -z '' ']'
++++ PS1=
+[0m[91m++ conda activate
+++ local cmd=activate
+++ case "$cmd" in
+++ __conda_activate activate
+[0m[91m++ '[' -n '' ']'
+++ local ask_conda
+[0m[91m+++ PS1=
++++ __conda_exe shell.posix activate
+[0m[91m+++ /opt/miniconda3/bin/conda shell.posix activate
+[0m[91m++ ask_conda='PS1='\''(base) '\''
+export PATH='\''/opt/miniconda3/bin:/opt/miniconda3/condabin:/opt/miniconda3/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'\''
+export CONDA_PREFIX='\''/opt/miniconda3'\''
+export CONDA_SHLVL='\''1'\''
+export CONDA_DEFAULT_ENV='\''base'\''
+export CONDA_PROMPT_MODIFIER='\''(base) '\''
+export CONDA_EXE='\''/opt/miniconda3/bin/conda'\''
+export _CE_M='\'''\''
+export _CE_CONDA='\'''\''
+export CONDA_PYTHON_EXE='\''/opt/miniconda3/bin/python'\'''
+++ eval 'PS1='\''(base) '\''
+export PATH='\''/opt/miniconda3/bin:/opt/miniconda3/condabin:/opt/miniconda3/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'\''
+export CONDA_PREFIX='\''/opt/miniconda3'\''
+export CONDA_SHLVL='\''1'\''
+export CONDA_DEFAULT_ENV='\''base'\''
+export CONDA_PROMPT_MODIFIER='\''(base) '\''
+export CONDA_EXE='\''/opt/miniconda3/bin/conda'\''
+export _CE_M='\'''\''
+export _CE_CONDA='\'''\''
+export CONDA_PYTHON_EXE='\''/opt/miniconda3/bin/python'\'''
++++ PS1='(base) '
++++ export PATH=/opt/miniconda3/bin:/opt/miniconda3/condabin:/opt/miniconda3/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
++++ PATH=/opt/miniconda3/bin:/opt/miniconda3/condabin:/opt/miniconda3/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
++++ export CONDA_PREFIX=/opt/miniconda3
++++ CONDA_PREFIX=/opt/miniconda3
++++ export CONDA_SHLVL=1
++++ CONDA_SHLVL=1
++++ export CONDA_DEFAULT_ENV=base
++++ CONDA_DEFAULT_ENV=base
++++ export 'CONDA_PROMPT_MODIFIER=(base) '
++++ CONDA_PROMPT_MODIFIER='(base) '
++++ export CONDA_EXE=/opt/miniconda3/bin/conda
++++ CONDA_EXE=/opt/miniconda3/bin/conda
++++ export _CE_M=
++++ _CE_M=
++++ export _CE_CONDA=
++++ _CE_CONDA=
++++ export CONDA_PYTHON_EXE=/opt/miniconda3/bin/python
++++ CONDA_PYTHON_EXE=/opt/miniconda3/bin/python
+++ __conda_hashr
+[0m[91m++ '[' -n '' ']'
+++ '[' -n '' ']'
+++ hash -r
++ conda activate testbed
++ local cmd=activate
++ case "$cmd" in
+[0m[91m+ __conda_activate activate testbed
++ '[' -n '' ']'
++ local ask_conda
+[0m[91m++ PS1='(base) '
+++ __conda_exe shell.posix activate testbed
+[0m[91m++ /opt/miniconda3/bin/conda shell.posix activate testbed
+[0m[91m+ ask_conda='PS1='\''(testbed) '\''
+export PATH='\''/opt/miniconda3/envs/testbed/bin:/opt/miniconda3/condabin:/opt/miniconda3/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'\''
+export CONDA_PREFIX='\''/opt/miniconda3/envs/testbed'\''
+export CONDA_SHLVL='\''2'\''
+export CONDA_DEFAULT_ENV='\''testbed'\''
+export CONDA_PROMPT_MODIFIER='\''(testbed) '\''
+export CONDA_PREFIX_1='\''/opt/miniconda3'\''
+export CONDA_EXE='\''/opt/miniconda3/bin/conda'\''
+export _CE_M='\'''\''
+export _CE_CONDA='\'''\''
+export CONDA_PYTHON_EXE='\''/opt/miniconda3/bin/python'\'''
++ eval 'PS1='\''(testbed) '\''
+export PATH='\''/opt/miniconda3/envs/testbed/bin:/opt/miniconda3/condabin:/opt/miniconda3/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'\''
+export CONDA_PREFIX='\''/opt/miniconda3/envs/testbed'\''
+export CONDA_SHLVL='\''2'\''
+export CONDA_DEFAULT_ENV='\''testbed'\''
+export CONDA_PROMPT_MODIFIER='\''(testbed) '\''
+export CONDA_PREFIX_1='\''/opt/miniconda3'\''
+export CONDA_EXE='\''/opt/miniconda3/bin/conda'\''
+export _CE_M='\'''\''
+export _CE_CONDA='\'''\''
+export CONDA_PYTHON_EXE='\''/opt/miniconda3/bin/python'\'''
+++ PS1='(testbed) '
+++ export PATH=/opt/miniconda3/envs/testbed/bin:/opt/miniconda3/condabin:/opt/miniconda3/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+++ PATH=/opt/miniconda3/envs/testbed/bin:/opt/miniconda3/condabin:/opt/miniconda3/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+++ export CONDA_PREFIX=/opt/miniconda3/envs/testbed
+++ CONDA_PREFIX=/opt/miniconda3/envs/testbed
+++ export CONDA_SHLVL=2
+++ CONDA_SHLVL=2
+++ export CONDA_DEFAULT_ENV=testbed
+++ CONDA_DEFAULT_ENV=testbed
+++ export 'CONDA_PROMPT_MODIFIER=(testbed) '
+++ CONDA_PROMPT_MODIFIER='(testbed) '
+++ export CONDA_PREFIX_1=/opt/miniconda3
+++ CONDA_PREFIX_1=/opt/miniconda3
+++ export CONDA_EXE=/opt/miniconda3/bin/conda
+++ CONDA_EXE=/opt/miniconda3/bin/conda
+++ export _CE_M=
+++ _CE_M=
+++ export _CE_CONDA=
+++ _CE_CONDA=
+++ export CONDA_PYTHON_EXE=/opt/miniconda3/bin/python
+++ CONDA_PYTHON_EXE=/opt/miniconda3/bin/python
++ __conda_hashr
++ '[' -n '' ']'
+[0m[91m+ '[' -n '' ']'
++ hash -r
+[0m[91m+ echo 'Current environment: testbed'
++ sed -i 's/requires = \["setuptools",/requires = \["setuptools==68.0.0",/' pyproject.toml
+[0mCurrent environment: testbed
+[91m+ python -m pip install -e '.[test]' --verbose
+[0mUsing pip 26.0.1 from /opt/miniconda3/envs/testbed/lib/python3.9/site-packages/pip (python 3.9)
+Obtaining file:///testbed
+  Checking if build backend supports build_editable: started
+[91m  Running command Checking if build backend supports build_editable
+[0m  Checking if build backend supports build_editable: finished with status 'done'
+  Preparing editable metadata (pyproject.toml): started
+[91m  Running command Preparing editable metadata (pyproject.toml)
+[0m[91m  Traceback (most recent call last):
+[0m[91m    File "/opt/miniconda3/envs/testbed/lib/python3.9/site-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py", line 389, in <module>
+[0m[91m      main()
+[0m[91m    File "/opt/miniconda3/envs/testbed/lib/python3.9/site-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py", line 373, in main
+      json_out["return_val"] = hook(**hook_input["kwargs"])
+[0m[91m    File "/opt/miniconda3/envs/testbed/lib/python3.9/site-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py", line 209, in prepare_metadata_for_build_editable
+[0m[91m      return hook(metadata_directory, config_settings)
+    File "/opt/miniconda3/envs/testbed/lib/python3.9/site-packages/setuptools/build_meta.py", line 454, in prepare_metadata_for_build_editable
+[0m[91m      return self.prepare_metadata_for_build_wheel(
+    File "/opt/miniconda3/envs/testbed/lib/python3.9/site-packages/setuptools/build_meta.py", line 380, in prepare_metadata_for_build_wheel
+[0m[91m      self.run_setup()
+    File "/opt/miniconda3/envs/testbed/lib/python3.9/site-packages/setuptools/build_meta.py", line 338, in run_setup
+      exec(code, locals())
+[0m[91m    File "<string>", line 66, in <module>
+  ModuleNotFoundError: No module named 'extension_helpers'
+[0m[91m  error: subprocess-exited-with-error
+  
+  × Preparing editable metadata (pyproject.toml) did not run successfully.
+  │ exit code: 1
+  ╰─> No available output.
+  
+  note: This error originates from a subprocess, and is likely not a problem with pip.
+[0m[91m  full command: /opt/miniconda3/envs/testbed/bin/python /opt/miniconda3/envs/testbed/lib/python3.9/site-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py prepare_metadata_for_build_editable /tmp/tmpxx05lo9s
+[0m[91m  cwd: /testbed
+[0m  Preparing editable metadata (pyproject.toml): finished with status 'error'
+  Link requires a different Python (3.9.25 not in: '>=3.10'): https://files.pythonhosted.org/packages/70/7a/be4bd8bcbb24ea475856dd68159d78b03b2bb53dae369f69c9606b8888f5/pip-26.1-py3-none-any.whl (from https://pypi.org/simple/pip/) (requires-python:>=3.10)
+  Link requires a different Python (3.9.25 not in: '>=3.10'): https://files.pythonhosted.org/packages/73/7e/d2b04004e1068ad4fdfa2f227b839b5d03e602e47cdbbf49de71137c9546/pip-26.1.tar.gz (from https://pypi.org/simple/pip/) (requires-python:>=3.10)
+  Link requires a different Python (3.9.25 not in: '>=3.10'): https://files.pythonhosted.org/packages/3a/eb/fea4d1d51c49832120f7f285d07306db3960f423a2612c6057caf3e8196f/pip-26.1.1-py3-none-any.whl (from https://pypi.org/simple/pip/) (requires-python:>=3.10)
+  Link requires a different Python (3.9.25 not in: '>=3.10'): https://files.pythonhosted.org/packages/b6/48/cb9b7a682f6fe01a4221e1728941dd4ac3cd9090a17db3779d6ff490b602/pip-26.1.1.tar.gz (from https://pypi.org/simple/pip/) (requires-python:>=3.10)
+  Link requires a different Python (3.9.25 not in: '>=3.10'): https://files.pythonhosted.org/packages/5d/95/6b5cb3461ea5673ba0995989746db58eb18b91b54dbf331e72f569540946/pip-26.1.2-py3-none-any.whl (from https://pypi.org/simple/pip/) (requires-python:>=3.10)
+  Link requires a different Python (3.9.25 not in: '>=3.10'): https://files.pythonhosted.org/packages/01/91/47e7d486260f618783899587af63ccf7980fb60245c3e63dd4571c6b57ad/pip-26.1.2.tar.gz (from https://pypi.org/simple/pip/) (requires-python:>=3.10)
+  Link requires a different Python (3.9.25 not in: '>=3.10'): https://files.pythonhosted.org/packages/62/36/a3aed958d60531cb442b7ab4596cda7b3621cfb916f8ae1d6769795c7dc1/pip-26.2-py3-none-any.whl (from https://pypi.org/simple/pip/) (requires-python:>=3.10)
+  Link requires a different Python (3.9.25 not in: '>=3.10'): https://files.pythonhosted.org/packages/db/96/e6f8e9d9d7b9cc4457092712a7e919c3186aa2c2fa9ffed2c5d29cc947e8/pip-26.2.tar.gz (from https://pypi.org/simple/pip/) (requires-python:>=3.10)
+  Link requires a different Python (3.9.25 not in: '>=3.10'): https://files.pythonhosted.org/packages/f3/6e/1736e5b4ae2b778ef2f81c47d797de9f891d4d8acb047a24ca37a60294dd/pip-26.2.1-py3-none-any.whl (from https://pypi.org/simple/pip/) (requires-python:>=3.10)
+  Link requires a different Python (3.9.25 not in: '>=3.10'): https://files.pythonhosted.org/packages/ae/15/4500e320e6b101ec3b719ae85b697d9940b6cda672bc555bd6016fc60c6f/pip-26.2.1.tar.gz (from https://pypi.org/simple/pip/) (requires-python:>=3.10)
+[91merror: metadata-generation-failed
+
+× Encountered error while generating package metadata.
+╰─> from file:///testbed
+
+note: This is an issue with the package mentioned above, not pip.
+hint: See above for details.
+[0mThe command '/bin/sh -c /bin/bash /root/setup_local_repo.sh' returned a non-zero code: 1
+Traceback (most recent call last):
+  File "/Users/bytedance/codes/pi/rollback_mvp/build_local_swebench_images.py", line 405, in <module>
+    main()
+    ~~~~^^
+  File "/Users/bytedance/codes/pi/rollback_mvp/build_local_swebench_images.py", line 380, in main
+    build_image(
+    ~~~~~~~~~~~^
+        row,
+        ^^^^
+    ...<3 lines>...
+        args.wheelhouse.resolve() if args.wheelhouse else None,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/bytedance/codes/pi/rollback_mvp/build_local_swebench_images.py", line 314, in build_image
+    build_docker_context(
+    ~~~~~~~~~~~~~~~~~~~~^
+        image,
+        ^^^^^^
+    ...<2 lines>...
+        log_path,
+        ^^^^^^^^^
+    )
+    ^
+  File "/Users/bytedance/codes/pi/rollback_mvp/build_local_swebench_images.py", line 134, in build_docker_context
+    raise subprocess.CalledProcessError(return_code, process.args)
+subprocess.CalledProcessError: Command '['docker', 'build', '--platform', 'linux/arm64/v8', '--tag', 'sweb.eval.arm64.astropy__astropy-12907:latest', '.']' returned non-zero exit status 1.
+$ /tmp/pi-swebench-runtime/bin/python /Users/bytedance/codes/pi/rollback_mvp/build_local_swebench_images.py --dataset /Users/bytedance/codes/pi/research_output/dgm_pi_matched_smoke_20261014_1830/endpoints/frozen-inputs/materialized/frozen_swebench_dataset.json --instance-id astropy__astropy-12907 --log-dir /Users/bytedance/codes/pi/research_output/dgm_pi_matched_smoke_20261014_1830/runtime/images/astropy__astropy-12907/image_logs --output /Users/bytedance/codes/pi/research_output/dgm_pi_matched_smoke_20261014_1830/runtime/images/astropy__astropy-12907/image.json --build-missing-env
+Building sweb.eval.arm64.astropy__astropy-12907:latest from d16bfe05a744909de4b27f5875fe0d4ed41ce607
+DEPRECATED: The legacy builder is deprecated and will be removed in a future release.
+            Install the buildx component to build images with BuildKit:
+            https://docs.docker.com/go/buildx/
+
+Sending build context to Docker daemon  45.35MB
+
+Step 1/7 : FROM --platform=linux/arm64/v8 sweb.env.arm64.428468730904ff6b4232aa:latest
+ ---> 5a8d3c9313e0
+Step 2/7 : ARG PIP_DEFAULT_TIMEOUT=120
+ ---> Using cache
+ ---> 08ddf75b3b6e
+Step 3/7 : ARG PIP_RETRIES=20
+ ---> Using cache
+ ---> 13e4793ce729
+Step 4/7 : COPY ./repo /testbed
+ ---> 310f53e6ca24
+Step 5/7 : COPY ./setup_local_repo.sh /root/
+ ---> d2f7df084c6c
+Step 6/7 : RUN /bin/bash /root/setup_local_repo.sh
+ ---> Running in 12a7922ac7b5
+[91m++ git -C /testbed rev-parse HEAD
+[0m[91m+ test d16bfe05a744909de4b27f5875fe0d4ed41ce607 = d16bfe05a744909de4b27f5875fe0d4ed41ce607
+[0m[91m++ git -C /testbed remote
+[0m[91m+ test -z ''
++ chmod -R 777 /testbed
+[0m[91m+ cd /testbed
++ git reset --hard d16bfe05a744909de4b27f5875fe0d4ed41ce607
+[0mHEAD is now at d16bfe0 Merge pull request #12900 from Cadair/custom_compound_model
+[91m+ source /opt/miniconda3/bin/activate
+[0m[91m++ _CONDA_ROOT=/opt/miniconda3
+[0m[91m++ . /opt/miniconda3/etc/profile.d/conda.sh
+[0m[91m+++ export CONDA_EXE=/opt/miniconda3/bin/conda
++++ CONDA_EXE=/opt/miniconda3/bin/conda
++++ export _CE_M=
++++ _CE_M=
+[0m[91m+++ export _CE_CONDA=
++++ _CE_CONDA=
++++ export CONDA_PYTHON_EXE=/opt/miniconda3/bin/python
++++ CONDA_PYTHON_EXE=/opt/miniconda3/bin/python
+[0m[91m+++ '[' -z '' ']'
++++ export CONDA_SHLVL=0
++++ CONDA_SHLVL=0
++++ '[' -n '' ']'
+[0m[91m+++++ dirname /opt/miniconda3/bin/conda
+[0m[91m++++ dirname /opt/miniconda3/bin
+[0m[91m+++ PATH=/opt/miniconda3/condabin:/opt/miniconda3/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
++++ export PATH
++++ '[' -z '' ']'
++++ PS1=
+[0m[91m++ conda activate
+++ local cmd=activate
+++ case "$cmd" in
+++ __conda_activate activate
+[0m[91m++ '[' -n '' ']'
+++ local ask_conda
+[0m[91m+++ PS1=
++++ __conda_exe shell.posix activate
+[0m[91m+++ /opt/miniconda3/bin/conda shell.posix activate
+[0m[91m++ ask_conda='PS1='\''(base) '\''
+export PATH='\''/opt/miniconda3/bin:/opt/miniconda3/condabin:/opt/miniconda3/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'\''
+export CONDA_PREFIX='\''/opt/miniconda3'\''
+export CONDA_SHLVL='\''1'\''
+export CONDA_DEFAULT_ENV='\''base'\''
+export CONDA_PROMPT_MODIFIER='\''(base) '\''
+export CONDA_EXE='\''/opt/miniconda3/bin/conda'\''
+export _CE_M='\'''\''
+export _CE_CONDA='\'''\''
+export CONDA_PYTHON_EXE='\''/opt/miniconda3/bin/python'\'''
+++ eval 'PS1='\''(base) '\''
+export PATH='\''/opt/miniconda3/bin:/opt/miniconda3/condabin:/opt/miniconda3/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'\''
+export CONDA_PREFIX='\''/opt/miniconda3'\''
+export CONDA_SHLVL='\''1'\''
+export CONDA_DEFAULT_ENV='\''base'\''
+export CONDA_PROMPT_MODIFIER='\''(base) '\''
+export CONDA_EXE='\''/opt/miniconda3/bin/conda'\''
+export _CE_M='\'''\''
+export _CE_CONDA='\'''\''
+export CONDA_PYTHON_EXE='\''/opt/miniconda3/bin/python'\'''
++++ PS1='(base) '
++++ export PATH=/opt/miniconda3/bin:/opt/miniconda3/condabin:/opt/miniconda3/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
++++ PATH=/opt/miniconda3/bin:/opt/miniconda3/condabin:/opt/miniconda3/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
++++ export CONDA_PREFIX=/opt/miniconda3
++++ CONDA_PREFIX=/opt/miniconda3
++++ export CONDA_SHLVL=1
++++ CONDA_SHLVL=1
++++ export CONDA_DEFAULT_ENV=base
++++ CONDA_DEFAULT_ENV=base
++++ export 'CONDA_PROMPT_MODIFIER=(base) '
++++ CONDA_PROMPT_MODIFIER='(base) '
++++ export CONDA_EXE=/opt/miniconda3/bin/conda
++++ CONDA_EXE=/opt/miniconda3/bin/conda
++++ export _CE_M=
++++ _CE_M=
++++ export _CE_CONDA=
++++ _CE_CONDA=
++++ export CONDA_PYTHON_EXE=/opt/miniconda3/bin/python
++++ CONDA_PYTHON_EXE=/opt/miniconda3/bin/python
+++ __conda_hashr
+[0m[91m++ '[' -n '' ']'
+++ '[' -n '' ']'
+++ hash -r
+[0m[91m+ conda activate testbed
++ local cmd=activate
++ case "$cmd" in
++ __conda_activate activate testbed
++ '[' -n '' ']'
++ local ask_conda
+[0m[91m++ PS1='(base) '
+++ __conda_exe shell.posix activate testbed
+[0m[91m++ /opt/miniconda3/bin/conda shell.posix activate testbed
+[0m[91m+ ask_conda='PS1='\''(testbed) '\''
+export PATH='\''/opt/miniconda3/envs/testbed/bin:/opt/miniconda3/condabin:/opt/miniconda3/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'\''
+export CONDA_PREFIX='\''/opt/miniconda3/envs/testbed'\''
+export CONDA_SHLVL='\''2'\''
+export CONDA_DEFAULT_ENV='\''testbed'\''
+export CONDA_PROMPT_MODIFIER='\''(testbed) '\''
+export CONDA_PREFIX_1='\''/opt/miniconda3'\''
+export CONDA_EXE='\''/opt/miniconda3/bin/conda'\''
+export _CE_M='\'''\''
+export _CE_CONDA='\'''\''
+export CONDA_PYTHON_EXE='\''/opt/miniconda3/bin/python'\'''
++ eval 'PS1='\''(testbed) '\''
+export PATH='\''/opt/miniconda3/envs/testbed/bin:/opt/miniconda3/condabin:/opt/miniconda3/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'\''
+export CONDA_PREFIX='\''/opt/miniconda3/envs/testbed'\''
+export CONDA_SHLVL='\''2'\''
+export CONDA_DEFAULT_ENV='\''testbed'\''
+export CONDA_PROMPT_MODIFIER='\''(testbed) '\''
+export CONDA_PREFIX_1='\''/opt/miniconda3'\''
+export CONDA_EXE='\''/opt/miniconda3/bin/conda'\''
+export _CE_M='\'''\''
+export _CE_CONDA='\'''\''
+export CONDA_PYTHON_EXE='\''/opt/miniconda3/bin/python'\'''
+++ PS1='(testbed) '
+++ export PATH=/opt/miniconda3/envs/testbed/bin:/opt/miniconda3/condabin:/opt/miniconda3/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+++ PATH=/opt/miniconda3/envs/testbed/bin:/opt/miniconda3/condabin:/opt/miniconda3/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+++ export CONDA_PREFIX=/opt/miniconda3/envs/testbed
+++ CONDA_PREFIX=/opt/miniconda3/envs/testbed
+++ export CONDA_SHLVL=2
+++ CONDA_SHLVL=2
+++ export CONDA_DEFAULT_ENV=testbed
+++ CONDA_DEFAULT_ENV=testbed
+++ export 'CONDA_PROMPT_MODIFIER=(testbed) '
+++ CONDA_PROMPT_MODIFIER='(testbed) '
+++ export CONDA_PREFIX_1=/opt/miniconda3
+++ CONDA_PREFIX_1=/opt/miniconda3
+++ export CONDA_EXE=/opt/miniconda3/bin/conda
+++ CONDA_EXE=/opt/miniconda3/bin/conda
+++ export _CE_M=
+++ _CE_M=
+++ export _CE_CONDA=
+++ _CE_CONDA=
+++ export CONDA_PYTHON_EXE=/opt/miniconda3/bin/python
+++ CONDA_PYTHON_EXE=/opt/miniconda3/bin/python
++ __conda_hashr
+[0m[91m+ '[' -n '' ']'
++ '[' -n '' ']'
++ hash -r
+[0m[91m+ echo 'Current environment: testbed'
++ sed -i 's/requires = \["setuptools",/requires = \["setuptools==68.0.0",/' pyproject.toml
+[0mCurrent environment: testbed
+[91m+ python -m pip install -e '.[test]' --verbose
+[0mUsing pip 26.0.1 from /opt/miniconda3/envs/testbed/lib/python3.9/site-packages/pip (python 3.9)
+Obtaining file:///testbed
+  Checking if build backend supports build_editable: started
+[91m  Running command Checking if build backend supports build_editable
+[0m  Checking if build backend supports build_editable: finished with status 'done'
+  Preparing editable metadata (pyproject.toml): started
+[91m  Running command Preparing editable metadata (pyproject.toml)
+[0m[91m  Traceback (most recent call last):
+[0m[91m    File "/opt/miniconda3/envs/testbed/lib/python3.9/site-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py", line 389, in <module>
+[0m[91m      main()
+[0m[91m    File "/opt/miniconda3/envs/testbed/lib/python3.9/site-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py", line 373, in main
+[0m[91m      json_out["return_val"] = hook(**hook_input["kwargs"])
+    File "/opt/miniconda3/envs/testbed/lib/python3.9/site-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py", line 209, in prepare_metadata_for_build_editable
+      return hook(metadata_directory, config_settings)
+    File "/opt/miniconda3/envs/testbed/lib/python3.9/site-packages/setuptools/build_meta.py", line 454, in prepare_metadata_for_build_editable
+      return self.prepare_metadata_for_build_wheel(
+    File "/opt/miniconda3/envs/testbed/lib/python3.9/site-packages/setuptools/build_meta.py", line 380, in prepare_metadata_for_build_wheel
+      self.run_setup()
+[0m[91m    File "/opt/miniconda3/envs/testbed/lib/python3.9/site-packages/setuptools/build_meta.py", line 338, in run_setup
+[0m[91m      exec(code, locals())
+    File "<string>", line 66, in <module>
+  ModuleNotFoundError: No module named 'extension_helpers'
+[0m[91m  error: subprocess-exited-with-error
+  
+  × Preparing editable metadata (pyproject.toml) did not run successfully.
+  │ exit code: 1
+  ╰─> No available output.
+  
+  note: This error originates from a subprocess, and is likely not a problem with pip.
+[0m[91m  full command: /opt/miniconda3/envs/testbed/bin/python /opt/miniconda3/envs/testbed/lib/python3.9/site-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py prepare_metadata_for_build_editable /tmp/tmpl84au8vq
+[0m[91m  cwd: /testbed
+[0m  Preparing editable metadata (pyproject.toml): finished with status 'error'
+  Link requires a different Python (3.9.25 not in: '>=3.10'): https://files.pythonhosted.org/packages/70/7a/be4bd8bcbb24ea475856dd68159d78b03b2bb53dae369f69c9606b8888f5/pip-26.1-py3-none-any.whl (from https://pypi.org/simple/pip/) (requires-python:>=3.10)
+  Link requires a different Python (3.9.25 not in: '>=3.10'): https://files.pythonhosted.org/packages/73/7e/d2b04004e1068ad4fdfa2f227b839b5d03e602e47cdbbf49de71137c9546/pip-26.1.tar.gz (from https://pypi.org/simple/pip/) (requires-python:>=3.10)
+  Link requires a different Python (3.9.25 not in: '>=3.10'): https://files.pythonhosted.org/packages/3a/eb/fea4d1d51c49832120f7f285d07306db3960f423a2612c6057caf3e8196f/pip-26.1.1-py3-none-any.whl (from https://pypi.org/simple/pip/) (requires-python:>=3.10)
+  Link requires a different Python (3.9.25 not in: '>=3.10'): https://files.pythonhosted.org/packages/b6/48/cb9b7a682f6fe01a4221e1728941dd4ac3cd9090a17db3779d6ff490b602/pip-26.1.1.tar.gz (from https://pypi.org/simple/pip/) (requires-python:>=3.10)
+  Link requires a different Python (3.9.25 not in: '>=3.10'): https://files.pythonhosted.org/packages/5d/95/6b5cb3461ea5673ba0995989746db58eb18b91b54dbf331e72f569540946/pip-26.1.2-py3-none-any.whl (from https://pypi.org/simple/pip/) (requires-python:>=3.10)
+  Link requires a different Python (3.9.25 not in: '>=3.10'): https://files.pythonhosted.org/packages/01/91/47e7d486260f618783899587af63ccf7980fb60245c3e63dd4571c6b57ad/pip-26.1.2.tar.gz (from https://pypi.org/simple/pip/) (requires-python:>=3.10)
+  Link requires a different Python (3.9.25 not in: '>=3.10'): https://files.pythonhosted.org/packages/62/36/a3aed958d60531cb442b7ab4596cda7b3621cfb916f8ae1d6769795c7dc1/pip-26.2-py3-none-any.whl (from https://pypi.org/simple/pip/) (requires-python:>=3.10)
+  Link requires a different Python (3.9.25 not in: '>=3.10'): https://files.pythonhosted.org/packages/db/96/e6f8e9d9d7b9cc4457092712a7e919c3186aa2c2fa9ffed2c5d29cc947e8/pip-26.2.tar.gz (from https://pypi.org/simple/pip/) (requires-python:>=3.10)
+  Link requires a different Python (3.9.25 not in: '>=3.10'): https://files.pythonhosted.org/packages/f3/6e/1736e5b4ae2b778ef2f81c47d797de9f891d4d8acb047a24ca37a60294dd/pip-26.2.1-py3-none-any.whl (from https://pypi.org/simple/pip/) (requires-python:>=3.10)
+  Link requires a different Python (3.9.25 not in: '>=3.10'): https://files.pythonhosted.org/packages/ae/15/4500e320e6b101ec3b719ae85b697d9940b6cda672bc555bd6016fc60c6f/pip-26.2.1.tar.gz (from https://pypi.org/simple/pip/) (requires-python:>=3.10)
+[91merror: metadata-generation-failed
+
+× Encountered error while generating package metadata.
+╰─> from file:///testbed
+
+note: This is an issue with the package mentioned above, not pip.
+hint: See above for details.
+[0mThe command '/bin/sh -c /bin/bash /root/setup_local_repo.sh' returned a non-zero code: 1
+Traceback (most recent call last):
+  File "/Users/bytedance/codes/pi/rollback_mvp/build_local_swebench_images.py", line 405, in <module>
+    main()
+    ~~~~^^
+  File "/Users/bytedance/codes/pi/rollback_mvp/build_local_swebench_images.py", line 380, in main
+    build_image(
+    ~~~~~~~~~~~^
+        row,
+        ^^^^
+    ...<3 lines>...
+        args.wheelhouse.resolve() if args.wheelhouse else None,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/bytedance/codes/pi/rollback_mvp/build_local_swebench_images.py", line 314, in build_image
+    build_docker_context(
+    ~~~~~~~~~~~~~~~~~~~~^
+        image,
+        ^^^^^^
+    ...<2 lines>...
+        log_path,
+        ^^^^^^^^^
+    )
+    ^
+  File "/Users/bytedance/codes/pi/rollback_mvp/build_local_swebench_images.py", line 134, in build_docker_context
+    raise subprocess.CalledProcessError(return_code, process.args)
+subprocess.CalledProcessError: Command '['docker', 'build', '--platform', 'linux/arm64/v8', '--tag', 'sweb.eval.arm64.astropy__astropy-12907:latest', '.']' returned non-zero exit status 1.

@@ -1,0 +1,1599 @@
+{
+  "contract_hash": "d893017f61873040a2f94aa9b2c47291070de9e4e723ee158e77b9f4abecc41f",
+  "declaration": "Only the exact D_evolve P0 panel, compact execution evidence, archive entry, and attributable costs are imported. Source observation identities are preserved. No D_test content or mutation result is imported.",
+  "kind": "audited_p0_import",
+  "panel": {
+    "observations": [
+      {
+        "evidence_files": {
+          "evaluator-invocation.json": "3122195b681bf43514b823818852c67b5d5462bd82e44859e4b8baa9c25244ad",
+          "identity.json": "562bb452c2a3433f978a46b221bc8003243d15bb6c499a85e68938af046c49be",
+          "invocation.json": "85fc5e7bccc82f8745598340618fe27b063d2fb4574355595aa64cf745a31020",
+          "observation.json": "9e2a7e7ae0a803bcd8da8c33f8a710008593b5533a5a1935135ff068975c2deb",
+          "result.json": "7fc18c7fd1b4692d5c13f241166b2719815f658f052da8b1d2a0e06cd51100e4",
+          "search-p0-0f5a215ac0bc/evaluation.json": "8e45c3ec8df43cd30130ac0adef18c82d377e98bfa9f1aa639c07555241fb626",
+          "search-p0-0f5a215ac0bc/prediction.json": "b76b46c70c910c3ea8042120cae9b08d8c6ba2c5e6f38a37d82b11cf9fceff62"
+        },
+        "evidence_hash": "25e7f6c2edfafdb3470669e7fd6b107738154985d152011326b82b71f1f78c27",
+        "identity_hash": "11bad8f57aca73e7a8654adab5faf6063d0da88668907eb02db3ee27fe0ff4f4",
+        "instance_id": "django__django-10973",
+        "observation_hash": "414b389f16222a481fb56efc8bb189e03f7155a198790470562b6441796d4ba2",
+        "resolved": false
+      },
+      {
+        "evidence_files": {
+          "evaluator-invocation.json": "1a462314f5e6acbd190bc88272c2add87ef1e14f92733ff4ac43a893c56f2aa1",
+          "identity.json": "a8dc9814547fd7e123cdfb3777c14de0d6db6304a2905644048a5ea6d0130b21",
+          "invocation.json": "919e66b83eab42e0301b8bc7cd1913d53eca72fb09ce294de49c9aba30059f3b",
+          "observation.json": "b4b580bc715b1af3056ff547846b5cb97e960deb9ab7cfc0b0c5354f8a79c648",
+          "result.json": "5d2fdcc2b48a214ea54fb5d762c374854375e0974c7934558218a46b25d2f020",
+          "search-p0-0f5a215ac0bc/evaluation.json": "b7e948cf0af1b9b5216178e30fd93e1267dfea46d9faa61bdaebccad59491781",
+          "search-p0-0f5a215ac0bc/prediction.json": "2a2b3a0e8ae404d53ffa980903315025533c2b29134ea124bf94806a0120fb20"
+        },
+        "evidence_hash": "1d32913504e6a7d898120f3a3c901b189f2fcfed6b74c7d9e1d6453e50106068",
+        "identity_hash": "d640bb87bd178de96438875843eceb3dd38e695afd694d73b31d903260663e94",
+        "instance_id": "django__django-11066",
+        "observation_hash": "f8b8bc2124eb350f8ea8708b447d05bc493c1149a98c6c94ff038826c68ed5d0",
+        "resolved": true
+      },
+      {
+        "evidence_files": {
+          "identity.json": "e051041d45ad431a60ccbde062fbff6b25b280054fcf4588d3d2e7ab8e0139d2",
+          "invocation.json": "ab087f13a55f3bcfa4a57e60ab3adc7758dc06df03f7eaf3799ae034ff14f71e",
+          "observation.json": "7daa9b7a05601069e1b31e861bacb9b2edd82160b87bdccc08a19340210fbb8b",
+          "result.json": "9327d0034beb64c060d7e52c9a3c944d5de90e10fcad6e63ac4c785430191a06"
+        },
+        "evidence_hash": "a57b95914ceeb3f6081900fe81a4e4e1945df77b316c1431d3099cd8cdcac849",
+        "identity_hash": "db4f86c553127f9d23ff8402d9fefba1fc7148c976575cd7197db394e56f5712",
+        "instance_id": "django__django-12754",
+        "observation_hash": "17bbd03759af07fed45a4fb9d7688d0d1e6572880bb49679c77e23ff16342cda",
+        "resolved": false
+      },
+      {
+        "evidence_files": {
+          "identity.json": "f8fe759c0bf799b6180d44997277e855dc59a5d9f2f2893ca17add826a1c30ec",
+          "invocation.json": "6c0271e498827367916c714024c554e84f0b416517d23a1667fe424bdab45f31",
+          "observation.json": "89767fad7b81e38338e23c4a605a87517d2560c64625fad0bc4fe346b2704e05",
+          "result.json": "295859240aa4be625fde88124a21df262ff084582588a94d9a3e15be349dd6d4"
+        },
+        "evidence_hash": "5af062bd8b786db5e9ad3e996d25158f5adddec75788d7bfebe308fc2042428a",
+        "identity_hash": "9a659e9a160251c5b901b4b1a427c8f0618f364e30d0ca6c84b35ba1fe9fe3b2",
+        "instance_id": "django__django-15930",
+        "observation_hash": "73c7b5563c0f90e14a933afbffe1d403a8b68dc7cee5aaec31bd0e062dfb66e3",
+        "resolved": false
+      },
+      {
+        "evidence_files": {
+          "evaluator-invocation.json": "0e234a392702bb0b5fa84134cf77b8b2eb47760d60adc511026f55ce5ba5f1ba",
+          "identity.json": "857e1b2594d3fcdb3b60c2a5684a330ef223afe4e7d0356c16a65ae8e0f7220f",
+          "invocation.json": "998f9f30f24b8d995971d614d4d8e22fe964d65b08c132f9abcd8c7fa24e91a5",
+          "observation.json": "bf0ba864a712679b96347c136494891d55e4fbb459f32e6697702ed340397807",
+          "result.json": "b27455cfce26fc685ca8dc70c835a2cc0d5976ffe24f285ab01aa39413fce937",
+          "search-p0-0f5a215ac0bc/evaluation.json": "2d6b98ec7da03409b0ab71735d52de082f28ef23e027837c60817c98fc472051",
+          "search-p0-0f5a215ac0bc/prediction.json": "cd389347f96346f4ea8ec422a628582d7e45f420571f087ffeb45ab4c56e54b1"
+        },
+        "evidence_hash": "02abf7050c908fea94bae50cb017e1f8af4ac51e4dd2482820bd2fd6e6bccdb7",
+        "identity_hash": "d8ac77ad53ad89a0f192097e97c3733ff0a92f40f7d2951c8a5657754d77faca",
+        "instance_id": "django__django-13279",
+        "observation_hash": "8ee4a624a18a41fb97b7a34c77b0426898d13231d7f3b26f9f877a32eccfaad6",
+        "resolved": true
+      },
+      {
+        "evidence_files": {
+          "identity.json": "1a6580cfdfb7bcdcafa3c1fb02fa516c035ddf668d6c486dbe64ae691d07de43",
+          "invocation.json": "9628544a2625d4b939af36b3de2be528b9f26edadf3e5959fe170d7771173489",
+          "observation.json": "ff207e3a09869109afda5a0057ae2f76d80ac0b05bace02f30140e8cfc3f6b1f",
+          "result.json": "a2e86f261e937d528c4fc6fda5e4d5f60778530161b8a92039ee900110797a97"
+        },
+        "evidence_hash": "f3df296d164c2500667c2b86b7145b0bc8ab9f2f46afe444053b318431c7f84b",
+        "identity_hash": "62b187ec87012b058cc4dea1d37ecadc4526f8ab8106c132697a82d76dad53d9",
+        "instance_id": "django__django-16661",
+        "observation_hash": "6c5fdf3adf5b4d390f6672a208b9374d0a170ac4ca3db4fad8965f3a490388e7",
+        "resolved": false
+      },
+      {
+        "evidence_files": {
+          "identity.json": "8bd7a0deca62bd55510ab5786a832438eed3574bebfec0580035786c73381dc8",
+          "invocation.json": "8afeb25a864736405cb9bc24ea07beaba4fbadab66658375425c5cc455e6981f",
+          "observation.json": "e58d24b599c31f7f73703f5079633dafa1c152ddcdfb24564d6e00d984b5ce7b",
+          "result.json": "56fcdd5185bed25fd6984140c4d8aa0f392158e5882aed5f0c4d631f48b213b8"
+        },
+        "evidence_hash": "1f6ab2834df1e3b5f0de1b954eae350b610ddffc046c6f5a566adbbd375761f7",
+        "identity_hash": "ac67a0d44507793a8b5f7e659d6c014403b40c06b5d3ed0d94b317733b8a24de",
+        "instance_id": "django__django-13346",
+        "observation_hash": "34100b997a761ab4b9174d5078a0374309a873a51b85332633fbad17b23bb7bf",
+        "resolved": false
+      },
+      {
+        "evidence_files": {
+          "evaluator-invocation.json": "ab364b91601502b790c79cc072efbd9f6337b6812a850c744fcbae1f5f2a7aa6",
+          "identity.json": "421875e00a8c71dcd7b0535ce2b12f322a55cd124273beccee491e68202f2c95",
+          "invocation.json": "10d5d2a42eef647acbfb384ad21c10e49d424e21963132238b280e28805112a0",
+          "observation.json": "78da2ca31e7913ccf62581dacc49730398d1fe118ec9629e268fc1cd7685a5a3",
+          "result.json": "4cbc67d9528ae99bc83842aed8e02fb4a2871dc26c88ab0b4d4ba2a3d6fb3f95",
+          "search-p0-0f5a215ac0bc/evaluation.json": "e158c0dce7d36ced8a03707c539cb7e68cfb7b28bfab584be60f19183e2a4240",
+          "search-p0-0f5a215ac0bc/prediction.json": "547212ebaa2c08f187fd2692bedbd1d99c502b493688905b56fbca05e9ad88cd"
+        },
+        "evidence_hash": "f28197640484a3b8d13a8c1867dec7bfbb2170fc3851e4458eaf3d980bbb0a2d",
+        "identity_hash": "c158cbc20c034541126e709d0caf27b25285569ea5657765d0cf8ff4fc284717",
+        "instance_id": "django__django-10880",
+        "observation_hash": "fd54d3bfd61035f85d41e93486f09aaaee630304c222b979e88c6b6fdb49b8f4",
+        "resolved": true
+      },
+      {
+        "evidence_files": {
+          "evaluator-invocation.json": "417d7110802833e6556f5200958f3895def91f11250824bd090d6fb876e603b7",
+          "identity.json": "1f51b4d7bbb54e4ce2c136f253cd90639ab15e91f0c5e3c2440303ae3cbeeeb0",
+          "invocation.json": "84254609f079cee3d2688c64cfbaa7607579db125b4d32200a5474d3af2ba4f8",
+          "observation.json": "55e5da6c2eb543c89db471c3695c1159e00c515d486eab18c94dc2b17ff3faef",
+          "result.json": "dfbe85d0bdb290f5cebc5d47d5c7a79b76eb2067d54933d04141e99a61a40603",
+          "search-p0-0f5a215ac0bc/evaluation.json": "c3e0e458cfff771bf46e6993ca6a72912e40c8f73e9f70ff37ac05043b274061",
+          "search-p0-0f5a215ac0bc/prediction.json": "d6eeeee5194efaa7d84a9bd53170e3666115952516ad5f94e4a18d32e501a676"
+        },
+        "evidence_hash": "3544531cd43a87884ef49a8d5375ba7cf3f0d6cce2aeb8e1d99a25831c10b636",
+        "identity_hash": "5c30624a39d0faad9debc54f1bd4452bb2fa7420a510de2be431b4ff948d519e",
+        "instance_id": "django__django-10999",
+        "observation_hash": "32529cec2e1de0523f36d1017c2d8efbb66dad904cd76ec23c89b1a1eac3ce76",
+        "resolved": false
+      },
+      {
+        "evidence_files": {
+          "identity.json": "33c7690df6ec3f0045592fea1b351e7bca6983572f6393df717de49bdb54c9b6",
+          "invocation.json": "28979de1bc0bed8bd4feec0c723a88625401a95da8485a1247003314192f1243",
+          "observation.json": "ae9c906f5116fa98d3c29ec6513a0290dc316bc64cedbd1d58e89fafb303b000",
+          "result.json": "b7355a1794d5bf970557b4d50ff57306c8e06e79f0ad7f2b7f2bf427fde581d3"
+        },
+        "evidence_hash": "1ee18ad71cef429e4c5db2e28713e1132e1cf73d7fd0bcba4d8b0aa27303606b",
+        "identity_hash": "0eb5e0d7d13ed168870adacfacbeec7db06068e183cbe37559423239cade0210",
+        "instance_id": "django__django-11087",
+        "observation_hash": "1f1cce24f7fe9dc288930c477f3e66e4259b66e8a484572028552428b9283bf9",
+        "resolved": false
+      },
+      {
+        "evidence_files": {
+          "evaluator-invocation.json": "8ac6a2d5d2e7cbb99efb96b5dac007c12a369d2d8d77c0cc0b6df2d7123f5865",
+          "identity.json": "db11b275dc9c474acde8dd2ec560f928aacf1bc6fb820c1e395980add4a91629",
+          "invocation.json": "ac4ca570591f8495ec77191decb969dd3f94ed1ab9953d7dcd7e3cf64861511d",
+          "observation.json": "fde8a92e69ca776c9ce9352991833aa5b5c5a59d2a3b6ecf4c218f3365647cec",
+          "result.json": "f74743edb119f3d735468c75db776b5f1d2df55482d464ecd3b5ccd6629fdf5c",
+          "search-p0-0f5a215ac0bc/evaluation.json": "2f803f14387526396335ddb0fa5824882d0f2d385dc9b7a62ac4a1c97db15284",
+          "search-p0-0f5a215ac0bc/prediction.json": "63e2b319f8920d82947e22e3e1b420e60fed621a31b1340185b75624755178cf"
+        },
+        "evidence_hash": "f7ef55a1bf12cfe705edf7c74682e056843eb9dc4d66c0aa8e3b7e9f63bde1b8",
+        "identity_hash": "23e09b397dffadbefc2af6e47cf0d0b9f50513e0d432df3f338aa093fcfc882a",
+        "instance_id": "django__django-11790",
+        "observation_hash": "f5d776f2934c93c3ea7d34ae61961231212221bd6ee7a4891234ef83e76342a4",
+        "resolved": false
+      },
+      {
+        "evidence_files": {
+          "evaluator-invocation.json": "25c83e0c91ff9b7e7d4258378556079256eef19ae2999adab20ea5cd0b7529e1",
+          "identity.json": "caa8a1dd5bbe5fe8809822abcfeb6de7642272fb746d65b408caf7bce020d1cf",
+          "invocation.json": "5df8bf2a40b5c5fa5cd51ba2af40d95ef47e7dd01de56e734cd6b2e1dac4aefa",
+          "observation.json": "737e20492b8fba3617091b82ec7263abb800621fb55d47a61d69ac54b1b1093d",
+          "result.json": "5b84ff93ee7afbecff4cec522ad7e782d0bb8d467ef494bf1f4a3d5ee41cfac1",
+          "search-p0-0f5a215ac0bc/evaluation.json": "6a3c22f345f5f72bc75bbc1239d2487a00f9a9782018cb6f9c325f5873e296b2",
+          "search-p0-0f5a215ac0bc/prediction.json": "a50196882319ba6e967419172a7dfb51133d52fa829e332b9385b98f5b855ded"
+        },
+        "evidence_hash": "7f6af23b1c431c8af87c30b415eb69e002d3ec9ccd53a997a7b3ce6a28334076",
+        "identity_hash": "de6f377497a8dbefdbd869def00ded05fc28700b83245e0a965da61d8142b3a4",
+        "instance_id": "django__django-12050",
+        "observation_hash": "55df0912a7136454a0a82e8304cfee3cb06ed80622c7aabb0fdba0162e287a58",
+        "resolved": true
+      },
+      {
+        "evidence_files": {
+          "evaluator-invocation.json": "a7411a5c43d5ba20b8d2d6687b1121e0d8e482c82bd0ba4334d0e7e1544f9829",
+          "identity.json": "c4f6567edb92c19f9fee5126433068dc245fd19a450b7dd1a35c6162d5769a36",
+          "invocation.json": "7101f87f090566d78c9a15b0eb3c6033f31a522701e49642f4c538ac8387ecf4",
+          "observation.json": "7c652f30966e3a97a3d992ac56aa57d898e5a160c97a075f383f412372251477",
+          "result.json": "ec1df3260aed03b6447d6384408f1b9d69bd4efa2804ad0bd3f2c9d5550183d5",
+          "search-p0-0f5a215ac0bc/evaluation.json": "b66dc99a1299915a70dd3dab2992a5956b33d0ea430cc133327f922d74428245",
+          "search-p0-0f5a215ac0bc/prediction.json": "0a33964e5b358cb172a838f4d5eb501377fd9d680c6df5a8b9fe80baf0b059ce"
+        },
+        "evidence_hash": "069235758cb0ef45a54181460dbeccb104d1b9958448e593a61acdd8395bd523",
+        "identity_hash": "0d42f3599ff9e6064d0f073081bd7bb6175b01880c70d98ea94942c05451c227",
+        "instance_id": "django__django-12262",
+        "observation_hash": "90e9927c16063e8d32505db16606b88cece2298d8b404938c96df2f180124f69",
+        "resolved": true
+      },
+      {
+        "evidence_files": {
+          "evaluator-invocation.json": "32eb9e633e56a10bf9b326d00bdcd0086e1fba71b9e3018102773bb3dc9bad49",
+          "identity.json": "9df5fb8c9fd4d18fa13a1522aaa74b504705f3900a2bc685cd244c78b2dfcefb",
+          "invocation.json": "8690077f9be2b2a67f458d4cb082c25b4f0c25b3a573cf55e2642f21ba9c9c2e",
+          "observation.json": "8caa81caff4b21474fe498b673419aec4cee99b8d5b3d22072e0556f9baf1107",
+          "result.json": "4e4e093e016e85b16ce91853644c8c2b8ec165c22bb783b516607f720a72d9cb",
+          "search-p0-0f5a215ac0bc/evaluation.json": "9d5bd53ae99346b48633e2c18a2e9410e4c39914b37abbe2fbe511615f6e889f",
+          "search-p0-0f5a215ac0bc/prediction.json": "4ca22fc5c1c85f220b4eb5d1998485b8c8bdf0c7fdc1dbe27807c76d583351f5"
+        },
+        "evidence_hash": "105a396ba2cd18e9102d3e00992430e99e7720b504e39cee290b94b843c2bde4",
+        "identity_hash": "cd610cef2c193ae6c567b268281e279d5463527105cec2346bfec59b0caaeb87",
+        "instance_id": "django__django-12713",
+        "observation_hash": "33baadc292625aee1985a3460de08cc325fef2ec065ee8b1f60b065f89029ad0",
+        "resolved": true
+      },
+      {
+        "evidence_files": {
+          "evaluator-invocation.json": "daefe3b5b1449effe2b6537ab7c704029daec45611862fe11675d8aa50882834",
+          "identity.json": "7c5f7ec64683686718df7dc336284599727816469395818109307728bc80984a",
+          "invocation.json": "d6f9d98c34f69a6882568aeb012f9723069a721cf701bdca5e9b92e18aeac187",
+          "observation.json": "93f615ab7e87cb5bad27493356538dc076bdf42a38d436fcfa53c9ea04bc330e",
+          "result.json": "dda5529296db240b146982d56d8687fd5c63419fdcbb398ff6d29a56c1266035",
+          "search-p0-0f5a215ac0bc/evaluation.json": "534960194a12c71e6304ad97579f90d1715a005ab0c1ea79bb6d0102a70eb6e8",
+          "search-p0-0f5a215ac0bc/prediction.json": "8721522e02421299ef0764d8dcf6603cc0676cf3441040a3885d2a03640d501d"
+        },
+        "evidence_hash": "63bd1aff2f3935ad7a870af670dee3359482a8d09a3e41529db3a06759b637d3",
+        "identity_hash": "17628977e2fc042197992e11edf6d9c492a4700a00929a03ee4669d9289ede50",
+        "instance_id": "sphinx-doc__sphinx-8475",
+        "observation_hash": "7462b11a0953193b6db63a85a0d25f92cac2a270be5376d1f86ee0f27c82a57e",
+        "resolved": false
+      },
+      {
+        "evidence_files": {
+          "evaluator-invocation.json": "e1d2b255c59d85b67d7d4bbc1862ea30fc10e61a17c201c6fefca828c470b147",
+          "identity.json": "3f29cdb9224bffe3d0ccbb214e30380dde2b7f3bf6d0621efb383ac4d3ec5906",
+          "invocation.json": "39626373d1c884809e043ace843583c6cb3a7c0c9cd6baee18c0108e16495094",
+          "observation.json": "2fcfdc578e11a23801a4a49d9a80dfe8ed56960a535ce8e647f178ad18631408",
+          "result.json": "9041f4af8ef5deb06050f78e3f8e802534b9c24f51e92d87ff7f683dac976d11",
+          "search-p0-0f5a215ac0bc/evaluation.json": "5dec6946f31d2361342eec4dd19d09a8c0472abcd59b0637c271386941d529ce",
+          "search-p0-0f5a215ac0bc/prediction.json": "7469974da9768ae06670d802e340ae503924127e13b6f58c7186dd8e6f1b2532"
+        },
+        "evidence_hash": "4bc39169f1996f9add0edd65af11719aa1b7c97989e5d2640113d4b5c0b8c645",
+        "identity_hash": "42b40b3e62e3cb5a11d40f31a91fe8a1538f4849261d0bfaaf3627ef446d76a4",
+        "instance_id": "sphinx-doc__sphinx-8721",
+        "observation_hash": "90eb2eec8ba6791b4711b1c47410bdc0ee872f44ddc94af396d7cf7bf8dfac31",
+        "resolved": false
+      },
+      {
+        "evidence_files": {
+          "evaluator-invocation.json": "d63b9123c141310c1fbe8472ef54838d4e5fc48531abf0972379ab8d26240e07",
+          "identity.json": "88ba4d211985d40a92d474d6c1dea080d283b11049652f6cbda3af59f744eb16",
+          "invocation.json": "60714fc6b0ff177c19d4dba66fc7f9131bd9d029abb3d7e63faec962817e4b1e",
+          "observation.json": "b6b21ae21a697936b0d0bc5c97cf0ca68535af02e44a0e41c97c2ce12ea27cd4",
+          "result.json": "338ba9f41991822317f8b3b321f30a730e602437660a2ee0330caa49d16b8fba",
+          "search-p0-0f5a215ac0bc/evaluation.json": "4711825c86204ad4967a562d3a38803d66f851ea2f37f0b07b30f998a12641c3",
+          "search-p0-0f5a215ac0bc/prediction.json": "7088b1c054c86a4dc09f9acfae3e53e560cf82e36f736f5f1ff1bf5220fd0fbb"
+        },
+        "evidence_hash": "c68c401193339d8d16e2d97760a37244a6da6baec81b313d8529bbffafd86627",
+        "identity_hash": "598bbc95d97c3e0661f1255f552acd5bbc3b13b607c718a2885897a92b4ed5fb",
+        "instance_id": "sphinx-doc__sphinx-9320",
+        "observation_hash": "61570dfe19aa43e6024d4b38b64a157c9560006a6e08d85d89318340c489f7a1",
+        "resolved": true
+      },
+      {
+        "evidence_files": {
+          "evaluator-invocation.json": "176808f2baa6db4aeba5581bb1b625c834ffb9c89e5053b09b8b48abe0c63fa2",
+          "identity.json": "15b4ff4af2fee6d0ac70ce73ffab60538dd989854576f645bcb193f1c857870f",
+          "invocation.json": "acbbf7885cdd9c3446545f588522f6c8e5d6a3f28401ab37b2a69bd54dea218d",
+          "observation.json": "ab184d91fcfb09fbafd6e52cf68819b4048ce95efd2997973f8ce33a72f486b9",
+          "result.json": "47e426fe727173c65357828c4810b94523011f01074f2f8fa6b5b3265d03b300",
+          "search-p0-0f5a215ac0bc/evaluation.json": "d904fc4c190d28b67d2a6b6c10beaa3674ab9775d5d3840ca16cfd36610b4701",
+          "search-p0-0f5a215ac0bc/prediction.json": "457aff6746e2d66898fe5c8a2a49829033dd1016132c3b0bd64aac5a63a13afe"
+        },
+        "evidence_hash": "8ed9631818df44b688024b6bc25e9d4b67dad9382367b40aa4f7d69715999151",
+        "identity_hash": "8be92bdad389465202574bbcbce463d8ff79f440d7b2c211fbbcbd1b833635c0",
+        "instance_id": "sphinx-doc__sphinx-9698",
+        "observation_hash": "35f48e471d2061e44af6bc59e2308f472645ebf234ffac2e1b09f5e02adcf959",
+        "resolved": true
+      },
+      {
+        "evidence_files": {
+          "evaluator-invocation.json": "3c7ab781ab9de66c75877ccecbbf362fe88059434274a64e303d910ca41538c5",
+          "identity.json": "6b40f5469f6e1c488d0389a242eabb85fdfa83cca316f8d4f44d2cb4a9bc3a98",
+          "invocation.json": "c1481028786e74d1cb8544815fa2ef11f8675978c9bed15993305b6766c703f3",
+          "observation.json": "a7d93986da50a6c17ca39ba25477e99927a8585d45f68ee1b769e3bc1f476981",
+          "result.json": "3adb2e3ed94b787a7c414719f8d26523a27d1c3a8b353de63059e4162b064398",
+          "search-p0-0f5a215ac0bc/evaluation.json": "e03950709d11f71c9649b490902931012f2b0d58e7e1312bf8753d62bad814ec",
+          "search-p0-0f5a215ac0bc/prediction.json": "6242ed9ab5ca9a91b3435eb52da3cc0ee3d81d8b4dfdd832e97326014ead90cd"
+        },
+        "evidence_hash": "600394409139f81e977ee49177335572d20de8e366177a22eb8cf19b9bc0bef2",
+        "identity_hash": "94c12f1e7b21bdb127371f368ef1f27cf57ea7581d3dc4064a5929e472c78ca9",
+        "instance_id": "django__django-11848",
+        "observation_hash": "6fbcc79a6ff375734d71803288a2d33f2c38ffe835034fe7dd44eeeda100b990",
+        "resolved": false
+      },
+      {
+        "evidence_files": {
+          "evaluator-invocation.json": "f7d99d74ca6b68562b25a875e4258ad48d8a95cb19839d61834e37771d453064",
+          "identity.json": "732c71827892ef1fb5007cccf71ad3fcd73aeb65bfb87c92a213b1b8478c46c7",
+          "invocation.json": "f2556970efbd09d8600796e5804bbdacc9767af6711e5d08b63cd5f40f91bbd7",
+          "observation.json": "5c2e9818f7254a28ad451b45240b7b07e2e5fefef83792558694ba716873544d",
+          "result.json": "fce0b769910560d682c8bc900ca446cf33fc99aae4bd859dc4cebd1a3307ebe1",
+          "search-p0-0f5a215ac0bc/evaluation.json": "d608da76b1477ff5a0e7500503043cc33a67ee795a7cd13b2a50405a457493d6",
+          "search-p0-0f5a215ac0bc/prediction.json": "7f4fc9abe945830238c9b5a0447214869bec1842b64e62383451f4f26d2178e3"
+        },
+        "evidence_hash": "5961636d1d46623a5e0f3081e786ed6ef48f790480ee20f52249eb5be4d1c06d",
+        "identity_hash": "a681a5851c4baf4a03f6933d3db37a1cba16b44a4bca34d49edb06605201a83b",
+        "instance_id": "django__django-12774",
+        "observation_hash": "56a54d1b2e0ac9e3a19fd79a42fb2172151fb1237ff31d0a8a6571d814a70ffe",
+        "resolved": true
+      },
+      {
+        "evidence_files": {
+          "identity.json": "1d54c71c4a521bf80f8b5e94cbc1501b2c5bf124c94cc81983bdae8bd322cb8d",
+          "invocation.json": "d24058274bb6514eab8749bf30ebbc33b8a3e6db82afe74df684ac44fdf98c61",
+          "observation.json": "c28cb953b23a681029c3f0ce482f7eb9078b9f364a6fba1a3e9b1d9f5d4b101d",
+          "result.json": "26dbfa39cfbca58ccab2815b73ff3440e8c18c008997a07023febdd51cdb7a69"
+        },
+        "evidence_hash": "bc32732d0004f497c7813f839332ecf40d04caad9347f43b8d2b28c1c31b9788",
+        "identity_hash": "140690056d64ab3ef21952fffa63b2b56a9ae4228b42f1981e64c014c2bbb654",
+        "instance_id": "sphinx-doc__sphinx-7748",
+        "observation_hash": "423863526bede898f7a63e2aadee77f9f35b8bf31ae041962b0392c773b46ac1",
+        "resolved": false
+      },
+      {
+        "evidence_files": {
+          "identity.json": "919173c7b9d383cfd83cf24466f8c16f8f15ec056a2c30070ea84f3d195fdf07",
+          "invocation.json": "e22503cb75b7ccd2b0277374ed500b56b643fe8bba2efb7ceaedbc115b6c0037",
+          "observation.json": "b7b85453238832b8ee43a1b32bab7127af6fc0b028f43dfa592d0f9759d96c43",
+          "result.json": "34f381ba7485b11ccde7e7deb50c79d1295ec7fefae88f91ab91a7aaaafdf3cd"
+        },
+        "evidence_hash": "7afd04ed3b2737258f36aeb1cb073bd20dbeda95a0f09b9c9a5e6dc97399b6b7",
+        "identity_hash": "35970f54af2eee2eda88ab71680304c6dd1c859cfc26d29d25451ebb19f9b6a1",
+        "instance_id": "sphinx-doc__sphinx-8035",
+        "observation_hash": "31d5b7b097820c8544680a5e9e5a77901780cd52875351155780d69a60e87605",
+        "resolved": false
+      },
+      {
+        "evidence_files": {
+          "identity.json": "6d1083b2b02d9fdbc7457b38caca4892a5525b96044d0cd11a5c05917fd945cd",
+          "invocation.json": "cace95bd457606b778ef5e551195418cc6c4c562acd0b48f3f719ce364a4a87e",
+          "observation.json": "d475ab1ceaf92e43688a7af140c1edf9b5489f5e355c5f82ec8c028773f7796b",
+          "result.json": "c14508687bdcf43ae3ac9644ff729ebe337c94f4c2b85559efdddc1520ea9e76"
+        },
+        "evidence_hash": "f038a36b2d24af1e346da315513834aca23cbdb978964cdb4637e29a35c782f0",
+        "identity_hash": "34c0872f8a1ce79601143b8d29ec3f99eb3cee73ffecf8baf6cb065940fea617",
+        "instance_id": "sphinx-doc__sphinx-8548",
+        "observation_hash": "492e1cf5b142da6e46c6eca53371678d02ba6ad8b84b1eb0e2b1e180fb331d80",
+        "resolved": false
+      },
+      {
+        "evidence_files": {
+          "identity.json": "ca370d539448192353d295346043661c0f1f51c2c83103faef4f8b5913e5f967",
+          "invocation.json": "7aa58169fd0b9e0cbfdc5b7165cf2e55f350e89d168eba325f9b76b195fde4c4",
+          "observation.json": "45789b5f367b779d76f51b8f2d665414c3320875e355bc866ebfb4cd704c588b",
+          "result.json": "49afb8c79f2f08e606920ca1021a6907fe0234f458782b91f5ac860dc8ed5533"
+        },
+        "evidence_hash": "1e5f657364c3977bb71f046e5890a0589ff56343b0ed78f6250f43350568f1f9",
+        "identity_hash": "fa265dbe17715f58d315341899e1342797a529291051bf196d5d847ab026e278",
+        "instance_id": "sphinx-doc__sphinx-9229",
+        "observation_hash": "393181fa5cb612a3ec24392a535d17d349a15c944773e20d5a82316bbba0ed82",
+        "resolved": false
+      },
+      {
+        "evidence_files": {
+          "evaluator-invocation.json": "7ccd8714f76c6cef661d08f533bd5a4305747f889c903d20c6562455f5ca3306",
+          "identity.json": "76499f40689ffd5baf424fd6b14450e76a690411984324d048b6923aad88f7d0",
+          "invocation.json": "022b0321609eb9e420b1fb6d51487e6a1b98e55f42876a60cda24ea99815ba38",
+          "observation.json": "9b5c9dfa75b3e7a27e43933a486c3de4244c8198bd1f67b3363dd659caced6cf",
+          "result.json": "d4ca47eeade7092dbd3f727c1554000ada3698e31a8f2d859e634ba3f038a267",
+          "search-p0-0f5a215ac0bc/evaluation.json": "80a42d132dbeb2998cf78f545778e197b72d8c853985b0d4c8aa3fb6d5f8ef16",
+          "search-p0-0f5a215ac0bc/prediction.json": "008dd486a81b0b68b30a48ba21fa3999855066acb413bf4e77dde888e6fa858d"
+        },
+        "evidence_hash": "473044a908c8fb80bb55cea87abb1740146c6c5ea61598c342a9d4e7fe636dc3",
+        "identity_hash": "a45b4f85de89dae660dfb39f4d7dedb0cc5783a0f6fbad8f983df733f5f588a7",
+        "instance_id": "django__django-11880",
+        "observation_hash": "2364ffed46de0c9a07ee675038db9a6ce6a6cfeb89efd9d045a1d42216fceb8c",
+        "resolved": true
+      },
+      {
+        "evidence_files": {
+          "evaluator-invocation.json": "f0bea9f8e6389a744ad0ff34d4d9025734ba8d56e740133869d144c91e38edd2",
+          "identity.json": "58ebbdc76232c45df4fe1de1c371b7d7553774a703e6c9e97a92df0784c2b76b",
+          "invocation.json": "a6159aa32e041c50b64d4cf26ed6d7186661db8e5c84c3e31afe340dd5b0ad72",
+          "observation.json": "ef636ad0f5801bb91eac9f13a0277486d9be3ae56a198a29a28d75ee8131c29d",
+          "result.json": "8a3f61d4425b9087aa0e6c6cb32ebce211bf5416738f901a97b02b97f5773287",
+          "search-p0-0f5a215ac0bc/evaluation.json": "8e39238754ffae3c3471c1fa76d5704a63df7031cfb9f23348a2a8417de5c01c",
+          "search-p0-0f5a215ac0bc/prediction.json": "226b9ba1705f0f3beb6e7590d83e7e887576ca43adbb3ca0fe257da908bbe5c5"
+        },
+        "evidence_hash": "19ed1cb65b0f543363c46d7c1cbe8641d3e5258d442cf9b53928795dd0ae6493",
+        "identity_hash": "7f7b963dfba3834b6652720d15c67578c28288f578d105e887bb35acf5dd5fa1",
+        "instance_id": "django__django-12143",
+        "observation_hash": "00276ac3b2cf31ac670b44c338c5a485fb6363a4b2a8cc714a8ce5e00296999a",
+        "resolved": true
+      },
+      {
+        "evidence_files": {
+          "evaluator-invocation.json": "1e095e38d46dfc9bfa92af28180d550866425c511abf25c98d46632456436a41",
+          "identity.json": "e5ea34f0b59da773550989f81918c49b377f7b155947f3bec34bacf09334f6a6",
+          "invocation.json": "b53c6edce48d7584d1e5fa6bff58f1385263f36ae39e071be36af93800004b9c",
+          "observation.json": "edf44cb139e4ef3ee1c6f86f1d03f755508affeed9e1802928b618fe6e1b7c0f",
+          "result.json": "050662cbb897484429c861932b18e93aa003bd56b6712069b7fc4189a3a35e5e",
+          "search-p0-0f5a215ac0bc/evaluation.json": "bb967afcdaf4e2081da5e3546dd54e3a6ce95000e43fe0825ddcb907af5cdb2a",
+          "search-p0-0f5a215ac0bc/prediction.json": "96c6c730ba0f4f23149fede45606adefbeeb0d6634f576bd6a6c07ec78cb1835"
+        },
+        "evidence_hash": "9520c655eaf6767523043ef0f45c4665ffe0395f5118888c0447d8d432f5ad73",
+        "identity_hash": "c5530d5e0d36fbf55a882da84f118261f49ba2164215140facb4733e7c93ad97",
+        "instance_id": "django__django-12155",
+        "observation_hash": "a953649c65d17b5e913ff53ffd048e82cf615e182653e9b41d103c3ec3c24f39",
+        "resolved": true
+      },
+      {
+        "evidence_files": {
+          "evaluator-invocation.json": "efde6ad5d320801915dc56f2e74b45f07a23b20eec2bda35b3116df9b01421cd",
+          "identity.json": "c2b477af5cfc221bc7453b8c8631704d1c9cf4b848768492ed87a0821ddfcb96",
+          "invocation.json": "f1f9664bb1b6af35099f1c5b0069c7775ee149c2be280f5704bb9d0ad8da5164",
+          "observation.json": "6f7c847bfdfec5c7ea9a9e4878feef58c5e93a2e2f57f81c920bc3b84039c02d",
+          "result.json": "27a5bb065affd3d595993972c94aee7296ac21e4c698ee39a089a5e06ba1855d",
+          "search-p0-0f5a215ac0bc/evaluation.json": "3baff363dd8e57d17d559a433e884ab316f701107dc2c7abb90a99fe94ea15c8",
+          "search-p0-0f5a215ac0bc/prediction.json": "02938a305d277b5e62ac878b30f5ee3f046b501e7ee4884ad05f8313f8021e42"
+        },
+        "evidence_hash": "fbd8f90fa7cd8876ceda76f971ca8a869206a2e09e65216ed7ce05011166e13e",
+        "identity_hash": "c6a3b86a5089d341d078c6a8b293b47c031f3b19a3008cb587ab407199289d66",
+        "instance_id": "sphinx-doc__sphinx-9367",
+        "observation_hash": "a2dd4d5a447ca6f16aff0806a00fd2c6894c3e334a31ce4be73a8a58b0806138",
+        "resolved": true
+      },
+      {
+        "evidence_files": {
+          "identity.json": "917d2dbf3c2d3c4cddfd63cb07bfd84647ae128d767ee4b03163792daf447542",
+          "invocation.json": "81cce2b3113b87e0e43bee830f28bec7bbcbc90ff22ce4ec83b7ebaa10569f38",
+          "observation.json": "c45fbe52d94b1c3186c788b4d52347c96cbf10261bc2bba1e337898dcc8104c9",
+          "result.json": "822889a111991cefd48fcce028561d919c00cc9a69fdc2d25a723ff6c769aed6"
+        },
+        "evidence_hash": "10824c538570dc9ea7d88a1a92e6e8b6e5678aa05e4d5517c69ee80020f83406",
+        "identity_hash": "79799df11e19cca1d6fe41677fbfdd883d43f463176d82bad57b03dc44d8c290",
+        "instance_id": "django__django-12209",
+        "observation_hash": "f8a10b1d32a89793aa0c70a7cc0fd8847398ceb4dae82d18a1dc90d72aac1ee9",
+        "resolved": false
+      },
+      {
+        "evidence_files": {
+          "evaluator-invocation.json": "12bfa58d31968cab16e277aea206094ce9d17d561697e9d0a84a7eb8da9d0d8d",
+          "identity.json": "8fc35cc7549af31addadff2ca32ac8c7f517f7b8260b133f7aa94cfbed65aead",
+          "invocation.json": "31fb11f4059fece0bfcb18799d9d2287a1251aa1453026c95d840413c3f97d48",
+          "observation.json": "ef20e9ddbcaa8cee35b97ccf48638c28eed0732752aa3a91fa50fa1f23494db8",
+          "result.json": "f76b60f904def7950526f0b21e9e01536ded47a7a057b66ab223088a0babfecd",
+          "search-p0-0f5a215ac0bc/evaluation.json": "1e3bbf42513188d4431c287058a78aebc7d03163400f70256e706facb9276ccb",
+          "search-p0-0f5a215ac0bc/prediction.json": "10e0e117b4a3cf388ddd224bfd326b33fe35e2d291938121c4a74e19f0beb189"
+        },
+        "evidence_hash": "8b394bdc81262ee94d0ef98d2c412eef2c59cbcf45a291d16095594686bbddff",
+        "identity_hash": "19a67845af2bb850e801af2592c28800016c053a8d0cc2ba97e46321126a3d3f",
+        "instance_id": "django__django-11951",
+        "observation_hash": "43d228b0072b0e5fe94a59e941342fc08d02f0fe4695e3c91727c6a3b8c1b1ca",
+        "resolved": true
+      },
+      {
+        "evidence_files": {
+          "identity.json": "bc5224ff8e7cf52d8502c71b741a794574cb971a9fb4303d9054ad5427a5492e",
+          "invocation.json": "be258ab7cdddbd42ec23c954fe33e742ae3d3811ba9edbfe804d5c00da803c7d",
+          "observation.json": "13e22189cfba72c9324f6485239cf04393a9612a989d7657c8831bdccdb80722",
+          "result.json": "65eb934dad430ef504f218e2c8a2a7149f74c7ef4bac5cadd13b9b9a38f56203"
+        },
+        "evidence_hash": "b316fd99025bcce4f0d6a8a001975ca28b3d6d1ba4f974b58176f97fd913eb71",
+        "identity_hash": "1d5068556bdbd080f81ce3fc289f8e0b4525cc3489877e1f768b4de466388ba5",
+        "instance_id": "django__django-12193",
+        "observation_hash": "d0d207bd090ab2684708ea66f9957b35f605384f50c16c05d27866ec222d4d87",
+        "resolved": false
+      },
+      {
+        "evidence_files": {
+          "evaluator-invocation.json": "5500a5f79b2d08c672832b4d29cfacc2545fabc8259c55d25f8a676ccc27a27c",
+          "identity.json": "4eedcead4f6ddfb5d7d150f1681d21a50191645096782e2e7682936659a20b8d",
+          "invocation.json": "ffcb8a12fcae7420c428f3a0d52c1c48242997a8dc7714ed1ce85b64a3328e55",
+          "observation.json": "cf7ede520d8d69a5def43238f8531b9c11073180fbb5e43d23db7aba7594bc81",
+          "result.json": "d68a25e2b45e245e2d7a331fcdd83a70a354bf0471cde97d58710c90dd0b2930",
+          "search-p0-0f5a215ac0bc/evaluation.json": "629deb74b321eae93c6b4038b637fa1fa87ee0bf0cef46baae12378c87522df3",
+          "search-p0-0f5a215ac0bc/prediction.json": "d0d97e97fc7441261c31054b8c25bd3805b37122509dc1ca7732cdab02497b03"
+        },
+        "evidence_hash": "cc5ac2cb7863ae5b1a6af2edab487f9e8698f0ee7e70628bea6df0d6edb26d83",
+        "identity_hash": "059ffa04cb9d4d948dc2478b58407663b305004bd41e0911f9ba849fa2ed5297",
+        "instance_id": "django__django-12276",
+        "observation_hash": "dba7081a71eebc98150348e3aedfac77fb388bae96c876308f9256673ea6917f",
+        "resolved": true
+      },
+      {
+        "evidence_files": {
+          "identity.json": "52ed9a536a26b9cfb77aa9317f06124174abbdab48a93c9204d80f2031dba207",
+          "invocation.json": "4408887c0e573543aa44f06419d200aab800b6d6138f42227948ab4da8879c41",
+          "observation.json": "04add0ed7331c003c7e7dd630088725457182615884aa3a0dab629bcbbc40d12",
+          "result.json": "6a5bc362c822abc8774ea55a6098eae2da3392b917d4f52916646864d2b8c064"
+        },
+        "evidence_hash": "b2478903396c9f9066151e0417a3af4fb4924b791f3d540d57316f70673d2c7b",
+        "identity_hash": "53dfb2b1797fa5fb04583e01a2baa21c78caa87fd6e7a0fc594193fc9874f848",
+        "instance_id": "django__django-12304",
+        "observation_hash": "5f7b369ae2eb090414b0e9d379d32d38a899308a504cd6ca8638bc8f0746e635",
+        "resolved": false
+      },
+      {
+        "evidence_files": {
+          "evaluator-invocation.json": "da1ae868e452341f0abb88fbf0a3eabf13d2fc45f29d26bd414d0c86886f3f56",
+          "identity.json": "4b92b97645235e6d125fd6582f55182a4cb5eeaed0fed177e4f2757cdb4d1142",
+          "invocation.json": "9ff1251afca3b241645a35f746a6fb9a66e1811b98eef06a01eea7efd4a06330",
+          "observation.json": "7a86d7a5c208653c08144b1bbfc1e2bfb51fc14cfdad8be2ded828ed927b3d01",
+          "result.json": "d79ac0781b3d008e0376f8743c76e390d414ab00f64f9de632ff3b7bb6496be9",
+          "search-p0-0f5a215ac0bc/evaluation.json": "28b6cf05967ff2e90fb00584ac248b3d18d4298ffa69ed2a0b89939ecfc3fef6",
+          "search-p0-0f5a215ac0bc/prediction.json": "97802ff4f704197db48e8dd914917ad6269941aaaa4b2fe82ed2cd316da0d890"
+        },
+        "evidence_hash": "118a3a85647b04bcaf9a3e4759e7977164d60a1de3ce6df606671e3c052f24b5",
+        "identity_hash": "a342acb7ea6a74f1acdf7c620a6317d597f4a35df57024e34ca8a7809b5e113f",
+        "instance_id": "django__django-9296",
+        "observation_hash": "1067e824563f0331835955dca72672eaf5c1045606932ff14fc6c2597a19cfde",
+        "resolved": true
+      },
+      {
+        "evidence_files": {
+          "identity.json": "55e1d8710751afa5a5290c7301cc5ecedf11551fd7899ebe75cde49bec621867",
+          "invocation.json": "48ab007e43b3ade1fe7f2ae0b6feaa713513e5f13143e566d1708c9bed66e811",
+          "observation.json": "2d18048dd3048710793a3cdf6e75365b2ff28a6cf20b487f83272bb5dfabc36b",
+          "result.json": "c7db1457cdc4e720c9e22e5760f7eeaf5ab16c505935ce8b621bbae3caf18185"
+        },
+        "evidence_hash": "e3610bfec2e93a426417740dfe14b9d4de9d053e9ebbbf50275390596870dc13",
+        "identity_hash": "e56fcb82b5bef7425132897b2aef7565ac8e68888d345866614b8dd585b38a19",
+        "instance_id": "sphinx-doc__sphinx-10466",
+        "observation_hash": "c4553c7a944b66750cb2baffa67cbd77a421e1044a0aa87f84726c152c710cd9",
+        "resolved": false
+      },
+      {
+        "evidence_files": {
+          "evaluator-invocation.json": "6489715987992bf006f32cc9819e9e8db9a2b70292a98d9311de06cb5c160d1d",
+          "identity.json": "ab2c4e69f9b50e04c40ed3b39c52097c2b371924017aef38315371ac0a1152fb",
+          "invocation.json": "3197d6dc7e3807de3f58fc7a973d944d2adcd4b0bc5d17394fe1142e5670b2c0",
+          "observation.json": "7e86d05708c53f7063aed954d940b22a2e62a2c8493a8802b3247de50949a726",
+          "result.json": "b8dd520c45c4cf5730497cb002eeba29f5542a9470cab8895efdaf79d4454f41",
+          "search-p0-0f5a215ac0bc/evaluation.json": "f02faef27ee48ff7528076fc19bee18d7f55502d7acb3005073e034112bda228",
+          "search-p0-0f5a215ac0bc/prediction.json": "3513bf493a7cee5cc51babcaa99dff2185c92f3cff6fd0b29d9391b368b61d8f"
+        },
+        "evidence_hash": "8e1f6030b6c9b727e0abc5123841f93fc04a97d4a5fd9b8ae302656e88028aad",
+        "identity_hash": "f59fd3fc2a4135878be97ffd6dbcc1a9e4e69bc0925bfdb9508d812b3f463dc8",
+        "instance_id": "django__django-11999",
+        "observation_hash": "b83c28cbf4f1219bfd9b2bed1198d1a76e8100da237475169b67d0adf27323ce",
+        "resolved": true
+      },
+      {
+        "evidence_files": {
+          "identity.json": "a3bfd38a23478fd495f2f8fd8f7d832979005c625fb9056f6414522ff40c21d1",
+          "invocation.json": "0db4956758ed8e5b70bc5d89820f3ec05c67feefa6801094ea5fea55b243dc6b",
+          "observation.json": "8c892ed6d9fac92b7cb5cf08572a586cf34318f2da831048eeb841976d102a01",
+          "result.json": "ff1ba1d4fdb5cffc49eb26c4930cb7589746a6b984e42432cfc1957658f2bd22"
+        },
+        "evidence_hash": "15af02a05cd47fecf15f9833f108abaa2392a6492fc6737ea5f6c47ca42bd7fb",
+        "identity_hash": "d133bf1caab589618334ae7d6fdfea91d82ec4698a8d566c683bd17e9c234f18",
+        "instance_id": "django__django-12039",
+        "observation_hash": "4a188d37331f13d663541f69e36259122260dce6800c98e9803085d9dc208098",
+        "resolved": false
+      },
+      {
+        "evidence_files": {
+          "identity.json": "0126c789daa4a019186291187ceb1582ec69189cbd60d54de2cf457ec1893819",
+          "invocation.json": "7bc4f5cbb5494b8981b12acdb1eeda3a480714715416f647214c4206bd746d01",
+          "observation.json": "a88ca08625913f9cdc13d1fed6516947e2c12a4783b39bc896caa19837b73fed",
+          "result.json": "900b25270968f0faeb96be194626fbda35d9f7753bc503bcc515deb870a35b80"
+        },
+        "evidence_hash": "51067323925eeedabe121cbbdcbbc4c56d677788a859e7715241d5db37b8d2a7",
+        "identity_hash": "7548f9737d68f6f08edabed6c7de82df1fed9058e3494c0e7cb977be650a7639",
+        "instance_id": "django__django-12273",
+        "observation_hash": "2e6feceb3d835d06d34443e1ae193d0b9f0bf0f339de9e3668a6b92d280b48c8",
+        "resolved": false
+      },
+      {
+        "evidence_files": {
+          "identity.json": "af47044f139edfaaca99f79b28b6ffbe6284b853293422faeddad9bd7a9677c9",
+          "invocation.json": "cf4b04b2e00b27e32937bac0fcc4b8d4e21f127e7f9f65ba22f6a414c8b53468",
+          "observation.json": "2ba32a7b9ce6e6b2f53e33896657dc8896070f62369bf93f9989f661a7cf8d28",
+          "result.json": "6b9e0fa9df6e0e110e08984d873ebbb90174df753ff0c38c0ae70afb23ab4b50"
+        },
+        "evidence_hash": "27671da576bb837ec7043fffda6bf9c3c5a9b7f87facc9871a9f321e51459b57",
+        "identity_hash": "125e1654b701a6461ee54cf0942fa21f9db43bb912b881ff5f5a702e8c3c1e38",
+        "instance_id": "django__django-12325",
+        "observation_hash": "42400d4b3ddbfd817aaf124f280df3099e0cffe76e327ee7721a444f9a86068f",
+        "resolved": false
+      },
+      {
+        "evidence_files": {
+          "identity.json": "01a25a5dca077f7494a8906aadce21979c71e4710e50312fb2599fc758ff317a",
+          "invocation.json": "e727ffdf5b89f34922ede8f11a118de96f550398f6766c6f06aacc33570b9c90",
+          "observation.json": "881ba2445146377d7cb844aee15035ad459b6371e9d162a17ee21d4d18e6f240",
+          "result.json": "c820e780727a750071efcf54bf5f74b79f3d5dd0db9ed5b1efab5645cbdf26e7"
+        },
+        "evidence_hash": "34f5883320eaca78ba49ec6c67201d3f5748359d13560825826580141ba7ded9",
+        "identity_hash": "9a134651baaa0a051e42753e565231d4fdd26e10691d7832c6e6bc47a56532eb",
+        "instance_id": "django__django-12406",
+        "observation_hash": "1d7ea883c371f288bb551f385d8478ff45187579f1e982aab143c4e6a276a37e",
+        "resolved": false
+      },
+      {
+        "evidence_files": {
+          "identity.json": "359eb466ca4a94e78431c23b1d10da89b25389ed912d11f380bb29a656d52ea2",
+          "invocation.json": "8c66bf897a5c7eb783785e4282136660806814b7eca39af4a92da314f5fb49de",
+          "observation.json": "35ac74541d65b9eb7d23ada6790647ad67268b06b09474251e871b0224a96993",
+          "result.json": "c6a4457d5f8ace2b1e08952b03f92a416794e3db02e3dbdc4724329ee3f954e8"
+        },
+        "evidence_hash": "e5e50b94ae88952f580ff69444ef474f59422e463ba67ed3a7a563ca55febccb",
+        "identity_hash": "e7e32e268a86314c7e58c67c70db605d7f5f945dcea0310c3ce4a864cdc30f6e",
+        "instance_id": "sphinx-doc__sphinx-10673",
+        "observation_hash": "60f282f11d3482a2f4cd901195e1aa4b1ee1c017326aa6f28bcfbf4a5829763e",
+        "resolved": false
+      },
+      {
+        "evidence_files": {
+          "identity.json": "b7aec29b2032fee3fd61149e51bd9ad1d2423ce456db03542ceef48b3ecb004c",
+          "invocation.json": "bc7272b22c86b89911b00f2631b3e248bc15cedf4bd5dc6f424df43244940322",
+          "observation.json": "9493f8802a31abe46fd55b93e6c4576804f2f3f2d552c9558bf785806324ba0d",
+          "result.json": "50b2acd53d51479ec11553899a2153d8f16650d67d296fa68746dcd4a47ac3b8"
+        },
+        "evidence_hash": "e1575dbf7c552a2e4f3bfcba9013c054370daece47b159c4baeb752025a87789",
+        "identity_hash": "2a2d03e7d47debc16594b215fbca5de70d15efe04ca76de20b9fd2b5598e8c9e",
+        "instance_id": "sphinx-doc__sphinx-11510",
+        "observation_hash": "0f7d2940c16e3dbe627a800a677ebf01085a30ad66568dadde504ce598c65727",
+        "resolved": false
+      },
+      {
+        "evidence_files": {
+          "evaluator-invocation.json": "1a530c84c1c64307421829a6b811ff1deb556988e76eadb45b2b07d24e26bf52",
+          "identity.json": "18bea04c28edb4c44c41c2148a06c6d7a97aefbe357c4d6d3c638a016342026e",
+          "invocation.json": "225a6f3102b08bbbe0328fa4307cc2f7bb770796b73c05a10e217cad1d74e3ee",
+          "observation.json": "7fb7a462bd45f90d9c813f3f98fc6855babae147b2b2ddd2f634bf6bbc592174",
+          "result.json": "d2bc94325f8d8efb79e0da35d693f952690073cd18025ca8f0e7139b898da192",
+          "search-p0-0f5a215ac0bc/evaluation.json": "212b1fb08dcf231fe3292f0adaa788b4015230feaa2942206bd73ead1134f681",
+          "search-p0-0f5a215ac0bc/prediction.json": "464c89f3f969f1a5856ea778a45f582f50f9d79be245274f3c121ca0c6e68820"
+        },
+        "evidence_hash": "30a4eceb179c64251f388ac4874c459d83e47a88933c58faddaabbe84361bdab",
+        "identity_hash": "5eacaba88602b4e43b1be735c39c86a2b1018fdfe03e52b80c162e8193eb1e54",
+        "instance_id": "sphinx-doc__sphinx-7757",
+        "observation_hash": "95c372ea534f47cf178e81c376a3b0902b9a32ed6f899fc373ce9011edd242b1",
+        "resolved": false
+      },
+      {
+        "evidence_files": {
+          "identity.json": "4ffc3a0a26d4a9e6c68468d9dd8d4b58d37e7d9465e597d072b1e6e2a1ea4566",
+          "invocation.json": "0ed3f508f42fc4a1bb0b205dfef875bb9f719aa1accd715a46f958d2882a4d2e",
+          "observation.json": "ae5ddca6787bfc46333711973b5b78565b33380e5141d659bf8ddf05e286012b",
+          "result.json": "03c2cf5404d53822ee3bba013e1bd2421df4f1c0a4a403e0c52f9c05a28322c5"
+        },
+        "evidence_hash": "4781925d698c75cf5fc8dffe955fa6db7c413e4290137d346f985791ecb82688",
+        "identity_hash": "a8afa172eb8a2999c96b46668f34063cbce4870cd4eafbf28ae807420bce8dfd",
+        "instance_id": "sphinx-doc__sphinx-8265",
+        "observation_hash": "a0bb8f8da6c714881a35729546bfa77973921f45604dafeb2b172499b110333b",
+        "resolved": false
+      },
+      {
+        "evidence_files": {
+          "identity.json": "c30e9022c6505ce77ac3425024ebd02ca531acf114826e23f6fa3cc024d824d4",
+          "invocation.json": "ccdb99cf7c8029b0f23f3bc499cc173c07cc62fa5f39b1f34cfccae9b10c552c",
+          "observation.json": "db90d5e35780482e154ade0dd4cd6ee39b36f2e58dba205c2ff2a958ffb15cbf",
+          "result.json": "01183d4e85c349ac368ebd8208688ef003647fdd1750ecd1f0a00184c7d198d0"
+        },
+        "evidence_hash": "af58e68b8d213cfaa43984ce7e43135ef2279b0aa0a3b6e1c8a6bdd07652577c",
+        "identity_hash": "2e63aaa27bd0dd73ef1aadccbe91fe85744044fcb856e09abd640d1afe4f83ad",
+        "instance_id": "sphinx-doc__sphinx-8551",
+        "observation_hash": "d2f5eeebd9c80e61643a647c9b4281ca64357b0a69d61c8b1650ea256c9948ef",
+        "resolved": false
+      },
+      {
+        "evidence_files": {
+          "identity.json": "f3ab845ccd17886c9114b0e3beb33c935f86eda50890c236b8f1c49db9224700",
+          "invocation.json": "c7a31132a62f37af67327693424650e4606c6a87ee09aeb4b1f59fbd3be5be0e",
+          "observation.json": "bf810f181bad51a0ce4f282317acb75873f2d3def47fa268769a367c8d5c0478",
+          "result.json": "53e4fcad00789be5c6d591f0db801bcd964c7e73e5c364df6e2ddfaf5cea535b"
+        },
+        "evidence_hash": "18ec76e69f47d2a4d0f9b4289d143150deec587d8ef481cc7156da615a5d671f",
+        "identity_hash": "4f0cdd79bd50580dfaab747d8c6d72f31cb21694f75f48ee6ac685c397b3ccb5",
+        "instance_id": "sphinx-doc__sphinx-8638",
+        "observation_hash": "dffb878ddb44d3e898c94af3b7f8779e8f3ec0ef83c4d763a55f9f9fce4a7b6a",
+        "resolved": false
+      },
+      {
+        "evidence_files": {
+          "evaluator-invocation.json": "66305f1086d42d9380a43955d082a6436b6dbcc7c71dfaf8cce48dc18e0ee839",
+          "identity.json": "26137151cb76e9af1d1d11d178703ab208dd30a9af612d257d77b55762525bca",
+          "invocation.json": "6854b515c24d7138101c6408414ebe7181b1ef8c9ce544f4c35669f916f51ad1",
+          "observation.json": "f470e7468a6fce9e2ddaf20e399c554fac364b94a35f2344b96cd5b0dc7dc20a",
+          "result.json": "7aefb4e549e246ad5ba3581cfc98ede425b446a6918fd02f3e4940c37b9ba2b2",
+          "search-p0-0f5a215ac0bc/evaluation.json": "30d02cc23c8fffbd9379ac8331a0be0f31e770b9247f54456da2eec2bf783aaa",
+          "search-p0-0f5a215ac0bc/prediction.json": "d152c48b2c33f72a12c70c74d0a0006ba83a55bb83e6dcf6142d2ac167b643d5"
+        },
+        "evidence_hash": "746b732e363ffa58be88bc4bff313ecde50ecdafe2f4c3a1ef7a01048a87a37a",
+        "identity_hash": "8c20f7d7fd7d481c82f9e10e9709690800aa946c77619adc30e90e0dde57fa02",
+        "instance_id": "django__django-11815",
+        "observation_hash": "74d925333640b119b1a4ab07b7a03835418085ce6831d00f1c879c48aeeb569b",
+        "resolved": true
+      },
+      {
+        "evidence_files": {
+          "identity.json": "0fa630d8f320a0f0cf5d95d8fa56eaa402113eca38faf2496225a3cd43a623f0",
+          "invocation.json": "bcaef032290af0a2f089b4283252577810b1cac83e6080cec82d7a8b489fe4a1",
+          "observation.json": "d892720ef8597458bfbf456f35dc03e194221a1ad404d3000de8706bd6fac124",
+          "result.json": "c70ef38f037bd558186d4cb09b4fdf85c0830915244a59b5de43d55b151ddd0e"
+        },
+        "evidence_hash": "8b2aedc49733603b7f565d7962af8aef46e4f01ebce970da34b7a04fe359037f",
+        "identity_hash": "5742189a7b27685f1bf5b5b519886ca18d290624961b6ccaa5828f9c4c80df27",
+        "instance_id": "django__django-11885",
+        "observation_hash": "101baad3fd36fcc653ec889a68318285043f89aa33e7c9f8a99e3704ed3a6431",
+        "resolved": false
+      },
+      {
+        "evidence_files": {
+          "identity.json": "57d36c7d21bbd52063125f0b28a75d907b1e32e97602f35b1198881d15bdd087",
+          "invocation.json": "36eb84fcf50555319507a0c9f2177d5100ca57cd3f45723fcbfe30e69d5d19b0",
+          "observation.json": "c2da88a10fd3d916892e2c6b87e9537a8d889db4704d0b55263df09873498728",
+          "result.json": "8708a58087f44d28c26c3fcd7693ecb3b6560ae8f7e7336cbdb653f24ab81001"
+        },
+        "evidence_hash": "731ef937eed83e8164371a0b4a500617b86f04657edceb32d77960d9c426ee37",
+        "identity_hash": "d9422a3f2e0bb971e7f960f065a5ee91b92101c9547c43b71ca1552a30f8b478",
+        "instance_id": "django__django-12708",
+        "observation_hash": "f3d27ea910e2da09ae3c404fdccf491383494f8aff3a731c4100dc3cb3fa32d5",
+        "resolved": false
+      },
+      {
+        "evidence_files": {
+          "identity.json": "2cfa6138311c72ea2be939ed652a43e3f0f607a5e04b0c34e0f3096675891f0a",
+          "invocation.json": "6db3eb01df1138d933e975c649b22834207f71d439c8e6335ef730a12a982c38",
+          "observation.json": "048a2983219aaf516f3fb7b9bd2228c03b8cb57bd7f63b93383c4e30f5c33731",
+          "result.json": "e8318f8e5e436623d117ee0bee3d8772180827d8e92ce188d14b4460dbd30b6e"
+        },
+        "evidence_hash": "b971ec0df7cfa98f5a9c427bb6bf0c3538f4b658bc02ff1f4f2dec488aaa5fb2",
+        "identity_hash": "52ff8e2a2ebd4cb0aa10ec0e7329e0ebea434f4cadcf179625f5328502fbf367",
+        "instance_id": "sphinx-doc__sphinx-7590",
+        "observation_hash": "3b5a1a30da5606c46b8846b3916a240df9bc9b2a680223189a8adc84b0894ca9",
+        "resolved": false
+      },
+      {
+        "evidence_files": {
+          "identity.json": "618cc7c6220454031d514c18ba04db7ce917d70c3e0601843d111463ae2d6c7c",
+          "invocation.json": "b5b916d5a5f83efdbd77a0ce8f444b02be899be20e0480b3f0bb62de21db85e6",
+          "observation.json": "463d50a76f0ac5fe71ebc00d3642e5761d8549b8532dace847f4a28691036a02",
+          "result.json": "6cbd990ec24bbec9bdc873e41a0e1e0bf069ebc1236219d4a7ad130e90d5b33f"
+        },
+        "evidence_hash": "7322198ad9709cdff8e4367e6950b1bb0f317fc7ca029c5f8496d97c4e826e7e",
+        "identity_hash": "4f3856d8419707bfe54aefb8185ee86b1f05c8e949b8879d4e6bb2277f9ae7cf",
+        "instance_id": "sphinx-doc__sphinx-7985",
+        "observation_hash": "16d5e533c2ddc1091f76d5f521d038801a218c0903b65f5756cfc6bbd26f6574",
+        "resolved": false
+      },
+      {
+        "evidence_files": {
+          "identity.json": "cb12d52a28e8897a195f215f480e416f032aabdbafce1bf95cae36d656985bca",
+          "invocation.json": "08c4de31b07befacf2e251db1f95ef665fd2b785f421c221c5f252ac09c107a5",
+          "observation.json": "b7daddd73901fc673bf4ab9853392d711bd4e721561a4776cae7908684d07f6e",
+          "result.json": "366afc2e0416ed21aa5452a5664bb9587f79718d7faa17a1398ffb333763ab53"
+        },
+        "evidence_hash": "4b12a7760fc4829fd937439bc22855781ca8ecfb5e4b1e83d77755acb7f88b8e",
+        "identity_hash": "dbfea98ba77efde2e42436a820d0a82c9f3cfea4cc671d924df659a4da0349e5",
+        "instance_id": "sphinx-doc__sphinx-8056",
+        "observation_hash": "5ea0f09c20b717057443f33ccdc6fb6fe8c46891a7249dceb5d015812fb4ec25",
+        "resolved": false
+      },
+      {
+        "evidence_files": {
+          "identity.json": "c4ab7654e8e826568b09513035c015014f7e04b2f43abf042fd9a7750172305a",
+          "invocation.json": "664b5f085fcb5e955b7d647b577a30e0c665adf1a95f2366e66db9bcc635593b",
+          "observation.json": "fcb109e18f059abb33f6c471ebd983090a167a685f6bfc267739456c1c896aa5",
+          "result.json": "2d25fbe895535b5c5be9df688127b9a60dc6b14cd074c1415feacd2fa26315ee"
+        },
+        "evidence_hash": "45eee4526359ac46363ae51d37bd6ca96402ba93fbc8cc0bfaaf63c7b2583680",
+        "identity_hash": "a96177a91bcec1b73776e113881d244cc0771b975ecc945e390870530d7c849f",
+        "instance_id": "sphinx-doc__sphinx-9461",
+        "observation_hash": "11fd2ea3bc75ed192223c18aa0185148727c36ada52960572337b0b119fba12d",
+        "resolved": false
+      },
+      {
+        "evidence_files": {
+          "identity.json": "1a8aba37abbb35989ff967e69663af1850f80587a5a943406f5a75a81e5d982c",
+          "invocation.json": "8f88e9c26265772e05ff324d1aa0732fc3028fab7a2f92d4b22bd015440beecd",
+          "observation.json": "afa1779b5a34eef2a4db21475d2847d85c86f79278eba1437a605429eb8ea885",
+          "result.json": "f211f75bb48fc202eb9c0d99e0891e22f868eb08bcc109b67db95d5826e9fd95"
+        },
+        "evidence_hash": "0aefa40a64d755c1858f258ee43574dd09d5d1a3faa37624303c2337ffad8b28",
+        "identity_hash": "1a695dbfadc898f56e8cc9b5bd86fc209ba522b8f828fa125713ea63934e4bd5",
+        "instance_id": "django__django-11964",
+        "observation_hash": "b94b6f6af564c6b92df3393e664c07e34d26fdb204c1373d667218c450bfa625",
+        "resolved": false
+      },
+      {
+        "evidence_files": {
+          "evaluator-invocation.json": "4a89efb0c78cbfed75d821c5b09d16c44731cfc5e54be1c5c37f513c7e9ce376",
+          "identity.json": "f6ed7d80c1e4a3731f75b5db01380bd1af75e636108cb0afa99060def6d0e8a2",
+          "invocation.json": "4e6d17ef1338a3e1e5d15bec9c28d48f15a88fe7703c2dfabcc0b968f3420b73",
+          "observation.json": "23f29c0261a1e523336bcf94a22f2827d46504d4bdb6c1acd64c80630c65ef91",
+          "result.json": "1154073fdfcaaf1c21f5b038c32097660bb638d5a4b02233daf58da32d6bf9a6",
+          "search-p0-0f5a215ac0bc/evaluation.json": "38052558b96a772cf448039cb55b93320b0b0cc0ba38697ec94e4e2f972a7cab",
+          "search-p0-0f5a215ac0bc/prediction.json": "bc7e9e5dd8827aa9280a047406e2605cd14756667f2a87ac659d94a9d41f6f16"
+        },
+        "evidence_hash": "ceaf93afefaa2e8063622ae8a3fecb17d96761b393bb6e3a174f8c60fdf73348",
+        "identity_hash": "1ebf6b2cd79bbb23781782796c24ca4d7dc28882b26389e7949db3afda601353",
+        "instance_id": "django__django-12308",
+        "observation_hash": "1257dc572107f20615076985c0b2ca9345772c3a883b07a7738ce4104ea3d7c2",
+        "resolved": true
+      },
+      {
+        "evidence_files": {
+          "identity.json": "c48377dfd9f185e11c9dba2b3379c090e4611b55e0e552ac05ab9d4347e270c1",
+          "invocation.json": "6941fe6d32595fed44576970fb77050050e838a037dc282ff9276bace979cc85",
+          "observation.json": "e5965db59774ef93516342f8daaa29af3d2931573d217602e3687d37f05eb79c",
+          "result.json": "a3c150173755f815001dbfd9fd3ae708c68042d1324617bbb0ca50169cb2e942"
+        },
+        "evidence_hash": "15696ebc57b72b8175d5abce0e9e87d3a6addb53f9fe7308e1d5cfb31b73c8f3",
+        "identity_hash": "60f883eb5bae229abfe703c841f8c1b22c131c1c966b15d0914dca6060187f55",
+        "instance_id": "sphinx-doc__sphinx-10449",
+        "observation_hash": "5dfa11e4268085b279c01bd84931937a59e9e077f5e5678d85198992cc53279e",
+        "resolved": false
+      },
+      {
+        "evidence_files": {
+          "identity.json": "e687924571748658bacc2272d2c988bedd7b772581768aee3fdea18e4db8e693",
+          "invocation.json": "3f1c96d4d857c89a4c11202c4039d79f2ec2e9aff00763480877d15eb141884b",
+          "observation.json": "970e3ed3e30a25623d60664d745251ae359e1d63351475ce2b29103e155484d0",
+          "result.json": "0f656e2e356579736bbb7a4e384ad11315ec684b9e64352448095da203eabea5"
+        },
+        "evidence_hash": "6a73e753173dc46d54041b703729ed1f1219061c5dd6698009fa9465c7566404",
+        "identity_hash": "89b88c6281092c26a7c359b8b410d6a6359106355e43a66caf2f6c25bf37984d",
+        "instance_id": "sphinx-doc__sphinx-7454",
+        "observation_hash": "c8b1adbe9134774c2e70f3b83bd7979dde78eee05a12360e0e702bd66880a874",
+        "resolved": false
+      },
+      {
+        "evidence_files": {
+          "evaluator-invocation.json": "b4e1e8a9aca566b0ea99b41b9d483be42d5ebf46a1cc4ca96aaec47a6a2888f0",
+          "identity.json": "c57d3edf3d87577040e4712596f9e6958b21c0fb02d1788ca1b61fd3404504ea",
+          "invocation.json": "b5df07e1d19d996cfc7f8df8720a8e4edf9b487aed91eb16d3f8e6fe5a6b1ed2",
+          "observation.json": "16eeb30d16df5e0f7669f8e64c1d30ef4d1e38dca9b77adb1d35027e534a0e8e",
+          "result.json": "f70a21cbbd0c755022ec8b8b70d7752fb6374e6a1d6a801b977441a94d73c7ed",
+          "search-p0-0f5a215ac0bc/evaluation.json": "a2c4b32eba19d61ac4292118e089c1d7261188d88e7854b42ac6e289a5cf3810",
+          "search-p0-0f5a215ac0bc/prediction.json": "e2ebc7311645a50c61564d8a398d219ceb05eeb33971e23ec2a80bb62dac5675"
+        },
+        "evidence_hash": "fa217bac2a609dd6dbce0599d7b670e4e4e35dd69eb5ad4f1673a2b4f119db4a",
+        "identity_hash": "18881d027826b30c9d625eef235a1b7fd01c2f8ae50767fea1dd2f91e228f8c4",
+        "instance_id": "sphinx-doc__sphinx-8269",
+        "observation_hash": "6e9f4a29174685beeda93644a78f78bae3b89d4b3839d3ccd5c5779cd596e363",
+        "resolved": false
+      },
+      {
+        "evidence_files": {
+          "identity.json": "4edf9935848af0a446a90e88a6b85102821cbe9292ab24ca655e10b2591032f9",
+          "invocation.json": "012b1ad9e0e87913c4b1c86af9477d38a33574272acba2f4ebcd6995200edc78",
+          "observation.json": "2a525ee97a294a4df49871078c4066568fbee81e4ef31f145be592ec66051e9f",
+          "result.json": "d3226c1079c92076660084a3c4e7c43134f5f7d527ffe2aa4a4d795d2d3ab15d"
+        },
+        "evidence_hash": "5b577684e0e441d1e6812e29650ae933f948ada1a11ad23842b507ea26fb535f",
+        "identity_hash": "37de11fe490321348fc041a2460652a0802d1695aba685f6e6e42960f6887e81",
+        "instance_id": "sphinx-doc__sphinx-9230",
+        "observation_hash": "e4bacaeb8c17029a112d41bb45bfadbab89ed9d9d2bf218444f1563254eddf3c",
+        "resolved": false
+      },
+      {
+        "evidence_files": {
+          "evaluator-invocation.json": "b8ca23469cc821860449f867271978ca1b9a23bd0d31edbf304fbfee4ac1feee",
+          "identity.json": "3df651b0d0a1360835552b8e6051a7394e665a305793905deae2608d8310abca",
+          "invocation.json": "4ee8fb5839dbe054c1d4256e5746e5dd1968ba76f0472552682a8652fe8aba02",
+          "observation.json": "5e03b832fca0ee1a249e2a7ffa2d29f909888e1d05ba0f2b302d1d3940665363",
+          "result.json": "3a74e73f63d24b2a4c1112508f2e31ddcb91817a4da08c237a7ac1fac0ac0783",
+          "search-p0-0f5a215ac0bc/evaluation.json": "6f4355b173f48132995135936496cc3210340a7a01e15a7e50d987bccac00662",
+          "search-p0-0f5a215ac0bc/prediction.json": "aff34eb4e92ad9151886d63f607a0dde7e19b2a800be3da0623e476cb3b022c3"
+        },
+        "evidence_hash": "6d73a47d4643020ec44507f115846cbf46bfb2f0cc26d02f5f28d66fe0a5ad04",
+        "identity_hash": "57793d6160318ae29a49dfd70ec1f4070d9aceaa3cbb21615347370b710c01ce",
+        "instance_id": "sphinx-doc__sphinx-9281",
+        "observation_hash": "36f7ff4b2007d7dc131f8ea6fb3ae080bbc7af8ad7a5ecaac7da94111778c618",
+        "resolved": false
+      }
+    ],
+    "observations_hash": "749a8db00e8a982eb743db3c46b321fd4c439d6235129daf0fc1d5ff46612d49",
+    "ordered_instance_ids": [
+      "django__django-10973",
+      "django__django-11066",
+      "django__django-12754",
+      "django__django-15930",
+      "django__django-13279",
+      "django__django-16661",
+      "django__django-13346",
+      "django__django-10880",
+      "django__django-10999",
+      "django__django-11087",
+      "django__django-11790",
+      "django__django-12050",
+      "django__django-12262",
+      "django__django-12713",
+      "sphinx-doc__sphinx-8475",
+      "sphinx-doc__sphinx-8721",
+      "sphinx-doc__sphinx-9320",
+      "sphinx-doc__sphinx-9698",
+      "django__django-11848",
+      "django__django-12774",
+      "sphinx-doc__sphinx-7748",
+      "sphinx-doc__sphinx-8035",
+      "sphinx-doc__sphinx-8548",
+      "sphinx-doc__sphinx-9229",
+      "django__django-11880",
+      "django__django-12143",
+      "django__django-12155",
+      "sphinx-doc__sphinx-9367",
+      "django__django-12209",
+      "django__django-11951",
+      "django__django-12193",
+      "django__django-12276",
+      "django__django-12304",
+      "django__django-9296",
+      "sphinx-doc__sphinx-10466",
+      "django__django-11999",
+      "django__django-12039",
+      "django__django-12273",
+      "django__django-12325",
+      "django__django-12406",
+      "sphinx-doc__sphinx-10673",
+      "sphinx-doc__sphinx-11510",
+      "sphinx-doc__sphinx-7757",
+      "sphinx-doc__sphinx-8265",
+      "sphinx-doc__sphinx-8551",
+      "sphinx-doc__sphinx-8638",
+      "django__django-11815",
+      "django__django-11885",
+      "django__django-12708",
+      "sphinx-doc__sphinx-7590",
+      "sphinx-doc__sphinx-7985",
+      "sphinx-doc__sphinx-8056",
+      "sphinx-doc__sphinx-9461",
+      "django__django-11964",
+      "django__django-12308",
+      "sphinx-doc__sphinx-10449",
+      "sphinx-doc__sphinx-7454",
+      "sphinx-doc__sphinx-8269",
+      "sphinx-doc__sphinx-9230",
+      "sphinx-doc__sphinx-9281"
+    ],
+    "ordered_instance_ids_sha256": "403e9dfa5d27d18a80f16ceb8879a9d63109d3f5d808d23af1b834f6c88bd8e8",
+    "p0_artifact_hash": "0f5a215ac0bce1aac54cc709e1a86e5e16f6f10547b78b30c711af30726a4c1b",
+    "panel_hash": "a68c80686b56b98f8b6d1a5c986441eb97036b620e4d48b556c16dd37059234d",
+    "resolved": 19,
+    "task_count": 60
+  },
+  "protocol_revision": "matched-dgm-pi-v2",
+  "schema_version": 1,
+  "source": {
+    "archive_hash": "eca98de953538bacd0ae648c1aa84688687a35ada2402f437702fa5f6608c6c5",
+    "archive_sha256": "bcd0be06d9b64d8004b793e94f487e78fff5ff73e89ea4110c673d3a2885bf3f",
+    "config_hash": "7d92d8528b0e1d4d161d82646579100f6743d07e4eb33b65a1b85ec941e4d02a",
+    "evolve_manifest_sha256": "a566adc929d11d4deb8de4c18130f4a6ea2152d7620c517744c91ea3fdbd6ea0",
+    "execution_stack_sha256": "e1ece202abd4a733200f9d687212f1b00a54e1fbe6af004939f456a886dc1248",
+    "experiment_config_sha256": "605fdf18c7a73f8ebee0c0deeab3841cb2a0f15b1dd20c25c78155913a48f952",
+    "final_event_hash": "3d1f71ff3ba0c91ad30b0186d206ff5c4b9c67490a96bd84ea0d9fa33117c66c",
+    "protocol_lock_sha256": "5d1df593b81f68e08f5cfcc6278c3eacffc427774f0d66406339d7fae2afd805",
+    "run_id": "dgm-pilot-s20261014",
+    "run_root": "/Users/bytedance/codes/pi/research_output/rerun_20261014/dgm_seed20261014",
+    "search_invalid_record_hash": "352686c3fea3244bc0e077a103cf04b01dfaaafe5d2ec6e522cb542945efdbfa",
+    "search_invalid_sha256": "35e6a9abe2d7469ddfba697ad5a3e2c63f19f3e4d9dc34fda503366d6fd5196e"
+  },
+  "source_ledger": {
+    "bindings": [
+      {
+        "charge_id": "task:11bad8f57aca73e7a8654adab5faf6063d0da88668907eb02db3ee27fe0ff4f4",
+        "entry_hash": "12a5d9839e2b772ded979f9868b1fa98ffbb1057109b0968f27c67400c97b483",
+        "payload_hash": "54eacc788a46cb1aa35e33308db9ee84f9cf7af6b92d4e6ec7246d05d43ce17d"
+      },
+      {
+        "charge_id": "delay:search:search-p0:0f5a215ac0bce1aac54cc709e1a86e5e16f6f10547b78b30c711af30726a4c1b:django__django-10973",
+        "entry_hash": "547c5e77fb27542bbb54f261fc678d2a3b793000e04718c0210cf932a26a51ca",
+        "payload_hash": "c8c6fc5895ec181255869144e810eb8e2bde36cd1337deed3cfd6d06da8ad38a"
+      },
+      {
+        "charge_id": "task:d640bb87bd178de96438875843eceb3dd38e695afd694d73b31d903260663e94",
+        "entry_hash": "8a53dcc58efaa243c3fdec0bad0d6a6bc84e2130ad9b35803924c1fb8e520145",
+        "payload_hash": "6f6ddaf00204aa185a01ce706c988c86cd90a6053789762da79570642af03a48"
+      },
+      {
+        "charge_id": "delay:search:search-p0:0f5a215ac0bce1aac54cc709e1a86e5e16f6f10547b78b30c711af30726a4c1b:django__django-11066",
+        "entry_hash": "df39ab198e55a74becaba4f08622a1de08985b40afa6d2bc93b5323e51d664f7",
+        "payload_hash": "c8c6fc5895ec181255869144e810eb8e2bde36cd1337deed3cfd6d06da8ad38a"
+      },
+      {
+        "charge_id": "task:db4f86c553127f9d23ff8402d9fefba1fc7148c976575cd7197db394e56f5712",
+        "entry_hash": "342f845f385340b9736d539a25f27925a02a8f54d67ad70aa610b70956ef0310",
+        "payload_hash": "ef64db4a2872e95d48f25c41e3421c3853616a34fe222917bae95eea43f749b4"
+      },
+      {
+        "charge_id": "delay:search:search-p0:0f5a215ac0bce1aac54cc709e1a86e5e16f6f10547b78b30c711af30726a4c1b:django__django-12754",
+        "entry_hash": "5e263af3f6c7669b94afda97e512e4e0a53c4220a767d8322cd6bc27e0547826",
+        "payload_hash": "c8c6fc5895ec181255869144e810eb8e2bde36cd1337deed3cfd6d06da8ad38a"
+      },
+      {
+        "charge_id": "task:9a659e9a160251c5b901b4b1a427c8f0618f364e30d0ca6c84b35ba1fe9fe3b2",
+        "entry_hash": "e14e6ca183d253a67d05a64fe8a07bdd79b9de328627a4ee12fd76101b4d669b",
+        "payload_hash": "96426474c8c8a851f451f98521d5ad53749fbea40c71c5dc934a3d127a9b38c7"
+      },
+      {
+        "charge_id": "delay:search:search-p0:0f5a215ac0bce1aac54cc709e1a86e5e16f6f10547b78b30c711af30726a4c1b:django__django-15930",
+        "entry_hash": "e004000c1f9ae41e57a11edde3bf59ac4d460689246abcdae81a535497292e92",
+        "payload_hash": "c8c6fc5895ec181255869144e810eb8e2bde36cd1337deed3cfd6d06da8ad38a"
+      },
+      {
+        "charge_id": "task:d8ac77ad53ad89a0f192097e97c3733ff0a92f40f7d2951c8a5657754d77faca",
+        "entry_hash": "3e66cb1e7753e8b9ea48559c1aab3e3efe751b3fad7398ae1bca2e76e0e3ca28",
+        "payload_hash": "5058e6c1a7baf1fc3250b3d3a47d1d977870c5b639319c990c11163a1f53337c"
+      },
+      {
+        "charge_id": "delay:search:search-p0:0f5a215ac0bce1aac54cc709e1a86e5e16f6f10547b78b30c711af30726a4c1b:django__django-13279",
+        "entry_hash": "c2ef72e54887d2ade64c5da43763ad85c7ac6ac88b6f43561d3a901da65e9172",
+        "payload_hash": "c8c6fc5895ec181255869144e810eb8e2bde36cd1337deed3cfd6d06da8ad38a"
+      },
+      {
+        "charge_id": "task:62b187ec87012b058cc4dea1d37ecadc4526f8ab8106c132697a82d76dad53d9",
+        "entry_hash": "051fa5b3ec5023fdaf2d50050270eb28feb24099aa3e30c3765a9d2a653d6a9b",
+        "payload_hash": "219253db1a91a5a1ab0fb202afbbc11e4794908687e5ba8b90f957376739afe2"
+      },
+      {
+        "charge_id": "delay:search:search-p0:0f5a215ac0bce1aac54cc709e1a86e5e16f6f10547b78b30c711af30726a4c1b:django__django-16661",
+        "entry_hash": "a8454b64f0702981273e58c6e0a6801b4523076081075aac7621c9d4cea05176",
+        "payload_hash": "c8c6fc5895ec181255869144e810eb8e2bde36cd1337deed3cfd6d06da8ad38a"
+      },
+      {
+        "charge_id": "task:ac67a0d44507793a8b5f7e659d6c014403b40c06b5d3ed0d94b317733b8a24de",
+        "entry_hash": "0d62d81e7dcd00fcc6b97507abade43eca198d01ba378d38f938c59a0ee26997",
+        "payload_hash": "05634e1c9231b65323e178bfd081ba1eb19427d841f0a326fb08edf34f1492fe"
+      },
+      {
+        "charge_id": "delay:search:search-p0:0f5a215ac0bce1aac54cc709e1a86e5e16f6f10547b78b30c711af30726a4c1b:django__django-13346",
+        "entry_hash": "b13f20b9a62a2ec3e435e5c18857c593889b2af38082004413a011c99baeb064",
+        "payload_hash": "c8c6fc5895ec181255869144e810eb8e2bde36cd1337deed3cfd6d06da8ad38a"
+      },
+      {
+        "charge_id": "task:c158cbc20c034541126e709d0caf27b25285569ea5657765d0cf8ff4fc284717",
+        "entry_hash": "56dfb1159dd209a777d7cf8d7329e661e6192e1c67011025cd1df40dc4f733e3",
+        "payload_hash": "44aabb1c37aa33b0723605744b46aef8acd4cfa556dfa5bd993585609b46246b"
+      },
+      {
+        "charge_id": "delay:search:search-p0:0f5a215ac0bce1aac54cc709e1a86e5e16f6f10547b78b30c711af30726a4c1b:django__django-10880",
+        "entry_hash": "f957aa57759c7ff0358bd8ef48f160be1d2e49fde01c5cfdb3f9e67ba99a1a75",
+        "payload_hash": "c8c6fc5895ec181255869144e810eb8e2bde36cd1337deed3cfd6d06da8ad38a"
+      },
+      {
+        "charge_id": "task:5c30624a39d0faad9debc54f1bd4452bb2fa7420a510de2be431b4ff948d519e",
+        "entry_hash": "cfe55cb33bbf88295ab349d28a50b2a9020ae2ac96afb7a0b4f37ae2806af550",
+        "payload_hash": "16618d280c7eafac36d50b63b19a2cd876093ec2c6e104e72617a986a8229953"
+      },
+      {
+        "charge_id": "delay:search:search-p0:0f5a215ac0bce1aac54cc709e1a86e5e16f6f10547b78b30c711af30726a4c1b:django__django-10999",
+        "entry_hash": "9218a228ae4f3474bfca0734c64708177f2cf639b8e5ae8027cbbae3ba907977",
+        "payload_hash": "c8c6fc5895ec181255869144e810eb8e2bde36cd1337deed3cfd6d06da8ad38a"
+      },
+      {
+        "charge_id": "task:0eb5e0d7d13ed168870adacfacbeec7db06068e183cbe37559423239cade0210",
+        "entry_hash": "f715678ef883f531333494328c388b5acdea2249fa47c222a5194e8ef29a31a9",
+        "payload_hash": "9528ba484a6feb4418cda418eca89c85159d784dd6814a6759a7284a4eced3ed"
+      },
+      {
+        "charge_id": "delay:search:search-p0:0f5a215ac0bce1aac54cc709e1a86e5e16f6f10547b78b30c711af30726a4c1b:django__django-11087",
+        "entry_hash": "d022364ef59d2c3954adae242280dd534214c0584d0e6e4da43342bfe7a42f0b",
+        "payload_hash": "c8c6fc5895ec181255869144e810eb8e2bde36cd1337deed3cfd6d06da8ad38a"
+      },
+      {
+        "charge_id": "task:23e09b397dffadbefc2af6e47cf0d0b9f50513e0d432df3f338aa093fcfc882a",
+        "entry_hash": "de2395323ba773d998535b969e72244f4d79a700ecbb7fdea87c6175b165ea11",
+        "payload_hash": "2249030057087b9bf8c76746462e727eb19c968c5a2f6e07f9dff60defcef82b"
+      },
+      {
+        "charge_id": "delay:search:search-p0:0f5a215ac0bce1aac54cc709e1a86e5e16f6f10547b78b30c711af30726a4c1b:django__django-11790",
+        "entry_hash": "633762e0e57226a0916945c7179b50a9628ce12cc14b41dfa133e537f49fe465",
+        "payload_hash": "c8c6fc5895ec181255869144e810eb8e2bde36cd1337deed3cfd6d06da8ad38a"
+      },
+      {
+        "charge_id": "task:de6f377497a8dbefdbd869def00ded05fc28700b83245e0a965da61d8142b3a4",
+        "entry_hash": "cddc9f11d699d03aaf1eba4a8e9017f209e46921b79953ba13580d0a75afe7c0",
+        "payload_hash": "e9005785507ea32f1fe5b8e01da98def32a8a5599781d6ee3468f0742fe369fb"
+      },
+      {
+        "charge_id": "delay:search:search-p0:0f5a215ac0bce1aac54cc709e1a86e5e16f6f10547b78b30c711af30726a4c1b:django__django-12050",
+        "entry_hash": "33537bb6fe82229aeb44146f9e3d31248d8dbf51f054d0555e542e26619f83ff",
+        "payload_hash": "c8c6fc5895ec181255869144e810eb8e2bde36cd1337deed3cfd6d06da8ad38a"
+      },
+      {
+        "charge_id": "task:0d42f3599ff9e6064d0f073081bd7bb6175b01880c70d98ea94942c05451c227",
+        "entry_hash": "b43867233c018124598a03da9a4ab8c0222059843acc3c8b30d120faba485a5e",
+        "payload_hash": "649a5419a4318c22f978d0103cc40943249e570c5d133bae9af551e92ae24b41"
+      },
+      {
+        "charge_id": "delay:search:search-p0:0f5a215ac0bce1aac54cc709e1a86e5e16f6f10547b78b30c711af30726a4c1b:django__django-12262",
+        "entry_hash": "0868a7ea483222a543a291c9de06dcce881811c17ec938816230a5f5311dffab",
+        "payload_hash": "c8c6fc5895ec181255869144e810eb8e2bde36cd1337deed3cfd6d06da8ad38a"
+      },
+      {
+        "charge_id": "task:cd610cef2c193ae6c567b268281e279d5463527105cec2346bfec59b0caaeb87",
+        "entry_hash": "92fded3199054995e9046c0c34c84e04b1b906c62b9711363ccb0426f37b5775",
+        "payload_hash": "290897259df60714253c351a107f772ffa0d302328871c73c9db7aefba67f5b7"
+      },
+      {
+        "charge_id": "delay:search:search-p0:0f5a215ac0bce1aac54cc709e1a86e5e16f6f10547b78b30c711af30726a4c1b:django__django-12713",
+        "entry_hash": "828b48a42288955c0a81de7aa90f91396284e5d888351c0eb4ccb63cc89bbd00",
+        "payload_hash": "c8c6fc5895ec181255869144e810eb8e2bde36cd1337deed3cfd6d06da8ad38a"
+      },
+      {
+        "charge_id": "task:17628977e2fc042197992e11edf6d9c492a4700a00929a03ee4669d9289ede50",
+        "entry_hash": "6443ceff5d896885e4ae847c3d8127123aa76cdadddf075303ea5e67e2d5e1bf",
+        "payload_hash": "1c62143de274a2bb63ef6c28042d10b8e4d101b7c3f8d6d16e17a9ed64f62644"
+      },
+      {
+        "charge_id": "delay:search:search-p0:0f5a215ac0bce1aac54cc709e1a86e5e16f6f10547b78b30c711af30726a4c1b:sphinx-doc__sphinx-8475",
+        "entry_hash": "1444e1842df1dff0dbc48e95241f66a4f545f7e05640744c7584896bf654369b",
+        "payload_hash": "c8c6fc5895ec181255869144e810eb8e2bde36cd1337deed3cfd6d06da8ad38a"
+      },
+      {
+        "charge_id": "task:42b40b3e62e3cb5a11d40f31a91fe8a1538f4849261d0bfaaf3627ef446d76a4",
+        "entry_hash": "d5c0d64d86d10d03b7a50eec6092ac6e3293bd8d78f7ff170a92291eed59ab5e",
+        "payload_hash": "1c680ed4076e3226fc173fe57c312e3513a38a4acac87415bfc4303388e55b53"
+      },
+      {
+        "charge_id": "delay:search:search-p0:0f5a215ac0bce1aac54cc709e1a86e5e16f6f10547b78b30c711af30726a4c1b:sphinx-doc__sphinx-8721",
+        "entry_hash": "5888ce1ca17ac33256a80a4c31a8a646ba56cbd7521d6ef534e20ae4daed64ea",
+        "payload_hash": "c8c6fc5895ec181255869144e810eb8e2bde36cd1337deed3cfd6d06da8ad38a"
+      },
+      {
+        "charge_id": "task:598bbc95d97c3e0661f1255f552acd5bbc3b13b607c718a2885897a92b4ed5fb",
+        "entry_hash": "9f0198dbd6609533aef83b38ef906711510642dabb834332c22b90c469cf0b28",
+        "payload_hash": "8ea790ef8e630b1accb3e48dca7fecf7d803e22680b7da5106d70a87f55d4de3"
+      },
+      {
+        "charge_id": "delay:search:search-p0:0f5a215ac0bce1aac54cc709e1a86e5e16f6f10547b78b30c711af30726a4c1b:sphinx-doc__sphinx-9320",
+        "entry_hash": "e73400344808aabcd41fe5f5e730b84e53367df5ce88fc6d984b2c72728a558b",
+        "payload_hash": "c8c6fc5895ec181255869144e810eb8e2bde36cd1337deed3cfd6d06da8ad38a"
+      },
+      {
+        "charge_id": "task:8be92bdad389465202574bbcbce463d8ff79f440d7b2c211fbbcbd1b833635c0",
+        "entry_hash": "07bffdbbcb999a322d89b0accb695e2b7f7a609ea7f99a3e60be734213f47398",
+        "payload_hash": "bd59fb065eb32a88c0533683371403207a4ce657ef465d56f18f07e699737ede"
+      },
+      {
+        "charge_id": "delay:search:search-p0:0f5a215ac0bce1aac54cc709e1a86e5e16f6f10547b78b30c711af30726a4c1b:sphinx-doc__sphinx-9698",
+        "entry_hash": "d96d1c7cb873bf7855108d22f29e5ff8682ac549f85e90015b60a87fd39634ef",
+        "payload_hash": "c8c6fc5895ec181255869144e810eb8e2bde36cd1337deed3cfd6d06da8ad38a"
+      },
+      {
+        "charge_id": "task:94c12f1e7b21bdb127371f368ef1f27cf57ea7581d3dc4064a5929e472c78ca9",
+        "entry_hash": "1d58dffe32a7ff12812b50d283c63891b9efedc29787f75bd754055f48db59d9",
+        "payload_hash": "e5a25179dafd64eaf8046937f9e6e63c3fe6e37e31bc94bb7247c4f64f58e5c1"
+      },
+      {
+        "charge_id": "delay:search:search-p0:0f5a215ac0bce1aac54cc709e1a86e5e16f6f10547b78b30c711af30726a4c1b:django__django-11848",
+        "entry_hash": "543e9df826f59508694091f1cf1ce767848a8c21cca95583361183e50f599280",
+        "payload_hash": "c8c6fc5895ec181255869144e810eb8e2bde36cd1337deed3cfd6d06da8ad38a"
+      },
+      {
+        "charge_id": "task:a681a5851c4baf4a03f6933d3db37a1cba16b44a4bca34d49edb06605201a83b",
+        "entry_hash": "fae1d2616971641ae929b5fda9c065fe3c43b82fc395229453bbcac04e3d0ff0",
+        "payload_hash": "44da9341100a775af1f7a905560834807a365ed3a0b330eb77b1d877a73d2518"
+      },
+      {
+        "charge_id": "delay:search:search-p0:0f5a215ac0bce1aac54cc709e1a86e5e16f6f10547b78b30c711af30726a4c1b:django__django-12774",
+        "entry_hash": "6b6ae484b4d2b4bde4a09be88fb926686010d9498ec00326c8cb20e6fd7ba5d8",
+        "payload_hash": "c8c6fc5895ec181255869144e810eb8e2bde36cd1337deed3cfd6d06da8ad38a"
+      },
+      {
+        "charge_id": "task:140690056d64ab3ef21952fffa63b2b56a9ae4228b42f1981e64c014c2bbb654",
+        "entry_hash": "cefe616e721cbd53b360888c9c52af4b1f6dc69c5490c8e96d9619455040ff02",
+        "payload_hash": "14f6dd88dc0643cecdc1a712125aacfa1cf0e5e1938e5f0bf3b6394f829e99b4"
+      },
+      {
+        "charge_id": "delay:search:search-p0:0f5a215ac0bce1aac54cc709e1a86e5e16f6f10547b78b30c711af30726a4c1b:sphinx-doc__sphinx-7748",
+        "entry_hash": "7090e63b1c0ccd20beaa7402a2bd338b34390720c2069f8e88c0e68d212100b6",
+        "payload_hash": "c8c6fc5895ec181255869144e810eb8e2bde36cd1337deed3cfd6d06da8ad38a"
+      },
+      {
+        "charge_id": "task:35970f54af2eee2eda88ab71680304c6dd1c859cfc26d29d25451ebb19f9b6a1",
+        "entry_hash": "4bb718048f92654a0d3286767bf22f7803882c45c31b661e2c4bdd6bb235ad05",
+        "payload_hash": "6b5b57c2ef8361964d19d2cc4548b2b4bf025c63f7d83129cab45f3c6287c015"
+      },
+      {
+        "charge_id": "delay:search:search-p0:0f5a215ac0bce1aac54cc709e1a86e5e16f6f10547b78b30c711af30726a4c1b:sphinx-doc__sphinx-8035",
+        "entry_hash": "ff9a1cd580408a064baf618a3e12d657156188db2d14b3271ed1c8b67c58d0ea",
+        "payload_hash": "c8c6fc5895ec181255869144e810eb8e2bde36cd1337deed3cfd6d06da8ad38a"
+      },
+      {
+        "charge_id": "task:34c0872f8a1ce79601143b8d29ec3f99eb3cee73ffecf8baf6cb065940fea617",
+        "entry_hash": "4f65daaefd6f20f2c733c0f3940d8ea381858d375fd71ede1981038974a9a2f2",
+        "payload_hash": "e5b8a475fb8cc559f389c87b136a24f27cf80930861ae549175b7e6ad748ed80"
+      },
+      {
+        "charge_id": "delay:search:search-p0:0f5a215ac0bce1aac54cc709e1a86e5e16f6f10547b78b30c711af30726a4c1b:sphinx-doc__sphinx-8548",
+        "entry_hash": "61a0d3006f1e8ca1fa6fd14de35f3f8690b261b5bf5aabea3cef65753e560915",
+        "payload_hash": "c8c6fc5895ec181255869144e810eb8e2bde36cd1337deed3cfd6d06da8ad38a"
+      },
+      {
+        "charge_id": "task:fa265dbe17715f58d315341899e1342797a529291051bf196d5d847ab026e278",
+        "entry_hash": "e3d438eb9ea6a0793c7fec6cb48d488c136eeb1263b7b6b3ad481a5fe573ec66",
+        "payload_hash": "097488754f9d87df8ea949e35989613cb9725d27af736efecc62b8b790e84fb6"
+      },
+      {
+        "charge_id": "delay:search:search-p0:0f5a215ac0bce1aac54cc709e1a86e5e16f6f10547b78b30c711af30726a4c1b:sphinx-doc__sphinx-9229",
+        "entry_hash": "aee908fbde6deb9234b4afdbefc856d45b6f83a78aa93b385bda0f1c88050ac9",
+        "payload_hash": "c8c6fc5895ec181255869144e810eb8e2bde36cd1337deed3cfd6d06da8ad38a"
+      },
+      {
+        "charge_id": "task:a45b4f85de89dae660dfb39f4d7dedb0cc5783a0f6fbad8f983df733f5f588a7",
+        "entry_hash": "dc6b6a0d120fea0b5279bfc24490323813edbbe90374e695d8dad702fe2a3e47",
+        "payload_hash": "65e2bf3892d32d63f1925376427aa252e98d189fee64e4f1d7b37196262592a2"
+      },
+      {
+        "charge_id": "delay:search:search-p0:0f5a215ac0bce1aac54cc709e1a86e5e16f6f10547b78b30c711af30726a4c1b:django__django-11880",
+        "entry_hash": "3640c878109429b56c3667604b865d3712c875a0184f41a55fa1385d0a3432a6",
+        "payload_hash": "c8c6fc5895ec181255869144e810eb8e2bde36cd1337deed3cfd6d06da8ad38a"
+      },
+      {
+        "charge_id": "task:7f7b963dfba3834b6652720d15c67578c28288f578d105e887bb35acf5dd5fa1",
+        "entry_hash": "7ef0d527077043c5a95b1cc7d9e13cd6d2b411963f69d558b982b43bd2512b08",
+        "payload_hash": "59611485b394f9bfb922dd9c029851ad32f91a7404b90e8187a17db3565465b0"
+      },
+      {
+        "charge_id": "delay:search:search-p0:0f5a215ac0bce1aac54cc709e1a86e5e16f6f10547b78b30c711af30726a4c1b:django__django-12143",
+        "entry_hash": "aff1a32d11b5a9b9370e7c0c4c965c011ce25bbf51b672fffdeadea8f2c67feb",
+        "payload_hash": "c8c6fc5895ec181255869144e810eb8e2bde36cd1337deed3cfd6d06da8ad38a"
+      },
+      {
+        "charge_id": "task:c5530d5e0d36fbf55a882da84f118261f49ba2164215140facb4733e7c93ad97",
+        "entry_hash": "4368a0601bc43b9977b94ee970ff4180043242246b949e8c6bb3ad363ec7f264",
+        "payload_hash": "8c059e62a8eb5171a0aaf71a40614ea691aa84d9db3e2298384d6e42a7a41b5f"
+      },
+      {
+        "charge_id": "delay:search:search-p0:0f5a215ac0bce1aac54cc709e1a86e5e16f6f10547b78b30c711af30726a4c1b:django__django-12155",
+        "entry_hash": "7f86b40b8dde29718af181536f64dfc394ce131046f51d1aa18a14f3899f10c3",
+        "payload_hash": "c8c6fc5895ec181255869144e810eb8e2bde36cd1337deed3cfd6d06da8ad38a"
+      },
+      {
+        "charge_id": "task:c6a3b86a5089d341d078c6a8b293b47c031f3b19a3008cb587ab407199289d66",
+        "entry_hash": "13b9b676d054d28680b714bf20177c158d9ebe922623a78949d54f840b6f5e7e",
+        "payload_hash": "c7e6d35ddf6e7900c343169ced0f452ce610f87b6a1ba16d60c66d837ff8ce99"
+      },
+      {
+        "charge_id": "delay:search:search-p0:0f5a215ac0bce1aac54cc709e1a86e5e16f6f10547b78b30c711af30726a4c1b:sphinx-doc__sphinx-9367",
+        "entry_hash": "4afabd6324851a01fd26673515b7b88219de63fa31bc3dec243c3d428873669e",
+        "payload_hash": "c8c6fc5895ec181255869144e810eb8e2bde36cd1337deed3cfd6d06da8ad38a"
+      },
+      {
+        "charge_id": "task:79799df11e19cca1d6fe41677fbfdd883d43f463176d82bad57b03dc44d8c290",
+        "entry_hash": "ae61b14d99ee13ad3b4bda6e5d650559aa8354859a347227c28d3b1f100ad071",
+        "payload_hash": "35354e77b253043bde6a8a59afe4cafc992b6fee9d68e300ade52e6d44c8a581"
+      },
+      {
+        "charge_id": "delay:search:search-p0:0f5a215ac0bce1aac54cc709e1a86e5e16f6f10547b78b30c711af30726a4c1b:django__django-12209",
+        "entry_hash": "981c6a8d58baa1c9e7d95eadc898983d5f3e8c858f9b7debc16f73dcf27375df",
+        "payload_hash": "c8c6fc5895ec181255869144e810eb8e2bde36cd1337deed3cfd6d06da8ad38a"
+      },
+      {
+        "charge_id": "task:19a67845af2bb850e801af2592c28800016c053a8d0cc2ba97e46321126a3d3f",
+        "entry_hash": "f698b38e23fd5c158fd98c2aebf5367cfec7ef8c7221b6a939dded31415c0d45",
+        "payload_hash": "93b4b81f36fb6c67e03ad52a2a9d9e27513691df357a03b7573b55dc2d00b56e"
+      },
+      {
+        "charge_id": "delay:search:search-p0:0f5a215ac0bce1aac54cc709e1a86e5e16f6f10547b78b30c711af30726a4c1b:django__django-11951",
+        "entry_hash": "a81e6a99d615818015da6616941ecb51e54f44bccc3ff7b43fe0a85e9319c47c",
+        "payload_hash": "c8c6fc5895ec181255869144e810eb8e2bde36cd1337deed3cfd6d06da8ad38a"
+      },
+      {
+        "charge_id": "task:1d5068556bdbd080f81ce3fc289f8e0b4525cc3489877e1f768b4de466388ba5",
+        "entry_hash": "614c52be5c9af2e8ac63827e06fa81c5c6aa243adb4d9d8262209d10e64430a4",
+        "payload_hash": "27214178c04abb2afe69e2093be1bb19093481bb7c1552a527b68281208036f9"
+      },
+      {
+        "charge_id": "delay:search:search-p0:0f5a215ac0bce1aac54cc709e1a86e5e16f6f10547b78b30c711af30726a4c1b:django__django-12193",
+        "entry_hash": "987a42f6d8370df94315782565a4803ab81d63bac011cd0d692334f395452d57",
+        "payload_hash": "c8c6fc5895ec181255869144e810eb8e2bde36cd1337deed3cfd6d06da8ad38a"
+      },
+      {
+        "charge_id": "task:059ffa04cb9d4d948dc2478b58407663b305004bd41e0911f9ba849fa2ed5297",
+        "entry_hash": "6772ea09d98989878d98c2f8d69784260622a03f5ad93da4c0da73b79195c3b5",
+        "payload_hash": "f6c9cf5e30829c2dec0cc0533c93d05d564947535cfcdcd6c65be3d4a1254923"
+      },
+      {
+        "charge_id": "delay:search:search-p0:0f5a215ac0bce1aac54cc709e1a86e5e16f6f10547b78b30c711af30726a4c1b:django__django-12276",
+        "entry_hash": "16541879c138eb592a7d5a8ac96b2c5f23520c05cfc60ef1fe651c8edb4571a1",
+        "payload_hash": "c8c6fc5895ec181255869144e810eb8e2bde36cd1337deed3cfd6d06da8ad38a"
+      },
+      {
+        "charge_id": "task:53dfb2b1797fa5fb04583e01a2baa21c78caa87fd6e7a0fc594193fc9874f848",
+        "entry_hash": "9f4adf38f7dada0c41d57c4115653f54c5269e005db693d1d73901afd15bbbdb",
+        "payload_hash": "1156ce8793f69ec542cd88a1d159596ddce2d948de53fb6f9cb53ba75f4d38a0"
+      },
+      {
+        "charge_id": "delay:search:search-p0:0f5a215ac0bce1aac54cc709e1a86e5e16f6f10547b78b30c711af30726a4c1b:django__django-12304",
+        "entry_hash": "3e919e46e4c1da7c1925706c6fbdd629c51e5211c5d23c039be58940c19ecd67",
+        "payload_hash": "c8c6fc5895ec181255869144e810eb8e2bde36cd1337deed3cfd6d06da8ad38a"
+      },
+      {
+        "charge_id": "task:a342acb7ea6a74f1acdf7c620a6317d597f4a35df57024e34ca8a7809b5e113f",
+        "entry_hash": "bc78b2d2af2c7a460de3dc23caf3cd0245b859ab31d8e325d47073d35370774b",
+        "payload_hash": "a008b5782968d89b9b4906083b00fbc506d028621b687c27190d9758b74e0699"
+      },
+      {
+        "charge_id": "delay:search:search-p0:0f5a215ac0bce1aac54cc709e1a86e5e16f6f10547b78b30c711af30726a4c1b:django__django-9296",
+        "entry_hash": "6ecb1a9064c220bc45a502f446b4fe562e8b19657dbb489806531884c7bcbfc7",
+        "payload_hash": "c8c6fc5895ec181255869144e810eb8e2bde36cd1337deed3cfd6d06da8ad38a"
+      },
+      {
+        "charge_id": "task:e56fcb82b5bef7425132897b2aef7565ac8e68888d345866614b8dd585b38a19",
+        "entry_hash": "428bdf972c992b4b00b38ed3c68e8d16431cdf1bb69759a2acc1f71de109b7ec",
+        "payload_hash": "6dc77f646700a42d5bab2acebc3bcc5010c0bec02c8c5647a1b430ceec1d98cb"
+      },
+      {
+        "charge_id": "delay:search:search-p0:0f5a215ac0bce1aac54cc709e1a86e5e16f6f10547b78b30c711af30726a4c1b:sphinx-doc__sphinx-10466",
+        "entry_hash": "d33927b01f1fa85faece2788ed6ef23e9227c65995699b41d7c8ad24e433b1c3",
+        "payload_hash": "c8c6fc5895ec181255869144e810eb8e2bde36cd1337deed3cfd6d06da8ad38a"
+      },
+      {
+        "charge_id": "task:f59fd3fc2a4135878be97ffd6dbcc1a9e4e69bc0925bfdb9508d812b3f463dc8",
+        "entry_hash": "d8e45d2537cda960ebb35b46e43780f76ef67e69bcf8168316d17655556bd2f6",
+        "payload_hash": "46fd12a90aac6317f4973d9f5388677a1bbc82633863c8ad153e5ffb1b5bb94d"
+      },
+      {
+        "charge_id": "delay:search:search-p0:0f5a215ac0bce1aac54cc709e1a86e5e16f6f10547b78b30c711af30726a4c1b:django__django-11999",
+        "entry_hash": "1be52732b5879e226c3cbf3a62336fd7d838a16a53a116d1189db2b0a885105c",
+        "payload_hash": "c8c6fc5895ec181255869144e810eb8e2bde36cd1337deed3cfd6d06da8ad38a"
+      },
+      {
+        "charge_id": "task:d133bf1caab589618334ae7d6fdfea91d82ec4698a8d566c683bd17e9c234f18",
+        "entry_hash": "2ecac3be0f6989be199a951888a2ee2e1f1dab3d926ab9584802db71ebd1576c",
+        "payload_hash": "3561c3d15dc378a47e7a4a93e27a28808626e6d8d881db15fa85ede196ef66c5"
+      },
+      {
+        "charge_id": "delay:search:search-p0:0f5a215ac0bce1aac54cc709e1a86e5e16f6f10547b78b30c711af30726a4c1b:django__django-12039",
+        "entry_hash": "72567698bc6726c3dc5fc272923bfac951c217f324e773b3fdc26723725da814",
+        "payload_hash": "c8c6fc5895ec181255869144e810eb8e2bde36cd1337deed3cfd6d06da8ad38a"
+      },
+      {
+        "charge_id": "task:7548f9737d68f6f08edabed6c7de82df1fed9058e3494c0e7cb977be650a7639",
+        "entry_hash": "f1adbeb3de0c7c005faa7f4035323cd4f97cc4b7b8e70dbc2c59cf67cb27b44d",
+        "payload_hash": "672a55ec40e9f4d56ee160d6962232022606c2f5ab7fdcd6afd61e71960afc64"
+      },
+      {
+        "charge_id": "delay:search:search-p0:0f5a215ac0bce1aac54cc709e1a86e5e16f6f10547b78b30c711af30726a4c1b:django__django-12273",
+        "entry_hash": "91ec8ae73b2ee8681556d70887e8b0c5f819a0f512c0014fbf0ae51e4a0868a4",
+        "payload_hash": "c8c6fc5895ec181255869144e810eb8e2bde36cd1337deed3cfd6d06da8ad38a"
+      },
+      {
+        "charge_id": "task:125e1654b701a6461ee54cf0942fa21f9db43bb912b881ff5f5a702e8c3c1e38",
+        "entry_hash": "1290c74dd50fceca66ae0bd5a54a8a85a9e177fa966d1f9ba170ec4ce00d071b",
+        "payload_hash": "38047e365ee6c3cc07ae31121933071c4666c5c1871f8111a95ac85280d65dfb"
+      },
+      {
+        "charge_id": "delay:search:search-p0:0f5a215ac0bce1aac54cc709e1a86e5e16f6f10547b78b30c711af30726a4c1b:django__django-12325",
+        "entry_hash": "bd49721ea37416aa62da1d19864373a9d0d78ceaa9590ea49fe3f38a36e56e68",
+        "payload_hash": "c8c6fc5895ec181255869144e810eb8e2bde36cd1337deed3cfd6d06da8ad38a"
+      },
+      {
+        "charge_id": "task:9a134651baaa0a051e42753e565231d4fdd26e10691d7832c6e6bc47a56532eb",
+        "entry_hash": "ef888872b09719034815c225918407bc9e13a3175c6f477badbe890abc1965f1",
+        "payload_hash": "6c63c94358833cbd42459663a1cb9acc9b35305c2c9d7394edd5a1c93a1c6a55"
+      },
+      {
+        "charge_id": "delay:search:search-p0:0f5a215ac0bce1aac54cc709e1a86e5e16f6f10547b78b30c711af30726a4c1b:django__django-12406",
+        "entry_hash": "96f6846b23a4d49b2e842cf94f08352562925ef46f085c12958e0a310d87116e",
+        "payload_hash": "c8c6fc5895ec181255869144e810eb8e2bde36cd1337deed3cfd6d06da8ad38a"
+      },
+      {
+        "charge_id": "task:e7e32e268a86314c7e58c67c70db605d7f5f945dcea0310c3ce4a864cdc30f6e",
+        "entry_hash": "191b34335ff8bfd52b53314e2b3e825e44f49052dbe613b6dc5906f6358b61b0",
+        "payload_hash": "25a07e96a1f3a381fd7a25d107ab122a85b6650af287469f4e36d94a2caaaaa5"
+      },
+      {
+        "charge_id": "delay:search:search-p0:0f5a215ac0bce1aac54cc709e1a86e5e16f6f10547b78b30c711af30726a4c1b:sphinx-doc__sphinx-10673",
+        "entry_hash": "22b8e54ee9befef7cadcf8cff4fc527bdadda29b8312b5fc8a7809cdcca86603",
+        "payload_hash": "c8c6fc5895ec181255869144e810eb8e2bde36cd1337deed3cfd6d06da8ad38a"
+      },
+      {
+        "charge_id": "task:2a2d03e7d47debc16594b215fbca5de70d15efe04ca76de20b9fd2b5598e8c9e",
+        "entry_hash": "bf1ce4189a7079d72dd38260bf9f379e8325a0f59aede8504448b455ff612dd2",
+        "payload_hash": "5060f59c892ca83a5e9f3cabcea969f17b99df6ce6b786bebd58c3d9dc5c5053"
+      },
+      {
+        "charge_id": "delay:search:search-p0:0f5a215ac0bce1aac54cc709e1a86e5e16f6f10547b78b30c711af30726a4c1b:sphinx-doc__sphinx-11510",
+        "entry_hash": "66dc180debb8707c5969fa68487b4fcb5718861ac020947b759ffb5c7b4fcca8",
+        "payload_hash": "c8c6fc5895ec181255869144e810eb8e2bde36cd1337deed3cfd6d06da8ad38a"
+      },
+      {
+        "charge_id": "task:5eacaba88602b4e43b1be735c39c86a2b1018fdfe03e52b80c162e8193eb1e54",
+        "entry_hash": "672d79a3599e0d4bc96bdc61411e442d139b807c09aacf784e59ff34561760fd",
+        "payload_hash": "94be96b4c9795c1f38bc73a95a1c33bf1a8d0141d6b109bf220ad413c8c369fa"
+      },
+      {
+        "charge_id": "delay:search:search-p0:0f5a215ac0bce1aac54cc709e1a86e5e16f6f10547b78b30c711af30726a4c1b:sphinx-doc__sphinx-7757",
+        "entry_hash": "cf5400e4db0208c6ee303c0df160d15cf6ae19132c30beeef8226b9a2f152727",
+        "payload_hash": "c8c6fc5895ec181255869144e810eb8e2bde36cd1337deed3cfd6d06da8ad38a"
+      },
+      {
+        "charge_id": "task:a8afa172eb8a2999c96b46668f34063cbce4870cd4eafbf28ae807420bce8dfd",
+        "entry_hash": "60ca050d25910e3683179f2d4202e71db9b2251c567de46c00a4ec1606db0732",
+        "payload_hash": "3550fcfe0961f4805e9598deb2c61ce9e984b797a0b087b17d1130659ca2184c"
+      },
+      {
+        "charge_id": "delay:search:search-p0:0f5a215ac0bce1aac54cc709e1a86e5e16f6f10547b78b30c711af30726a4c1b:sphinx-doc__sphinx-8265",
+        "entry_hash": "b4d1ae67d3960bc5e8369ba75b54b82282ad25c463f784a1833a4b917a9dc959",
+        "payload_hash": "c8c6fc5895ec181255869144e810eb8e2bde36cd1337deed3cfd6d06da8ad38a"
+      },
+      {
+        "charge_id": "task:2e63aaa27bd0dd73ef1aadccbe91fe85744044fcb856e09abd640d1afe4f83ad",
+        "entry_hash": "285e5c3307c3c1e21a6a002f024ec81b4b42edf7302af1a28ba755c105316d5a",
+        "payload_hash": "0e7fa54bd0233d4611c549e6d8ec47046d954ec76de2b26d5a643f576bd1a63b"
+      },
+      {
+        "charge_id": "delay:search:search-p0:0f5a215ac0bce1aac54cc709e1a86e5e16f6f10547b78b30c711af30726a4c1b:sphinx-doc__sphinx-8551",
+        "entry_hash": "f01e48cc34aa5fcc7c5f619995575bb5c056e3e7c54365a69348c9b97320a8c7",
+        "payload_hash": "c8c6fc5895ec181255869144e810eb8e2bde36cd1337deed3cfd6d06da8ad38a"
+      },
+      {
+        "charge_id": "task:4f0cdd79bd50580dfaab747d8c6d72f31cb21694f75f48ee6ac685c397b3ccb5",
+        "entry_hash": "9ef0ce8913b00f2e829b33e2edc5a2cccc443b87a4e465483b6575e64e42050f",
+        "payload_hash": "906216938647f2a95343ff957e17db76ca168ac557ee6b9b169d9d20f703765b"
+      },
+      {
+        "charge_id": "delay:search:search-p0:0f5a215ac0bce1aac54cc709e1a86e5e16f6f10547b78b30c711af30726a4c1b:sphinx-doc__sphinx-8638",
+        "entry_hash": "dfe4180d65c2486fabf7b95b5dd6144033af4f520b4957a8d71b46733a67198d",
+        "payload_hash": "c8c6fc5895ec181255869144e810eb8e2bde36cd1337deed3cfd6d06da8ad38a"
+      },
+      {
+        "charge_id": "task:8c20f7d7fd7d481c82f9e10e9709690800aa946c77619adc30e90e0dde57fa02",
+        "entry_hash": "6d15f72ee01a735bd4f524f5a4f1b6c632e123a39d3da322852773b63eca727e",
+        "payload_hash": "62ae04a42cf1eafdbfe4e4045da32e9a97d19f6a40161655fa6477275ad52d49"
+      },
+      {
+        "charge_id": "delay:search:search-p0:0f5a215ac0bce1aac54cc709e1a86e5e16f6f10547b78b30c711af30726a4c1b:django__django-11815",
+        "entry_hash": "003fea91a2f0f900bd9d01593a15ef06836453824df0f19932bdc2671bf60d02",
+        "payload_hash": "c8c6fc5895ec181255869144e810eb8e2bde36cd1337deed3cfd6d06da8ad38a"
+      },
+      {
+        "charge_id": "task:5742189a7b27685f1bf5b5b519886ca18d290624961b6ccaa5828f9c4c80df27",
+        "entry_hash": "1bb39ef3692209b844d6c70e76504e8c542601e5087cb7a59f43941c931f2f1d",
+        "payload_hash": "a75f1985f36ab11b8f382f6e6dd8ebf0ef4077b54fedca7ae354788279b5c4f3"
+      },
+      {
+        "charge_id": "delay:search:search-p0:0f5a215ac0bce1aac54cc709e1a86e5e16f6f10547b78b30c711af30726a4c1b:django__django-11885",
+        "entry_hash": "0db53bdd8035d505ad15d3915a4103564201b414fa92d3a8da7bf2af4aa4a9ff",
+        "payload_hash": "c8c6fc5895ec181255869144e810eb8e2bde36cd1337deed3cfd6d06da8ad38a"
+      },
+      {
+        "charge_id": "task:d9422a3f2e0bb971e7f960f065a5ee91b92101c9547c43b71ca1552a30f8b478",
+        "entry_hash": "232254a90c6d74ad76268f66ac33c06b5c313207de8b1eeee075996e80d3e9b9",
+        "payload_hash": "1068402cec16546628163820123a43b94d88602c56671486229cdd41777286d6"
+      },
+      {
+        "charge_id": "delay:search:search-p0:0f5a215ac0bce1aac54cc709e1a86e5e16f6f10547b78b30c711af30726a4c1b:django__django-12708",
+        "entry_hash": "4df7b47648901a1c1b9a10e926f7b69933b27e57283436114fc1f70a844155f6",
+        "payload_hash": "c8c6fc5895ec181255869144e810eb8e2bde36cd1337deed3cfd6d06da8ad38a"
+      },
+      {
+        "charge_id": "task:52ff8e2a2ebd4cb0aa10ec0e7329e0ebea434f4cadcf179625f5328502fbf367",
+        "entry_hash": "02372430b25fba5dbfe2585025972a0e4548efc0812ed8f72681f5b4947787eb",
+        "payload_hash": "f5476019bfd287dc54e573c0db2a81f13e238c8b506743bfc6e04a3909c1efba"
+      },
+      {
+        "charge_id": "delay:search:search-p0:0f5a215ac0bce1aac54cc709e1a86e5e16f6f10547b78b30c711af30726a4c1b:sphinx-doc__sphinx-7590",
+        "entry_hash": "eedb72cd156e0e58615388a374f960702fd5b164d5e8a035a58a3af12dded7dd",
+        "payload_hash": "c8c6fc5895ec181255869144e810eb8e2bde36cd1337deed3cfd6d06da8ad38a"
+      },
+      {
+        "charge_id": "task:4f3856d8419707bfe54aefb8185ee86b1f05c8e949b8879d4e6bb2277f9ae7cf",
+        "entry_hash": "3819a93208fe8d2471c4461dd7404e15630df68ee35f7614499d48a3263f1a1b",
+        "payload_hash": "cc6c6746f6c4b04c6ff7abfa3e2b0ca058597eecf6aa52c833dc46f7912f688f"
+      },
+      {
+        "charge_id": "delay:search:search-p0:0f5a215ac0bce1aac54cc709e1a86e5e16f6f10547b78b30c711af30726a4c1b:sphinx-doc__sphinx-7985",
+        "entry_hash": "ebd5b180c7d328065da26650d2d5658d3753398823c3fe2c6b05a060c50fbe2e",
+        "payload_hash": "c8c6fc5895ec181255869144e810eb8e2bde36cd1337deed3cfd6d06da8ad38a"
+      },
+      {
+        "charge_id": "task:dbfea98ba77efde2e42436a820d0a82c9f3cfea4cc671d924df659a4da0349e5",
+        "entry_hash": "9649ef0c7650b2fb3c47bc3b0980fa49020fe464a6e42568781790d22ed38543",
+        "payload_hash": "7ed57407ba6afe395ac6324aeca7c6b08438629b89f7fd400a272e63dbf8dddb"
+      },
+      {
+        "charge_id": "delay:search:search-p0:0f5a215ac0bce1aac54cc709e1a86e5e16f6f10547b78b30c711af30726a4c1b:sphinx-doc__sphinx-8056",
+        "entry_hash": "aa5dc9f1f8dbc29fc479a3d43d206725e9b633c0da17a8f661743c87c9d17979",
+        "payload_hash": "c8c6fc5895ec181255869144e810eb8e2bde36cd1337deed3cfd6d06da8ad38a"
+      },
+      {
+        "charge_id": "task:a96177a91bcec1b73776e113881d244cc0771b975ecc945e390870530d7c849f",
+        "entry_hash": "753f0bcda1edcbb01a03e5e7eb485cf0fa7763ca3bd7d231f37d77d10ac24c7e",
+        "payload_hash": "56f7cea0737620c20e643321bfcc88df450c752a9f0b2a135cc730ab39c0f48b"
+      },
+      {
+        "charge_id": "delay:search:search-p0:0f5a215ac0bce1aac54cc709e1a86e5e16f6f10547b78b30c711af30726a4c1b:sphinx-doc__sphinx-9461",
+        "entry_hash": "32ab84fb0c8cad572ec73c841aa3d0df42b69e26d1a7f16163e6213a6d3fdb28",
+        "payload_hash": "c8c6fc5895ec181255869144e810eb8e2bde36cd1337deed3cfd6d06da8ad38a"
+      },
+      {
+        "charge_id": "task:1a695dbfadc898f56e8cc9b5bd86fc209ba522b8f828fa125713ea63934e4bd5",
+        "entry_hash": "1b3431fc02b9e83a1438542a38f0a89d99b1172424f5dba8693b584fd8e520a9",
+        "payload_hash": "28e2192299300b43cfad94cbb441fa8ef50643912014a179bc226ba03a903b4d"
+      },
+      {
+        "charge_id": "delay:search:search-p0:0f5a215ac0bce1aac54cc709e1a86e5e16f6f10547b78b30c711af30726a4c1b:django__django-11964",
+        "entry_hash": "3e1e63e3ea25ba629d46aa94ed0366e170731a8580a4db1374dfc6b1739afeae",
+        "payload_hash": "c8c6fc5895ec181255869144e810eb8e2bde36cd1337deed3cfd6d06da8ad38a"
+      },
+      {
+        "charge_id": "task:1ebf6b2cd79bbb23781782796c24ca4d7dc28882b26389e7949db3afda601353",
+        "entry_hash": "0ffa43c6f869e22af3d68e6c80d25da61fca1ac026d2454644c1b84ef8eba87f",
+        "payload_hash": "87c4cb5672718b2f42bfc0057a54e5dcb1d9e35f520e4a7b3a11baabbbf101b6"
+      },
+      {
+        "charge_id": "delay:search:search-p0:0f5a215ac0bce1aac54cc709e1a86e5e16f6f10547b78b30c711af30726a4c1b:django__django-12308",
+        "entry_hash": "51225902484b18e50a41a71f9dd73dad62616bd68c46295dd05eb377bfd7c7f1",
+        "payload_hash": "c8c6fc5895ec181255869144e810eb8e2bde36cd1337deed3cfd6d06da8ad38a"
+      },
+      {
+        "charge_id": "task:60f883eb5bae229abfe703c841f8c1b22c131c1c966b15d0914dca6060187f55",
+        "entry_hash": "f7e8979cc2cd9d308841a2cd1a57a7b47812ad8c8a8e5aa78b13a805063e89ff",
+        "payload_hash": "93ead0fa0c3b011a13854e7dc4eb02ebd637e463645e0b948958495235a647ea"
+      },
+      {
+        "charge_id": "delay:search:search-p0:0f5a215ac0bce1aac54cc709e1a86e5e16f6f10547b78b30c711af30726a4c1b:sphinx-doc__sphinx-10449",
+        "entry_hash": "ab441adb665f76671b7a91f401ca6297dc37a82c6652fb63b3585947f67f7aaa",
+        "payload_hash": "c8c6fc5895ec181255869144e810eb8e2bde36cd1337deed3cfd6d06da8ad38a"
+      },
+      {
+        "charge_id": "task:89b88c6281092c26a7c359b8b410d6a6359106355e43a66caf2f6c25bf37984d",
+        "entry_hash": "ebfb5afeb59e811ec293c8b0dc3eed10997bd2b2584b49df2e6be7a5aa802500",
+        "payload_hash": "0e938912ae5fb6cdcd6324f7f02e850352890fdbbe494df22a4c7c49d86e4ed6"
+      },
+      {
+        "charge_id": "delay:search:search-p0:0f5a215ac0bce1aac54cc709e1a86e5e16f6f10547b78b30c711af30726a4c1b:sphinx-doc__sphinx-7454",
+        "entry_hash": "d6a6830b482d75de3446c3f307f4f097c6148aebd549058696562f590d10c229",
+        "payload_hash": "c8c6fc5895ec181255869144e810eb8e2bde36cd1337deed3cfd6d06da8ad38a"
+      },
+      {
+        "charge_id": "task:18881d027826b30c9d625eef235a1b7fd01c2f8ae50767fea1dd2f91e228f8c4",
+        "entry_hash": "b0bca470d9ec20ed2271529d6b4a35b3a0b487401fb32ceae7fcb0b5f64376f7",
+        "payload_hash": "e5f19c01e1f877ab705abc853dee9af35c129ef6cd9fbc85a8f4fbae9334039c"
+      },
+      {
+        "charge_id": "delay:search:search-p0:0f5a215ac0bce1aac54cc709e1a86e5e16f6f10547b78b30c711af30726a4c1b:sphinx-doc__sphinx-8269",
+        "entry_hash": "c0ab8c63696977290fd95c5ebdef2c15325420b4a9ba0fe1c47b759544e46bc7",
+        "payload_hash": "c8c6fc5895ec181255869144e810eb8e2bde36cd1337deed3cfd6d06da8ad38a"
+      },
+      {
+        "charge_id": "task:37de11fe490321348fc041a2460652a0802d1695aba685f6e6e42960f6887e81",
+        "entry_hash": "8f412b433f702c4bef0d5e159f823eecd58c092d3a7297e0c33f7471b8a54233",
+        "payload_hash": "938a3256645e3f4f8dcb1891fb0573ddb66dfe15a09e46315c8c5e58d8dbf3b1"
+      },
+      {
+        "charge_id": "delay:search:search-p0:0f5a215ac0bce1aac54cc709e1a86e5e16f6f10547b78b30c711af30726a4c1b:sphinx-doc__sphinx-9230",
+        "entry_hash": "aa62859614da3c436646e79319e92d76fd565fa3dbddcc12cc7b900f27940c4d",
+        "payload_hash": "c8c6fc5895ec181255869144e810eb8e2bde36cd1337deed3cfd6d06da8ad38a"
+      },
+      {
+        "charge_id": "task:57793d6160318ae29a49dfd70ec1f4070d9aceaa3cbb21615347370b710c01ce",
+        "entry_hash": "7aa3453d1d8ec178e4a66acd388b93229e43a5e407a8b350db404a35b08764ce",
+        "payload_hash": "68f01033e0fc6c19b11a032aafed7e672428f3d9dc29275736a1775b101d02c8"
+      },
+      {
+        "charge_id": "delay:search:search-p0:0f5a215ac0bce1aac54cc709e1a86e5e16f6f10547b78b30c711af30726a4c1b:sphinx-doc__sphinx-9281",
+        "entry_hash": "51d62a825de70beb453fa90b5011ced7b91f7c836c62c57c1304aff2f1e84985",
+        "payload_hash": "c8c6fc5895ec181255869144e810eb8e2bde36cd1337deed3cfd6d06da8ad38a"
+      }
+    ],
+    "bindings_hash": "f6cce97994d7c2593d6271f9097d32516e771a5f5052fd85550942196a419ade",
+    "summary": {
+      "active_seconds": 21847.84,
+      "api_calls": 60,
+      "conservative_token_charge": 0,
+      "records": 120,
+      "reported_tokens": 21821181,
+      "task_executions": 60
+    }
+  },
+  "target": {
+    "config_hash": "31ad2059612f2cfa20a4e35cec7980a9603bfc66b23efc434493f30cf6f4aa7b",
+    "protocol_lock_sha256": "98b22bb259f830181345d48afebc0e4813a214a846080e09ec3c02302f712746",
+    "run_id": "dgm-pilot-s20261014-v2",
+    "run_root": "/Users/bytedance/codes/pi/research_output/rerun_20261015/dgm_seed20261014_v2",
+    "task_execution_contract": {
+      "config": {
+        "agent_timeout_seconds": 3600,
+        "concurrency": 1,
+        "evaluator_timeout_seconds": 1800,
+        "image_build_retries": 2,
+        "image_build_retry_delay_seconds": 30,
+        "image_build_timeout_seconds": 7200,
+        "inter_task_delay_seconds": 90.0,
+        "model_id": "byteplus/deepseek-v4-flash-ga",
+        "model_provider": "rollback-deepseek",
+        "per_task_output_token_cap": 65536,
+        "per_task_token_cap": 512000,
+        "smoke": false,
+        "task_rollout_count": 1
+      },
+      "evolve_manifest_hash": "ba5617a82f44048abd7ecf334d1f633341759613d21faedd0fc2ffc53e15cf86",
+      "evolve_ordered_instance_ids_sha256": "403e9dfa5d27d18a80f16ceb8879a9d63109d3f5d808d23af1b834f6c88bd8e8",
+      "execution_stack_hash": "d6c0de64ed460490733fd93205750400fcf44ba3aa8814b877658edd11b666cb",
+      "p0_artifact_hash": "0f5a215ac0bce1aac54cc709e1a86e5e16f6f10547b78b30c711af30726a4c1b",
+      "schema_version": 1
+    },
+    "task_execution_contract_hash": "f24059fe96931b8877eeb8f42b280501b0c32f4c24c415a9b6c8595ccaad2f0b"
+  }
+}

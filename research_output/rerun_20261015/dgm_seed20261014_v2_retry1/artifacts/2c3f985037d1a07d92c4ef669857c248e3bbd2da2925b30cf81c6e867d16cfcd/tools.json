@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "tools": [
+    {
+      "description": "Searches Python source files under /testbed for a literal or regular expression and returns matching file paths, line numbers, and surrounding snippets. Useful for locating definitions, call sites, and related code without shell or git access.",
+      "handler": "handlers/code_occurrence_search.py",
+      "label": "Read-only source code occurrence search",
+      "name": "code_occurrence_search",
+      "parameters": {
+        "additionalProperties": false,
+        "properties": {
+          "case_sensitive": {
+            "description": "Match case sensitively, default false.",
+            "type": "boolean"
+          },
+          "context_lines": {
+            "description": "Number of lines of context to include around each match, default 2.",
+            "type": "integer"
+          },
+          "file_glob": {
+            "description": "Filename glob filter, default *.py.",
+            "type": "string"
+          },
+          "max_matches": {
+            "description": "Maximum number of matches to return, default 50.",
+            "type": "integer"
+          },
+          "pattern": {
+            "description": "Literal text or regular expression to find.",
+            "type": "string"
+          },
+          "regex": {
+            "description": "Treat pattern as a regular expression, default true.",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "pattern"
+        ],
+        "type": "object"
+      },
+      "timeout_seconds": 30
+    }
+  ]
+}

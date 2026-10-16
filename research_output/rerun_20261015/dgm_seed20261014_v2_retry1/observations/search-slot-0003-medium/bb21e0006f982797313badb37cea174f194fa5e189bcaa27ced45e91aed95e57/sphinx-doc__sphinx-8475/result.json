@@ -1,0 +1,30 @@
+{
+  "budgetAborted": false,
+  "cacheReadTokens": 63488,
+  "cacheWriteTokens": 0,
+  "candidateToolNames": [
+    "callable_contract",
+    "code_search"
+  ],
+  "completedAt": "2026-10-15T10:38:56.652Z",
+  "durationMs": 28499,
+  "fullPatch": "diff --git a/sphinx/builders/linkcheck.py b/sphinx/builders/linkcheck.py\nindex 1dc0337..4104fe6 100644\n--- a/sphinx/builders/linkcheck.py\n+++ b/sphinx/builders/linkcheck.py\n@@ -20,7 +20,7 @@ from urllib.parse import unquote, urlparse\n \n from docutils import nodes\n from docutils.nodes import Node\n-from requests.exceptions import HTTPError\n+from requests.exceptions import HTTPError, TooManyRedirects\n \n from sphinx.application import Sphinx\n from sphinx.builders import Builder\n@@ -172,7 +172,7 @@ class CheckExternalLinksBuilder(Builder):\n                                                  config=self.app.config, auth=auth_info,\n                                                  **kwargs)\n                         response.raise_for_status()\n-                    except HTTPError:\n+                    except (HTTPError, TooManyRedirects):\n                         # retry with GET request if that fails, some servers\n                         # don't like HEAD requests.\n                         response = requests.get(req_url, stream=True, config=self.app.config,\n",
+  "inputTokens": 14142,
+  "instanceId": "sphinx-doc__sphinx-8475",
+  "maxOutputTokens": 65536,
+  "maxTotalTokens": 512000,
+  "modelId": "byteplus/deepseek-v4-flash-ga",
+  "modelProvider": "rollback-deepseek",
+  "noShell": false,
+  "outputTokens": 2508,
+  "patch": "diff --git a/sphinx/builders/linkcheck.py b/sphinx/builders/linkcheck.py\nindex 1dc0337..4104fe6 100644\n--- a/sphinx/builders/linkcheck.py\n+++ b/sphinx/builders/linkcheck.py\n@@ -20,7 +20,7 @@ from urllib.parse import unquote, urlparse\n \n from docutils import nodes\n from docutils.nodes import Node\n-from requests.exceptions import HTTPError\n+from requests.exceptions import HTTPError, TooManyRedirects\n \n from sphinx.application import Sphinx\n from sphinx.builders import Builder\n@@ -172,7 +172,7 @@ class CheckExternalLinksBuilder(Builder):\n                                                  config=self.app.config, auth=auth_info,\n                                                  **kwargs)\n                         response.raise_for_status()\n-                    except HTTPError:\n+                    except (HTTPError, TooManyRedirects):\n                         # retry with GET request if that fails, some servers\n                         # don't like HEAD requests.\n                         response = requests.get(req_url, stream=True, config=self.app.config,\n",
+  "policyViolations": [],
+  "runnerExitCode": 0,
+  "sandboxImage": "sweb.eval.arm64.sphinx-doc__sphinx-8475:latest",
+  "schemaVersion": 1,
+  "startedAt": "2026-10-15T10:38:28.153Z",
+  "strategyHash": "e925574904955546f15307878ea80f282aea7848af4d8378b105bd3c7d572036",
+  "timeoutAborted": false,
+  "tokenTelemetryAvailable": true,
+  "toolCalls": 11
+}

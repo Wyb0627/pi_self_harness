@@ -1,0 +1,8 @@
+{
+  "parent_artifact_hash": "0f5a215ac0bce1aac54cc709e1a86e5e16f6f10547b78b30c711af30726a4c1b",
+  "reason": "Unexpected end of JSON input",
+  "schema_version": 1,
+  "slot": 9,
+  "terminal_state": "CANDIDATE_INVALID_REJECTED",
+  "wave": 4
+}

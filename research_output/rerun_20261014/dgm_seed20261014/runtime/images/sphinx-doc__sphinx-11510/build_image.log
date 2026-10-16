@@ -1,0 +1,557 @@
+$ /tmp/pi-swebench-runtime/bin/python /Users/bytedance/codes/pi/rollback_mvp/build_local_swebench_images.py --dataset /Users/bytedance/codes/pi/research_output/rerun_20261014/dgm_seed20261014/runtime/evolve-inputs/frozen_swebench_dataset.json --instance-id sphinx-doc__sphinx-11510 --log-dir /Users/bytedance/codes/pi/research_output/rerun_20261014/dgm_seed20261014/runtime/images/sphinx-doc__sphinx-11510/image_logs --output /Users/bytedance/codes/pi/research_output/rerun_20261014/dgm_seed20261014/runtime/images/sphinx-doc__sphinx-11510/image.json --build-missing-env
+Building sweb.eval.arm64.sphinx-doc__sphinx-11510:latest from 6cb783c0024a873722952a67ebb9f41771c8eb6d
+DEPRECATED: The legacy builder is deprecated and will be removed in a future release.
+            Install the buildx component to build images with BuildKit:
+            https://docs.docker.com/go/buildx/
+
+Sending build context to Docker daemon  24.98MB
+
+Step 1/7 : FROM --platform=linux/arm64/v8 sweb.env.arm64.c6d251a05e0af7688b64fd:latest
+ ---> eeb76c446a9a
+Step 2/7 : ARG PIP_DEFAULT_TIMEOUT=120
+ ---> Using cache
+ ---> de31c9528aec
+Step 3/7 : ARG PIP_RETRIES=20
+ ---> Using cache
+ ---> 0aa9988479cd
+Step 4/7 : COPY ./repo /testbed
+ ---> 22791d915565
+Step 5/7 : COPY ./setup_local_repo.sh /root/
+ ---> 0806d3678804
+Step 6/7 : RUN /bin/bash /root/setup_local_repo.sh
+ ---> Running in 8022fdfeba1b
+[91m++ git -C /testbed rev-parse HEAD
+[0m[91m+ test 6cb783c0024a873722952a67ebb9f41771c8eb6d = 6cb783c0024a873722952a67ebb9f41771c8eb6d
+[0m[91m++ git -C /testbed remote
+[0m[91m+ test -z ''
++ chmod -R 777 /testbed
+[0m[91m+ cd /testbed
++ git reset --hard 6cb783c0024a873722952a67ebb9f41771c8eb6d
+[0mHEAD is now at 6cb783c Enable SIM105 (use contextlib.suppress)
+[91m+ source /opt/miniconda3/bin/activate
+[0m[91m++ _CONDA_ROOT=/opt/miniconda3
+++ . /opt/miniconda3/etc/profile.d/conda.sh
+[0m[91m+++ export CONDA_EXE=/opt/miniconda3/bin/conda
++++ CONDA_EXE=/opt/miniconda3/bin/conda
++++ export _CE_M=
++++ _CE_M=
++++ export _CE_CONDA=
++++ _CE_CONDA=
++++ export CONDA_PYTHON_EXE=/opt/miniconda3/bin/python
++++ CONDA_PYTHON_EXE=/opt/miniconda3/bin/python
+[0m[91m+++ '[' -z '' ']'
++++ export CONDA_SHLVL=0
++++ CONDA_SHLVL=0
++++ '[' -n '' ']'
+[0m[91m+++++ dirname /opt/miniconda3/bin/conda
+[0m[91m++++ dirname /opt/miniconda3/bin
+[0m[91m+++ PATH=/opt/miniconda3/condabin:/opt/miniconda3/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
++++ export PATH
++++ '[' -z '' ']'
++++ PS1=
+[0m[91m++ conda activate
+++ local cmd=activate
+++ case "$cmd" in
+++ __conda_activate activate
+++ '[' -n '' ']'
+++ local ask_conda
+[0m[91m+++ PS1=
++++ __conda_exe shell.posix activate
+[0m[91m+++ /opt/miniconda3/bin/conda shell.posix activate
+[0m[91m++ ask_conda='PS1='\''(base) '\''
+export PATH='\''/opt/miniconda3/bin:/opt/miniconda3/condabin:/opt/miniconda3/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'\''
+export CONDA_PREFIX='\''/opt/miniconda3'\''
+export CONDA_SHLVL='\''1'\''
+export CONDA_DEFAULT_ENV='\''base'\''
+export CONDA_PROMPT_MODIFIER='\''(base) '\''
+export CONDA_EXE='\''/opt/miniconda3/bin/conda'\''
+export _CE_M='\'''\''
+export _CE_CONDA='\'''\''
+export CONDA_PYTHON_EXE='\''/opt/miniconda3/bin/python'\'''
+++ eval 'PS1='\''(base) '\''
+export PATH='\''/opt/miniconda3/bin:/opt/miniconda3/condabin:/opt/miniconda3/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'\''
+export CONDA_PREFIX='\''/opt/miniconda3'\''
+export CONDA_SHLVL='\''1'\''
+export CONDA_DEFAULT_ENV='\''base'\''
+export CONDA_PROMPT_MODIFIER='\''(base) '\''
+export CONDA_EXE='\''/opt/miniconda3/bin/conda'\''
+export _CE_M='\'''\''
+export _CE_CONDA='\'''\''
+export CONDA_PYTHON_EXE='\''/opt/miniconda3/bin/python'\'''
++++ PS1='(base) '
++++ export PATH=/opt/miniconda3/bin:/opt/miniconda3/condabin:/opt/miniconda3/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
++++ PATH=/opt/miniconda3/bin:/opt/miniconda3/condabin:/opt/miniconda3/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
++++ export CONDA_PREFIX=/opt/miniconda3
++++ CONDA_PREFIX=/opt/miniconda3
++++ export CONDA_SHLVL=1
++++ CONDA_SHLVL=1
++++ export CONDA_DEFAULT_ENV=base
++++ CONDA_DEFAULT_ENV=base
++++ export 'CONDA_PROMPT_MODIFIER=(base) '
++++ CONDA_PROMPT_MODIFIER='(base) '
++++ export CONDA_EXE=/opt/miniconda3/bin/conda
++++ CONDA_EXE=/opt/miniconda3/bin/conda
++++ export _CE_M=
++++ _CE_M=
++++ export _CE_CONDA=
++++ _CE_CONDA=
++++ export CONDA_PYTHON_EXE=/opt/miniconda3/bin/python
++++ CONDA_PYTHON_EXE=/opt/miniconda3/bin/python
+++ __conda_hashr
+[0m[91m++ '[' -n '' ']'
+++ '[' -n '' ']'
+++ hash -r
+[0m[91m+ conda activate testbed
++ local cmd=activate
++ case "$cmd" in
++ __conda_activate activate testbed
++ '[' -n '' ']'
++ local ask_conda
+[0m[91m++ PS1='(base) '
+++ __conda_exe shell.posix activate testbed
+[0m[91m++ /opt/miniconda3/bin/conda shell.posix activate testbed
+[0m[91m+ ask_conda='PS1='\''(testbed) '\''
+export PATH='\''/opt/miniconda3/envs/testbed/bin:/opt/miniconda3/condabin:/opt/miniconda3/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'\''
+export CONDA_PREFIX='\''/opt/miniconda3/envs/testbed'\''
+export CONDA_SHLVL='\''2'\''
+export CONDA_DEFAULT_ENV='\''testbed'\''
+export CONDA_PROMPT_MODIFIER='\''(testbed) '\''
+export CONDA_PREFIX_1='\''/opt/miniconda3'\''
+export CONDA_EXE='\''/opt/miniconda3/bin/conda'\''
+export _CE_M='\'''\''
+export _CE_CONDA='\'''\''
+export CONDA_PYTHON_EXE='\''/opt/miniconda3/bin/python'\'''
++ eval 'PS1='\''(testbed) '\''
+export PATH='\''/opt/miniconda3/envs/testbed/bin:/opt/miniconda3/condabin:/opt/miniconda3/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'\''
+export CONDA_PREFIX='\''/opt/miniconda3/envs/testbed'\''
+export CONDA_SHLVL='\''2'\''
+export CONDA_DEFAULT_ENV='\''testbed'\''
+export CONDA_PROMPT_MODIFIER='\''(testbed) '\''
+export CONDA_PREFIX_1='\''/opt/miniconda3'\''
+export CONDA_EXE='\''/opt/miniconda3/bin/conda'\''
+export _CE_M='\'''\''
+export _CE_CONDA='\'''\''
+export CONDA_PYTHON_EXE='\''/opt/miniconda3/bin/python'\'''
+++ PS1='(testbed) '
+++ export PATH=/opt/miniconda3/envs/testbed/bin:/opt/miniconda3/condabin:/opt/miniconda3/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+++ PATH=/opt/miniconda3/envs/testbed/bin:/opt/miniconda3/condabin:/opt/miniconda3/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+++ export CONDA_PREFIX=/opt/miniconda3/envs/testbed
+++ CONDA_PREFIX=/opt/miniconda3/envs/testbed
+++ export CONDA_SHLVL=2
+++ CONDA_SHLVL=2
+++ export CONDA_DEFAULT_ENV=testbed
+++ CONDA_DEFAULT_ENV=testbed
+++ export 'CONDA_PROMPT_MODIFIER=(testbed) '
+++ CONDA_PROMPT_MODIFIER='(testbed) '
+++ export CONDA_PREFIX_1=/opt/miniconda3
+++ CONDA_PREFIX_1=/opt/miniconda3
+++ export CONDA_EXE=/opt/miniconda3/bin/conda
+++ CONDA_EXE=/opt/miniconda3/bin/conda
+++ export _CE_M=
+++ _CE_M=
+++ export _CE_CONDA=
+++ _CE_CONDA=
+++ export CONDA_PYTHON_EXE=/opt/miniconda3/bin/python
+++ CONDA_PYTHON_EXE=/opt/miniconda3/bin/python
++ __conda_hashr
+[0m[91m+ '[' -n '' ']'
++ '[' -n '' ']'
++ hash -r
+[0m[91m+ echo 'Current environment: testbed'
++ sed -i 's/pytest/pytest -rA/' tox.ini
+[0mCurrent environment: testbed
+[91m+ apt-get update
+[0mGet:1 http://ports.ubuntu.com/ubuntu-ports jammy InRelease [270 kB]
+Get:2 http://ports.ubuntu.com/ubuntu-ports jammy-updates InRelease [128 kB]
+Get:3 http://ports.ubuntu.com/ubuntu-ports jammy-backports InRelease [127 kB]
+Get:4 http://ports.ubuntu.com/ubuntu-ports jammy-security InRelease [129 kB]
+Get:5 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 Packages [17.2 MB]
+Get:6 http://ports.ubuntu.com/ubuntu-ports jammy/restricted arm64 Packages [24.2 kB]
+Get:7 http://ports.ubuntu.com/ubuntu-ports jammy/multiverse arm64 Packages [224 kB]
+Get:8 http://ports.ubuntu.com/ubuntu-ports jammy/main arm64 Packages [1758 kB]
+Get:9 http://ports.ubuntu.com/ubuntu-ports jammy-updates/multiverse arm64 Packages [81.6 kB]
+Get:10 http://ports.ubuntu.com/ubuntu-ports jammy-updates/restricted arm64 Packages [8359 kB]
+Get:11 http://ports.ubuntu.com/ubuntu-ports jammy-updates/universe arm64 Packages [1715 kB]
+Get:12 http://ports.ubuntu.com/ubuntu-ports jammy-updates/main arm64 Packages [4566 kB]
+Get:13 http://ports.ubuntu.com/ubuntu-ports jammy-backports/main arm64 Packages [82.5 kB]
+Get:14 http://ports.ubuntu.com/ubuntu-ports jammy-backports/universe arm64 Packages [33.7 kB]
+Get:15 http://ports.ubuntu.com/ubuntu-ports jammy-security/main arm64 Packages [4252 kB]
+Get:16 http://ports.ubuntu.com/ubuntu-ports jammy-security/universe arm64 Packages [1419 kB]
+Get:17 http://ports.ubuntu.com/ubuntu-ports jammy-security/restricted arm64 Packages [8061 kB]
+Get:18 http://ports.ubuntu.com/ubuntu-ports jammy-security/multiverse arm64 Packages [75.6 kB]
+Fetched 48.5 MB in 1min 6s (732 kB/s)
+Reading package lists...
+[91m+ apt-get install -y graphviz
+[0mReading package lists...
+Building dependency tree...
+Reading state information...
+The following additional packages will be installed:
+  fontconfig fonts-liberation libann0 libcairo2 libcdt5 libcgraph6 libdatrie1
+  libfribidi0 libglib2.0-0 libglib2.0-data libgraphite2-3 libgts-0.7-5
+  libgts-bin libgvc6 libgvpr2 libharfbuzz0b libice6 libicu70 liblab-gamut1
+  libltdl7 libpango-1.0-0 libpangocairo-1.0-0 libpangoft2-1.0-0 libpathplan4
+  libpixman-1-0 libsm6 libthai-data libthai0 libxaw7 libxcb-render0
+  libxcb-shm0 libxml2 libxmu6 libxrender1 libxt6 shared-mime-info x11-common
+  xdg-user-dirs
+Suggested packages:
+  gsfonts graphviz-doc
+The following NEW packages will be installed:
+  fontconfig fonts-liberation graphviz libann0 libcairo2 libcdt5 libcgraph6
+  libdatrie1 libfribidi0 libglib2.0-0 libglib2.0-data libgraphite2-3
+  libgts-0.7-5 libgts-bin libgvc6 libgvpr2 libharfbuzz0b libice6 libicu70
+  liblab-gamut1 libltdl7 libpango-1.0-0 libpangocairo-1.0-0 libpangoft2-1.0-0
+  libpathplan4 libpixman-1-0 libsm6 libthai-data libthai0 libxaw7
+  libxcb-render0 libxcb-shm0 libxml2 libxmu6 libxrender1 libxt6
+  shared-mime-info x11-common xdg-user-dirs
+0 upgraded, 39 newly installed, 0 to remove and 23 not upgraded.
+Need to get 20.3 MB of archives.
+After this operation, 62.3 MB of additional disk space will be used.
+Get:1 http://ports.ubuntu.com/ubuntu-ports jammy-updates/main arm64 libfribidi0 arm64 1.0.8-2ubuntu3.1 [26.4 kB]
+Get:2 http://ports.ubuntu.com/ubuntu-ports jammy-updates/main arm64 libglib2.0-0 arm64 2.72.4-0ubuntu2.10 [1436 kB]
+Get:3 http://ports.ubuntu.com/ubuntu-ports jammy-updates/main arm64 libglib2.0-data all 2.72.4-0ubuntu2.10 [5596 B]
+Get:4 http://ports.ubuntu.com/ubuntu-ports jammy/main arm64 libicu70 arm64 70.1-2 [10.5 MB]
+Get:5 http://ports.ubuntu.com/ubuntu-ports jammy-updates/main arm64 libxml2 arm64 2.9.13+dfsg-1ubuntu0.14 [728 kB]
+Get:6 http://ports.ubuntu.com/ubuntu-ports jammy/main arm64 shared-mime-info arm64 2.1-2 [453 kB]
+Get:7 http://ports.ubuntu.com/ubuntu-ports jammy/main arm64 xdg-user-dirs arm64 0.17-2ubuntu4 [53.5 kB]
+Get:8 http://ports.ubuntu.com/ubuntu-ports jammy/main arm64 fontconfig arm64 2.13.1-4.2ubuntu5 [183 kB]
+Get:9 http://ports.ubuntu.com/ubuntu-ports jammy/main arm64 fonts-liberation all 1:1.07.4-11 [822 kB]
+Get:10 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 libann0 arm64 1.1.2+doc-7build1 [24.2 kB]
+Get:11 http://ports.ubuntu.com/ubuntu-ports jammy-updates/universe arm64 libcdt5 arm64 2.42.2-6ubuntu0.1 [20.7 kB]
+Get:12 http://ports.ubuntu.com/ubuntu-ports jammy-updates/universe arm64 libcgraph6 arm64 2.42.2-6ubuntu0.1 [44.8 kB]
+Get:13 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 libgts-0.7-5 arm64 0.7.6+darcs121130-5 [157 kB]
+Get:14 http://ports.ubuntu.com/ubuntu-ports jammy-updates/main arm64 libpixman-1-0 arm64 0.40.0-1ubuntu0.22.04.1 [160 kB]
+Get:15 http://ports.ubuntu.com/ubuntu-ports jammy/main arm64 libxcb-render0 arm64 1.14-3ubuntu3 [16.2 kB]
+Get:16 http://ports.ubuntu.com/ubuntu-ports jammy/main arm64 libxcb-shm0 arm64 1.14-3ubuntu3 [5848 B]
+Get:17 http://ports.ubuntu.com/ubuntu-ports jammy/main arm64 libxrender1 arm64 1:0.9.10-1build4 [18.8 kB]
+Get:18 http://ports.ubuntu.com/ubuntu-ports jammy-updates/main arm64 libcairo2 arm64 1.16.0-5ubuntu2.1 [613 kB]
+Get:19 http://ports.ubuntu.com/ubuntu-ports jammy/main arm64 libltdl7 arm64 2.4.6-15build2 [39.5 kB]
+Get:20 http://ports.ubuntu.com/ubuntu-ports jammy-updates/main arm64 libgraphite2-3 arm64 1.3.14-1ubuntu0.1 [69.2 kB]
+Get:21 http://ports.ubuntu.com/ubuntu-ports jammy-updates/main arm64 libharfbuzz0b arm64 2.7.4-1ubuntu3.2 [353 kB]
+Get:22 http://ports.ubuntu.com/ubuntu-ports jammy/main arm64 libthai-data all 0.1.29-1build1 [162 kB]
+Get:23 http://ports.ubuntu.com/ubuntu-ports jammy/main arm64 libdatrie1 arm64 0.2.13-2 [19.8 kB]
+Get:24 http://ports.ubuntu.com/ubuntu-ports jammy/main arm64 libthai0 arm64 0.1.29-1build1 [18.4 kB]
+Get:25 http://ports.ubuntu.com/ubuntu-ports jammy-updates/main arm64 libpango-1.0-0 arm64 1.50.6+ds-2ubuntu1 [225 kB]
+Get:26 http://ports.ubuntu.com/ubuntu-ports jammy-updates/main arm64 libpangoft2-1.0-0 arm64 1.50.6+ds-2ubuntu1 [52.0 kB]
+Get:27 http://ports.ubuntu.com/ubuntu-ports jammy-updates/main arm64 libpangocairo-1.0-0 arm64 1.50.6+ds-2ubuntu1 [37.8 kB]
+Get:28 http://ports.ubuntu.com/ubuntu-ports jammy-updates/universe arm64 libpathplan4 arm64 2.42.2-6ubuntu0.1 [22.2 kB]
+Get:29 http://ports.ubuntu.com/ubuntu-ports jammy-updates/universe arm64 libgvc6 arm64 2.42.2-6ubuntu0.1 [700 kB]
+Get:30 http://ports.ubuntu.com/ubuntu-ports jammy-updates/universe arm64 libgvpr2 arm64 2.42.2-6ubuntu0.1 [192 kB]
+Get:31 http://ports.ubuntu.com/ubuntu-ports jammy-updates/universe arm64 liblab-gamut1 arm64 2.42.2-6ubuntu0.1 [1966 kB]
+Get:32 http://ports.ubuntu.com/ubuntu-ports jammy/main arm64 x11-common all 1:7.7+23ubuntu2 [23.4 kB]
+Get:33 http://ports.ubuntu.com/ubuntu-ports jammy/main arm64 libice6 arm64 2:1.0.10-1build2 [41.7 kB]
+Get:34 http://ports.ubuntu.com/ubuntu-ports jammy/main arm64 libsm6 arm64 2:1.2.3-1build2 [16.1 kB]
+Get:35 http://ports.ubuntu.com/ubuntu-ports jammy/main arm64 libxt6 arm64 1:1.2.1-1 [171 kB]
+Get:36 http://ports.ubuntu.com/ubuntu-ports jammy/main arm64 libxmu6 arm64 2:1.1.3-3 [48.9 kB]
+Get:37 http://ports.ubuntu.com/ubuntu-ports jammy/main arm64 libxaw7 arm64 2:1.0.14-1 [184 kB]
+Get:38 http://ports.ubuntu.com/ubuntu-ports jammy-updates/universe arm64 graphviz arm64 2.42.2-6ubuntu0.1 [632 kB]
+Get:39 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 libgts-bin arm64 0.7.6+darcs121130-5 [43.4 kB]
+[91mdebconf: delaying package configuration, since apt-utils is not installed
+[0mFetched 20.3 MB in 6s (3318 kB/s)
+Selecting previously unselected package libfribidi0:arm64.
+(Reading database ... 
+(Reading database ... 5%
+(Reading database ... 10%
+(Reading database ... 15%
+(Reading database ... 20%
+(Reading database ... 25%
+(Reading database ... 30%
+(Reading database ... 35%
+(Reading database ... 40%
+(Reading database ... 45%
+(Reading database ... 50%
+(Reading database ... 55%
+(Reading database ... 60%
+(Reading database ... 65%
+(Reading database ... 70%
+(Reading database ... 75%
+(Reading database ... 80%
+(Reading database ... 85%
+(Reading database ... 90%
+(Reading database ... 95%
+(Reading database ... 100%
+(Reading database ... 26975 files and directories currently installed.)
+Preparing to unpack .../00-libfribidi0_1.0.8-2ubuntu3.1_arm64.deb ...
+Unpacking libfribidi0:arm64 (1.0.8-2ubuntu3.1) ...
+Selecting previously unselected package libglib2.0-0:arm64.
+Preparing to unpack .../01-libglib2.0-0_2.72.4-0ubuntu2.10_arm64.deb ...
+Unpacking libglib2.0-0:arm64 (2.72.4-0ubuntu2.10) ...
+Selecting previously unselected package libglib2.0-data.
+Preparing to unpack .../02-libglib2.0-data_2.72.4-0ubuntu2.10_all.deb ...
+Unpacking libglib2.0-data (2.72.4-0ubuntu2.10) ...
+Selecting previously unselected package libicu70:arm64.
+Preparing to unpack .../03-libicu70_70.1-2_arm64.deb ...
+Unpacking libicu70:arm64 (70.1-2) ...
+Selecting previously unselected package libxml2:arm64.
+Preparing to unpack .../04-libxml2_2.9.13+dfsg-1ubuntu0.14_arm64.deb ...
+Unpacking libxml2:arm64 (2.9.13+dfsg-1ubuntu0.14) ...
+Selecting previously unselected package shared-mime-info.
+Preparing to unpack .../05-shared-mime-info_2.1-2_arm64.deb ...
+Unpacking shared-mime-info (2.1-2) ...
+Selecting previously unselected package xdg-user-dirs.
+Preparing to unpack .../06-xdg-user-dirs_0.17-2ubuntu4_arm64.deb ...
+Unpacking xdg-user-dirs (0.17-2ubuntu4) ...
+Selecting previously unselected package fontconfig.
+Preparing to unpack .../07-fontconfig_2.13.1-4.2ubuntu5_arm64.deb ...
+Unpacking fontconfig (2.13.1-4.2ubuntu5) ...
+Selecting previously unselected package fonts-liberation.
+Preparing to unpack .../08-fonts-liberation_1%3a1.07.4-11_all.deb ...
+Unpacking fonts-liberation (1:1.07.4-11) ...
+Selecting previously unselected package libann0.
+Preparing to unpack .../09-libann0_1.1.2+doc-7build1_arm64.deb ...
+Unpacking libann0 (1.1.2+doc-7build1) ...
+Selecting previously unselected package libcdt5:arm64.
+Preparing to unpack .../10-libcdt5_2.42.2-6ubuntu0.1_arm64.deb ...
+Unpacking libcdt5:arm64 (2.42.2-6ubuntu0.1) ...
+Selecting previously unselected package libcgraph6:arm64.
+Preparing to unpack .../11-libcgraph6_2.42.2-6ubuntu0.1_arm64.deb ...
+Unpacking libcgraph6:arm64 (2.42.2-6ubuntu0.1) ...
+Selecting previously unselected package libgts-0.7-5:arm64.
+Preparing to unpack .../12-libgts-0.7-5_0.7.6+darcs121130-5_arm64.deb ...
+Unpacking libgts-0.7-5:arm64 (0.7.6+darcs121130-5) ...
+Selecting previously unselected package libpixman-1-0:arm64.
+Preparing to unpack .../13-libpixman-1-0_0.40.0-1ubuntu0.22.04.1_arm64.deb ...
+Unpacking libpixman-1-0:arm64 (0.40.0-1ubuntu0.22.04.1) ...
+Selecting previously unselected package libxcb-render0:arm64.
+Preparing to unpack .../14-libxcb-render0_1.14-3ubuntu3_arm64.deb ...
+Unpacking libxcb-render0:arm64 (1.14-3ubuntu3) ...
+Selecting previously unselected package libxcb-shm0:arm64.
+Preparing to unpack .../15-libxcb-shm0_1.14-3ubuntu3_arm64.deb ...
+Unpacking libxcb-shm0:arm64 (1.14-3ubuntu3) ...
+Selecting previously unselected package libxrender1:arm64.
+Preparing to unpack .../16-libxrender1_1%3a0.9.10-1build4_arm64.deb ...
+Unpacking libxrender1:arm64 (1:0.9.10-1build4) ...
+Selecting previously unselected package libcairo2:arm64.
+Preparing to unpack .../17-libcairo2_1.16.0-5ubuntu2.1_arm64.deb ...
+Unpacking libcairo2:arm64 (1.16.0-5ubuntu2.1) ...
+Selecting previously unselected package libltdl7:arm64.
+Preparing to unpack .../18-libltdl7_2.4.6-15build2_arm64.deb ...
+Unpacking libltdl7:arm64 (2.4.6-15build2) ...
+Selecting previously unselected package libgraphite2-3:arm64.
+Preparing to unpack .../19-libgraphite2-3_1.3.14-1ubuntu0.1_arm64.deb ...
+Unpacking libgraphite2-3:arm64 (1.3.14-1ubuntu0.1) ...
+Selecting previously unselected package libharfbuzz0b:arm64.
+Preparing to unpack .../20-libharfbuzz0b_2.7.4-1ubuntu3.2_arm64.deb ...
+Unpacking libharfbuzz0b:arm64 (2.7.4-1ubuntu3.2) ...
+Selecting previously unselected package libthai-data.
+Preparing to unpack .../21-libthai-data_0.1.29-1build1_all.deb ...
+Unpacking libthai-data (0.1.29-1build1) ...
+Selecting previously unselected package libdatrie1:arm64.
+Preparing to unpack .../22-libdatrie1_0.2.13-2_arm64.deb ...
+Unpacking libdatrie1:arm64 (0.2.13-2) ...
+Selecting previously unselected package libthai0:arm64.
+Preparing to unpack .../23-libthai0_0.1.29-1build1_arm64.deb ...
+Unpacking libthai0:arm64 (0.1.29-1build1) ...
+Selecting previously unselected package libpango-1.0-0:arm64.
+Preparing to unpack .../24-libpango-1.0-0_1.50.6+ds-2ubuntu1_arm64.deb ...
+Unpacking libpango-1.0-0:arm64 (1.50.6+ds-2ubuntu1) ...
+Selecting previously unselected package libpangoft2-1.0-0:arm64.
+Preparing to unpack .../25-libpangoft2-1.0-0_1.50.6+ds-2ubuntu1_arm64.deb ...
+Unpacking libpangoft2-1.0-0:arm64 (1.50.6+ds-2ubuntu1) ...
+Selecting previously unselected package libpangocairo-1.0-0:arm64.
+Preparing to unpack .../26-libpangocairo-1.0-0_1.50.6+ds-2ubuntu1_arm64.deb ...
+Unpacking libpangocairo-1.0-0:arm64 (1.50.6+ds-2ubuntu1) ...
+Selecting previously unselected package libpathplan4:arm64.
+Preparing to unpack .../27-libpathplan4_2.42.2-6ubuntu0.1_arm64.deb ...
+Unpacking libpathplan4:arm64 (2.42.2-6ubuntu0.1) ...
+Selecting previously unselected package libgvc6.
+Preparing to unpack .../28-libgvc6_2.42.2-6ubuntu0.1_arm64.deb ...
+Unpacking libgvc6 (2.42.2-6ubuntu0.1) ...
+Selecting previously unselected package libgvpr2:arm64.
+Preparing to unpack .../29-libgvpr2_2.42.2-6ubuntu0.1_arm64.deb ...
+Unpacking libgvpr2:arm64 (2.42.2-6ubuntu0.1) ...
+Selecting previously unselected package liblab-gamut1:arm64.
+Preparing to unpack .../30-liblab-gamut1_2.42.2-6ubuntu0.1_arm64.deb ...
+Unpacking liblab-gamut1:arm64 (2.42.2-6ubuntu0.1) ...
+Selecting previously unselected package x11-common.
+Preparing to unpack .../31-x11-common_1%3a7.7+23ubuntu2_all.deb ...
+Unpacking x11-common (1:7.7+23ubuntu2) ...
+Selecting previously unselected package libice6:arm64.
+Preparing to unpack .../32-libice6_2%3a1.0.10-1build2_arm64.deb ...
+Unpacking libice6:arm64 (2:1.0.10-1build2) ...
+Selecting previously unselected package libsm6:arm64.
+Preparing to unpack .../33-libsm6_2%3a1.2.3-1build2_arm64.deb ...
+Unpacking libsm6:arm64 (2:1.2.3-1build2) ...
+Selecting previously unselected package libxt6:arm64.
+Preparing to unpack .../34-libxt6_1%3a1.2.1-1_arm64.deb ...
+Unpacking libxt6:arm64 (1:1.2.1-1) ...
+Selecting previously unselected package libxmu6:arm64.
+Preparing to unpack .../35-libxmu6_2%3a1.1.3-3_arm64.deb ...
+Unpacking libxmu6:arm64 (2:1.1.3-3) ...
+Selecting previously unselected package libxaw7:arm64.
+Preparing to unpack .../36-libxaw7_2%3a1.0.14-1_arm64.deb ...
+Unpacking libxaw7:arm64 (2:1.0.14-1) ...
+Selecting previously unselected package graphviz.
+Preparing to unpack .../37-graphviz_2.42.2-6ubuntu0.1_arm64.deb ...
+Unpacking graphviz (2.42.2-6ubuntu0.1) ...
+Selecting previously unselected package libgts-bin.
+Preparing to unpack .../38-libgts-bin_0.7.6+darcs121130-5_arm64.deb ...
+Unpacking libgts-bin (0.7.6+darcs121130-5) ...
+Setting up libgraphite2-3:arm64 (1.3.14-1ubuntu0.1) ...
+Setting up libpixman-1-0:arm64 (0.40.0-1ubuntu0.22.04.1) ...
+Setting up fontconfig (2.13.1-4.2ubuntu5) ...
+Regenerating fonts cache... done.
+Setting up libxrender1:arm64 (1:0.9.10-1build4) ...
+Setting up libdatrie1:arm64 (0.2.13-2) ...
+Setting up xdg-user-dirs (0.17-2ubuntu4) ...
+Setting up libxcb-render0:arm64 (1.14-3ubuntu3) ...
+Setting up libglib2.0-0:arm64 (2.72.4-0ubuntu2.10) ...
+No schema files found: doing nothing.
+Setting up liblab-gamut1:arm64 (2.42.2-6ubuntu0.1) ...
+Setting up x11-common (1:7.7+23ubuntu2) ...
+debconf: unable to initialize frontend: Dialog
+debconf: (TERM is not set, so the dialog frontend is not usable.)
+debconf: falling back to frontend: Readline
+invoke-rc.d: could not determine current runlevel
+invoke-rc.d: policy-rc.d denied execution of start.
+Setting up libxcb-shm0:arm64 (1.14-3ubuntu3) ...
+Setting up libcairo2:arm64 (1.16.0-5ubuntu2.1) ...
+Setting up libgts-0.7-5:arm64 (0.7.6+darcs121130-5) ...
+Setting up libglib2.0-data (2.72.4-0ubuntu2.10) ...
+Setting up libpathplan4:arm64 (2.42.2-6ubuntu0.1) ...
+Setting up libann0 (1.1.2+doc-7build1) ...
+Setting up libfribidi0:arm64 (1.0.8-2ubuntu3.1) ...
+Setting up libltdl7:arm64 (2.4.6-15build2) ...
+Setting up fonts-liberation (1:1.07.4-11) ...
+Setting up libharfbuzz0b:arm64 (2.7.4-1ubuntu3.2) ...
+Setting up libthai-data (0.1.29-1build1) ...
+Setting up libcdt5:arm64 (2.42.2-6ubuntu0.1) ...
+Setting up libcgraph6:arm64 (2.42.2-6ubuntu0.1) ...
+Setting up libicu70:arm64 (70.1-2) ...
+Setting up libgts-bin (0.7.6+darcs121130-5) ...
+Setting up libice6:arm64 (2:1.0.10-1build2) ...
+Setting up libthai0:arm64 (0.1.29-1build1) ...
+Setting up libgvpr2:arm64 (2.42.2-6ubuntu0.1) ...
+Setting up libsm6:arm64 (2:1.2.3-1build2) ...
+Setting up libxml2:arm64 (2.9.13+dfsg-1ubuntu0.14) ...
+Setting up libpango-1.0-0:arm64 (1.50.6+ds-2ubuntu1) ...
+Setting up shared-mime-info (2.1-2) ...
+Setting up libxt6:arm64 (1:1.2.1-1) ...
+Setting up libpangoft2-1.0-0:arm64 (1.50.6+ds-2ubuntu1) ...
+Setting up libpangocairo-1.0-0:arm64 (1.50.6+ds-2ubuntu1) ...
+Setting up libxmu6:arm64 (2:1.1.3-3) ...
+Setting up libxaw7:arm64 (2:1.0.14-1) ...
+Setting up libgvc6 (2.42.2-6ubuntu0.1) ...
+Setting up graphviz (2.42.2-6ubuntu0.1) ...
+Processing triggers for libc-bin (2.35-0ubuntu3.14) ...
+[91m+ python -m pip install -e '.[test]'
+[0mObtaining file:///testbed
+  Installing build dependencies: started
+  Installing build dependencies: finished with status 'done'
+  Checking if build backend supports build_editable: started
+  Checking if build backend supports build_editable: finished with status 'done'
+  Getting requirements to build editable: started
+  Getting requirements to build editable: finished with status 'done'
+  Preparing editable metadata (pyproject.toml): started
+  Preparing editable metadata (pyproject.toml): finished with status 'done'
+Collecting sphinxcontrib-applehelp (from Sphinx==7.2.0)
+  Downloading sphinxcontrib_applehelp-2.0.0-py3-none-any.whl.metadata (2.3 kB)
+Collecting sphinxcontrib-devhelp (from Sphinx==7.2.0)
+  Downloading sphinxcontrib_devhelp-2.0.0-py3-none-any.whl.metadata (2.3 kB)
+Collecting sphinxcontrib-jsmath (from Sphinx==7.2.0)
+  Downloading sphinxcontrib_jsmath-1.0.1-py2.py3-none-any.whl.metadata (1.4 kB)
+Collecting sphinxcontrib-htmlhelp>=2.0.0 (from Sphinx==7.2.0)
+  Downloading sphinxcontrib_htmlhelp-2.1.0-py3-none-any.whl.metadata (2.3 kB)
+Collecting sphinxcontrib-serializinghtml>=1.1.5 (from Sphinx==7.2.0)
+  Downloading sphinxcontrib_serializinghtml-2.0.0-py3-none-any.whl.metadata (2.4 kB)
+Collecting sphinxcontrib-qthelp (from Sphinx==7.2.0)
+  Downloading sphinxcontrib_qthelp-2.0.0-py3-none-any.whl.metadata (2.3 kB)
+Collecting Jinja2>=3.0 (from Sphinx==7.2.0)
+  Downloading jinja2-3.1.6-py3-none-any.whl.metadata (2.9 kB)
+Collecting Pygments>=2.14 (from Sphinx==7.2.0)
+  Downloading pygments-2.21.0-py3-none-any.whl.metadata (2.5 kB)
+Collecting docutils<0.21,>=0.18.1 (from Sphinx==7.2.0)
+  Downloading docutils-0.20.1-py3-none-any.whl.metadata (2.8 kB)
+Collecting snowballstemmer>=2.0 (from Sphinx==7.2.0)
+  Downloading snowballstemmer-3.1.1-py3-none-any.whl.metadata (7.9 kB)
+Collecting babel>=2.9 (from Sphinx==7.2.0)
+  Downloading babel-2.18.0-py3-none-any.whl.metadata (2.2 kB)
+Collecting alabaster<0.8,>=0.7 (from Sphinx==7.2.0)
+  Downloading alabaster-0.7.16-py3-none-any.whl.metadata (2.9 kB)
+Collecting imagesize>=1.3 (from Sphinx==7.2.0)
+  Downloading imagesize-1.5.0-py2.py3-none-any.whl.metadata (1.6 kB)
+Collecting requests>=2.25.0 (from Sphinx==7.2.0)
+  Downloading requests-2.32.5-py3-none-any.whl.metadata (4.9 kB)
+Requirement already satisfied: packaging>=21.0 in /opt/miniconda3/envs/testbed/lib/python3.9/site-packages (from Sphinx==7.2.0) (26.3)
+Collecting importlib-metadata>=4.8 (from Sphinx==7.2.0)
+  Downloading importlib_metadata-8.7.1-py3-none-any.whl.metadata (4.7 kB)
+Collecting pytest>=4.6 (from Sphinx==7.2.0)
+  Downloading pytest-8.4.2-py3-none-any.whl.metadata (7.7 kB)
+Collecting html5lib (from Sphinx==7.2.0)
+  Downloading html5lib-1.1-py2.py3-none-any.whl.metadata (16 kB)
+Collecting cython>=3.0 (from Sphinx==7.2.0)
+  Downloading cython-3.3.0-cp39-cp39-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl.metadata (28 kB)
+Requirement already satisfied: setuptools>=67.0 in /opt/miniconda3/envs/testbed/lib/python3.9/site-packages (from Sphinx==7.2.0) (80.9.0)
+Requirement already satisfied: filelock in /opt/miniconda3/envs/testbed/lib/python3.9/site-packages (from Sphinx==7.2.0) (3.19.1)
+Collecting zipp>=3.20 (from importlib-metadata>=4.8->Sphinx==7.2.0)
+  Downloading zipp-3.23.1-py3-none-any.whl.metadata (3.6 kB)
+Collecting MarkupSafe>=2.0 (from Jinja2>=3.0->Sphinx==7.2.0)
+  Downloading markupsafe-3.0.4-cp39-cp39-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl.metadata (2.7 kB)
+Collecting exceptiongroup>=1 (from pytest>=4.6->Sphinx==7.2.0)
+  Downloading exceptiongroup-1.3.1-py3-none-any.whl.metadata (6.7 kB)
+Collecting iniconfig>=1 (from pytest>=4.6->Sphinx==7.2.0)
+  Downloading iniconfig-2.1.0-py3-none-any.whl.metadata (2.7 kB)
+Requirement already satisfied: pluggy<2,>=1.5 in /opt/miniconda3/envs/testbed/lib/python3.9/site-packages (from pytest>=4.6->Sphinx==7.2.0) (1.6.0)
+Requirement already satisfied: tomli>=1 in /opt/miniconda3/envs/testbed/lib/python3.9/site-packages (from pytest>=4.6->Sphinx==7.2.0) (2.5.0)
+Requirement already satisfied: typing-extensions>=4.6.0 in /opt/miniconda3/envs/testbed/lib/python3.9/site-packages (from exceptiongroup>=1->pytest>=4.6->Sphinx==7.2.0) (4.16.0)
+Collecting charset_normalizer<4,>=2 (from requests>=2.25.0->Sphinx==7.2.0)
+  Downloading charset_normalizer-3.5.2-cp39-cp39-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl.metadata (46 kB)
+Collecting idna<4,>=2.5 (from requests>=2.25.0->Sphinx==7.2.0)
+  Downloading idna-3.20-py3-none-any.whl.metadata (7.2 kB)
+Collecting urllib3<3,>=1.21.1 (from requests>=2.25.0->Sphinx==7.2.0)
+  Downloading urllib3-2.6.3-py3-none-any.whl.metadata (6.9 kB)
+Collecting certifi>=2017.4.17 (from requests>=2.25.0->Sphinx==7.2.0)
+  Downloading certifi-2026.7.22-py3-none-any.whl.metadata (2.5 kB)
+Collecting six>=1.9 (from html5lib->Sphinx==7.2.0)
+  Downloading six-1.17.0-py2.py3-none-any.whl.metadata (1.7 kB)
+Collecting webencodings (from html5lib->Sphinx==7.2.0)
+  Downloading webencodings-0.5.1-py2.py3-none-any.whl.metadata (2.1 kB)
+Downloading alabaster-0.7.16-py3-none-any.whl (13 kB)
+Downloading docutils-0.20.1-py3-none-any.whl (572 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 572.7/572.7 kB 849.9 kB/s  0:00:00
+Downloading babel-2.18.0-py3-none-any.whl (10.2 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 10.2/10.2 MB 6.6 MB/s  0:00:01
+Downloading cython-3.3.0-cp39-cp39-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl (3.3 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 3.3/3.3 MB 21.9 MB/s  0:00:00
+Downloading imagesize-1.5.0-py2.py3-none-any.whl (5.8 kB)
+Downloading importlib_metadata-8.7.1-py3-none-any.whl (27 kB)
+Downloading jinja2-3.1.6-py3-none-any.whl (134 kB)
+Downloading markupsafe-3.0.4-cp39-cp39-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl (21 kB)
+Downloading pygments-2.21.0-py3-none-any.whl (1.3 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.3/1.3 MB 37.9 MB/s  0:00:00
+Downloading pytest-8.4.2-py3-none-any.whl (365 kB)
+Downloading exceptiongroup-1.3.1-py3-none-any.whl (16 kB)
+Downloading iniconfig-2.1.0-py3-none-any.whl (6.0 kB)
+Downloading requests-2.32.5-py3-none-any.whl (64 kB)
+Downloading charset_normalizer-3.5.2-cp39-cp39-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl (261 kB)
+Downloading idna-3.20-py3-none-any.whl (69 kB)
+Downloading urllib3-2.6.3-py3-none-any.whl (131 kB)
+Downloading certifi-2026.7.22-py3-none-any.whl (136 kB)
+Downloading snowballstemmer-3.1.1-py3-none-any.whl (104 kB)
+Downloading sphinxcontrib_htmlhelp-2.1.0-py3-none-any.whl (98 kB)
+Downloading sphinxcontrib_serializinghtml-2.0.0-py3-none-any.whl (92 kB)
+Downloading zipp-3.23.1-py3-none-any.whl (10 kB)
+Downloading html5lib-1.1-py2.py3-none-any.whl (112 kB)
+Downloading six-1.17.0-py2.py3-none-any.whl (11 kB)
+Downloading sphinxcontrib_applehelp-2.0.0-py3-none-any.whl (119 kB)
+Downloading sphinxcontrib_devhelp-2.0.0-py3-none-any.whl (82 kB)
+Downloading sphinxcontrib_jsmath-1.0.1-py2.py3-none-any.whl (5.1 kB)
+Downloading sphinxcontrib_qthelp-2.0.0-py3-none-any.whl (88 kB)
+Downloading webencodings-0.5.1-py2.py3-none-any.whl (11 kB)
+Building wheels for collected packages: Sphinx
+  Building editable for Sphinx (pyproject.toml): started
+  Building editable for Sphinx (pyproject.toml): finished with status 'done'
+  Created wheel for Sphinx: filename=sphinx-7.2.0-py3-none-any.whl size=6384 sha256=bc078770a69280f43bc849c7c4570591a23f5c171c6388acf4916efff2f22fd2
+  Stored in directory: /tmp/pip-ephem-wheel-cache-7jb4y61u/wheels/7d/66/67/70d1ee2124ccf21d601c352e25cdca10f611f7c8b3f9ffb9e4
+Successfully built Sphinx
+Installing collected packages: webencodings, zipp, urllib3, sphinxcontrib-serializinghtml, sphinxcontrib-qthelp, sphinxcontrib-jsmath, sphinxcontrib-htmlhelp, sphinxcontrib-devhelp, sphinxcontrib-applehelp, snowballstemmer, six, Pygments, MarkupSafe, iniconfig, imagesize, idna, exceptiongroup, docutils, cython, charset_normalizer, certifi, babel, alabaster, requests, pytest, Jinja2, importlib-metadata, html5lib, Sphinx
+
+Successfully installed Jinja2-3.1.6 MarkupSafe-3.0.4 Pygments-2.21.0 Sphinx-7.2.0 alabaster-0.7.16 babel-2.18.0 certifi-2026.7.22 charset_normalizer-3.5.2 cython-3.3.0 docutils-0.20.1 exceptiongroup-1.3.1 html5lib-1.1 idna-3.20 imagesize-1.5.0 importlib-metadata-8.7.1 iniconfig-2.1.0 pytest-8.4.2 requests-2.32.5 six-1.17.0 snowballstemmer-3.1.1 sphinxcontrib-applehelp-2.0.0 sphinxcontrib-devhelp-2.0.0 sphinxcontrib-htmlhelp-2.1.0 sphinxcontrib-jsmath-1.0.1 sphinxcontrib-qthelp-2.0.0 sphinxcontrib-serializinghtml-2.0.0 urllib3-2.6.3 webencodings-0.5.1 zipp-3.23.1
+[91mWARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.
+[0m ---> Removed intermediate container 8022fdfeba1b
+ ---> 87bbc4edd981
+Step 7/7 : WORKDIR /testbed/
+ ---> Running in 3c08e78df29f
+ ---> Removed intermediate container 3c08e78df29f
+ ---> d3b012b72311
+Successfully built d3b012b72311
+Successfully tagged sweb.eval.arm64.sphinx-doc__sphinx-11510:latest

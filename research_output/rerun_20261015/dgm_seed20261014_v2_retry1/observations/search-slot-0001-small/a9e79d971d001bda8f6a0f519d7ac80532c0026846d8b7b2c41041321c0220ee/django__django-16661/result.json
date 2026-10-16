@@ -1,0 +1,30 @@
+{
+  "budgetAborted": true,
+  "cacheReadTokens": 468480,
+  "cacheWriteTokens": 0,
+  "candidateToolNames": [
+    "source_inspector"
+  ],
+  "completedAt": "2026-10-15T08:23:41.260Z",
+  "durationMs": 161414,
+  "fullPatch": "diff --git a/repro_bug.py b/repro_bug.py\nnew file mode 100644\nindex 0000000..c8f7c0b\n--- /dev/null\n+++ b/repro_bug.py\n@@ -0,0 +1,72 @@\n+import django\n+from django.conf import settings\n+\n+settings.configure(\n+    DEBUG=True,\n+    DATABASES={\n+        \"default\": {\n+            \"ENGINE\": \"django.db.backends.sqlite3\",\n+            \"NAME\": \":memory:\",\n+        }\n+    },\n+    INSTALLED_APPS=[\n+        \"django.contrib.contenttypes\",\n+        \"django.contrib.auth\",\n+        \"django.contrib.admin\",\n+        \"django.contrib.messages\",\n+        \"django.contrib.sessions\",\n+        \"django.contrib.staticfiles\",\n+    ],\n+    SECRET_KEY=\"x\",\n+    USE_TZ=True,\n+    ROOT_URLCONF=\"django.contrib.admin.urls\",\n+)\n+django.setup()\n+\n+from django.db import models\n+from django.test.utils import isolate_apps\n+from django.contrib import admin\n+from django.contrib.admin.options import ModelAdmin\n+\n+\n+@isolate_apps(\"modeladmin\")\n+def run():\n+    class Country(models.Model):\n+        name = models.CharField(max_length=256)\n+\n+        class Meta:\n+            app_label = \"modeladmin\"\n+\n+    class Place(models.Model):\n+        name = models.CharField(max_length=256)\n+\n+        class Meta:\n+            app_label = \"modeladmin\"\n+\n+    class Restaurant(models.Model):\n+        place = models.OneToOneField(Place, models.CASCADE, primary_key=True)\n+\n+        class Meta:\n+            app_label = \"modeladmin\"\n+\n+    class Waiter(models.Model):\n+        restaurant = models.ForeignKey(Restaurant, models.CASCADE)\n+\n+        class Meta:\n+            app_label = \"modeladmin\"\n+\n+    site = admin.AdminSite()\n+\n+    class WaiterAdmin(ModelAdmin):\n+        list_filter = [\n+            \"restaurant__place__country\",\n+        ]\n+\n+    ma = WaiterAdmin(Waiter, site)\n+    result = ma.lookup_allowed(\"restaurant__place__country\", \"test_value\")\n+    print(\"lookup_allowed('restaurant__place__country') =\", result)\n+    assert result is True, \"BUG REPRODUCED: expected True, got %r\" % result\n+\n+\n+run()\n+print(\"OK - no bug\")\n",
+  "inputTokens": 38573,
+  "instanceId": "django__django-16661",
+  "maxOutputTokens": 65536,
+  "maxTotalTokens": 512000,
+  "modelId": "byteplus/deepseek-v4-flash-ga",
+  "modelProvider": "rollback-deepseek",
+  "noShell": false,
+  "outputTokens": 18170,
+  "patch": "diff --git a/repro_bug.py b/repro_bug.py\nnew file mode 100644\nindex 0000000..c8f7c0b\n--- /dev/null\n+++ b/repro_bug.py\n@@ -0,0 +1,72 @@\n+import django\n+from django.conf import settings\n+\n+settings.configure(\n+    DEBUG=True,\n+    DATABASES={\n+        \"default\": {\n+            \"ENGINE\": \"django.db.backends.sqlite3\",\n+            \"NAME\": \":memory:\",\n+        }\n+    },\n+    INSTALLED_APPS=[\n+        \"django.contrib.contenttypes\",\n+        \"django.contrib.auth\",\n+        \"django.contrib.admin\",\n+        \"django.contrib.messages\",\n+        \"django.contrib.sessions\",\n+        \"django.contrib.staticfiles\",\n+    ],\n+    SECRET_KEY=\"x\",\n+    USE_TZ=True,\n+    ROOT_URLCONF=\"django.contrib.admin.urls\",\n+)\n+django.setup()\n+\n+from django.db import models\n+from django.test.utils import isolate_apps\n+from django.contrib import admin\n+from django.contrib.admin.options import ModelAdmin\n+\n+\n+@isolate_apps(\"modeladmin\")\n+def run():\n+    class Country(models.Model):\n+        name = models.CharField(max_length=256)\n+\n+        class Meta:\n+            app_label = \"modeladmin\"\n+\n+    class Place(models.Model):\n+        name = models.CharField(max_length=256)\n+\n+        class Meta:\n+            app_label = \"modeladmin\"\n+\n+    class Restaurant(models.Model):\n+        place = models.OneToOneField(Place, models.CASCADE, primary_key=True)\n+\n+        class Meta:\n+            app_label = \"modeladmin\"\n+\n+    class Waiter(models.Model):\n+        restaurant = models.ForeignKey(Restaurant, models.CASCADE)\n+\n+        class Meta:\n+            app_label = \"modeladmin\"\n+\n+    site = admin.AdminSite()\n+\n+    class WaiterAdmin(ModelAdmin):\n+        list_filter = [\n+            \"restaurant__place__country\",\n+        ]\n+\n+    ma = WaiterAdmin(Waiter, site)\n+    result = ma.lookup_allowed(\"restaurant__place__country\", \"test_value\")\n+    print(\"lookup_allowed('restaurant__place__country') =\", result)\n+    assert result is True, \"BUG REPRODUCED: expected True, got %r\" % result\n+\n+\n+run()\n+print(\"OK - no bug\")\n",
+  "policyViolations": [],
+  "providerError": "This operation was aborted",
+  "runnerExitCode": 1,
+  "sandboxImage": "sweb.eval.arm64.django__django-16661:latest",
+  "schemaVersion": 1,
+  "startedAt": "2026-10-15T08:20:59.845Z",
+  "strategyHash": "a814de85318798da3e245e0f4e35bc4e3c8fc44ebdee5db1d8af4898939e117f",
+  "timeoutAborted": false,
+  "tokenTelemetryAvailable": true,
+  "toolCalls": 36
+}

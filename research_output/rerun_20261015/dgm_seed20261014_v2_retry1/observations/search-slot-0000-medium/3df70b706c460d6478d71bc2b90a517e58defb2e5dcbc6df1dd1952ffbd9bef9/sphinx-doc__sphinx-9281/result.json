@@ -1,0 +1,29 @@
+{
+  "budgetAborted": false,
+  "cacheReadTokens": 211712,
+  "cacheWriteTokens": 0,
+  "candidateToolNames": [
+    "code_search"
+  ],
+  "completedAt": "2026-10-15T07:55:22.092Z",
+  "durationMs": 66809,
+  "fullPatch": "diff --git a/CHANGES b/CHANGES\nindex 6441001..a73eac9 100644\n--- a/CHANGES\n+++ b/CHANGES\n@@ -50,6 +50,7 @@ Features added\n Bugs fixed\n ----------\n \n+* #9281: autodoc: Python Enum values are not rendered correctly\n * #8872: autodoc: stacked singledispatches are wrongly rendered\n * #8597: autodoc: a docsting having metadata only should be treated as\n   undocumented\ndiff --git a/sphinx/util/inspect.py b/sphinx/util/inspect.py\nindex a415a70..170e966 100644\n--- a/sphinx/util/inspect.py\n+++ b/sphinx/util/inspect.py\n@@ -457,6 +457,8 @@ def object_description(object: Any) -> str:\n         else:\n             return \"frozenset({%s})\" % \", \".join(object_description(x)\n                                                  for x in sorted_values)\n+    if isinstance(object, enum.Enum):\n+        return \"%s.%s\" % (object.__class__.__name__, object.name)\n     try:\n         s = repr(object)\n     except Exception as exc:\n",
+  "inputTokens": 28271,
+  "instanceId": "sphinx-doc__sphinx-9281",
+  "maxOutputTokens": 65536,
+  "maxTotalTokens": 512000,
+  "modelId": "byteplus/deepseek-v4-flash-ga",
+  "modelProvider": "rollback-deepseek",
+  "noShell": false,
+  "outputTokens": 7130,
+  "patch": "diff --git a/CHANGES b/CHANGES\nindex 6441001..a73eac9 100644\n--- a/CHANGES\n+++ b/CHANGES\n@@ -50,6 +50,7 @@ Features added\n Bugs fixed\n ----------\n \n+* #9281: autodoc: Python Enum values are not rendered correctly\n * #8872: autodoc: stacked singledispatches are wrongly rendered\n * #8597: autodoc: a docsting having metadata only should be treated as\n   undocumented\ndiff --git a/sphinx/util/inspect.py b/sphinx/util/inspect.py\nindex a415a70..170e966 100644\n--- a/sphinx/util/inspect.py\n+++ b/sphinx/util/inspect.py\n@@ -457,6 +457,8 @@ def object_description(object: Any) -> str:\n         else:\n             return \"frozenset({%s})\" % \", \".join(object_description(x)\n                                                  for x in sorted_values)\n+    if isinstance(object, enum.Enum):\n+        return \"%s.%s\" % (object.__class__.__name__, object.name)\n     try:\n         s = repr(object)\n     except Exception as exc:\n",
+  "policyViolations": [],
+  "runnerExitCode": 0,
+  "sandboxImage": "sweb.eval.arm64.sphinx-doc__sphinx-9281:latest",
+  "schemaVersion": 1,
+  "startedAt": "2026-10-15T07:54:15.283Z",
+  "strategyHash": "af051feb0d3041c9c41a99f22ca71062093da67e27fa02a01a79dbb8b7c197e6",
+  "timeoutAborted": false,
+  "tokenTelemetryAvailable": true,
+  "toolCalls": 18
+}

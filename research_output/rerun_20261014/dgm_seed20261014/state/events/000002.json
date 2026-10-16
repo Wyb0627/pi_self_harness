@@ -1,0 +1,14 @@
+{
+  "event_hash": "c932805f06e0d86b89a9bbacff93fb04e5886a170ad52f296eb57bff8eef37e0",
+  "event_type": "protocol_amendment",
+  "payload": {
+    "amended_commit": "4c312e7d199ed9ad5c857c9621e38ea7dce6ee70",
+    "amendment_id": "0001-invalid-mutation-reason",
+    "amendment_path": "protocol-amendments/0001-invalid-mutation-reason.json",
+    "amendment_sha256": "09c008e7b35fe10334ae175302b21c89a8685b7bac25fb25f2289645fbb38184",
+    "prior_commit": "d63fe099d1c4a6cb15ef01ef454c324ea6b84652",
+    "slot_0_rerun": false
+  },
+  "previous_hash": "0fbf3625024223239c26f3332fca3a9c1a2f5e56c2aa0ee8fa1bc2c5b30b6ce9",
+  "sequence": 2
+}

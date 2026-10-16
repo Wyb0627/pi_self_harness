@@ -1,0 +1,30 @@
+{
+  "budgetAborted": false,
+  "cacheReadTokens": 116736,
+  "cacheWriteTokens": 0,
+  "candidateToolNames": [
+    "callable_contract",
+    "code_search"
+  ],
+  "completedAt": "2026-10-15T10:52:58.976Z",
+  "durationMs": 79757,
+  "fullPatch": "diff --git a/django/utils/http.py b/django/utils/http.py\nindex 572cfb4..fb1e67a 100644\n--- a/django/utils/http.py\n+++ b/django/utils/http.py\n@@ -13,6 +13,7 @@ from urllib.parse import (\n )\n \n from django.core.exceptions import TooManyFieldsSent\n+from django.utils import timezone\n from django.utils.datastructures import MultiValueDict\n from django.utils.deprecation import RemovedInDjango40Warning\n from django.utils.functional import keep_lazy_text\n@@ -176,10 +177,10 @@ def parse_http_date(date):\n     try:\n         year = int(m.group('year'))\n         if year < 100:\n-            if year < 70:\n-                year += 2000\n-            else:\n-                year += 1900\n+            current_year = timezone.now().year\n+            year += current_year - current_year % 100\n+            if year - current_year > 50:\n+                year -= 100\n         month = MONTHS.index(m.group('mon').lower()) + 1\n         day = int(m.group('day'))\n         hour = int(m.group('hour'))\n",
+  "inputTokens": 26463,
+  "instanceId": "django__django-11848",
+  "maxOutputTokens": 65536,
+  "maxTotalTokens": 512000,
+  "modelId": "byteplus/deepseek-v4-flash-ga",
+  "modelProvider": "rollback-deepseek",
+  "noShell": false,
+  "outputTokens": 14630,
+  "patch": "diff --git a/django/utils/http.py b/django/utils/http.py\nindex 572cfb4..fb1e67a 100644\n--- a/django/utils/http.py\n+++ b/django/utils/http.py\n@@ -13,6 +13,7 @@ from urllib.parse import (\n )\n \n from django.core.exceptions import TooManyFieldsSent\n+from django.utils import timezone\n from django.utils.datastructures import MultiValueDict\n from django.utils.deprecation import RemovedInDjango40Warning\n from django.utils.functional import keep_lazy_text\n@@ -176,10 +177,10 @@ def parse_http_date(date):\n     try:\n         year = int(m.group('year'))\n         if year < 100:\n-            if year < 70:\n-                year += 2000\n-            else:\n-                year += 1900\n+            current_year = timezone.now().year\n+            year += current_year - current_year % 100\n+            if year - current_year > 50:\n+                year -= 100\n         month = MONTHS.index(m.group('mon').lower()) + 1\n         day = int(m.group('day'))\n         hour = int(m.group('hour'))\n",
+  "policyViolations": [],
+  "runnerExitCode": 0,
+  "sandboxImage": "sweb.eval.arm64.django__django-11848:latest",
+  "schemaVersion": 1,
+  "startedAt": "2026-10-15T10:51:39.219Z",
+  "strategyHash": "e925574904955546f15307878ea80f282aea7848af4d8378b105bd3c7d572036",
+  "timeoutAborted": false,
+  "tokenTelemetryAvailable": true,
+  "toolCalls": 11
+}

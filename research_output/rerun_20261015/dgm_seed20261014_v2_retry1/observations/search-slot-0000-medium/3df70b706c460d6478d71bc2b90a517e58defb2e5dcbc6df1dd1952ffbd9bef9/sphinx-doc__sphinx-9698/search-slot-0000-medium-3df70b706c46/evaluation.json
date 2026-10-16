@@ -1,0 +1,15 @@
+{
+  "status": "completed",
+  "resolved": true,
+  "protocol": "search-slot-0000-medium-3df70b706c46",
+  "officialEvaluatorRun": true,
+  "usedInertFeedbackProbe": false,
+  "identitySha256": "1f2ae97a09f411635dadb05cd3a1203f35891dda917663ec69f4977a04b38932",
+  "submittedPatchSha256": "21a895e722b259d5331db73279bab4719c461fb829774e74bc9a0ddec28b1664",
+  "runId": "dgm200-search-slot-0000-m-1f2ae97a09f41163",
+  "modelNameOrPath": "dgm-pi-3df70b706c46-1f2ae97a09f4",
+  "returnCode": 0,
+  "durationSeconds": 56.574,
+  "reportPath": "/Users/bytedance/codes/pi/research_output/rerun_20261015/dgm_seed20261014_v2_retry1/logs/run_evaluation/dgm200-search-slot-0000-m-1f2ae97a09f41163/dgm-pi-3df70b706c46-1f2ae97a09f4/sphinx-doc__sphinx-9698/report.json",
+  "testOutputPath": "/Users/bytedance/codes/pi/research_output/rerun_20261015/dgm_seed20261014_v2_retry1/logs/run_evaluation/dgm200-search-slot-0000-m-1f2ae97a09f41163/dgm-pi-3df70b706c46-1f2ae97a09f4/sphinx-doc__sphinx-9698/test_output.txt"
+}

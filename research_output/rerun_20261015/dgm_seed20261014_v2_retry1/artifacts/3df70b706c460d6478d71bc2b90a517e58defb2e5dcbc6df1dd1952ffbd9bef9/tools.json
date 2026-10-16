@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "tools": [
+    {
+      "description": "Search repository text and source files with a regular expression and return file, line, surrounding context, and match counts. This is a static grep-like capability for tracing symbols, hooks, event names, and options without executing code.",
+      "handler": "handlers/code_search.py",
+      "label": "Static code search",
+      "name": "code_search",
+      "parameters": {
+        "additionalProperties": false,
+        "properties": {
+          "case_sensitive": {
+            "description": "Whether matching is case-sensitive; defaults to true.",
+            "type": "boolean"
+          },
+          "context_lines": {
+            "description": "Number of lines of context to include around each match, from 0 to 10.",
+            "type": "integer"
+          },
+          "extensions": {
+            "description": "Comma-separated file extensions to include; defaults to py,rst,txt,cfg,ini,html,js,css.",
+            "type": "string"
+          },
+          "max_results": {
+            "description": "Maximum number of matches to return, from 1 to 200.",
+            "type": "integer"
+          },
+          "path": {
+            "description": "Root directory to search; must be under /testbed and defaults to /testbed.",
+            "type": "string"
+          },
+          "pattern": {
+            "description": "Regular expression to search for in file contents.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "pattern"
+        ],
+        "type": "object"
+      },
+      "timeout_seconds": 60
+    }
+  ]
+}

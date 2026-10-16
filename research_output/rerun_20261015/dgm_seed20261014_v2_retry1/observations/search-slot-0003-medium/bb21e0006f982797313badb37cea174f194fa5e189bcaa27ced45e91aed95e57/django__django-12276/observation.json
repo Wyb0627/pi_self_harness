@@ -1,0 +1,16 @@
+{
+  "agent_duration_seconds": 30.099,
+  "artifact_hash": "bb21e0006f982797313badb37cea174f194fa5e189bcaa27ced45e91aed95e57",
+  "evaluator_duration_seconds": 57.369,
+  "identity_hash": "d7872f7523209463d32ef8eec5e36eb6aaf8ee79e71f42f1e998f2dd84260479",
+  "image_build_seconds": 0.098,
+  "instance_id": "django__django-12276",
+  "observation_hash": "1cd1454e8eb6e555cbc253d46ad9b0e3ec7c90e421e1f17a39d706a154aa9c25",
+  "patch_sha256": "bbbd4c62610723f316cfa1e88a19f24efe29b86ba3bf8df2fb51e7de4a9ba63d",
+  "phase": "search-slot-0003-medium",
+  "reported_tokens": 62540,
+  "resolved": true,
+  "status": "completed",
+  "token_telemetry_complete": true,
+  "valid": true
+}

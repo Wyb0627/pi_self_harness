@@ -1,0 +1,13 @@
+{
+  "artifact_hash": "bb21e0006f982797313badb37cea174f194fa5e189bcaa27ced45e91aed95e57",
+  "files": [
+    "strategy.md",
+    "tools.json",
+    "lineage.json",
+    "handlers/callable_contract.py",
+    "handlers/code_search.py"
+  ],
+  "schema_version": 1,
+  "strategy_sha256": "e925574904955546f15307878ea80f282aea7848af4d8378b105bd3c7d572036",
+  "tools_manifest_hash": "e67ea07c0f0447569c5d594083c8806e9022501bc37addc07bf4ddca28e64869"
+}

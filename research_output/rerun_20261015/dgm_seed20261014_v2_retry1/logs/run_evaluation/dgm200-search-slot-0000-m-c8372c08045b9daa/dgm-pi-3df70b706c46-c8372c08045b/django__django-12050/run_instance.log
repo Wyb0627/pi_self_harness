@@ -1,0 +1,48 @@
+2026-10-15 12:32:47,781 - INFO - Environment image sweb.env.arm64.a18371b03f944585b4f08c:latest found for django__django-12050
+Building instance image sweb.eval.arm64.django__django-12050:latest for django__django-12050
+2026-10-15 12:32:47,794 - INFO - Image sweb.eval.arm64.django__django-12050:latest already exists, skipping build.
+2026-10-15 12:32:47,794 - INFO - Creating container for django__django-12050...
+2026-10-15 12:32:47,811 - INFO - Container for django__django-12050 created: bad04159784f46375e336978f3f1e419e6a814fb3f02f80cce3c8dea8c7ea563
+2026-10-15 12:32:47,863 - INFO - Container for django__django-12050 started: bad04159784f46375e336978f3f1e419e6a814fb3f02f80cce3c8dea8c7ea563
+2026-10-15 12:32:47,864 - INFO - Intermediate patch for django__django-12050 written to logs/run_evaluation/dgm200-search-slot-0000-m-c8372c08045b9daa/dgm-pi-3df70b706c46-c8372c08045b/django__django-12050/patch.diff, now applying to container...
+2026-10-15 12:32:47,980 - INFO - Failed to apply patch to container, trying again...
+2026-10-15 12:32:48,016 - INFO - >>>>> Applied Patch:
+patching file django/db/models/sql/query.py
+
+2026-10-15 12:32:48,415 - INFO - Git diff before:
+diff --git a/django/db/models/sql/query.py b/django/db/models/sql/query.py
+index ea51912..90475d6 100644
+--- a/django/db/models/sql/query.py
++++ b/django/db/models/sql/query.py
+@@ -1073,7 +1073,7 @@ class Query(BaseExpression):
+                         ))
+                 else:
+                     resolved_values.append(sub_value)
+-            value = tuple(resolved_values)
++            value = type(value)(resolved_values)
+         return value
+ 
+     def solve_lookup_type(self, lookup):
+2026-10-15 12:32:48,416 - INFO - Eval script for django__django-12050 written to logs/run_evaluation/dgm200-search-slot-0000-m-c8372c08045b9daa/dgm-pi-3df70b706c46-c8372c08045b/django__django-12050/eval.sh; copying to container...
+2026-10-15 12:32:51,480 - INFO - Test runtime: 2.98 seconds
+2026-10-15 12:32:51,481 - INFO - Test output for django__django-12050 written to logs/run_evaluation/dgm200-search-slot-0000-m-c8372c08045b9daa/dgm-pi-3df70b706c46-c8372c08045b/django__django-12050/test_output.txt
+2026-10-15 12:32:51,513 - INFO - Git diff after:
+diff --git a/django/db/models/sql/query.py b/django/db/models/sql/query.py
+index ea51912..90475d6 100644
+--- a/django/db/models/sql/query.py
++++ b/django/db/models/sql/query.py
+@@ -1073,7 +1073,7 @@ class Query(BaseExpression):
+                         ))
+                 else:
+                     resolved_values.append(sub_value)
+-            value = tuple(resolved_values)
++            value = type(value)(resolved_values)
+         return value
+ 
+     def solve_lookup_type(self, lookup):
+2026-10-15 12:32:51,513 - INFO - Grading answer for django__django-12050...
+2026-10-15 12:32:51,516 - INFO - report: {'django__django-12050': {'patch_is_None': False, 'patch_exists': True, 'patch_successfully_applied': True, 'resolved': True, 'tests_status': {'FAIL_TO_PASS': {'success': ['test_iterable_lookup_value (queries.test_query.TestQuery)'], 'failure': []}, 'PASS_TO_PASS': {'success': ['test_clone_select_related (queries.test_query.TestQuery)', 'test_complex_query (queries.test_query.TestQuery)', 'test_foreign_key (queries.test_query.TestQuery)', 'test_foreign_key_exclusive (queries.test_query.TestQuery)', 'test_foreign_key_f (queries.test_query.TestQuery)', 'test_multiple_fields (queries.test_query.TestQuery)', 'test_negated_nullable (queries.test_query.TestQuery)', 'test_simple_query (queries.test_query.TestQuery)', 'test_simplecol_query (queries.test_query.TestQuery)', 'test_transform (queries.test_query.TestQuery)'], 'failure': []}, 'FAIL_TO_FAIL': {'success': [], 'failure': []}, 'PASS_TO_FAIL': {'success': [], 'failure': []}}}}
+Result for django__django-12050: resolved: True
+2026-10-15 12:32:51,517 - INFO - Attempting to stop container sweb.eval.django__django-12050.dgm200-search-slot-0000-m-c8372c08045b9daa...
+2026-10-15 12:33:06,648 - INFO - Attempting to remove container sweb.eval.django__django-12050.dgm200-search-slot-0000-m-c8372c08045b9daa...
+2026-10-15 12:33:06,673 - INFO - Container sweb.eval.django__django-12050.dgm200-search-slot-0000-m-c8372c08045b9daa removed.

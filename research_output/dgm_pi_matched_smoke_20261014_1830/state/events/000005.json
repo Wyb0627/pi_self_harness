@@ -1,0 +1,12 @@
+{
+  "event_hash": "974321f8e80e3ae344cb1d00ff794d401ea5bfd6b4acb2b0b7254a0c4ecde6a6",
+  "event_type": "endpoint_started",
+  "payload": {
+    "identity_hash": "d10ed8a45a344d7f11d9614e02cac558f25da4ae2c874870e706584d73637bfa",
+    "schema_version": 1,
+    "started_at": "2026-10-14T09:42:39Z",
+    "status": "running"
+  },
+  "previous_hash": "c4f0ce599bf71949e59ffd8880279d2f22970fa09a7949b8bc0d2aebbf2f1c74",
+  "sequence": 5
+}

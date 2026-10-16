@@ -1,0 +1,23 @@
+{
+  "agent_timeout_seconds": 3600,
+  "artifact_content_hash": "b36d6720f60f3d4d4d6f1c14d159db912c21ee71565d5175d1f64f30476b434a",
+  "artifact_hash": "b36d6720f60f3d4d4d6f1c14d159db912c21ee71565d5175d1f64f30476b434a",
+  "base_commit": "18759b2209ff556aed7f20d83cbf23e3d234e41c",
+  "budget_scope": "search",
+  "config_hash": "9c7f4207f186731d9d88881d149d568e3a6531c4a30731ce22ade4014c066fd8",
+  "evaluator_timeout_seconds": 1800,
+  "execution_stack_hash": "d6c0de64ed460490733fd93205750400fcf44ba3aa8814b877658edd11b666cb",
+  "image": "sweb.eval.arm64.django__django-12754:latest",
+  "image_digest": "sha256:668d6a7678b28c0f8913e9f6353816850ae864b30117c7f1fdf46bb9b3c6b1a8",
+  "instance_id": "django__django-12754",
+  "model_id": "byteplus/deepseek-v4-flash-ga",
+  "model_provider": "rollback-deepseek",
+  "per_task_output_token_cap": 65536,
+  "per_task_token_cap": 512000,
+  "phase": "search-slot-0002-small",
+  "repo": "django/django",
+  "role_manifest_hash": "ba5617a82f44048abd7ecf334d1f633341759613d21faedd0fc2ffc53e15cf86",
+  "rollout": 0,
+  "run_id": "dgm-pilot-s20261014-v2-retry1",
+  "schema_version": 1
+}

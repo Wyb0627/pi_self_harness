@@ -1,0 +1,29 @@
+{
+  "budgetAborted": true,
+  "cacheReadTokens": 474880,
+  "cacheWriteTokens": 0,
+  "candidateToolNames": [
+    "code_search"
+  ],
+  "completedAt": "2026-10-15T06:17:35.883Z",
+  "durationMs": 141954,
+  "fullPatch": "diff --git a/django/db/backends/ddl_references.py b/django/db/backends/ddl_references.py\nindex 44e4980..32cbd4f 100644\n--- a/django/db/backends/ddl_references.py\n+++ b/django/db/backends/ddl_references.py\n@@ -84,7 +84,7 @@ class Columns(TableColumns):\n     def __str__(self):\n         def col_str(column, idx):\n             try:\n-                return self.quote_name(column) + self.col_suffixes[idx]\n+                return self.quote_name(column) + (' %s' % self.col_suffixes[idx] if self.col_suffixes[idx] else '')\n             except IndexError:\n                 return self.quote_name(column)\n \n@@ -114,7 +114,7 @@ class IndexColumns(Columns):\n             # length as self.columns.\n             col = '{} {}'.format(self.quote_name(column), self.opclasses[idx])\n             try:\n-                col = '{} {}'.format(col, self.col_suffixes[idx])\n+                col = '{} {}'.format(col, self.col_suffixes[idx]) if self.col_suffixes[idx] else col\n             except IndexError:\n                 pass\n             return col\n",
+  "inputTokens": 59779,
+  "instanceId": "django__django-12039",
+  "maxOutputTokens": 65536,
+  "maxTotalTokens": 512000,
+  "modelId": "byteplus/deepseek-v4-flash-ga",
+  "modelProvider": "rollback-deepseek",
+  "noShell": false,
+  "outputTokens": 22061,
+  "patch": "diff --git a/django/db/backends/ddl_references.py b/django/db/backends/ddl_references.py\nindex 44e4980..32cbd4f 100644\n--- a/django/db/backends/ddl_references.py\n+++ b/django/db/backends/ddl_references.py\n@@ -84,7 +84,7 @@ class Columns(TableColumns):\n     def __str__(self):\n         def col_str(column, idx):\n             try:\n-                return self.quote_name(column) + self.col_suffixes[idx]\n+                return self.quote_name(column) + (' %s' % self.col_suffixes[idx] if self.col_suffixes[idx] else '')\n             except IndexError:\n                 return self.quote_name(column)\n \n@@ -114,7 +114,7 @@ class IndexColumns(Columns):\n             # length as self.columns.\n             col = '{} {}'.format(self.quote_name(column), self.opclasses[idx])\n             try:\n-                col = '{} {}'.format(col, self.col_suffixes[idx])\n+                col = '{} {}'.format(col, self.col_suffixes[idx]) if self.col_suffixes[idx] else col\n             except IndexError:\n                 pass\n             return col\n",
+  "policyViolations": [],
+  "runnerExitCode": 0,
+  "sandboxImage": "sweb.eval.arm64.django__django-12039:latest",
+  "schemaVersion": 1,
+  "startedAt": "2026-10-15T06:15:13.928Z",
+  "strategyHash": "af051feb0d3041c9c41a99f22ca71062093da67e27fa02a01a79dbb8b7c197e6",
+  "timeoutAborted": false,
+  "tokenTelemetryAvailable": true,
+  "toolCalls": 19
+}

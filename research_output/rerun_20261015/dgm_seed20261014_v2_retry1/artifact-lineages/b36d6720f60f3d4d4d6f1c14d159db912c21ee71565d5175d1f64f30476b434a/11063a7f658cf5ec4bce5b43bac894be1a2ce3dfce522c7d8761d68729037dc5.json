@@ -1,0 +1,46 @@
+{
+  "artifact_hash": "b36d6720f60f3d4d4d6f1c14d159db912c21ee71565d5175d1f64f30476b434a",
+  "lineage": [
+    {
+      "depends_on": [],
+      "entry_task_id": "django__django-12406",
+      "mutation_id": "m-0002-c9aaff2313cd",
+      "mutation_summary": "Add a reusable read-only source-search tool and a general root-cause workflow for form/widget rendering defects.",
+      "repo": "django/django",
+      "strategy_patch": "## Root-Cause Strategy for Rendering and Choice-Suppression Defects\n\nWhen a framework bug report describes incorrect rendered output (an extra option, a missing attribute, or a widget being mutated), investigate from the public rendering contract inward instead of starting with a broad test run.\n\n1. **State the contract**: write one sentence describing what should appear in the rendered HTML, and one sentence describing what should not appear. Keep this tied to user input and model metadata such as requiredness, initial state, and choices.\n2. **Reproduce with the smallest possible source-level example**: create the relevant form/model/widget, render it, and inspect the exact HTML. A direct Python expression is faster than a full server response.\n3. **Search the source tree** for the implementation of the responsible field or widget. Useful terms are the widget class name, `empty_label`, `use_required_attribute`, `get_context`, `choices`, `blank`, `checked`, and `required`.\n4. **Read the nearest sibling implementations**. If the bug is in one widget but not another, reading their `get_context`, `use_required_attribute`, or option-generation methods shows the invariant that should be preserved.\n5. **Trace metadata into the render path**. The fix should normally consult existing model/form metadata (requiredness, initial state, or an empty-label policy) rather than special-case a literal value or option string. This preserves the intended behavior of other widgets while correcting only the widget that renders an implicit unfilled state.\n6. **Add a regression test at the rendering layer**. Assert both the presence and absence of the offending attribute or option in the rendered HTML so the contract is explicit and future changes cannot silently reintroduce it.\n7. **Run the smallest relevant test module** for the component family (form fields, widgets, model forms, and admin forms when the same widget is used there).\n\nThis workflow is reusable for any incident whose symptom is visible in HTML output: it identifies the responsibility boundary, uses read-only source inspection to map the call chain, and validates the fix with a rendering-level assertion.",
+      "tool": {
+        "description": "Search a read-only source tree for a Python regular expression and return matching file paths with line-numbered context snippets. Useful for locating field, widget, and form rendering code without external commands.",
+        "handler_code": "import json, os, re, fnmatch\nimport sys\n\ndef handler(params):\n    query = params.get('query', '')\n    root = params.get('root', '/testbed')\n    glob_pattern = params.get('glob', '*.py')\n    try:\n        max_matches = int(params.get('max_matches', 30) or 30)\n        context_lines = int(params.get('context_lines', 2) or 2)\n    except ValueError:\n        return {'content': 'max_matches and context_lines must be integers.', 'details': {}}\n    if max_matches < 1:\n        max_matches = 30\n    if context_lines < 0:\n        context_lines = 0\n    if not query:\n        return {'content': 'No query provided.', 'details': {}}\n    root = os.path.abspath(root)\n    testbed_root = os.path.abspath('/testbed')\n    if os.path.normpath(root) != os.path.normpath(testbed_root) and not os.path.normpath(root).startswith(os.path.normpath(testbed_root) + os.sep):\n        root = testbed_root\n    if not os.path.isdir(root):\n        return {'content': 'Root not found: ' + root, 'details': {}}\n    try:\n        q = re.compile(query, re.IGNORECASE | re.MULTILINE)\n    except re.error as exc:\n        return {'content': 'Invalid regular expression: ' + str(exc), 'details': {}}\n    matches = []\n    scanned = 0\n    read_error = None\n    for dirpath, dirnames, filenames in os.walk(root):\n        dirnames[:] = [d for d in dirnames if not d.startswith('.')]\n        for filename in filenames:\n            if glob_pattern:\n                rel = os.path.relpath(os.path.join(dirpath, filename), root)\n                if not fnmatch.fnmatch(filename, glob_pattern) and not fnmatch.fnmatch(rel, glob_pattern):\n                    continue\n            scanned += 1\n            path = os.path.join(dirpath, filename)\n            try:\n                with open(path, 'r', encoding='utf-8', errors='replace') as fh:\n                    lines = fh.read().splitlines()\n            except Exception as exc:\n                read_error = read_error or str(exc)\n                continue\n            for idx, line in enumerate(lines):\n                if q.search(line):\n                    start = max(0, idx - context_lines)\n                    end = min(len(lines), idx + context_lines + 1)\n                    snippet_lines = []\n                    for i in range(start, end):\n                        snippet_lines.append('{:5d}: {}'.format(i + 1, lines[i]))\n                    snippet = chr(10).join(snippet_lines)\n                    matches.append({'path': path, 'line': idx + 1, 'snippet': snippet})\n                    if len(matches) >= max_matches:\n                        break\n            if len(matches) >= max_matches:\n                break\n        if len(matches) >= max_matches:\n            break\n    if not matches:\n        content = 'No matches found.'\n    else:\n        blocks = []\n        for m in matches:\n            blocks.append('{}:{}'.format(m['path'], m['line']))\n            blocks.append(m['snippet'])\n        content = chr(10).join(blocks)\n    details = {\n        'match_count': len(matches),\n        'files_scanned': scanned,\n        'root': root,\n        'query_pattern': query,\n        'truncated': len(matches) >= max_matches,\n    }\n    if read_error:\n        details['read_error'] = read_error\n    return {'content': content, 'details': details}\n\nif __name__ == '__main__':\n    data = json.load(sys.stdin)\n    if isinstance(data, dict) and isinstance(data.get('params'), dict):\n        data = data['params']\n    print(json.dumps(handler(data), ensure_ascii=False))",
+        "label": "Read-only source grep",
+        "name": "source_grep",
+        "parameters": {
+          "additionalProperties": false,
+          "properties": {
+            "context_lines": {
+              "type": "integer"
+            },
+            "glob": {
+              "type": "string"
+            },
+            "max_matches": {
+              "type": "integer"
+            },
+            "query": {
+              "type": "string"
+            },
+            "root": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "query"
+          ],
+          "type": "object"
+        },
+        "timeout_seconds": 25
+      }
+    }
+  ],
+  "lineage_hash": "11063a7f658cf5ec4bce5b43bac894be1a2ce3dfce522c7d8761d68729037dc5",
+  "schema_version": 1
+}

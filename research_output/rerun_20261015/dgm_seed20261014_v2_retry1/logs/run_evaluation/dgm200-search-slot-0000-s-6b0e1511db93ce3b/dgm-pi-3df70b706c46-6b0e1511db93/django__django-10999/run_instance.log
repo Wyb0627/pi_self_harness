@@ -1,0 +1,48 @@
+2026-10-15 12:19:01,919 - INFO - Environment image sweb.env.arm64.2baaea72acc974f6c02079:latest found for django__django-10999
+Building instance image sweb.eval.arm64.django__django-10999:latest for django__django-10999
+2026-10-15 12:19:01,935 - INFO - Image sweb.eval.arm64.django__django-10999:latest already exists, skipping build.
+2026-10-15 12:19:01,936 - INFO - Creating container for django__django-10999...
+2026-10-15 12:19:01,955 - INFO - Container for django__django-10999 created: 9d51412c081d29cb30a84dd8f8951db69a8411915ae0067424d2a7820b0f67eb
+2026-10-15 12:19:02,023 - INFO - Container for django__django-10999 started: 9d51412c081d29cb30a84dd8f8951db69a8411915ae0067424d2a7820b0f67eb
+2026-10-15 12:19:02,024 - INFO - Intermediate patch for django__django-10999 written to logs/run_evaluation/dgm200-search-slot-0000-s-6b0e1511db93ce3b/dgm-pi-3df70b706c46-6b0e1511db93/django__django-10999/patch.diff, now applying to container...
+2026-10-15 12:19:02,143 - INFO - Failed to apply patch to container, trying again...
+2026-10-15 12:19:02,174 - INFO - >>>>> Applied Patch:
+patching file django/utils/dateparse.py
+
+2026-10-15 12:19:02,576 - INFO - Git diff before:
+diff --git a/django/utils/dateparse.py b/django/utils/dateparse.py
+index 8d08b7d..a037758 100644
+--- a/django/utils/dateparse.py
++++ b/django/utils/dateparse.py
+@@ -29,7 +29,7 @@ datetime_re = re.compile(
+ standard_duration_re = re.compile(
+     r'^'
+     r'(?:(?P<days>-?\d+) (days?, )?)?'
+-    r'((?:(?P<hours>-?\d+):)(?=\d+:\d+))?'
++    r'((?:(?P<hours>-?\d+):)(?=-?\d+:-?\d+))?'
+     r'(?:(?P<minutes>-?\d+):)?'
+     r'(?P<seconds>-?\d+)'
+     r'(?:\.(?P<microseconds>\d{1,6})\d{0,6})?'
+2026-10-15 12:19:02,577 - INFO - Eval script for django__django-10999 written to logs/run_evaluation/dgm200-search-slot-0000-s-6b0e1511db93ce3b/dgm-pi-3df70b706c46-6b0e1511db93/django__django-10999/eval.sh; copying to container...
+2026-10-15 12:19:05,484 - INFO - Test runtime: 2.82 seconds
+2026-10-15 12:19:05,485 - INFO - Test output for django__django-10999 written to logs/run_evaluation/dgm200-search-slot-0000-s-6b0e1511db93ce3b/dgm-pi-3df70b706c46-6b0e1511db93/django__django-10999/test_output.txt
+2026-10-15 12:19:05,518 - INFO - Git diff after:
+diff --git a/django/utils/dateparse.py b/django/utils/dateparse.py
+index 8d08b7d..a037758 100644
+--- a/django/utils/dateparse.py
++++ b/django/utils/dateparse.py
+@@ -29,7 +29,7 @@ datetime_re = re.compile(
+ standard_duration_re = re.compile(
+     r'^'
+     r'(?:(?P<days>-?\d+) (days?, )?)?'
+-    r'((?:(?P<hours>-?\d+):)(?=\d+:\d+))?'
++    r'((?:(?P<hours>-?\d+):)(?=-?\d+:-?\d+))?'
+     r'(?:(?P<minutes>-?\d+):)?'
+     r'(?P<seconds>-?\d+)'
+     r'(?:\.(?P<microseconds>\d{1,6})\d{0,6})?'
+2026-10-15 12:19:05,518 - INFO - Grading answer for django__django-10999...
+2026-10-15 12:19:05,522 - INFO - report: {'django__django-10999': {'patch_is_None': False, 'patch_exists': True, 'patch_successfully_applied': True, 'resolved': False, 'tests_status': {'FAIL_TO_PASS': {'success': [], 'failure': ['test_negative (utils_tests.test_dateparse.DurationParseTests)', 'test_parse_postgresql_format (utils_tests.test_dateparse.DurationParseTests)']}, 'PASS_TO_PASS': {'success': ['test_parse_date (utils_tests.test_dateparse.DateParseTests)', 'test_parse_datetime (utils_tests.test_dateparse.DateParseTests)', 'test_parse_time (utils_tests.test_dateparse.DateParseTests)', 'test_days (utils_tests.test_dateparse.DurationParseTests)', 'test_fractions_of_seconds (utils_tests.test_dateparse.DurationParseTests)', 'test_hours_minutes_seconds (utils_tests.test_dateparse.DurationParseTests)', 'test_iso_8601 (utils_tests.test_dateparse.DurationParseTests)', 'test_minutes_seconds (utils_tests.test_dateparse.DurationParseTests)', 'test_parse_python_format (utils_tests.test_dateparse.DurationParseTests)', 'test_seconds (utils_tests.test_dateparse.DurationParseTests)'], 'failure': []}, 'FAIL_TO_FAIL': {'success': [], 'failure': []}, 'PASS_TO_FAIL': {'success': [], 'failure': []}}}}
+Result for django__django-10999: resolved: False
+2026-10-15 12:19:05,523 - INFO - Attempting to stop container sweb.eval.django__django-10999.dgm200-search-slot-0000-s-6b0e1511db93ce3b...
+2026-10-15 12:19:20,674 - INFO - Attempting to remove container sweb.eval.django__django-10999.dgm200-search-slot-0000-s-6b0e1511db93ce3b...
+2026-10-15 12:19:20,702 - INFO - Container sweb.eval.django__django-10999.dgm200-search-slot-0000-s-6b0e1511db93ce3b removed.

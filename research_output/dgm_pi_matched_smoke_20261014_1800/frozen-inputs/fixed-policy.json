@@ -1,0 +1,14 @@
+{
+  "archive_rule": "keep every valid child with complete cumulative-60 evidence",
+  "endpoint_rule": "P0 and final artifact each run once on sealed big-140",
+  "final_selection": "highest score_60; then earliest insertion ordinal; then artifact hash",
+  "mutable_surface": [
+    "strategy.md"
+  ],
+  "name": "held-out-adapted-dgm-on-pi",
+  "parent_selection": "sampling with replacement proportional to sigmoid(10*(score_60-0.5))/(1+functioning_child_count)",
+  "proposal_slots": 2,
+  "proposals_per_wave": 2,
+  "schema_version": 1,
+  "small_promotion_rule": "resolved >= ceil(0.4 * small_tasks)"
+}

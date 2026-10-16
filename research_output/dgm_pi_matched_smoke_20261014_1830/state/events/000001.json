@@ -1,0 +1,11 @@
+{
+  "event_hash": "eb75c3bfa9862901fd973d86a9ecda3d922decc996ea6548ce54ee6b49723100",
+  "event_type": "p0_evaluated",
+  "payload": {
+    "artifact_hash": "5eb48a6ee49d31a9eacf1fde5cfdd7bada079ffbdc9d1bbf4705088c3b7a9200",
+    "resolved": 0,
+    "tasks": 1
+  },
+  "previous_hash": "fcff0e61ab8fd58b2c0d2232f0536178b599e32a0b5d5ad8c213a73de2b20a24",
+  "sequence": 1
+}

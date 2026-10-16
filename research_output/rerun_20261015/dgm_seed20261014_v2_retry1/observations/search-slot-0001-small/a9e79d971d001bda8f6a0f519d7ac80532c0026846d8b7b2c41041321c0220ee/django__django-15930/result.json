@@ -1,0 +1,35 @@
+{
+  "budgetAborted": true,
+  "cacheReadTokens": 477184,
+  "cacheWriteTokens": 0,
+  "candidateToolNames": [
+    "source_inspector"
+  ],
+  "completedAt": "2026-10-15T08:14:33.399Z",
+  "durationMs": 185643,
+  "fullPatch": "diff --git a/repro.py b/repro.py\nnew file mode 100644\nindex 0000000..d97fbfb\n--- /dev/null\n+++ b/repro.py\n@@ -0,0 +1,37 @@\n+import django\n+from django.conf import settings\n+\n+settings.configure(\n+    DEBUG=True,\n+    DATABASES={\"default\": {\"ENGINE\": \"django.db.backends.sqlite3\", \"NAME\": \":memory:\"}},\n+    INSTALLED_APPS=[\"django.contrib.contenttypes\", \"django.contrib.auth\"],\n+)\n+django.setup()\n+\n+from django.db import models, connection\n+from django.db.models import Case, When, Value, BooleanField, Q, F\n+\n+class User(models.Model):\n+    name = models.CharField(max_length=50)\n+    class Meta:\n+        app_label = \"app\"\n+\n+with connection.schema_editor() as editor:\n+    editor.create_model(User)\n+\n+User.objects.create(name=\"a\")\n+User.objects.create(name=\"b\")\n+\n+qs = User.objects.annotate(\n+    _a=Case(\n+        When(~Q(pk__in=[]), then=Value(True)),\n+        default=Value(False),\n+        output_field=BooleanField(),\n+    )\n+).order_by(\"-_a\").values(\"pk\")\n+\n+print(qs.query)\n+try:\n+    print(list(qs))\n+except Exception as e:\n+    print(\"ERROR:\", type(e).__name__, e)\n",
+  "inputTokens": 45696,
+  "instanceId": "django__django-15930",
+  "maxOutputTokens": 65536,
+  "maxTotalTokens": 512000,
+  "modelId": "byteplus/deepseek-v4-flash-ga",
+  "modelProvider": "rollback-deepseek",
+  "noShell": false,
+  "outputTokens": 22371,
+  "patch": "",
+  "policyViolations": [
+    {
+      "patch": "diff --git a/repro.py b/repro.py\nnew file mode 100644\nindex 0000000..d97fbfb\n--- /dev/null\n+++ b/repro.py\n@@ -0,0 +1,37 @@\n+import django\n+from django.conf import settings\n+\n+settings.configure(\n+    DEBUG=True,\n+    DATABASES={\"default\": {\"ENGINE\": \"django.db.backends.sqlite3\", \"NAME\": \":memory:\"}},\n+    INSTALLED_APPS=[\"django.contrib.contenttypes\", \"django.contrib.auth\"],\n+)\n+django.setup()\n+\n+from django.db import models, connection\n+from django.db.models import Case, When, Value, BooleanField, Q, F\n+\n+class User(models.Model):\n+    name = models.CharField(max_length=50)\n+    class Meta:\n+        app_label = \"app\"\n+\n+with connection.schema_editor() as editor:\n+    editor.create_model(User)\n+\n+User.objects.create(name=\"a\")\n+User.objects.create(name=\"b\")\n+\n+qs = User.objects.annotate(\n+    _a=Case(\n+        When(~Q(pk__in=[]), then=Value(True)),\n+        default=Value(False),\n+        output_field=BooleanField(),\n+    )\n+).order_by(\"-_a\").values(\"pk\")\n+\n+print(qs.query)\n+try:\n+    print(list(qs))\n+except Exception as e:\n+    print(\"ERROR:\", type(e).__name__, e)\n",
+      "type": "forbidden-path-modification"
+    }
+  ],
+  "providerError": "This operation was aborted",
+  "runnerExitCode": 1,
+  "sandboxImage": "sweb.eval.x86_64.django__django-15930:latest",
+  "schemaVersion": 1,
+  "startedAt": "2026-10-15T08:11:27.755Z",
+  "strategyHash": "a814de85318798da3e245e0f4e35bc4e3c8fc44ebdee5db1d8af4898939e117f",
+  "timeoutAborted": false,
+  "tokenTelemetryAvailable": true,
+  "toolCalls": 35
+}

@@ -1,0 +1,24 @@
+{
+  "event_hash": "2c85f6b71c9547003d6435e8fd4e81a8698d3ee5de3f5c193f02beabd192e25f",
+  "event_type": "search_sealed",
+  "payload": {
+    "archive_entries": 2,
+    "archive_hash": "2a1d377f96bf059de736f7f3f174cefc7f3aad48ae4a31c695a0577f77bfcd50",
+    "completed_proposal_slots": 10,
+    "final_artifact_hash": "0f5a215ac0bce1aac54cc709e1a86e5e16f6f10547b78b30c711af30726a4c1b",
+    "final_score_60": 0.31666666666666665,
+    "reason": "proposal_slots_exhausted",
+    "schema_version": 1,
+    "sealed_at": "2026-10-15T14:44:49Z",
+    "search_cost": {
+      "active_seconds": 59179.181,
+      "api_calls": 226,
+      "budget_counted_tokens": 77655336,
+      "conservative_token_charge": 0,
+      "reported_tokens": 77655336,
+      "task_executions": 216
+    }
+  },
+  "previous_hash": "b7866e99a983ee114a7785af768f26123009219039b84144647408dcc2620d98",
+  "sequence": 12
+}

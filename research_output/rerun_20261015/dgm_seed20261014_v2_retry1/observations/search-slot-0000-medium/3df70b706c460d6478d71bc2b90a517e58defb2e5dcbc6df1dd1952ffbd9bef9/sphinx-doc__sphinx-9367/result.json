@@ -1,0 +1,29 @@
+{
+  "budgetAborted": false,
+  "cacheReadTokens": 54528,
+  "cacheWriteTokens": 0,
+  "candidateToolNames": [
+    "code_search"
+  ],
+  "completedAt": "2026-10-15T05:35:35.088Z",
+  "durationMs": 32967,
+  "fullPatch": "diff --git a/sphinx/pycode/ast.py b/sphinx/pycode/ast.py\nindex f541ec0..7ced7ba 100644\n--- a/sphinx/pycode/ast.py\n+++ b/sphinx/pycode/ast.py\n@@ -214,7 +214,10 @@ class _UnparseVisitor(ast.NodeVisitor):\n \n     def visit_Tuple(self, node: ast.Tuple) -> str:\n         if node.elts:\n-            return \"(\" + \", \".join(self.visit(e) for e in node.elts) + \")\"\n+            elts = \", \".join(self.visit(e) for e in node.elts)\n+            if len(node.elts) == 1:\n+                elts += \",\"\n+            return \"(\" + elts + \")\"\n         else:\n             return \"()\"\n \n",
+  "inputTokens": 14150,
+  "instanceId": "sphinx-doc__sphinx-9367",
+  "maxOutputTokens": 65536,
+  "maxTotalTokens": 512000,
+  "modelId": "byteplus/deepseek-v4-flash-ga",
+  "modelProvider": "rollback-deepseek",
+  "noShell": false,
+  "outputTokens": 3094,
+  "patch": "diff --git a/sphinx/pycode/ast.py b/sphinx/pycode/ast.py\nindex f541ec0..7ced7ba 100644\n--- a/sphinx/pycode/ast.py\n+++ b/sphinx/pycode/ast.py\n@@ -214,7 +214,10 @@ class _UnparseVisitor(ast.NodeVisitor):\n \n     def visit_Tuple(self, node: ast.Tuple) -> str:\n         if node.elts:\n-            return \"(\" + \", \".join(self.visit(e) for e in node.elts) + \")\"\n+            elts = \", \".join(self.visit(e) for e in node.elts)\n+            if len(node.elts) == 1:\n+                elts += \",\"\n+            return \"(\" + elts + \")\"\n         else:\n             return \"()\"\n \n",
+  "policyViolations": [],
+  "runnerExitCode": 0,
+  "sandboxImage": "sweb.eval.arm64.sphinx-doc__sphinx-9367:latest",
+  "schemaVersion": 1,
+  "startedAt": "2026-10-15T05:35:02.121Z",
+  "strategyHash": "af051feb0d3041c9c41a99f22ca71062093da67e27fa02a01a79dbb8b7c197e6",
+  "timeoutAborted": false,
+  "tokenTelemetryAvailable": true,
+  "toolCalls": 8
+}

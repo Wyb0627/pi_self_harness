@@ -1,0 +1,14 @@
+{
+  "declaration": "Online search receives only evolve-60-manifest.json. D_test rows, IDs, issue text, embeddings, trajectories, and outcomes are absent from mutation and archive inputs.",
+  "evolve_ordered_ids_sha256": "403e9dfa5d27d18a80f16ceb8879a9d63109d3f5d808d23af1b834f6c88bd8e8",
+  "evolve_task_count": 60,
+  "partition_source_sha256": {
+    "big": "76a8b81f0c044a64c928ab46312b5eb69c3728ab7d39c4fe6239a790797906cd",
+    "medium": "bf1cde9b2590f7813cc0cbb43a3ce0a9fccbdd163083891ff96b9abc82e4c06f",
+    "small": "b8909d87321bf7e9277e82baff8b2a739a3e1e76585ec512ae8ad4b6eef86591"
+  },
+  "schema_version": 1,
+  "source_manifest_sha256": "3fb913fbc73a05c1f7cae3b708c976374632820b58377aab5de08b742f96c967",
+  "test_ordered_ids_sha256": "3bb6b01e516ba5d3793e8cf02e8bbed85d8c5c33badbce187669daf06a3b8cbb",
+  "test_task_count": 140
+}

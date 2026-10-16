@@ -1,0 +1,15 @@
+diff --git a/django/forms/widgets.py b/django/forms/widgets.py
+index 6fe220b..0cbcced 100644
+--- a/django/forms/widgets.py
++++ b/django/forms/widgets.py
+@@ -522,9 +522,7 @@ class CheckboxInput(Input):
+ 
+     def get_context(self, name, value, attrs):
+         if self.check_test(value):
+-            if attrs is None:
+-                attrs = {}
+-            attrs['checked'] = True
++            attrs = {**attrs, 'checked': True} if attrs else {'checked': True}
+         return super().get_context(name, value, attrs)
+ 
+     def value_from_datadict(self, data, files, name):

@@ -1,0 +1,30 @@
+{
+  "budgetAborted": true,
+  "cacheReadTokens": 475136,
+  "cacheWriteTokens": 0,
+  "candidateToolNames": [
+    "code_search"
+  ],
+  "completedAt": "2026-10-15T07:15:34.508Z",
+  "durationMs": 156674,
+  "fullPatch": "",
+  "inputTokens": 50956,
+  "instanceId": "sphinx-doc__sphinx-7590",
+  "maxOutputTokens": 65536,
+  "maxTotalTokens": 512000,
+  "modelId": "byteplus/deepseek-v4-flash-ga",
+  "modelProvider": "rollback-deepseek",
+  "noShell": false,
+  "outputTokens": 19411,
+  "patch": "",
+  "policyViolations": [],
+  "providerError": "This operation was aborted",
+  "runnerExitCode": 1,
+  "sandboxImage": "sweb.eval.arm64.sphinx-doc__sphinx-7590:latest",
+  "schemaVersion": 1,
+  "startedAt": "2026-10-15T07:12:57.833Z",
+  "strategyHash": "af051feb0d3041c9c41a99f22ca71062093da67e27fa02a01a79dbb8b7c197e6",
+  "timeoutAborted": false,
+  "tokenTelemetryAvailable": true,
+  "toolCalls": 30
+}

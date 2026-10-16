@@ -1,0 +1,30 @@
+{
+  "budgetAborted": true,
+  "cacheReadTokens": 456192,
+  "cacheWriteTokens": 0,
+  "candidateToolNames": [
+    "code_search"
+  ],
+  "completedAt": "2026-10-15T04:29:19.310Z",
+  "durationMs": 168930,
+  "fullPatch": "diff --git a/stubs_for_test/asgiref/__init__.py b/stubs_for_test/asgiref/__init__.py\nnew file mode 100644\nindex 0000000..e69de29\ndiff --git a/stubs_for_test/asgiref/local.py b/stubs_for_test/asgiref/local.py\nnew file mode 100644\nindex 0000000..ecd19ca\n--- /dev/null\n+++ b/stubs_for_test/asgiref/local.py\n@@ -0,0 +1,29 @@\n+import threading\n+\n+\n+class Local:\n+    def __init__(self, thread_critical=False):\n+        object.__setattr__(self, \"_storage\", {})\n+        object.__setattr__(self, \"_lock\", threading.RLock())\n+        object.__setattr__(self, \"_thread_critical\", thread_critical)\n+\n+    def __getattr__(self, name):\n+        try:\n+            return self._storage[name]\n+        except KeyError:\n+            raise AttributeError(name) from None\n+\n+    def __setattr__(self, name, value):\n+        self._storage[name] = value\n+\n+    def __delattr__(self, name):\n+        try:\n+            del self._storage[name]\n+        except KeyError:\n+            raise AttributeError(name) from None\n+\n+    def __enter__(self):\n+        return self\n+\n+    def __exit__(self, *args):\n+        pass\ndiff --git a/stubs_for_test/pytz/__init__.py b/stubs_for_test/pytz/__init__.py\nnew file mode 100644\nindex 0000000..ed09c1f\n--- /dev/null\n+++ b/stubs_for_test/pytz/__init__.py\n@@ -0,0 +1,33 @@\n+from datetime import timedelta, tzinfo\n+\n+\n+class _UTC(tzinfo):\n+    def utcoffset(self, dt):\n+        return timedelta(0)\n+\n+    def tzname(self, dt):\n+        return \"UTC\"\n+\n+    def dst(self, dt):\n+        return timedelta(0)\n+\n+\n+utc = _UTC()\n+\n+\n+class UnknownTimeZoneError(KeyError):\n+    pass\n+\n+\n+def timezone(name):\n+    if name in (\"UTC\", \"Etc/UTC\"):\n+        return utc\n+    raise UnknownTimeZoneError(name)\n+\n+\n+all_timezones = [\"UTC\"]\n+common_timezones = [\"UTC\"]\n+\n+\n+class exceptions:\n+    UnknownTimeZoneError = UnknownTimeZoneError\n",
+  "inputTokens": 41381,
+  "instanceId": "django__django-11790",
+  "maxOutputTokens": 65536,
+  "maxTotalTokens": 512000,
+  "modelId": "byteplus/deepseek-v4-flash-ga",
+  "modelProvider": "rollback-deepseek",
+  "noShell": false,
+  "outputTokens": 22066,
+  "patch": "diff --git a/stubs_for_test/asgiref/__init__.py b/stubs_for_test/asgiref/__init__.py\nnew file mode 100644\nindex 0000000..e69de29\ndiff --git a/stubs_for_test/asgiref/local.py b/stubs_for_test/asgiref/local.py\nnew file mode 100644\nindex 0000000..ecd19ca\n--- /dev/null\n+++ b/stubs_for_test/asgiref/local.py\n@@ -0,0 +1,29 @@\n+import threading\n+\n+\n+class Local:\n+    def __init__(self, thread_critical=False):\n+        object.__setattr__(self, \"_storage\", {})\n+        object.__setattr__(self, \"_lock\", threading.RLock())\n+        object.__setattr__(self, \"_thread_critical\", thread_critical)\n+\n+    def __getattr__(self, name):\n+        try:\n+            return self._storage[name]\n+        except KeyError:\n+            raise AttributeError(name) from None\n+\n+    def __setattr__(self, name, value):\n+        self._storage[name] = value\n+\n+    def __delattr__(self, name):\n+        try:\n+            del self._storage[name]\n+        except KeyError:\n+            raise AttributeError(name) from None\n+\n+    def __enter__(self):\n+        return self\n+\n+    def __exit__(self, *args):\n+        pass\ndiff --git a/stubs_for_test/pytz/__init__.py b/stubs_for_test/pytz/__init__.py\nnew file mode 100644\nindex 0000000..ed09c1f\n--- /dev/null\n+++ b/stubs_for_test/pytz/__init__.py\n@@ -0,0 +1,33 @@\n+from datetime import timedelta, tzinfo\n+\n+\n+class _UTC(tzinfo):\n+    def utcoffset(self, dt):\n+        return timedelta(0)\n+\n+    def tzname(self, dt):\n+        return \"UTC\"\n+\n+    def dst(self, dt):\n+        return timedelta(0)\n+\n+\n+utc = _UTC()\n+\n+\n+class UnknownTimeZoneError(KeyError):\n+    pass\n+\n+\n+def timezone(name):\n+    if name in (\"UTC\", \"Etc/UTC\"):\n+        return utc\n+    raise UnknownTimeZoneError(name)\n+\n+\n+all_timezones = [\"UTC\"]\n+common_timezones = [\"UTC\"]\n+\n+\n+class exceptions:\n+    UnknownTimeZoneError = UnknownTimeZoneError\n",
+  "policyViolations": [],
+  "providerError": "This operation was aborted",
+  "runnerExitCode": 1,
+  "sandboxImage": "sweb.eval.arm64.django__django-11790:latest",
+  "schemaVersion": 1,
+  "startedAt": "2026-10-15T04:26:30.380Z",
+  "strategyHash": "af051feb0d3041c9c41a99f22ca71062093da67e27fa02a01a79dbb8b7c197e6",
+  "timeoutAborted": false,
+  "tokenTelemetryAvailable": true,
+  "toolCalls": 33
+}

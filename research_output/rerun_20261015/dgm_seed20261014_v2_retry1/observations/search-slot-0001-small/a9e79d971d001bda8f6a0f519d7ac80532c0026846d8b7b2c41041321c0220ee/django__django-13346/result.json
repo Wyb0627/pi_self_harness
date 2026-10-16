@@ -1,0 +1,30 @@
+{
+  "budgetAborted": true,
+  "cacheReadTokens": 465920,
+  "cacheWriteTokens": 0,
+  "candidateToolNames": [
+    "source_inspector"
+  ],
+  "completedAt": "2026-10-15T08:27:16.465Z",
+  "durationMs": 102328,
+  "fullPatch": "diff --git a/_repro/asgiref/__init__.py b/_repro/asgiref/__init__.py\nnew file mode 100644\nindex 0000000..e69de29\ndiff --git a/_repro/asgiref/local.py b/_repro/asgiref/local.py\nnew file mode 100644\nindex 0000000..50fe33f\n--- /dev/null\n+++ b/_repro/asgiref/local.py\n@@ -0,0 +1,14 @@\n+import threading\n+\n+class Local:\n+    def __init__(self, thread_critical=False):\n+        object.__setattr__(self, '_storage', threading.local())\n+\n+    def __getattr__(self, name):\n+        try:\n+            return getattr(self._storage, name)\n+        except AttributeError:\n+            raise AttributeError(name)\n+\n+    def __setattr__(self, name, value):\n+        setattr(self._storage, name, value)\ndiff --git a/_repro/asgiref/sync.py b/_repro/asgiref/sync.py\nnew file mode 100644\nindex 0000000..8157f76\n--- /dev/null\n+++ b/_repro/asgiref/sync.py\n@@ -0,0 +1,9 @@\n+def sync_to_async(func, thread_sensitive=True):\n+    async def wrapper(*args, **kwargs):\n+        return func(*args, **kwargs)\n+    return wrapper\n+\n+def async_to_sync(func):\n+    def wrapper(*args, **kwargs):\n+        return func(*args, **kwargs)\n+    return wrapper\ndiff --git a/_repro/asgiref/timeout.py b/_repro/asgiref/timeout.py\nnew file mode 100644\nindex 0000000..b21d52b\n--- /dev/null\n+++ b/_repro/asgiref/timeout.py\n@@ -0,0 +1,5 @@\n+from contextlib import contextmanager\n+\n+@contextmanager\n+def timeout(timeout, func=None):\n+    yield\ndiff --git a/_repro/repro.py b/_repro/repro.py\nnew file mode 100644\nindex 0000000..dddd0e0\n--- /dev/null\n+++ b/_repro/repro.py\n@@ -0,0 +1,36 @@\n+import django\n+from django.conf import settings\n+\n+settings.configure(\n+    DEBUG=True,\n+    DATABASES={\n+        'default': {\n+            'ENGINE': 'django.db.backends.sqlite3',\n+            'NAME': ':memory:',\n+        }\n+    },\n+    INSTALLED_APPS=[\n+        'django.contrib.contenttypes',\n+        'django.contrib.auth',\n+        'model_fields',\n+    ],\n+    DEFAULT_AUTO_FIELD='django.db.models.AutoField',\n+    USE_TZ=True,\n+)\n+django.setup()\n+\n+from django.db import models, connection\n+\n+class OurModel(models.Model):\n+    our_field = models.JSONField()\n+\n+    class Meta:\n+        app_label = 'model_fields'\n+\n+qs = OurModel.objects.filter(our_field__key__in=[0])\n+print(\"IN lookup SQL:\")\n+print(qs.query)\n+print()\n+qs2 = OurModel.objects.filter(our_field__key=0)\n+print(\"EXACT lookup SQL:\")\n+print(qs2.query)\n",
+  "inputTokens": 40624,
+  "instanceId": "django__django-13346",
+  "maxOutputTokens": 65536,
+  "maxTotalTokens": 512000,
+  "modelId": "byteplus/deepseek-v4-flash-ga",
+  "modelProvider": "rollback-deepseek",
+  "noShell": false,
+  "outputTokens": 9148,
+  "patch": "diff --git a/_repro/asgiref/__init__.py b/_repro/asgiref/__init__.py\nnew file mode 100644\nindex 0000000..e69de29\ndiff --git a/_repro/asgiref/local.py b/_repro/asgiref/local.py\nnew file mode 100644\nindex 0000000..50fe33f\n--- /dev/null\n+++ b/_repro/asgiref/local.py\n@@ -0,0 +1,14 @@\n+import threading\n+\n+class Local:\n+    def __init__(self, thread_critical=False):\n+        object.__setattr__(self, '_storage', threading.local())\n+\n+    def __getattr__(self, name):\n+        try:\n+            return getattr(self._storage, name)\n+        except AttributeError:\n+            raise AttributeError(name)\n+\n+    def __setattr__(self, name, value):\n+        setattr(self._storage, name, value)\ndiff --git a/_repro/asgiref/sync.py b/_repro/asgiref/sync.py\nnew file mode 100644\nindex 0000000..8157f76\n--- /dev/null\n+++ b/_repro/asgiref/sync.py\n@@ -0,0 +1,9 @@\n+def sync_to_async(func, thread_sensitive=True):\n+    async def wrapper(*args, **kwargs):\n+        return func(*args, **kwargs)\n+    return wrapper\n+\n+def async_to_sync(func):\n+    def wrapper(*args, **kwargs):\n+        return func(*args, **kwargs)\n+    return wrapper\ndiff --git a/_repro/asgiref/timeout.py b/_repro/asgiref/timeout.py\nnew file mode 100644\nindex 0000000..b21d52b\n--- /dev/null\n+++ b/_repro/asgiref/timeout.py\n@@ -0,0 +1,5 @@\n+from contextlib import contextmanager\n+\n+@contextmanager\n+def timeout(timeout, func=None):\n+    yield\ndiff --git a/_repro/repro.py b/_repro/repro.py\nnew file mode 100644\nindex 0000000..dddd0e0\n--- /dev/null\n+++ b/_repro/repro.py\n@@ -0,0 +1,36 @@\n+import django\n+from django.conf import settings\n+\n+settings.configure(\n+    DEBUG=True,\n+    DATABASES={\n+        'default': {\n+            'ENGINE': 'django.db.backends.sqlite3',\n+            'NAME': ':memory:',\n+        }\n+    },\n+    INSTALLED_APPS=[\n+        'django.contrib.contenttypes',\n+        'django.contrib.auth',\n+        'model_fields',\n+    ],\n+    DEFAULT_AUTO_FIELD='django.db.models.AutoField',\n+    USE_TZ=True,\n+)\n+django.setup()\n+\n+from django.db import models, connection\n+\n+class OurModel(models.Model):\n+    our_field = models.JSONField()\n+\n+    class Meta:\n+        app_label = 'model_fields'\n+\n+qs = OurModel.objects.filter(our_field__key__in=[0])\n+print(\"IN lookup SQL:\")\n+print(qs.query)\n+print()\n+qs2 = OurModel.objects.filter(our_field__key=0)\n+print(\"EXACT lookup SQL:\")\n+print(qs2.query)\n",
+  "policyViolations": [],
+  "providerError": "This operation was aborted",
+  "runnerExitCode": 1,
+  "sandboxImage": "sweb.eval.arm64.django__django-13346:latest",
+  "schemaVersion": 1,
+  "startedAt": "2026-10-15T08:25:34.137Z",
+  "strategyHash": "a814de85318798da3e245e0f4e35bc4e3c8fc44ebdee5db1d8af4898939e117f",
+  "timeoutAborted": false,
+  "tokenTelemetryAvailable": true,
+  "toolCalls": 25
+}

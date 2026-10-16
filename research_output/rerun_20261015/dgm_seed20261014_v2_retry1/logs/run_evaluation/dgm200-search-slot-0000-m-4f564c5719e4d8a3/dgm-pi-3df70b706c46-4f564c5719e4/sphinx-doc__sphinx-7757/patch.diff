@@ -1,0 +1,23 @@
+diff --git a/sphinx/util/inspect.py b/sphinx/util/inspect.py
+index 15f0d66..f19cb80 100644
+--- a/sphinx/util/inspect.py
++++ b/sphinx/util/inspect.py
+@@ -521,10 +521,16 @@ def signature_from_str(signature: str) -> inspect.Signature:
+     params = []
+ 
+     if hasattr(args, "posonlyargs"):
+-        for arg in args.posonlyargs:  # type: ignore
++        for i, arg in enumerate(args.posonlyargs):  # type: ignore
+             annotation = ast_unparse(arg.annotation) or Parameter.empty
++            if i >= len(args.posonlyargs) - (len(args.defaults) - len(args.args)):
++                default = ast_unparse(args.defaults[i - len(args.posonlyargs)
++                                                    - len(args.args)
++                                                    + len(args.defaults)])
++            else:
++                default = Parameter.empty
+             params.append(Parameter(arg.arg, Parameter.POSITIONAL_ONLY,
+-                                    annotation=annotation))
++                                    default=default, annotation=annotation))
+ 
+     for i, arg in enumerate(args.args):
+         if len(args.args) - i <= len(args.defaults):

@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "tools": [
+    {
+      "description": "Inspect the local /testbed source tree without executing code. Locate a symbol definition, list files matching a path fragment, or print a line range from one file. Use this before editing to find the relevant builder/helper and its call sites.",
+      "handler": "handlers/source_inspector.py",
+      "label": "Source Inspector",
+      "name": "source_inspector",
+      "parameters": {
+        "additionalProperties": false,
+        "properties": {
+          "context_lines": {
+            "type": "integer"
+          },
+          "file_filter": {
+            "type": "string"
+          },
+          "find_references": {
+            "type": "boolean"
+          },
+          "line": {
+            "type": "integer"
+          },
+          "max_results": {
+            "type": "integer"
+          },
+          "query": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "query"
+        ],
+        "type": "object"
+      },
+      "timeout_seconds": 30
+    }
+  ]
+}
