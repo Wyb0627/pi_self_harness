@@ -1,6 +1,6 @@
 # Matched DGM-style Arm 实验结论报告
 
-日期：2026-10-16  
+日期：2026-10-16；P2 状态更新：2026-10-19
 实验名称：**matched DGM-style arm / DGM-on-Pi baseline**  
 有效运行：`dgm-pilot-s20261014-v2-retry1`  
 协议版本：`matched-dgm-pi-v2`
@@ -37,6 +37,10 @@ evaluation 接到 Pi harness 之上，是否能进一步改进 Pi。它不是原
    DeepSeek-v4-flash 条件下，DGM-style archive search 没有给先进 Pi
    harness 带来可部署增益。单 seed pilot 不能支持“DGM 对所有先进 harness
    都无效”的普遍结论。
+6. **P2 首次重跑没有形成有效结果。** 搜索在 slot 5 的 mutation 请求遇到
+   上游 DNS/代理 `502`，按预注册协议标记为 `infrastructure_invalid`。
+   `D_test` 未消费，P0 仍可复用，但本次 mutation 和 partial score 不得进入
+   P2 对 DGM 的最终效果比较。
 
 ## 2. 原始 DGM 实际使用的 harness
 
@@ -231,20 +235,86 @@ P2 的唯一算法增量是：
 5. gate 处理后的 artifact 仍必须接受与 DGM 完全相同的 fixed small-10 /
    medium-50 archive scoring。
 
-运行状态（2026-10-16 03:09 UTC）：
+### 7.1 首次 P2 重跑终态
 
-- fresh run：`p2-pilot-s20261014-v2`
-- 输出目录：`research_output/rerun_20261016/p2_seed20261014_v2`
-- 非付费与付费 preflight 均已通过，配置 hash 为
-  `0337e0abe80f27aa8ae36fb8f4ae068e6c391e52180d82da0252db37f83487ea`
-- slot 0 mutation 已合法持久化，生成 artifact
-  `5d8b60afa8fbd9eecadb1cacbc2203d4e0fa69a31f9427afa624031c9cac307b`
-- proposer 已从 `sphinx-doc/sphinx` 自主选择 4 个同仓库 probe，运行已进入
+运行 `p2-pilot-s20261014-v2` 已于 2026-10-16 10:11 UTC 终止。slot 5 的
+mutation 请求收到本地 buffered proxy 返回的 `502`，根因文本为
+`urlopen error [Errno 8] nodename nor servname provided, or not known`。
+控制面文件 hash 与有效 DGM baseline 完全一致，因此该错误归类为外部基础设施
+故障，而不是 P2 算法失败。
+
+协议保护按设计生效：
+
+- `search-invalid.json` 标记 `SEARCH_INFRASTRUCTURE_INVALID`；
+- `d_test_consumed=false`，big-140 未物化；
+- `p0_reusable=true`，审计 P0 panel 可供 fresh retry 复用；
+- `search_mutations_reusable=false`，当前 partial lineage 不得续跑或进入结论；
+- archive 只有 P0，未产生完成 cumulative-60 的 P2 child。
+
+### 7.2 P2 partial slot 诊断
+
+| Slot | Adaptive gate / mutation | Fixed scoring | 终态 |
+| ---: | --- | --- | --- |
+| 0 | Gate 通过；4 个 probe 无观测回归 | small-10 为 `3/10` | `REJECT_SMALL` |
+| 1 | 发现 2 个回归；RF-CLM probe 后回退 baseline 也复现失败 | 未进入 small-10 | `RF_CLM_ABSTAIN_REJECTED` |
+| 2 | 发现 2 个回归；没有同时通过回归任务的 lineage prefix | 未进入 small-10 | `RF_CLM_NO_PASSING_BASELINE_REJECTED` |
+| 3 | Mutation proposer 超过冻结 token budget | 未评测 | `CANDIDATE_INVALID_REJECTED` |
+| 4 | Gate 通过；4 个 probe 无观测回归 | small-10 为 `4/10`；medium 跑到 41 条时出现 invalid edge | `EDGE_EVALUATION_INVALID` |
+| 5 | Mutation 请求遭遇 DNS/代理 `502` | 未评测 | 整个 search 标记 infrastructure-invalid |
+
+P2 gate 的局部行为得到了验证：它识别并拒绝了两个带成对回归证据的候选。
+但没有发生成功的 RF-CLM repair，也没有完整 P2 child 进入 archive。这只能
+作为机制诊断，不能作为 P2 accuracy 或优于 DGM 的证据。
+
+### 7.3 与 baseline 的可比结果表
+
+| Arm | 运行有效性 | 完成 proposal slots | 非 P0 完整归档节点 | 最佳完整 child | 最终选择 / evolve-60 | 相对 P0 | D_test |
+| --- | --- | ---: | ---: | ---: | --- | ---: | --- |
+| Pi P0 | 有效审计 reference | - | - | - | P0：`19/60` | - | 未消费 |
+| Matched DGM-on-Pi | **有效并封印** | `10/10` | 1 | `18/60` | P0：`19/60` | `0` | 未消费 |
+| P2 adaptive + RF-CLM | **基础设施无效** | 5；slot 5 中止 | 0 | N/A | N/A | **不可估计** | 未消费 |
+
+| Arm / 口径 | 新增 reported tokens | 新增 API calls | 新增 task executions | 新增 active time |
+| --- | ---: | ---: | ---: | ---: |
+| Matched DGM-on-Pi，有效完整搜索 | 55,834,155 | 166 | 156 | 37,331.341 s |
+| P2，无效 partial search | 41,662,573 | 107 | 101 | 23,969.202 s |
+
+P2 比 DGM 多出的 adaptive gate/RF-CLM task 是算法处理的一部分，但本次 P2
+只运行到中途，因此成本不能直接解释为完整两臂的效率差异。预注册假设 H2
+“P2 优于 matched DGM”在当前证据下是**未决**，不是接受，也不是拒绝。
+
+### 7.4 Fresh retry
+
+经付费重跑确认后，新运行已于 2026-10-19 03:25 UTC 在本机 Terminal 启动：
+
+- run ID：`p2-pilot-s20261014-v2-retry1`
+- 输出目录：`research_output/rerun_20261019/p2_seed20261014_v2_retry1`
+- config hash：
+  `2e5a9514ae671a360f2c3e8246d219d973ea8c273668e1c4ed9a197a2b3c56de`
+- P0 artifact、P0 panel、evolve-60 manifest、execution stack、split binding
+  和 endpoint commitment 均与 matched DGM baseline 相同
+- 非付费与付费 preflight 均通过
+- slot 0 已生成有效 mutation artifact
+  `423f0485cdd071a1e82e895dfe2c1774ec1d82f16314d1d96d08bdd6c7719c01`
+- proposer 已选择 4 个同仓库 Sphinx probe，当前进入
   `p2-slot-0000-gate-parent`
-- `D_test` manifest 不存在，search 尚未封印，held-out endpoint 未被消费
+- `search-seal.json` 和 `D_test` manifest 均不存在
 
-该搜索在本地 Terminal 中持续运行。以上状态只证明运行配置有效且 P2 gate
-已经实际执行，不是最终 P2 实验结果。
+该运行于 2026-10-19 03:40 UTC 在第四个 parent probe
+`sphinx-doc__sphinx-8475` 处退出。任务 trace 中两次 `Connection error`
+均被 Pi 自动重试，最终 assistant message 为成功 `stop`，且完整 patch 已
+生成；但 `pi_swe_runner.mjs` 保留了早先的 stale `providerError`，导致成功
+恢复后的任务仍以退出码 1 被误判为 `provider_or_runner_invalid`。
+
+共享 runner 已修复为只保留最后一个 assistant turn 的 provider 状态：后续
+成功的 `toolUse` 或 `stop` 会清除已经恢复的连接错误。端到端回归测试覆盖
+“连续两次连接断开、第三次成功”的真实 retry 流程。
+
+审计发现 matched DGM-on-Pi 的 slot 8 也存在相同模式：trace 最终成功
+`stop`，但 stale `Connection error` 将 edge 误记为 invalid。另两个 DGM
+invalid edge 是未恢复的真实 403/abort。由此，旧 DGM 结果仍是 protocol-v2
+的已封印结果，但不能作为修复后 P2 的严格 matched comparator。公平的后续
+比较需要让 DGM 与 P2 都使用修复后的同一 runner 重新搜索。
 
 ## 8. 建议对外表述
 
@@ -272,7 +342,14 @@ P2 的唯一算法增量是：
 - 完整成本账本：[`global-cost-ledger.jsonl`](research_output/rerun_20261015/dgm_seed20261014_v2_retry1/global-cost-ledger.jsonl)
 - 运行日志：[`terminal.log`](research_output/rerun_20261015/dgm_seed20261014_v2_retry1/terminal.log)
 - P2 冻结策略：[`fixed-policy.json`](research_output/rerun_20261016/p2_seed20261014_v2/frozen-inputs/fixed-policy.json)
+- P2 无效终态：[`search-invalid.json`](research_output/rerun_20261016/p2_seed20261014_v2/search-invalid.json)
+- P2 partial archive：[`archive.json`](research_output/rerun_20261016/p2_seed20261014_v2/archive.json)
+- P2 成本账本：[`global-cost-ledger.jsonl`](research_output/rerun_20261016/p2_seed20261014_v2/global-cost-ledger.jsonl)
 - P2 运行日志：[`terminal.log`](research_output/rerun_20261016/p2_seed20261014_v2/terminal.log)
+- P2 fresh retry 冻结策略：[`fixed-policy.json`](research_output/rerun_20261019/p2_seed20261014_v2_retry1/frozen-inputs/fixed-policy.json)
+- P2 fresh retry 日志：[`terminal.log`](research_output/rerun_20261019/p2_seed20261014_v2_retry1/terminal.log)
+- P2 fresh retry 失败 observation：[`observation.json`](research_output/rerun_20261019/p2_seed20261014_v2_retry1/observations/p2-slot-0000-gate-parent/0f5a215ac0bce1aac54cc709e1a86e5e16f6f10547b78b30c711af30726a4c1b/sphinx-doc__sphinx-8475/observation.json)
+- P2 fresh retry trace：[`trace.jsonl`](research_output/rerun_20261019/p2_seed20261014_v2_retry1/observations/p2-slot-0000-gate-parent/0f5a215ac0bce1aac54cc709e1a86e5e16f6f10547b78b30c711af30726a4c1b/sphinx-doc__sphinx-8475/trace.jsonl)
 
 ## Sources
 

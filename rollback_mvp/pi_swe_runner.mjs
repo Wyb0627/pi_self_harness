@@ -268,9 +268,10 @@ const unsubscribe = session.subscribe((event) => {
 	writeFileSync(tracePath, `${JSON.stringify(event)}\n`, { flag: "a" });
 	if (event.type === "tool_execution_end") toolCalls += 1;
 	if (event.type !== "message_end" || event.message.role !== "assistant") return;
-	if (event.message.stopReason === "error") {
-		providerError = event.message.errorMessage ?? "Unknown provider error.";
-	}
+	providerError =
+		event.message.stopReason === "error"
+			? (event.message.errorMessage ?? "Unknown provider error.")
+			: undefined;
 	inputTokens += event.message.usage.input;
 	outputTokens += event.message.usage.output;
 	cacheReadTokens += event.message.usage.cacheRead;
