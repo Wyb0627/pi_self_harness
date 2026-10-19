@@ -459,40 +459,80 @@ function runCommand(command, cwd, image, dockerHost, executionId, timeoutSeconds
 		let output = "";
 		let timedOut = false;
 		let aborted = false;
+		let lastUpdateAt = 0;
+		let dockerClosed = false;
+		let cleanupDone = true;
+		let settled = false;
+		let exitCode = null;
+		let exitSignal = null;
+		let cleanupChild;
+		let cleanupTimer;
 		const append = (chunk) => {
 			output += chunk.toString();
 			if (output.length > 100_000) output = output.slice(-100_000);
-			onUpdate?.({ content: [{ type: "text", text: output }], details: { command } });
+			const now = performance.now();
+			if (now - lastUpdateAt >= 100) {
+				lastUpdateAt = now;
+				onUpdate?.({ content: [{ type: "text", text: output }], details: { command } });
+			}
 		};
 		child.stdout.on("data", append);
 		child.stderr.on("data", append);
-		const timer = setTimeout(() => {
-			timedOut = true;
-			child.kill("SIGTERM");
-		}, timeoutSeconds * 1000);
-		signal?.addEventListener(
-			"abort",
-			() => {
-				aborted = true;
-				child.kill("SIGTERM");
-			},
-			{ once: true },
-		);
-		child.on("close", (code, childSignal) => {
+		const finish = () => {
+			if (settled || !dockerClosed || !cleanupDone) return;
+			settled = true;
 			clearTimeout(timer);
-			if (timedOut || aborted) {
-				try {
-					execFileSync("docker", ["rm", "--force", containerName], {
-						env: dockerEnvironment,
-						stdio: "ignore",
-					});
-				} catch {}
-			}
+			clearTimeout(cleanupTimer);
+			signal?.removeEventListener("abort", abort);
 			const suffix = timedOut ? `\nCommand timed out after ${timeoutSeconds}s.` : "";
 			resolvePromise({
 				content: [{ type: "text", text: `${output}${suffix}` || "(no output)" }],
-				details: { command, exitCode: code, signal: childSignal, timedOut },
+				details: { command, exitCode, signal: exitSignal, timedOut },
 			});
+		};
+		const terminate = () => {
+			if (!cleanupDone) return child.kill("SIGTERM");
+			cleanupDone = false;
+			cleanupChild = spawn("docker", ["rm", "--force", containerName], {
+				env: dockerEnvironment,
+				stdio: "ignore",
+			});
+			const completeCleanup = () => {
+				cleanupDone = true;
+				finish();
+			};
+			cleanupChild.once("close", completeCleanup);
+			cleanupChild.once("error", completeCleanup);
+			cleanupTimer = setTimeout(() => {
+				cleanupChild?.kill("SIGKILL");
+				child.kill("SIGKILL");
+				child.stdout.destroy();
+				child.stderr.destroy();
+				child.unref();
+				dockerClosed = true;
+				cleanupDone = true;
+				finish();
+			}, 10_000);
+			return child.kill("SIGTERM");
+		};
+		const timer = setTimeout(() => {
+			timedOut = true;
+			terminate();
+		}, timeoutSeconds * 1000);
+		const abort = () => {
+			aborted = true;
+			terminate();
+		};
+		signal?.addEventListener(
+			"abort",
+			abort,
+			{ once: true },
+		);
+		child.on("close", (code, childSignal) => {
+			dockerClosed = true;
+			exitCode = code;
+			exitSignal = childSignal;
+			finish();
 		});
 	});
 }
