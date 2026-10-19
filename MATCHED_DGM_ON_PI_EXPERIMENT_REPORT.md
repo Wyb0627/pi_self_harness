@@ -316,6 +316,33 @@ invalid edge 是未恢复的真实 403/abort。由此，旧 DGM 结果仍是 pro
 的已封印结果，但不能作为修复后 P2 的严格 matched comparator。公平的后续
 比较需要让 DGM 与 P2 都使用修复后的同一 runner 重新搜索。
 
+### 7.5 Runner-fix matched 双臂重跑
+
+runner 修复已提交为
+`c0d7ea6d4ac1f2fd7f613b685254c7222f5e30b1`。新的 DGM 与 P2 协议目录
+使用相同的 execution stack
+`71a9ee0b03657e4c2c7c3e64208e209f1a8f037156a7573cc06d24c0cba7a30d`、
+split binding 和 P0 artifact；除 run ID、arm 与 P2 adaptive gate 外，
+冻结配置一致。
+
+旧 P0 panel 的导入被 fail-closed 校验拒绝，因为 runner 修复改变了
+execution-stack hash。为避免把旧 runner 的 observations 混入新 runner
+证据，本轮两个 arm 均 fresh 评测 P0 cumulative-60，不放宽导入校验。
+
+双臂串行付费重跑已于 2026-10-19 04:16 UTC 在本机 Terminal 启动：
+
+- DGM run ID：`dgm-pilot-s20261014-v2-runnerfix1`
+- P2 run ID：`p2-pilot-s20261014-v2-runnerfix1`
+- DGM config hash：
+  `c1fcb5047b2827274040c3d2d7a093540860d1df72abb9937d6b773f181a4ec2`
+- P2 config hash：
+  `ba9fb43543342e05bad883fba801eba4fd1aa721fd601f4c5ddbeaab4b14a7ed`
+- 两臂非付费与付费 preflight 均通过
+- 当前阶段：DGM `search-p0`；首题已形成有效 observation 与成本账本记录，
+  进度 `1/60`，第二题已启动
+- 执行顺序：DGM 正常封印后才启动 P2；DGM 非零退出时不启动 P2
+- `search-seal.json` 和 `D_test` manifest 在两臂均不存在
+
 ## 8. 建议对外表述
 
 推荐：
@@ -350,6 +377,10 @@ invalid edge 是未恢复的真实 403/abort。由此，旧 DGM 结果仍是 pro
 - P2 fresh retry 日志：[`terminal.log`](research_output/rerun_20261019/p2_seed20261014_v2_retry1/terminal.log)
 - P2 fresh retry 失败 observation：[`observation.json`](research_output/rerun_20261019/p2_seed20261014_v2_retry1/observations/p2-slot-0000-gate-parent/0f5a215ac0bce1aac54cc709e1a86e5e16f6f10547b78b30c711af30726a4c1b/sphinx-doc__sphinx-8475/observation.json)
 - P2 fresh retry trace：[`trace.jsonl`](research_output/rerun_20261019/p2_seed20261014_v2_retry1/observations/p2-slot-0000-gate-parent/0f5a215ac0bce1aac54cc709e1a86e5e16f6f10547b78b30c711af30726a4c1b/sphinx-doc__sphinx-8475/trace.jsonl)
+- Runner-fix 双臂启动脚本：[`start_both.command`](research_output/rerun_20261019/start_both.command)
+- Runner-fix 双臂合并日志：[`runnerfix1-terminal.log`](research_output/rerun_20261019/runnerfix1-terminal.log)
+- Runner-fix DGM 日志：[`terminal.log`](research_output/rerun_20261019/dgm_seed20261014_v2_runnerfix1/terminal.log)
+- Runner-fix P2 日志：[`terminal.log`](research_output/rerun_20261019/p2_seed20261014_v2_runnerfix1/terminal.log)
 
 ## Sources
 
