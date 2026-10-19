@@ -57,7 +57,12 @@ if (!configuredModel) {
 const model = { ...configuredModel, maxTokens: maxOutputTokens };
 const settingsManager = SettingsManager.inMemory({
 	compaction: { enabled: false },
-	retry: { enabled: true, maxRetries: 2 },
+	retry: {
+		enabled: true,
+		maxRetries: 5,
+		baseDelayMs: 5000,
+		maxAgentDelayMs: 60000,
+	},
 });
 const resourceLoader = new DefaultResourceLoader({
 	cwd: dirname(evidencePath),
@@ -117,9 +122,10 @@ const unsubscribe = session.subscribe((event) => {
 	cacheReadTokens += event.message.usage.cacheRead;
 	cacheWriteTokens += event.message.usage.cacheWrite;
 	rawResponse = messageText(event.message.content);
-	if (event.message.stopReason === "error") {
-		providerError = event.message.errorMessage ?? "Unknown provider error.";
-	}
+	providerError =
+		event.message.stopReason === "error"
+			? (event.message.errorMessage ?? "Unknown provider error.")
+			: undefined;
 	const totalTokens = inputTokens + outputTokens + cacheReadTokens + cacheWriteTokens;
 	if ((totalTokens > maxTotalTokens || outputTokens > maxOutputTokens) && !budgetAborted) {
 		budgetAborted = true;

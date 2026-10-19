@@ -17,13 +17,15 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 class RecoveringCompletionHandler(BaseHTTPRequestHandler):
     attempts = 0
     attempts_lock = threading.Lock()
+    failures_before_success = 2
+    response_content = "The task is complete."
 
     def do_POST(self) -> None:
         self.rfile.read(int(self.headers.get("content-length", "0")))
         with self.attempts_lock:
             type(self).attempts += 1
             attempt = type(self).attempts
-        if attempt <= 2:
+        if attempt <= self.failures_before_success:
             try:
                 self.connection.shutdown(socket.SHUT_RDWR)
             except OSError:
@@ -42,7 +44,7 @@ class RecoveringCompletionHandler(BaseHTTPRequestHandler):
                         "index": 0,
                         "delta": {
                             "role": "assistant",
-                            "content": "The task is complete.",
+                            "content": self.response_content,
                         },
                         "finish_reason": "stop",
                     }
@@ -77,7 +79,44 @@ class RecoveringCompletionHandler(BaseHTTPRequestHandler):
 
 class PiSweRunnerTest(unittest.TestCase):
     def test_recovered_provider_errors_do_not_fail_the_runner(self) -> None:
+        completed, result, events = self.run_runner(failures_before_success=2)
+
+        self.assertEqual(completed.returncode, 0, completed.stderr)
+        self.assertEqual(RecoveringCompletionHandler.attempts, 3)
+        self.assertNotIn("providerError", result)
+        stop_reasons = [
+            event["message"]["stopReason"]
+            for event in events
+            if event["type"] == "message_end"
+            and event["message"]["role"] == "assistant"
+        ]
+        self.assertEqual(stop_reasons.count("error"), 2)
+        self.assertEqual(stop_reasons[-1], "stop")
+
+    def test_runner_recovers_after_three_connection_failures(self) -> None:
+        # A short provider outage must not invalidate an entire paid search.
+        completed, result, events = self.run_runner(failures_before_success=3)
+
+        self.assertEqual(completed.returncode, 0, completed.stderr)
+        self.assertEqual(RecoveringCompletionHandler.attempts, 4)
+        self.assertNotIn("providerError", result)
+        stop_reasons = [
+            event["message"]["stopReason"]
+            for event in events
+            if event["type"] == "message_end"
+            and event["message"]["role"] == "assistant"
+        ]
+        self.assertEqual(stop_reasons.count("error"), 3)
+        self.assertEqual(stop_reasons[-1], "stop")
+
+    def run_runner(
+        self,
+        *,
+        failures_before_success: int,
+    ) -> tuple[subprocess.CompletedProcess[str], dict[str, object], list[dict[str, object]]]:
         RecoveringCompletionHandler.attempts = 0
+        RecoveringCompletionHandler.failures_before_success = failures_before_success
+        RecoveringCompletionHandler.response_content = "The task is complete."
         server = ThreadingHTTPServer(("127.0.0.1", 0), RecoveringCompletionHandler)
         server_thread = threading.Thread(target=server.serve_forever, daemon=True)
         server_thread.start()
@@ -201,27 +240,17 @@ class PiSweRunnerTest(unittest.TestCase):
                 env=environment,
                 capture_output=True,
                 text=True,
-                timeout=30,
+                timeout=90,
                 check=False,
             )
 
-            self.assertEqual(completed.returncode, 0, completed.stderr)
-            self.assertEqual(RecoveringCompletionHandler.attempts, 3)
             result = json.loads(result_path.read_text())
-            self.assertNotIn("providerError", result)
             events = [
                 json.loads(line)
                 for line in trace_path.read_text().splitlines()
                 if line
             ]
-            stop_reasons = [
-                event["message"]["stopReason"]
-                for event in events
-                if event["type"] == "message_end"
-                and event["message"]["role"] == "assistant"
-            ]
-            self.assertEqual(stop_reasons.count("error"), 2)
-            self.assertEqual(stop_reasons[-1], "stop")
+            return completed, result, events
 
 
 if __name__ == "__main__":

@@ -18,8 +18,13 @@ def fetch_completion(
     *,
     max_rate_limit_retries: int,
     rate_limit_wait_seconds: float,
+    max_transient_retries: int = 5,
+    transient_retry_base_seconds: float = 5.0,
+    transient_retry_max_seconds: float = 60.0,
 ) -> dict:
-    for attempt in range(max_rate_limit_retries + 1):
+    rate_limit_retries = 0
+    transient_retries = 0
+    while True:
         request = urllib.request.Request(
             f"{upstream}/chat/completions",
             data=json.dumps(body).encode(),
@@ -33,23 +38,56 @@ def fetch_completion(
             with urllib.request.urlopen(request, timeout=600) as response:
                 return json.loads(response.read())
         except urllib.error.HTTPError as error:
-            if error.code != 429 or attempt == max_rate_limit_retries:
+            if error.code == 429 and rate_limit_retries < max_rate_limit_retries:
+                rate_limit_retries += 1
+                retry_after = error.headers.get("Retry-After") if error.headers else None
+                try:
+                    requested_wait = float(retry_after) if retry_after else 0.0
+                except ValueError:
+                    requested_wait = 0.0
+                wait_seconds = max(rate_limit_wait_seconds, requested_wait)
+                error.read()
+                print(
+                    f"Upstream rate limited request; retrying in {wait_seconds:g}s "
+                    f"({rate_limit_retries}/{max_rate_limit_retries}).",
+                    file=sys.stderr,
+                    flush=True,
+                )
+                time.sleep(wait_seconds)
+                continue
+            if error.code in {408, 409} or error.code >= 500:
+                if transient_retries < max_transient_retries:
+                    transient_retries += 1
+                    wait_seconds = min(
+                        transient_retry_base_seconds * 2 ** (transient_retries - 1),
+                        transient_retry_max_seconds,
+                    )
+                    error.read()
+                    print(
+                        f"Upstream HTTP {error.code}; retrying in {wait_seconds:g}s "
+                        f"({transient_retries}/{max_transient_retries}).",
+                        file=sys.stderr,
+                        flush=True,
+                    )
+                    time.sleep(wait_seconds)
+                    continue
                 raise
-            retry_after = error.headers.get("Retry-After") if error.headers else None
-            try:
-                requested_wait = float(retry_after) if retry_after else 0.0
-            except ValueError:
-                requested_wait = 0.0
-            wait_seconds = max(rate_limit_wait_seconds, requested_wait)
-            error.read()
+            raise
+        except (urllib.error.URLError, TimeoutError, ConnectionError) as error:
+            if transient_retries >= max_transient_retries:
+                raise
+            transient_retries += 1
+            wait_seconds = min(
+                transient_retry_base_seconds * 2 ** (transient_retries - 1),
+                transient_retry_max_seconds,
+            )
             print(
-                f"Upstream rate limited request; retrying in {wait_seconds:g}s "
-                f"({attempt + 1}/{max_rate_limit_retries}).",
+                f"Upstream connection failed; retrying in {wait_seconds:g}s "
+                f"({transient_retries}/{max_transient_retries}): {error}",
                 file=sys.stderr,
                 flush=True,
             )
             time.sleep(wait_seconds)
-    raise AssertionError("unreachable")
 
 
 def response_events(payload: dict) -> list[dict]:
@@ -93,6 +131,9 @@ class ProxyHandler(BaseHTTPRequestHandler):
     upstream = ""
     max_rate_limit_retries = 3
     rate_limit_wait_seconds = 65.0
+    max_transient_retries = 5
+    transient_retry_base_seconds = 5.0
+    transient_retry_max_seconds = 60.0
 
     def do_POST(self) -> None:
         if not self.path.endswith("/chat/completions"):
@@ -109,6 +150,9 @@ class ProxyHandler(BaseHTTPRequestHandler):
                 self.headers.get("authorization", ""),
                 max_rate_limit_retries=self.max_rate_limit_retries,
                 rate_limit_wait_seconds=self.rate_limit_wait_seconds,
+                max_transient_retries=self.max_transient_retries,
+                transient_retry_base_seconds=self.transient_retry_base_seconds,
+                transient_retry_max_seconds=self.transient_retry_max_seconds,
             )
         except urllib.error.HTTPError as error:
             self.send_response(error.code)
@@ -152,6 +196,9 @@ def main() -> None:
     parser.add_argument("--port", type=int, default=8765)
     parser.add_argument("--max-rate-limit-retries", type=int, default=3)
     parser.add_argument("--rate-limit-wait-seconds", type=float, default=65.0)
+    parser.add_argument("--max-transient-retries", type=int, default=5)
+    parser.add_argument("--transient-retry-base-seconds", type=float, default=5.0)
+    parser.add_argument("--transient-retry-max-seconds", type=float, default=60.0)
     parser.add_argument(
         "--upstream",
         default="https://aicolate.tiktok-row.net/ai-gateway/openai/v1",
@@ -161,9 +208,18 @@ def main() -> None:
         parser.error("--max-rate-limit-retries must be non-negative")
     if args.rate_limit_wait_seconds < 0:
         parser.error("--rate-limit-wait-seconds must be non-negative")
+    if args.max_transient_retries < 0:
+        parser.error("--max-transient-retries must be non-negative")
+    if args.transient_retry_base_seconds < 0:
+        parser.error("--transient-retry-base-seconds must be non-negative")
+    if args.transient_retry_max_seconds < 0:
+        parser.error("--transient-retry-max-seconds must be non-negative")
     ProxyHandler.upstream = args.upstream.rstrip("/")
     ProxyHandler.max_rate_limit_retries = args.max_rate_limit_retries
     ProxyHandler.rate_limit_wait_seconds = args.rate_limit_wait_seconds
+    ProxyHandler.max_transient_retries = args.max_transient_retries
+    ProxyHandler.transient_retry_base_seconds = args.transient_retry_base_seconds
+    ProxyHandler.transient_retry_max_seconds = args.transient_retry_max_seconds
     ThreadingHTTPServer((args.host, args.port), ProxyHandler).serve_forever()
 
 

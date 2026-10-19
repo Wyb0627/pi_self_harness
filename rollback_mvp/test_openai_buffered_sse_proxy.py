@@ -40,7 +40,7 @@ class BufferedSseProxyTest(unittest.TestCase):
         self.assertEqual(urlopen.call_count, 2)
         sleep.assert_called_once_with(2.0)
 
-    def test_does_not_retry_other_http_errors(self):
+    def test_retries_transient_http_errors(self):
         headers = Message()
         upstream_error = urllib.error.HTTPError(
             "https://example.test/v1/chat/completions",
@@ -48,6 +48,63 @@ class BufferedSseProxyTest(unittest.TestCase):
             "server error",
             headers,
             io.BytesIO(b'{"error":"server error"}'),
+        )
+        response = io.BytesIO(json.dumps({"choices": []}).encode())
+
+        with (
+            patch(
+                "openai_buffered_sse_proxy.urllib.request.urlopen",
+                side_effect=[upstream_error, response],
+            ) as urlopen,
+            patch("openai_buffered_sse_proxy.time.sleep") as sleep,
+        ):
+            payload = fetch_completion(
+                "https://example.test/v1",
+                {"model": "test"},
+                "Bearer test",
+                max_rate_limit_retries=3,
+                rate_limit_wait_seconds=65,
+                max_transient_retries=1,
+                transient_retry_base_seconds=2,
+                transient_retry_max_seconds=10,
+            )
+
+        self.assertEqual(payload, {"choices": []})
+        self.assertEqual(urlopen.call_count, 2)
+        sleep.assert_called_once_with(2)
+
+    def test_retries_connection_errors(self):
+        response = io.BytesIO(json.dumps({"choices": []}).encode())
+        with (
+            patch(
+                "openai_buffered_sse_proxy.urllib.request.urlopen",
+                side_effect=[urllib.error.URLError("temporary DNS failure"), response],
+            ) as urlopen,
+            patch("openai_buffered_sse_proxy.time.sleep") as sleep,
+        ):
+            payload = fetch_completion(
+                "https://example.test/v1",
+                {"model": "test"},
+                "Bearer test",
+                max_rate_limit_retries=3,
+                rate_limit_wait_seconds=65,
+                max_transient_retries=1,
+                transient_retry_base_seconds=3,
+                transient_retry_max_seconds=10,
+            )
+
+        self.assertEqual(payload, {"choices": []})
+        self.assertEqual(urlopen.call_count, 2)
+        sleep.assert_called_once_with(3)
+
+    def test_does_not_retry_nontransient_http_errors(self):
+        headers = Message()
+        upstream_error = urllib.error.HTTPError(
+            "https://example.test/v1/chat/completions",
+            400,
+            "bad request",
+            headers,
+            io.BytesIO(b'{"error":"bad request"}'),
         )
 
         with (

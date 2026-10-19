@@ -118,7 +118,12 @@ const model = { ...configuredModel, maxTokens: maxOutputTokens };
 
 const settingsManager = SettingsManager.inMemory({
 	compaction: { enabled: true },
-	retry: { enabled: true, maxRetries: 2 },
+	retry: {
+		enabled: true,
+		maxRetries: 5,
+		baseDelayMs: 5000,
+		maxAgentDelayMs: 60000,
+	},
 });
 const confinedReadOperations = {
 	readFile: async (path) => readFile(await assertWorkspacePath(path, workspace)),

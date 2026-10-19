@@ -343,6 +343,39 @@ execution-stack hash。为避免把旧 runner 的 observations 混入新 runner
 - 执行顺序：DGM 正常封印后才启动 P2；DGM 非零退出时不启动 P2
 - `search-seal.json` 和 `D_test` manifest 在两臂均不存在
 
+### 7.6 Transient retry 修复与 smoke
+
+runner-fix DGM 在 fresh P0 的第 59 次执行
+`sphinx-doc__sphinx-9230` 处终止。此前 58 条 observation 有效，失败任务在
+evaluator 前连续三次收到 `Connection error`；Pi 只等待 `2s` 和 `4s`，
+第三次失败后即返回 `provider_or_runner_invalid`。这是真实的 transient
+provider failure，不是 stale-error 误判。协议随后正确写入
+`P0_EVALUATION_INVALID` 并阻止 P2 启动。
+
+旧 P2 与本轮的 split binding 均为
+`a0136c5b2c7b4b86c6c375bd02f8a67ac7c3c67797030340c9f9aa81b1529134`；
+冻结实验参数除 run ID 外一致。因此本次故障不是数据划分变化导致。
+
+修复覆盖三层：
+
+1. task runner 和 mutation runner 均使用 5 次会话级重试，退避为
+   `5s/10s/20s/40s/60s`；
+2. mutation runner 与 task runner 一样，在后续成功 turn 清除已恢复的
+   provider error；
+3. buffered proxy 除 `429` 外，对连接异常、`408/409` 和 `5xx` 进行独立、
+   有界的指数退避。
+
+合成回归验证 task runner 与 mutation runner 均可在连续三次断连后于第四次
+恢复。2026-10-19 15:27 UTC 完成精确付费 smoke：
+
+| Arm | Slots | API calls | Task executions | 终态 |
+| --- | ---: | ---: | ---: | --- |
+| DGM smoke | `2/2` | 3 | 1 | 正常封印 |
+| P2 smoke | `2/2` | 3 | 1 | 正常封印 |
+
+两臂 smoke 均未出现 `provider_or_runner_invalid`，且 P2 mutation/adaptive
+路径实际执行。smoke 仅验证链路，不进入正式效果比较。
+
 ## 8. 建议对外表述
 
 推荐：
@@ -381,6 +414,9 @@ execution-stack hash。为避免把旧 runner 的 observations 混入新 runner
 - Runner-fix 双臂合并日志：[`runnerfix1-terminal.log`](research_output/rerun_20261019/runnerfix1-terminal.log)
 - Runner-fix DGM 日志：[`terminal.log`](research_output/rerun_20261019/dgm_seed20261014_v2_runnerfix1/terminal.log)
 - Runner-fix P2 日志：[`terminal.log`](research_output/rerun_20261019/p2_seed20261014_v2_runnerfix1/terminal.log)
+- Retry-fix smoke 日志：[`retryfix3-smoke-terminal.log`](research_output/rerun_20261019/retryfix3-smoke-terminal.log)
+- DGM smoke 封印：[`search-seal.json`](research_output/rerun_20261019/dgm_retryfix3_smoke/search-seal.json)
+- P2 smoke 封印：[`search-seal.json`](research_output/rerun_20261019/p2_retryfix3_smoke/search-seal.json)
 
 ## Sources
 
