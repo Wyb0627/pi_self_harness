@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<title>Harness² Pipeline — Context Files & Token Flow</title>
+<style>
+  :root {
+    --bg: #0f1115;
+    --panel: #161922;
+    --panel-2: #1d2130;
+    --border: #2a2f42;
+    --text: #e6e9f2;
+    --muted: #8b92a8;
+    --accent: #7aa2f7;
+    --exec: #9ece6a;
+    --edit: #e0af68;
+    --probe: #bb9af7;
+    --comp: #f7768e;
+    --sel: #7dcfff;
+    --refl: #ff9e64;
+    --lib: #9ece6a;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, "SF Pro Text", "Segoe UI", system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.5;
+  }
+  header {
+    padding: 20px 28px 8px;
+    border-bottom: 1px solid var(--border);
+  }
+  header h1 { margin: 0 0 4px; font-size: 20px; font-weight: 600; }
+  header p { margin: 0; color: var(--muted); font-size: 13px; }
+  .wrap { display: flex; gap: 0; min-height: calc(100vh - 72px); }
+  .diagram { flex: 1; padding: 24px; overflow: auto; }
+  .sidebar {
+    width: 440px;
+    border-left: 1px solid var(--border);
+    background: var(--panel);
+    padding: 20px 22px;
+    overflow: auto;
+    position: sticky;
+    top: 0;
+    height: calc(100vh - 72px);
+  }
+  .lane {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px 18px 22px;
+    margin-bottom: 22px;
+    background: var(--panel);
+  }
+  .lane-title {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 14px;
+  }
+  .lane.task-level { border-color: #3b4a6b; }
+  .lane.harness-level { border-color: #5a4a6b; }
+  .stage-row {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    align-items: stretch;
+  }
+  .stage {
+    flex: 1 1 140px;
+    min-width: 140px;
+    background: var(--panel-2);
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 14px 12px;
+    cursor: pointer;
+    transition: border-color .15s, transform .15s, box-shadow .15s;
+    position: relative;
+  }
+  .stage:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(0,0,0,.35);
+  }
+  .stage.active {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px rgba(122,162,247,.25);
+  }
+  .stage .dot {
+    display: inline-block;
+    width: 9px; height: 9px;
+    border-radius: 50%;
+    margin-right: 7px;
+    vertical-align: middle;
+  }
+  .stage .name { font-size: 13px; font-weight: 600; }
+  .stage .sub { font-size: 11px; color: var(--muted); margin-top: 4px; }
+  .arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--muted);
+    font-size: 18px;
+    min-width: 18px;
+  }
+  .token-flow {
+    margin-top: 10px;
+    font-size: 11px;
+    color: var(--muted);
+    font-family: "SF Mono", Menlo, monospace;
+  }
+  .token-flow b { color: var(--accent); font-weight: 500; }
+  .legend {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    margin-top: 18px;
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .legend span { display: inline-flex; align-items: center; gap: 5px; }
+  .legend i {
+    width: 10px; height: 10px; border-radius: 3px; display: inline-block;
+  }
+  .comp-table {
+    margin-top: 18px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    font-size: 11.5px;
+  }
+  .comp-table .row {
+    display: grid;
+    grid-template-columns: 40px 1fr 110px;
+    border-bottom: 1px solid var(--border);
+  }
+  .comp-table .row:last-child { border-bottom: none; }
+  .comp-table .cell { padding: 6px 8px; }
+  .comp-table .head { background: var(--panel-2); color: var(--muted); font-weight: 600; }
+  .tag {
+    display: inline-block;
+    font-size: 10px;
+    padding: 1px 6px;
+    border-radius: 10px;
+    background: var(--panel-2);
+    color: var(--muted);
+    border: 1px solid var(--border);
+  }
+  .detail h2 {
+    margin: 0 0 4px;
+    font-size: 16px;
+  }
+  .detail .role {
+    color: var(--muted);
+    font-size: 12px;
+    margin-bottom: 14px;
+  }
+  .detail h3 {
+    font-size: 12px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin: 16px 0 6px;
+  }
+  .files {
+    background: var(--panel-2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 10px;
+    font-family: "SF Mono", Menlo, monospace;
+    font-size: 12px;
+  }
+  .files div { padding: 3px 0; }
+  .files .ctx { color: var(--accent); }
+  .files .out { color: var(--exec); }
+  .empty { color: var(--muted); font-size: 13px; text-align: center; padding: 40px 10px; }
+  .kbd {
+    font-family: "SF Mono", Menlo, monospace;
+    background: var(--panel-2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 1px 5px;
+    font-size: 11px;
+  }
+  .note {
+    margin-top: 14px;
+    padding: 10px 12px;
+    border-left: 3px solid var(--accent);
+    background: var(--panel-2);
+    font-size: 12px;
+    color: var(--muted);
+    border-radius: 0 6px 6px 0;
+  }
+  .flow-svg { width: 100%; height: auto; display: block; margin-top: 8px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Harness² Pipeline — Recursive Agent Harnessing</h1>
+  <p>点击任一阶段查看其 context 文件构成、输入输出与 token 流向。Executor = frozen Gemini 3.5 Flash / GLM-5；Improver = Claude Opus 4.8（同机实验证明同模型也可）。</p>
+</header>
+
+<div class="wrap">
+  <div class="diagram">
+
+    <!-- TASK-LEVEL RECURSION -->
+    <div class="lane task-level">
+      <p class="lane-title">① Task-Level Recursion（单任务内；improvement harness R_t 冻结）</p>
+      <div class="stage-row">
+        <div class="stage" data-id="executor" style="border-color: var(--exec);">
+          <span class="dot" style="background:var(--exec)"></span><span class="name">Agent Executor</span>
+          <div class="sub">frozen model · k 次 base rollout</div>
+          <div class="token-flow"><b>OUT</b>: trajectory τ + deliverable y</div>
+        </div>
+        <div class="arrow">→</div>
+        <div class="stage" data-id="editor" style="border-color: var(--edit);">
+          <span class="dot" style="background:var(--edit)"></span><span class="name">Harness Editor</span>
+          <div class="sub">INV ×k + DOM ×k scoped proposals</div>
+          <div class="token-flow"><b>OUT</b>: 候选 harness 树 + notes</div>
+        </div>
+        <div class="arrow">→</div>
+        <div class="stage" data-id="probe" style="border-color: var(--probe);">
+          <span class="dot" style="background:var(--probe)"></span><span class="name">Candidate Probes</span>
+          <div class="sub">同模型/同环境各跑一次</div>
+          <div class="token-flow"><b>OUT</b>: behavioral contrast</div>
+        </div>
+        <div class="arrow">→</div>
+        <div class="stage" data-id="composer" style="border-color: var(--comp);">
+          <span class="dot" style="background:var(--comp)"></span><span class="name">Harness Composer</span>
+          <div class="sub">merge / adopt / KEEP_BASE</div>
+          <div class="token-flow"><b>OUT</b>: successor H′ → 再跑 e′</div>
+        </div>
+        <div class="arrow">→</div>
+        <div class="stage" data-id="selector" style="border-color: var(--sel);">
+          <span class="dot" style="background:var(--sel)"></span><span class="name">Final Selector</span>
+          <div class="sub">盲选（仅 k&gt;1）</div>
+          <div class="token-flow"><b>OUT</b>: H_t★ + 交付产物</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- HARNESSING-LEVEL RECURSION -->
+    <div class="lane harness-level">
+      <p class="lane-title">② Harnessing-Level Recursion（任务结束后；更新 improvement harness R_{t+1}）</p>
+      <div class="stage-row">
+        <div class="stage" data-id="reflector" style="border-color: var(--refl);">
+          <span class="dot" style="background:var(--refl)"></span><span class="name">Experience Reflector</span>
+          <div class="sub">逐组件归因 + 至多一条 lesson</div>
+          <div class="token-flow"><b>OUT</b>: edits 表 + experience block</div>
+        </div>
+        <div class="arrow">→</div>
+        <div class="stage" data-id="library" style="border-color: var(--lib);">
+          <span class="dot" style="background:var(--lib)"></span><span class="name">Improvement Library</span>
+          <div class="sub">adopted harness 树 + EXPERIENCE.md</div>
+          <div class="token-flow"><b>OUT</b>: R_{t+1} → 指导下一个任务</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LEGEND & COMPONENT TABLE -->
+    <div class="legend">
+      <span><i style="background:var(--exec)"></i>Executor (frozen LLM)</span>
+      <span><i style="background:var(--edit)"></i>Editor</span>
+      <span><i style="background:var(--probe)"></i>Probe</span>
+      <span><i style="background:var(--comp)"></i>Composer</span>
+      <span><i style="background:var(--sel)"></i>Selector</span>
+      <span><i style="background:var(--refl)"></i>Reflector</span>
+      <span><i style="background:var(--lib)"></i>Library</span>
+    </div>
+
+    <div class="comp-table">
+      <div class="row head"><div class="cell">ID</div><div class="cell">Component</div><div class="cell">Activation</div></div>
+      <div class="row"><div class="cell">C1</div><div class="cell">systemprompt.md — persona + top-level procedure</div><div class="cell"><span class="tag">always-on</span></div></div>
+      <div class="row"><div class="cell">C2</div><div class="cell">guardrails.md — hard constraints</div><div class="cell"><span class="tag">always-on</span></div></div>
+      <div class="row"><div class="cell">C3</div><div class="cell">LongTermMEMORY.md — durable domain facts</div><div class="cell"><span class="tag">always-on</span></div></div>
+      <div class="row"><div class="cell">C4</div><div class="cell">tool_guidance.md — when/how to use tools</div><div class="cell"><span class="tag">always-on</span></div></div>
+      <div class="row"><div class="cell">C5</div><div class="cell">sub_agents/&lt;n&gt;/AGENT.md — delegated worker</div><div class="cell"><span class="tag">task tool</span></div></div>
+      <div class="row"><div class="cell">C6</div><div class="cell">skills/&lt;n&gt;/SKILL.md (+ helper scripts)</div><div class="cell"><span class="tag">on invoke</span></div></div>
+      <div class="row"><div class="cell">C7</div><div class="cell">scripts/&lt;name&gt;.py — deterministic capability</div><div class="cell"><span class="tag">via bash</span></div></div>
+      <div class="row"><div class="cell">C8</div><div class="cell">plugin/&lt;name&gt;.ts — tool-loop hook, unskippable</div><div class="cell"><span class="tag">in loop</span></div></div>
+    </div>
+
+  </div>
+
+  <aside class="sidebar" id="sidebar">
+    <div class="empty" id="empty">点击左侧任一阶段查看 context 文件、输入输出与 token 流向。</div>
+    <div class="detail" id="detail" style="display:none;"></div>
+  </aside>
+</div>
+
+<script>
+const stages = {
+  executor: {
+    name: "Agent Executor",
+    color: "var(--exec)",
+    role: "frozen 模型（Gemini 3.5 Flash / GLM-5），在 OpenCode / Codex harness 内执行任务。每个任务从公共 H0 重启，不继承上一任务的 harness 树。",
+    context: [
+      "context/task.md — 任务请求原文",
+      "context/harness/ — 当前 8 组件树（C1-C4 always-on；C6/C7 按需；C5 委派；C8 hook）",
+      "context/source/ — 原始输入材料",
+      "工具返回结果 + plugin 注入/拦截的 tool-loop 行为",
+    ],
+    output: [
+      "e = (trajectory τ, deliverable y)",
+      "τ = 完整 tool-call 序列与观察；y = 写出的交付物文件",
+    ],
+    tokens: "C1/C2/C3/C4 每次 call 都进 context（最昂贵，与 executor 自身输出预算竞争）；C6 仅在 skill 被 invoke 时加载；C7 经 bash 执行不占 prompt token；C5 开独立 context window；C8 不占 prompt 但强制行为。上限 200 model turns / 3600s。",
+    note: "reference run 只揭示 harness「怎么表现」，不揭示对错。k 次 base rollout 是后续 contrast 的证据池。",
+  },
+  editor: {
+    name: "Harness Editor",
+    color: "var(--edit)",
+    role: "Claude Opus 4.8（高推理强度）。分两个 scope 各跑一次：INV 管 agent 怎么工作，DOM 管从业者知道什么。k>1 时每个 scope 各 k 个独立候选。",
+    context: [
+      "context/task.md + context/source/",
+      "context/harness/ — 当前可改的 harness 树",
+      "全部 base rollout 轨迹（e0..ek）与交付物",
+      "context/library/ — 同域历史 adopted harness + EXPERIENCE.md + index（只读范例，不在运行路径）",
+      "benchmark 块：工具桥、环境字段、领域约束",
+      "scope 专属 stage prompt（Prompt 1 INV / Prompt 2 DOM）",
+    ],
+    output: [
+      "磁盘上改好的候选 harness 树（编辑本身即提案，无单独格式）",
+      "一个 <notes> 块：每条改动 ← 触发它的轨迹时刻",
+      "若无证据支持改动 → KEEP_BASE",
+    ],
+    tokens: "editor 是 agentic session：证据以文件挂载，不内联进 prompt。每个 editor 独立看同一证据池。INV 与 DOM 互不越界（INV 禁写领域规则/脚本/hook；DOM 禁碰命令/重试/委派）。",
+    note: "硬验证闸：skill 必须在同次编辑于 always-on 文本写下逐字 trigger line；always-on 文件不得含 Jinja 花括号；被引用的 script 必须随提案发货。失败重试一次，再失败继承原树。",
+  },
+  probe: {
+    name: "Candidate Probes",
+    color: "var(--probe)",
+    role: "不是新的 LLM 阶段，而是把每个候选 harness 在同一任务、同模型、同环境下重跑一次 executor。",
+    context: [
+      "候选 harness 树（来自 Editor）",
+      "与 base rollout 完全相同的任务与环境配置",
+    ],
+    output: [
+      "候选的 trajectory + deliverable",
+      "与 reference 的 behavioral contrast：改动是否缓解目标缺陷 / 无变化 / 引入回归",
+    ],
+    tokens: "每个 probe = 一次完整任务 rollout（与 executor 同成本）。k=1 时 2 次 probe；k=5 并行时 10 次。这是 pipeline 最昂贵的部分。",
+    note: "contrast 只服务于后续 Composer 决策，不验证任务正确性。执行随机性与 shared model bias 使单次对比证据很弱——k 次 base 中重复出现的失败才可信；1/k 的缺陷是噪声。",
+  },
+  composer: {
+    name: "Harness Composer",
+    color: "var(--comp)",
+    role: "Claude Opus 4.8。最后一道门：merge 一个 edit 等于为它背书（merging an edit launders it）。并行时 k 个独立会话各看同一候选池；串行时每轮 1 个，可见全部历史。",
+    context: [
+      "k 份 base rollout",
+      "2k 候选 harness 树、各自 diff、各自单次 rollout",
+      "任务 + 源材料 + library",
+      "Prompt 3（并行）/ Prompt 4（串行）",
+    ],
+    output: [
+      "后继 harness H′（kept|revised|dropped，逐行附轨迹时刻证据）",
+      "H′ 再交给 executor 真跑出 e′",
+    ],
+    tokens: "Composer 不看分数、不看 rubric。决策三选一：MERGE 跨候选（INV+DOM 各得其位时的默认）/ ADOPT ONE / KEEP_BASE。",
+    note: "安全纪律：若关联 rollout 产出为空 → 标记 UNSAFE，除非证据压倒性。共享错误前提会在候选间传播（literal-key、缓存假设），对比设计无法消除 shared bias。",
+  },
+  selector: {
+    name: "Final Selector",
+    color: "var(--sel)",
+    role: "仅 k>1 时执行。盲选：只能从已执行状态里挑一个交付物，不能合成新内容。",
+    context: [
+      "context/task.md — 请求原文",
+      "context/source/ — 原始材料",
+      "context/candidates/<id>.md — 匿名交付物（id 已洗牌，无轨迹、无 harness 来源）",
+      "Prompt 5",
+    ],
+    output: [
+      "<why>（≤6 行，说明决定性 criteria 与 runner-up）",
+      "```choice <id>```",
+      "对应 harness 记为 H_t★（★ 表示 adopted，非 verified optimal）",
+    ],
+    tokens: "selector 看不到产出它的 harness。决策顺序：DELIVERY → CONFORMANCE（形状必须精确匹配，额外列/改名是偏差）→ FIDELITY（对照 source 核验事实）→ INTERNAL CONSISTENCY → OPERATIONAL FITNESS → FINISH。",
+    note: "选择本身不修改 harness。失败案例：盲选偶尔选了更弱产物（55 分盖过 95 分），这是 selector 无分数信号的固有风险。",
+  },
+  reflector: {
+    name: "Experience Reflector",
+    color: "var(--refl)",
+    role: "任务结束后执行。读完整改进记录 D_t，产出归因表和至多一条可迁移经验。",
+    context: [
+      "context/base_harness/ — base 树",
+      "所有候选 harness diff",
+      "所有执行轨迹与交付物",
+      "被选输出（但不知分数；被选 ≠ 某个 edit 有效）",
+      "Prompt 6",
+    ],
+    output: [
+      "<edits> 表：每个改动组件的 candidates / change / observed / verdict",
+      "verdict ∈ {helped, hurt, no observed effect, confounded}",
+      "至多一条 <experience>（cue / lesson / evidence / confidence）",
+      "证据不足 → 写 NO_ENTRY",
+    ],
+    tokens: "归因不确定时一律判 confounded——编造的归因会毒化整个 library。Adoption 单独不证明 edit 有效。",
+    note: "cue 描述「情境的形状」（不是本任务事实），lesson 是可操作的 harness 改动（必须点名组件）。太泛（be thorough）无用，太具体（fee rose to 250）不会再触发。",
+  },
+  library: {
+    name: "Improvement Library",
+    color: "var(--lib)",
+    role: "improvement harness R_t 中唯一会演化的部分。模型权重、stage 指令、决策规则全部固定。",
+    context: [
+      "来自 Reflector 的 adopted harness 树 + edits 表 + experience block",
+    ],
+    output: [
+      "每个 domain 一个 library 目录",
+      "entry = 完整 adopted harness 树（8 组件全量代码，非文字摘要）+ EXPERIENCE.md + index",
+      "R_{t+1} = Update(R_t, H_t★, D_t)",
+    ],
+    tokens: "只存 adopted 的 harness（不存所有 candidate），N 个任务最多 N 个 entry。下一个任务的 Editor 通过 library 选择性 copy 组件并重新核验事实。",
+    note: "无 embedding 检索，只有 index——任务多时扫描成本会涨。跨 benchmark 迁移实验（Figure 7 右）证明 library 可复用：JobBench 的库迁到 WorkBuddy 仍 +0.5~+2.9。",
+  },
+};
+
+const sidebar = document.getElementById("sidebar");
+const empty = document.getElementById("empty");
+const detail = document.getElementById("detail");
+const stageEls = document.querySelectorAll(".stage");
+
+function render(id) {
+  const s = stages[id];
+  if (!s) return;
+  empty.style.display = "none";
+  detail.style.display = "block";
+  detail.innerHTML = `
+    <h2 style="color:${s.color}">${s.name}</h2>
+    <div class="role">${s.role}</div>
+    <h3>Context files（IN）</h3>
+    <div class="files">${s.context.map(f => `<div class="ctx">▸ ${f}</div>`).join("")}</div>
+    <h3>Output（OUT）</h3>
+    <div class="files">${s.output.map(f => `<div class="out">▸ ${f}</div>`).join("")}</div>
+    <h3>Token flow</h3>
+    <div class="files" style="color:var(--text)">${s.tokens}</div>
+    ${s.note ? `<div class="note">${s.note}</div>` : ""}
+  `;
+  stageEls.forEach(el => el.classList.toggle("active", el.dataset.id === id));
+}
+
+stageEls.forEach(el => el.addEventListener("click", () => render(el.dataset.id)));
+
+// default open executor
+render("executor");
+</script>
+</body>
+</html>
