@@ -1,0 +1,80 @@
+{
+  "artifact_hash": "f025ec008a75ccbe5b2cb803ebae117be2f8b2200f380e164b18e691dd189490",
+  "budgetAborted": false,
+  "cacheReadTokens": 0,
+  "cacheWriteTokens": 0,
+  "completedAt": "2026-10-20T05:57:51.491Z",
+  "dependsOn": [],
+  "durationMs": 97618,
+  "entry_task_id": "django__django-12325",
+  "inputTokens": 10725,
+  "maxOutputTokens": 32768,
+  "maxTotalTokens": 64000,
+  "modelId": "byteplus/deepseek-v4-flash-ga",
+  "modelProvider": "rollback-deepseek",
+  "mutationSummary": "Add reusable diagnosis workflow and read-only source search tool for order-sensitive ORM/model bugs.",
+  "mutation_id": "m-0004-b5d53ffe445a",
+  "outputTokens": 20113,
+  "parentArtifactHash": "0f5a215ac0bce1aac54cc709e1a86e5e16f6f10547b78b30c711af30726a4c1b",
+  "probeTaskIds": [
+    "django__django-12325",
+    "django__django-12754",
+    "django__django-12273",
+    "django__django-16661"
+  ],
+  "probe_task_ids": [
+    "django__django-12325",
+    "django__django-12754",
+    "django__django-12273",
+    "django__django-16661"
+  ],
+  "rawResponse": "{\"mutation_summary\":\"Add reusable diagnosis workflow and read-only source search tool for order-sensitive ORM/model bugs.\",\"strategy_patch\":\"# Reusable Strategy\\n\\n## 1. Reproduce before editing\\n- Create the smallest possible reproduction that shows the reported failure, either as a standalone script or as a focused test.\\n- Note the exact error message and stack trace; the exception type and message usually name the subsystem to investigate.\\n- Check whether the failure depends on declaration order, input order, or configuration order and record that fact explicitly.\\n\\n## 2. Trace the code path from observed behavior\\n- Use the `search_source_code` tool to locate every occurrence of the relevant exception, option name, or function.\\n- Follow the stack trace backward: identify where the exception is raised and what data was being computed at that point.\\n- When the report involves model fields or ORM metadata, inspect metaclass/Options code and any loops that iterate fields in declaration order.\\n\\n## 3. Fix root causes, not symptoms\\n- Look for state that is set while iterating and then silently overwritten by a later iteration.\\n- If an explicit marker or attribute should control behavior, find where that marker is read and ensure the decision does not depend on prior unrelated declarations unless the API contract requires it.\\n- Make the smallest change that preserves the intended behavior for all orderings.\\n\\n## 4. Validate with focused and adjacent tests\\n- Run the reproduction case first, then run nearby existing tests for the same component.\\n- For ORM/model changes, include adjacent checks involving inheritance, field-name clashes, primary-key handling, and related-field lookups.\\n- Re-read the diff to confirm it changes only the intended code path and introduces no new ordering assumptions.\\n\\n## 5. Use read-only source search efficiently\\n- Always prefer `search_source_code` over guessing file locations.\\n- Search for the literal error message or option name first; then narrow by file path substrings such as `models/` or `forms/` when the search is too broad.\",\"tool\":{\"name\":\"search_source_code\",\"label\":\"Search Python source code\",\"description\":\"Search Python source files in /testbed for a literal string or regular expression, returning file paths, line numbers, and surrounding context. Use it to locate exception raise sites, option names, and related code before editing.\",\"parameters\":{\"type\":\"object\",\"properties\":{\"query\":{\"type\":\"string\",\"description\":\"Text to find in Python source files.\"},\"path_include\":{\"type\":\"string\",\"description\":\"Optional substring that must appear in the relative file path.\"},\"max_results\":{\"type\":\"integer\",\"description\":\"Maximum number of matches to return (1-200).\"},\"context_lines\":{\"type\":\"integer\",\"description\":\"Number of context lines before and after each match.\"},\"case_sensitive\":{\"type\":\"boolean\",\"description\":\"Match case-sensitively.\"},\"regex\":{\"type\":\"boolean\",\"description\":\"Treat query as a regular expression.\"}},\"required\":[\"query\"],\"additionalProperties\":false},\"handler_code\":\"import json\\nimport os\\nimport re\\nimport sys\\n\\nROOT = '/testbed'\\n\\nSKIP_DIRS = {'.git', '__pycache__', 'node_modules', '.venv', 'venv', 'site-packages', '.tox', '.mypy_cache', '.pytest_cache'}\\n\\ndef iter_python_files():\\n    for dirpath, dirnames, filenames in os.walk(ROOT):\\n        dirnames[:] = [d for d in dirnames if not d.startswith('.') and d not in SKIP_DIRS]\\n        for filename in filenames:\\n            if filename.endswith('.py'):\\n                yield os.path.join(dirpath, filename)\\n\\ndef main():\\n    try:\\n        raw = sys.stdin.read()\\n        if not raw.strip():\\n            print(json.dumps({'content': 'No input received.', 'details': {}}))\\n            return\\n        data = json.loads(raw)\\n    except Exception as exc:\\n        print(json.dumps({'content': 'Invalid JSON input: {0}'.format(exc), 'details': {}}))\\n        return\\n\\n    params = data if isinstance(data, dict) and 'query' in data else data.get('parameters', {})\\n    if not isinstance(params, dict):\\n        print(json.dumps({'content': 'Parameters must be a JSON object.', 'details': {}}))\\n        return\\n\\n    query = params.get('query')\\n    if not isinstance(query, str) or not query.strip():\\n        print(json.dumps({'content': 'Missing non-empty string parameter.', 'details': {}}))\\n        return\\n\\n    path_substring = params.get('path_include', '')\\n    if path_substring is None:\\n        path_substring = ''\\n    path_substring = str(path_substring)\\n\\n    try:\\n        max_results = int(params.get('max_results', 30))\\n    except (TypeError, ValueError):\\n        max_results = 30\\n    max_results = max(1, min(max_results, 200))\\n\\n    try:\\n        context_lines = int(params.get('context_lines', 2))\\n    except (TypeError, ValueError):\\n        context_lines = 2\\n    context_lines = max(0, min(context_lines, 10))\\n\\n    case_sensitive = bool(params.get('case_sensitive', False))\\n    use_regex = bool(params.get('regex', False))\\n    flags = 0 if case_sensitive else re.IGNORECASE\\n\\n    try:\\n        pattern = re.compile(query if use_regex else re.escape(query), flags)\\n    except re.error as exc:\\n        print(json.dumps({'content': 'Invalid regular expression: {0}'.format(exc), 'details': {}}))\\n        return\\n\\n    matches = []\\n    for filepath in iter_python_files():\\n        relpath = os.path.relpath(filepath, ROOT)\\n        if path_substring and path_substring not in relpath:\\n            continue\\n        try:\\n            with open(filepath, 'r', encoding='utf-8', errors='replace') as fh:\\n                lines = fh.readlines()\\n        except OSError:\\n            continue\\n        for line_no, line in enumerate(lines, 1):\\n            if pattern.search(line):\\n                start = max(0, line_no - 1 - context_lines)\\n                end = min(len(lines), line_no + context_lines)\\n                snippet = ''.join(lines[start:end])\\n                matches.append({\\n                    'path': relpath,\\n                    'line': line_no,\\n                    'text': line.rstrip(chr(10)),\\n                    'snippet': snippet\\n                })\\n                if len(matches) >= max_results:\\n                    break\\n        if len(matches) >= max_results:\\n            break\\n\\n    if matches:\\n        lines_out = []\\n        for m in matches:\\n            lines_out.append('{0}:{1}: {2}'.format(m['path'], m['line'], m['text'].strip()))\\n        content = 'Found {0} match(es).' + chr(10) + chr(10) + chr(10).join(lines_out)\\n        content = content.format(len(matches))\\n    else:\\n        content = 'No matches found for query: {0}'.format(query)\\n\\n    print(json.dumps({'content': content, 'details': {'count': len(matches), 'matches': matches}}))\\n\\nif __name__ == '__main__':\\n    main()\",\"timeout_seconds\":60},\"depends_on\":[],\"probe_task_ids\":[\"django__django-12325\",\"django__django-12754\",\"django__django-12273\",\"django__django-16661\"]}",
+  "rawResponseSha256": "0179cbca4b599f646a01867c55a20862405d5daf1b501a0070dff3da5ec8dc28",
+  "repo": "django/django",
+  "schemaVersion": 1,
+  "startedAt": "2026-10-20T05:56:13.873Z",
+  "strategyPatch": "# Reusable Strategy\n\n## 1. Reproduce before editing\n- Create the smallest possible reproduction that shows the reported failure, either as a standalone script or as a focused test.\n- Note the exact error message and stack trace; the exception type and message usually name the subsystem to investigate.\n- Check whether the failure depends on declaration order, input order, or configuration order and record that fact explicitly.\n\n## 2. Trace the code path from observed behavior\n- Use the `search_source_code` tool to locate every occurrence of the relevant exception, option name, or function.\n- Follow the stack trace backward: identify where the exception is raised and what data was being computed at that point.\n- When the report involves model fields or ORM metadata, inspect metaclass/Options code and any loops that iterate fields in declaration order.\n\n## 3. Fix root causes, not symptoms\n- Look for state that is set while iterating and then silently overwritten by a later iteration.\n- If an explicit marker or attribute should control behavior, find where that marker is read and ensure the decision does not depend on prior unrelated declarations unless the API contract requires it.\n- Make the smallest change that preserves the intended behavior for all orderings.\n\n## 4. Validate with focused and adjacent tests\n- Run the reproduction case first, then run nearby existing tests for the same component.\n- For ORM/model changes, include adjacent checks involving inheritance, field-name clashes, primary-key handling, and related-field lookups.\n- Re-read the diff to confirm it changes only the intended code path and introduces no new ordering assumptions.\n\n## 5. Use read-only source search efficiently\n- Always prefer `search_source_code` over guessing file locations.\n- Search for the literal error message or option name first; then narrow by file path substrings such as `models/` or `forms/` when the search is too broad.",
+  "timeoutAborted": false,
+  "tokenTelemetryAvailable": true,
+  "tool": {
+    "description": "Search Python source files in /testbed for a literal string or regular expression, returning file paths, line numbers, and surrounding context. Use it to locate exception raise sites, option names, and related code before editing.",
+    "handler_code": "import json\nimport os\nimport re\nimport sys\n\nROOT = '/testbed'\n\nSKIP_DIRS = {'.git', '__pycache__', 'node_modules', '.venv', 'venv', 'site-packages', '.tox', '.mypy_cache', '.pytest_cache'}\n\ndef iter_python_files():\n    for dirpath, dirnames, filenames in os.walk(ROOT):\n        dirnames[:] = [d for d in dirnames if not d.startswith('.') and d not in SKIP_DIRS]\n        for filename in filenames:\n            if filename.endswith('.py'):\n                yield os.path.join(dirpath, filename)\n\ndef main():\n    try:\n        raw = sys.stdin.read()\n        if not raw.strip():\n            print(json.dumps({'content': 'No input received.', 'details': {}}))\n            return\n        data = json.loads(raw)\n    except Exception as exc:\n        print(json.dumps({'content': 'Invalid JSON input: {0}'.format(exc), 'details': {}}))\n        return\n\n    params = data if isinstance(data, dict) and 'query' in data else data.get('parameters', {})\n    if not isinstance(params, dict):\n        print(json.dumps({'content': 'Parameters must be a JSON object.', 'details': {}}))\n        return\n\n    query = params.get('query')\n    if not isinstance(query, str) or not query.strip():\n        print(json.dumps({'content': 'Missing non-empty string parameter.', 'details': {}}))\n        return\n\n    path_substring = params.get('path_include', '')\n    if path_substring is None:\n        path_substring = ''\n    path_substring = str(path_substring)\n\n    try:\n        max_results = int(params.get('max_results', 30))\n    except (TypeError, ValueError):\n        max_results = 30\n    max_results = max(1, min(max_results, 200))\n\n    try:\n        context_lines = int(params.get('context_lines', 2))\n    except (TypeError, ValueError):\n        context_lines = 2\n    context_lines = max(0, min(context_lines, 10))\n\n    case_sensitive = bool(params.get('case_sensitive', False))\n    use_regex = bool(params.get('regex', False))\n    flags = 0 if case_sensitive else re.IGNORECASE\n\n    try:\n        pattern = re.compile(query if use_regex else re.escape(query), flags)\n    except re.error as exc:\n        print(json.dumps({'content': 'Invalid regular expression: {0}'.format(exc), 'details': {}}))\n        return\n\n    matches = []\n    for filepath in iter_python_files():\n        relpath = os.path.relpath(filepath, ROOT)\n        if path_substring and path_substring not in relpath:\n            continue\n        try:\n            with open(filepath, 'r', encoding='utf-8', errors='replace') as fh:\n                lines = fh.readlines()\n        except OSError:\n            continue\n        for line_no, line in enumerate(lines, 1):\n            if pattern.search(line):\n                start = max(0, line_no - 1 - context_lines)\n                end = min(len(lines), line_no + context_lines)\n                snippet = ''.join(lines[start:end])\n                matches.append({\n                    'path': relpath,\n                    'line': line_no,\n                    'text': line.rstrip(chr(10)),\n                    'snippet': snippet\n                })\n                if len(matches) >= max_results:\n                    break\n        if len(matches) >= max_results:\n            break\n\n    if matches:\n        lines_out = []\n        for m in matches:\n            lines_out.append('{0}:{1}: {2}'.format(m['path'], m['line'], m['text'].strip()))\n        content = 'Found {0} match(es).' + chr(10) + chr(10) + chr(10).join(lines_out)\n        content = content.format(len(matches))\n    else:\n        content = 'No matches found for query: {0}'.format(query)\n\n    print(json.dumps({'content': content, 'details': {'count': len(matches), 'matches': matches}}))\n\nif __name__ == '__main__':\n    main()",
+    "label": "Search Python source code",
+    "name": "search_source_code",
+    "parameters": {
+      "additionalProperties": false,
+      "properties": {
+        "case_sensitive": {
+          "description": "Match case-sensitively.",
+          "type": "boolean"
+        },
+        "context_lines": {
+          "description": "Number of context lines before and after each match.",
+          "type": "integer"
+        },
+        "max_results": {
+          "description": "Maximum number of matches to return (1-200).",
+          "type": "integer"
+        },
+        "path_include": {
+          "description": "Optional substring that must appear in the relative file path.",
+          "type": "string"
+        },
+        "query": {
+          "description": "Text to find in Python source files.",
+          "type": "string"
+        },
+        "regex": {
+          "description": "Treat query as a regular expression.",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "query"
+      ],
+      "type": "object"
+    },
+    "timeout_seconds": 60
+  },
+  "valid": true
+}

@@ -1,0 +1,35 @@
+{
+  "budgetAborted": true,
+  "cacheReadTokens": 454912,
+  "cacheWriteTokens": 0,
+  "candidateToolNames": [
+    "source_text_search"
+  ],
+  "completedAt": "2026-10-20T01:36:05.780Z",
+  "durationMs": 113164,
+  "fullPatch": "diff --git a/repro.py b/repro.py\nnew file mode 100644\nindex 0000000..89bfc47\n--- /dev/null\n+++ b/repro.py\n@@ -0,0 +1,61 @@\n+import django\n+from django.conf import settings\n+\n+settings.configure(\n+    DEBUG=True,\n+    DATABASES={'default': {'ENGINE': 'django.db.backends.sqlite3', 'NAME': ':memory:'}},\n+    INSTALLED_APPS=['django.contrib.contenttypes', 'django.contrib.auth', 'migrations'],\n+    USE_TZ=True,\n+)\n+django.setup()\n+\n+from django.db import models\n+from django.db.migrations.autodetector import MigrationAutodetector\n+from django.db.migrations.state import ProjectState, ModelState\n+from django.db.migrations.questioner import MigrationQuestioner\n+\n+# Old state: Readable with title\n+readable_old = ModelState(\n+    \"migrations\", \"Readable\",\n+    [(\"id\", models.AutoField(primary_key=True)), (\"title\", models.CharField(max_length=200))],\n+)\n+old_state = ProjectState.from_model_states([readable_old], real_apps=[])\n+\n+# New state: Readable without title, Book subclass with title\n+readable_new = ModelState(\n+    \"migrations\", \"Readable\",\n+    [(\"id\", models.AutoField(primary_key=True))],\n+)\n+book_new = ModelState(\n+    \"migrations\", \"Book\",\n+    [(\"id\", models.AutoField(primary_key=True)), (\"title\", models.CharField(max_length=200))],\n+    bases=(\"migrations.Readable\",),\n+)\n+new_state = ProjectState.from_model_states([readable_new, book_new], real_apps=[])\n+\n+autodetector = MigrationAutodetector(old_state, new_state, MigrationQuestioner())\n+changes = autodetector._detect_changes()\n+for app_label, migrations in changes.items():\n+    for migration in migrations:\n+        print(\"Migration:\", migration.name)\n+        for op in migration.operations:\n+            print(\"   \", type(op).__name__, getattr(op, 'name', ''), getattr(op, 'model_name', ''))\n+\n+# Now simulate applying the operations to see the crash\n+from django.db.migrations.state import ProjectState as PS\n+from django.db.migrations.graph import MigrationGraph\n+\n+graph = MigrationGraph()\n+state = old_state.clone()\n+\n+for app_label, migrations in changes.items():\n+    for migration in migrations:\n+        print(\"\\nApplying migration\", migration.name)\n+        # Simulate executor: render project state with operations applied\n+        for op in migration.operations:\n+            op.state_forwards(app_label, state)\n+            try:\n+                rendered = state.apps\n+                print(\"   after\", type(op).__name__, \"-> render OK\")\n+            except Exception as e:\n+                print(\"   after\", type(op).__name__, \"-> RENDER ERROR:\", e)\n",
+  "inputTokens": 47639,
+  "instanceId": "django__django-12754",
+  "maxOutputTokens": 65536,
+  "maxTotalTokens": 512000,
+  "modelId": "byteplus/deepseek-v4-flash-ga",
+  "modelProvider": "rollback-deepseek",
+  "noShell": false,
+  "outputTokens": 14440,
+  "patch": "",
+  "policyViolations": [
+    {
+      "patch": "diff --git a/repro.py b/repro.py\nnew file mode 100644\nindex 0000000..89bfc47\n--- /dev/null\n+++ b/repro.py\n@@ -0,0 +1,61 @@\n+import django\n+from django.conf import settings\n+\n+settings.configure(\n+    DEBUG=True,\n+    DATABASES={'default': {'ENGINE': 'django.db.backends.sqlite3', 'NAME': ':memory:'}},\n+    INSTALLED_APPS=['django.contrib.contenttypes', 'django.contrib.auth', 'migrations'],\n+    USE_TZ=True,\n+)\n+django.setup()\n+\n+from django.db import models\n+from django.db.migrations.autodetector import MigrationAutodetector\n+from django.db.migrations.state import ProjectState, ModelState\n+from django.db.migrations.questioner import MigrationQuestioner\n+\n+# Old state: Readable with title\n+readable_old = ModelState(\n+    \"migrations\", \"Readable\",\n+    [(\"id\", models.AutoField(primary_key=True)), (\"title\", models.CharField(max_length=200))],\n+)\n+old_state = ProjectState.from_model_states([readable_old], real_apps=[])\n+\n+# New state: Readable without title, Book subclass with title\n+readable_new = ModelState(\n+    \"migrations\", \"Readable\",\n+    [(\"id\", models.AutoField(primary_key=True))],\n+)\n+book_new = ModelState(\n+    \"migrations\", \"Book\",\n+    [(\"id\", models.AutoField(primary_key=True)), (\"title\", models.CharField(max_length=200))],\n+    bases=(\"migrations.Readable\",),\n+)\n+new_state = ProjectState.from_model_states([readable_new, book_new], real_apps=[])\n+\n+autodetector = MigrationAutodetector(old_state, new_state, MigrationQuestioner())\n+changes = autodetector._detect_changes()\n+for app_label, migrations in changes.items():\n+    for migration in migrations:\n+        print(\"Migration:\", migration.name)\n+        for op in migration.operations:\n+            print(\"   \", type(op).__name__, getattr(op, 'name', ''), getattr(op, 'model_name', ''))\n+\n+# Now simulate applying the operations to see the crash\n+from django.db.migrations.state import ProjectState as PS\n+from django.db.migrations.graph import MigrationGraph\n+\n+graph = MigrationGraph()\n+state = old_state.clone()\n+\n+for app_label, migrations in changes.items():\n+    for migration in migrations:\n+        print(\"\\nApplying migration\", migration.name)\n+        # Simulate executor: render project state with operations applied\n+        for op in migration.operations:\n+            op.state_forwards(app_label, state)\n+            try:\n+                rendered = state.apps\n+                print(\"   after\", type(op).__name__, \"-> render OK\")\n+            except Exception as e:\n+                print(\"   after\", type(op).__name__, \"-> RENDER ERROR:\", e)\n",
+      "type": "forbidden-path-modification"
+    }
+  ],
+  "providerError": "This operation was aborted",
+  "runnerExitCode": 1,
+  "sandboxImage": "sweb.eval.arm64.django__django-12754:latest",
+  "schemaVersion": 1,
+  "startedAt": "2026-10-20T01:34:12.616Z",
+  "strategyHash": "b0127c2bf2890e257c4063bab9b8d39818ebdb5e7fa06f44c70a66303a87de5f",
+  "timeoutAborted": false,
+  "tokenTelemetryAvailable": true,
+  "toolCalls": 22
+}

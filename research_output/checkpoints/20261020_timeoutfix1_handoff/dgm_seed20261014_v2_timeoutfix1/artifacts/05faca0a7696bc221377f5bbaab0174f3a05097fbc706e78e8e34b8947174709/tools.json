@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "tools": [
+    {
+      "description": "Scans Python and HTML files under /testbed for a case-insensitive text substring and returns file:line excerpts. This helps locate implementation code without requiring a shell, grep, or network access.",
+      "handler": "handlers/source_text_search.py",
+      "label": "Search repository source text",
+      "name": "source_text_search",
+      "parameters": {
+        "additionalProperties": false,
+        "properties": {
+          "max_results": {
+            "description": "Maximum number of matches to return (1-200, default 30).",
+            "type": "integer"
+          },
+          "query": {
+            "description": "Text to search for in repository source files. Case-insensitive substring matching is used.",
+            "type": "string"
+          },
+          "scope": {
+            "description": "Optional directory under /testbed to restrict the search, e.g. django/forms.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "query"
+        ],
+        "type": "object"
+      },
+      "timeout_seconds": 30
+    }
+  ]
+}

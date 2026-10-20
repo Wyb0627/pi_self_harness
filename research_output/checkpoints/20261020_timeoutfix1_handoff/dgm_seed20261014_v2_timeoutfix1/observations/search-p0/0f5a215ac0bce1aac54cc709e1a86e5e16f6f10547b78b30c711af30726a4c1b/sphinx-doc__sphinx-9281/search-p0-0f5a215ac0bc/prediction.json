@@ -1,0 +1,7 @@
+[
+  {
+    "instance_id": "sphinx-doc__sphinx-9281",
+    "model_name_or_path": "dgm-pi-0f5a215ac0bc-7d9d1e441a4a",
+    "model_patch": "diff --git a/sphinx/util/inspect.py b/sphinx/util/inspect.py\nindex a415a70..a3e627b 100644\n--- a/sphinx/util/inspect.py\n+++ b/sphinx/util/inspect.py\n@@ -432,6 +432,8 @@ def safe_getattr(obj: Any, name: str, *defargs: Any) -> Any:\n \n def object_description(object: Any) -> str:\n     \"\"\"A repr() implementation that returns text safe to use in reST context.\"\"\"\n+    if isenumattribute(object):\n+        return '%s.%s' % (object.__class__.__name__, object.name)\n     if isinstance(object, dict):\n         try:\n             sorted_keys = sorted(object)\n"
+  }
+]

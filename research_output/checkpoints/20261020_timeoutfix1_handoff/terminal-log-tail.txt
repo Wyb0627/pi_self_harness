@@ -1,0 +1,183 @@
+Sanitized final 180 lines of timeoutfix1-terminal.log.
+No process environments or proxy logs are included.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -c with the switch command. Example:
+
+  git switch -c <new-branch-name>
+
+Or undo this operation with:
+
+  git switch -
+
+Turn off this advice by setting config variable advice.detachedHead to false
+
+
+search-slot-0003-medium:  90%|█████████ | 45/50 [2:55:20<19:55, 239.08s/it]Note: switching to '36367765fe780f962bba861bf368a765380bbc68'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by switching back to a branch.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -c with the switch command. Example:
+
+  git switch -c <new-branch-name>
+
+Or undo this operation with:
+
+  git switch -
+
+Turn off this advice by setting config variable advice.detachedHead to false
+
+
+search-slot-0003-medium:  92%|█████████▏| 46/50 [2:59:01<15:34, 233.68s/it]Note: switching to 'aca3f825f2e4a8817190f3c885a242a285aa0dba'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by switching back to a branch.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -c with the switch command. Example:
+
+  git switch -c <new-branch-name>
+
+Or undo this operation with:
+
+  git switch -
+
+Turn off this advice by setting config variable advice.detachedHead to false
+
+
+search-slot-0003-medium:  94%|█████████▍| 47/50 [3:01:48<10:40, 213.66s/it]Note: switching to '1e2ccd8f0eca0870cf6f8fce6934e2da8eba9b72'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by switching back to a branch.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -c with the switch command. Example:
+
+  git switch -c <new-branch-name>
+
+Or undo this operation with:
+
+  git switch -
+
+Turn off this advice by setting config variable advice.detachedHead to false
+
+
+search-slot-0003-medium:  96%|█████████▌| 48/50 [3:04:20<06:30, 195.24s/it]Note: switching to '567ff22716ac258b9edd2c1711d766b440ac0b11'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by switching back to a branch.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -c with the switch command. Example:
+
+  git switch -c <new-branch-name>
+
+Or undo this operation with:
+
+  git switch -
+
+Turn off this advice by setting config variable advice.detachedHead to false
+
+
+search-slot-0003-medium:  98%|█████████▊| 49/50 [3:08:46<03:36, 216.32s/it]Note: switching to '8ec06e9a1bd862cd713b9db748e039ccc7b3e15b'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by switching back to a branch.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -c with the switch command. Example:
+
+  git switch -c <new-branch-name>
+
+Or undo this operation with:
+
+  git switch -
+
+Turn off this advice by setting config variable advice.detachedHead to false
+
+
+search-slot-0003-medium: 100%|██████████| 50/50 [3:11:32<00:00, 201.19s/it]
+search-slot-0003-medium: 100%|██████████| 50/50 [3:11:32<00:00, 229.84s/it]
+
+search-slot-0004-small:   0%|          | 0/10 [00:00<?, ?it/s]Note: switching to 'ddb293685235fd09e932805771ae97f72e817181'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by switching back to a branch.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -c with the switch command. Example:
+
+  git switch -c <new-branch-name>
+
+Or undo this operation with:
+
+  git switch -
+
+Turn off this advice by setting config variable advice.detachedHead to false
+
+
+search-slot-0004-small:   0%|          | 0/10 [02:25<?, ?it/s]
+Traceback (most recent call last):
+  File "/Users/bytedance/codes/pi/rollback_mvp/run_dgm_pi_evolution.py", line 236, in <module>
+    raise SystemExit(main())
+                     ~~~~^^
+  File "/Users/bytedance/codes/pi/rollback_mvp/run_dgm_pi_evolution.py", line 227, in main
+    print(json.dumps(experiment.run_search(), indent=2))
+                     ~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/bytedance/codes/pi/rollback_mvp/dgm_evolve/experiment.py", line 1389, in run_search
+    small_observations = self._evaluate_records(
+        artifact_hash_value=child_hash,
+    ...<5 lines>...
+        budget_scope="search",
+    )
+  File "/Users/bytedance/codes/pi/rollback_mvp/dgm_evolve/experiment.py", line 3294, in _evaluate_records
+    observation = self._evaluate_task(
+        artifact_hash_value=artifact_hash_value,
+    ...<5 lines>...
+        budget_scope=budget_scope,
+    )
+  File "/Users/bytedance/codes/pi/rollback_mvp/dgm_evolve/experiment.py", line 3560, in _evaluate_task
+    evaluation = evaluate_patch(
+        runtime_args,
+    ...<7 lines>...
+        role_hash,
+    )
+  File "/Users/bytedance/codes/pi/rollback_mvp/orchestrate_endpoint_200.py", line 563, in evaluate_patch
+    return_code = run_logged(
+        command,
+    ...<6 lines>...
+        timeout=args.evaluator_timeout_seconds + 600,
+    )
+  File "/Users/bytedance/codes/pi/rollback_mvp/orchestrate_endpoint_200.py", line 180, in run_logged
+    completed = subprocess.run(
+        command,
+    ...<6 lines>...
+        text=True,
+    )
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 556, in run
+    stdout, stderr = process.communicate(input, timeout=timeout)
+                     ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 1222, in communicate
+    stdout, stderr = self._communicate(input, endtime, timeout)
+                     ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 2180, in _communicate
+    self.wait(timeout=self._remaining_time(endtime))
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 1280, in wait
+    return self._wait(timeout=timeout)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 2079, in _wait
+    time.sleep(delay)
+    ~~~~~~~~~~^^^^^^^
+KeyboardInterrupt
+DGM did not seal successfully; P2 was not started.
+[2026-10-20T06:00:16Z] sequential rerun exited with status 130
+]7;file://F92HCQNNF4/Users/bytedance/codes/pi[?25l[?25h

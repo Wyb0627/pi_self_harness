@@ -1,0 +1,30 @@
+{
+  "budgetAborted": true,
+  "cacheReadTokens": 472576,
+  "cacheWriteTokens": 0,
+  "candidateToolNames": [
+    "source_text_search"
+  ],
+  "completedAt": "2026-10-20T01:54:08.342Z",
+  "durationMs": 184201,
+  "fullPatch": "",
+  "inputTokens": 53779,
+  "instanceId": "django__django-13346",
+  "maxOutputTokens": 65536,
+  "maxTotalTokens": 512000,
+  "modelId": "byteplus/deepseek-v4-flash-ga",
+  "modelProvider": "rollback-deepseek",
+  "noShell": false,
+  "outputTokens": 32286,
+  "patch": "",
+  "policyViolations": [],
+  "providerError": "This operation was aborted",
+  "runnerExitCode": 1,
+  "sandboxImage": "sweb.eval.arm64.django__django-13346:latest",
+  "schemaVersion": 1,
+  "startedAt": "2026-10-20T01:51:04.141Z",
+  "strategyHash": "b0127c2bf2890e257c4063bab9b8d39818ebdb5e7fa06f44c70a66303a87de5f",
+  "timeoutAborted": false,
+  "tokenTelemetryAvailable": true,
+  "toolCalls": 24
+}

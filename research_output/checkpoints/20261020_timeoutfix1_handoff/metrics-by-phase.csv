@@ -1,0 +1,7 @@
+phase,completed,valid,invalid,resolved,accuracy_denominator,accuracy,reported_tokens,agent_duration_seconds,evaluator_duration_seconds,image_build_seconds
+search-p0,60,60,0,21,60,0.35,22149322,6715.686,748.943,206.331
+search-slot-0000-medium,50,50,0,18,50,0.36,18851704,5396.821,589.021,4.382
+search-slot-0000-small,10,10,0,5,10,0.5,3388536,1109.715,167.088,1.186
+search-slot-0002-small,10,10,0,3,10,0.3,3623671,1213.133,102.93,0.77
+search-slot-0003-medium,50,50,0,16,50,0.32,19214334,5974.045,554.132,4.285
+search-slot-0003-small,10,10,0,4,10,0.4,3294228,908.045,133.098,0.558

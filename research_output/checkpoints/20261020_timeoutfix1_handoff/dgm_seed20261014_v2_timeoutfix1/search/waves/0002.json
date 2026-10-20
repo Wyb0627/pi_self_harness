@@ -1,0 +1,10 @@
+{
+  "archive_hash": "e804e64964b3d18f716ef68647553775cedfbdfe2c20df9614f98beb155385f2",
+  "parent_artifact_hashes": [
+    "0f5a215ac0bce1aac54cc709e1a86e5e16f6f10547b78b30c711af30726a4c1b",
+    "190d4f12c362e93045dce6c2d5a322963d66942808419e26cfbecbc017c6ec4a"
+  ],
+  "schema_version": 1,
+  "slot_start": 4,
+  "wave": 2
+}

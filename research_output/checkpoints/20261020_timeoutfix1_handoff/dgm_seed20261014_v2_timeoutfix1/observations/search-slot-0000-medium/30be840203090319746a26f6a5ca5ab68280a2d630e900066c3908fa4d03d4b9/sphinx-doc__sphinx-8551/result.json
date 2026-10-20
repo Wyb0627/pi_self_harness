@@ -1,0 +1,30 @@
+{
+  "budgetAborted": true,
+  "cacheReadTokens": 481024,
+  "cacheWriteTokens": 0,
+  "candidateToolNames": [
+    "code_search"
+  ],
+  "completedAt": "2026-10-20T00:26:16.970Z",
+  "durationMs": 124679,
+  "fullPatch": "diff --git a/sphinx/domains/python.py b/sphinx/domains/python.py\nindex 79d7e4f..0e496fc 100644\n--- a/sphinx/domains/python.py\n+++ b/sphinx/domains/python.py\n@@ -1233,6 +1233,9 @@ class PythonDomain(Domain):\n             if mod.docname in docnames:\n                 self.modules[modname] = mod\n \n+    def process_field_xref(self, pnode: pending_xref) -> None:\n+        pnode.attributes.update(self.env.ref_context)\n+\n     def find_obj(self, env: BuildEnvironment, modname: str, classname: str,\n                  name: str, type: str, searchmode: int = 0\n                  ) -> List[Tuple[str, ObjectEntry]]:\n",
+  "inputTokens": 41171,
+  "instanceId": "sphinx-doc__sphinx-8551",
+  "maxOutputTokens": 65536,
+  "maxTotalTokens": 512000,
+  "modelId": "byteplus/deepseek-v4-flash-ga",
+  "modelProvider": "rollback-deepseek",
+  "noShell": false,
+  "outputTokens": 14208,
+  "patch": "diff --git a/sphinx/domains/python.py b/sphinx/domains/python.py\nindex 79d7e4f..0e496fc 100644\n--- a/sphinx/domains/python.py\n+++ b/sphinx/domains/python.py\n@@ -1233,6 +1233,9 @@ class PythonDomain(Domain):\n             if mod.docname in docnames:\n                 self.modules[modname] = mod\n \n+    def process_field_xref(self, pnode: pending_xref) -> None:\n+        pnode.attributes.update(self.env.ref_context)\n+\n     def find_obj(self, env: BuildEnvironment, modname: str, classname: str,\n                  name: str, type: str, searchmode: int = 0\n                  ) -> List[Tuple[str, ObjectEntry]]:\n",
+  "policyViolations": [],
+  "providerError": "This operation was aborted",
+  "runnerExitCode": 1,
+  "sandboxImage": "sweb.eval.arm64.sphinx-doc__sphinx-8551:latest",
+  "schemaVersion": 1,
+  "startedAt": "2026-10-20T00:24:12.290Z",
+  "strategyHash": "462f34ca395d1c0817472c8de3ee61cba155df886fe48dc8386a24cafcd5c17e",
+  "timeoutAborted": false,
+  "tokenTelemetryAvailable": true,
+  "toolCalls": 32
+}

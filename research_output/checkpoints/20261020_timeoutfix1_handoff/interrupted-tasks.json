@@ -1,0 +1,26 @@
+{
+  "interrupted_or_incomplete_tasks": [
+    {
+      "artifact_hash": "f025ec008a75ccbe5b2cb803ebae117be2f8b2200f380e164b18e691dd189490",
+      "copied_as_observation": false,
+      "existing_evidence_files_excluding_workspace": [
+        "evaluator-invocation.json",
+        "identity.json",
+        "invocation.json",
+        "result.json",
+        "runner.log",
+        "search-slot-0004-small-f025ec008a75/evaluator.log",
+        "search-slot-0004-small-f025ec008a75/prediction.json",
+        "trace.jsonl"
+      ],
+      "included_in_accuracy": false,
+      "included_in_token_aggregates": false,
+      "instance_id": "django__django-10973",
+      "phase": "search-slot-0004-small",
+      "reason": "User-requested SIGINT interrupted the official evaluator after result.json was persisted but before observation.json was written.",
+      "relative_path": "observations/search-slot-0004-small/f025ec008a75ccbe5b2cb803ebae117be2f8b2200f380e164b18e691dd189490/django__django-10973",
+      "reported_tokens_if_available_excluded_from_aggregates": 233205
+    }
+  ],
+  "schema_version": 1
+}

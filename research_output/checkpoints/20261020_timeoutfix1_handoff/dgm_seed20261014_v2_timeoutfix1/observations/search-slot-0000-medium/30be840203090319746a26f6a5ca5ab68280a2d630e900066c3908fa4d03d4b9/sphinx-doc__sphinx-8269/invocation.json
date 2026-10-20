@@ -1,0 +1,8 @@
+{
+  "identity_hash": "6ee6f40c36e8907a3969fcc53a2080c1dea5598b632ee2dd25e19cf19f9d9585",
+  "image_build_seconds": 0.05,
+  "result_sha256": "4ef4597522406de94cc8c4ab44ba6088bc273116ca46c3b629c2a5f62dbf2ced",
+  "schema_version": 1,
+  "started_at": "2026-10-20T01:15:39Z",
+  "status": "result_persisted"
+}

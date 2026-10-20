@@ -1,0 +1,30 @@
+{
+  "budgetAborted": true,
+  "cacheReadTokens": 440064,
+  "cacheWriteTokens": 0,
+  "candidateToolNames": [
+    "code_search"
+  ],
+  "completedAt": "2026-10-20T00:48:10.772Z",
+  "durationMs": 205923,
+  "fullPatch": "diff --git a/sphinx/domains/cpp.py b/sphinx/domains/cpp.py\nindex fe52d88..0712cf3 100644\n--- a/sphinx/domains/cpp.py\n+++ b/sphinx/domains/cpp.py\n@@ -4664,6 +4664,13 @@ class DefinitionParser(BaseParser):\n             if self.match(regex):\n                 while self.current_char in 'uUlLfF':\n                     self.pos += 1\n+                # user-defined literal\n+                # user-defined-integer-literal: 123_456abc\n+                # user-defined-floating-literal: 1.5e3abc\n+                if self.current_char == '_' or self.current_char.isalpha():\n+                    self.pos += 1\n+                    while self.current_char.isalnum() or self.current_char == '_':\n+                        self.pos += 1\n                 return ASTNumberLiteral(self.definition[pos:self.pos])\n \n         string = self._parse_string()\n",
+  "inputTokens": 57908,
+  "instanceId": "sphinx-doc__sphinx-7590",
+  "maxOutputTokens": 65536,
+  "maxTotalTokens": 512000,
+  "modelId": "byteplus/deepseek-v4-flash-ga",
+  "modelProvider": "rollback-deepseek",
+  "noShell": false,
+  "outputTokens": 36277,
+  "patch": "diff --git a/sphinx/domains/cpp.py b/sphinx/domains/cpp.py\nindex fe52d88..0712cf3 100644\n--- a/sphinx/domains/cpp.py\n+++ b/sphinx/domains/cpp.py\n@@ -4664,6 +4664,13 @@ class DefinitionParser(BaseParser):\n             if self.match(regex):\n                 while self.current_char in 'uUlLfF':\n                     self.pos += 1\n+                # user-defined literal\n+                # user-defined-integer-literal: 123_456abc\n+                # user-defined-floating-literal: 1.5e3abc\n+                if self.current_char == '_' or self.current_char.isalpha():\n+                    self.pos += 1\n+                    while self.current_char.isalnum() or self.current_char == '_':\n+                        self.pos += 1\n                 return ASTNumberLiteral(self.definition[pos:self.pos])\n \n         string = self._parse_string()\n",
+  "policyViolations": [],
+  "providerError": "This operation was aborted",
+  "runnerExitCode": 1,
+  "sandboxImage": "sweb.eval.arm64.sphinx-doc__sphinx-7590:latest",
+  "schemaVersion": 1,
+  "startedAt": "2026-10-20T00:44:44.849Z",
+  "strategyHash": "462f34ca395d1c0817472c8de3ee61cba155df886fe48dc8386a24cafcd5c17e",
+  "timeoutAborted": false,
+  "tokenTelemetryAvailable": true,
+  "toolCalls": 28
+}

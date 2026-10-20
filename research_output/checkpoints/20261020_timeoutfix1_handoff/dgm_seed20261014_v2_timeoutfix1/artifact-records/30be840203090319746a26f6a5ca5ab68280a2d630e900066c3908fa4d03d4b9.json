@@ -1,0 +1,12 @@
+{
+  "artifact_hash": "30be840203090319746a26f6a5ca5ab68280a2d630e900066c3908fa4d03d4b9",
+  "files": [
+    "strategy.md",
+    "tools.json",
+    "lineage.json",
+    "handlers/code_search.py"
+  ],
+  "schema_version": 1,
+  "strategy_sha256": "462f34ca395d1c0817472c8de3ee61cba155df886fe48dc8386a24cafcd5c17e",
+  "tools_manifest_hash": "7e89f20916505de11911492009e3842c207d286811ec9a3a107f1b5185dedbc3"
+}

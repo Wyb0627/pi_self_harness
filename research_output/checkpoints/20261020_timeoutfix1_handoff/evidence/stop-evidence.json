@@ -1,0 +1,53 @@
+{
+  "pre_stop": {
+    "branch": "main",
+    "complete_observations": 190,
+    "current_instance": "django__django-10973",
+    "current_phase": "search-slot-0004-small",
+    "formal_pgid": 15186,
+    "head": "855e89073f00d217e7687f9c29510dd88a32024e",
+    "local": "2026-10-20T13:58:44+08:00",
+    "origin_main": "855e89073f00d217e7687f9c29510dd88a32024e",
+    "processes": [
+      {
+        "pid": 15186,
+        "role": "sequential launcher"
+      },
+      {
+        "pid": 15188,
+        "role": "terminal log tee"
+      },
+      {
+        "pid": 15198,
+        "role": "local buffered SSE proxy"
+      },
+      {
+        "pid": 15258,
+        "role": "DGM search orchestrator"
+      },
+      {
+        "pid": 15259,
+        "role": "caffeinate"
+      },
+      {
+        "pid": 41310,
+        "role": "Pi SWE task runner"
+      }
+    ],
+    "utc": "2026-10-20T05:58:44Z"
+  },
+  "schema_version": 1,
+  "stop": {
+    "caffeinate_running_after_stop": false,
+    "force_kill_used": false,
+    "local": "2026-10-20T14:00:16+08:00",
+    "p2_started": false,
+    "proxy_running_after_stop": false,
+    "runner_running_after_stop": false,
+    "signal": "SIGINT",
+    "stale_lock_removed_after_evidence_copy": true,
+    "target_pgid": 15186,
+    "task_containers_running_after_stop": false,
+    "utc": "2026-10-20T06:00:16Z"
+  }
+}

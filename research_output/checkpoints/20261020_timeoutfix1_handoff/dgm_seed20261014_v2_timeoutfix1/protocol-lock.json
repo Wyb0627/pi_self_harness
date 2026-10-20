@@ -1,0 +1,18 @@
+{
+  "arm": "held-out-adapted-dgm-on-pi",
+  "cold_start_attestation_hash": "12750f18489cf28acb729046679ed8ccb94617f7e5f93e60079e95e0f893bbd2",
+  "config_hash": "2460d9258112d8d5210174ce439a64a9634fe545cf8491779132a08f7723f5bd",
+  "confirmatory_status": "exploratory-single-seed",
+  "d_test_visibility": "post-search-seal endpoint worker only",
+  "execution_stack_hash": "fd68171cf7b1173816d9f8a4a080f09222b21509c5e3e2a2d329ba17548b96f1",
+  "final_endpoint_budget_scope": "endpoint:final",
+  "fixed_policy_hash": "2a9aeacab5160555884971b7de14d2c27ccd630250ed73407dfd7b44499b2566",
+  "model_revision_limitation": "Provider exposes model ID but no immutable serving revision.",
+  "p0_artifact_hash": "0f5a215ac0bce1aac54cc709e1a86e5e16f6f10547b78b30c711af30726a4c1b",
+  "protocol_revision": "matched-dgm-pi-v2",
+  "reference_endpoint_budget_scope": "endpoint:p0",
+  "run_id": "dgm-pilot-s20261014-v2-timeoutfix1",
+  "schema_version": 1,
+  "search_budget_scope": "search",
+  "split_binding_hash": "a0136c5b2c7b4b86c6c375bd02f8a67ac7c3c67797030340c9f9aa81b1529134"
+}

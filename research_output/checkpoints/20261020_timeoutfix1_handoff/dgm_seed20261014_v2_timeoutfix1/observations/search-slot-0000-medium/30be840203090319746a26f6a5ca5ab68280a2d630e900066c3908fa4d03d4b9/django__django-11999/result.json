@@ -1,0 +1,30 @@
+{
+  "budgetAborted": true,
+  "cacheReadTokens": 491264,
+  "cacheWriteTokens": 0,
+  "candidateToolNames": [
+    "code_search"
+  ],
+  "completedAt": "2026-10-19T23:50:54.260Z",
+  "durationMs": 108552,
+  "fullPatch": "diff --git a/.djtest_tmp/stubs/asgiref/__init__.py b/.djtest_tmp/stubs/asgiref/__init__.py\nnew file mode 100644\nindex 0000000..e69de29\ndiff --git a/.djtest_tmp/stubs/asgiref/local.py b/.djtest_tmp/stubs/asgiref/local.py\nnew file mode 100644\nindex 0000000..73ebf0f\n--- /dev/null\n+++ b/.djtest_tmp/stubs/asgiref/local.py\n@@ -0,0 +1,12 @@\n+import threading\n+\n+\n+class Local:\n+    def __init__(self):\n+        object.__setattr__(self, '_local', threading.local())\n+\n+    def __getattr__(self, name):\n+        return getattr(self.__dict__['_local'], name)\n+\n+    def __setattr__(self, name, value):\n+        setattr(self.__dict__['_local'], name, value)\ndiff --git a/.djtest_tmp/stubs/pytz.py b/.djtest_tmp/stubs/pytz.py\nnew file mode 100644\nindex 0000000..403a475\n--- /dev/null\n+++ b/.djtest_tmp/stubs/pytz.py\n@@ -0,0 +1,3 @@\n+from datetime import timezone\n+\n+utc = timezone.utc\ndiff --git a/.djtest_tmp/stubs/sqlparse.py b/.djtest_tmp/stubs/sqlparse.py\nnew file mode 100644\nindex 0000000..e69de29\ndiff --git a/.djtest_tmp/testapp/__init__.py b/.djtest_tmp/testapp/__init__.py\nnew file mode 100644\nindex 0000000..e69de29\ndiff --git a/.djtest_tmp/testapp/apps.py b/.djtest_tmp/testapp/apps.py\nnew file mode 100644\nindex 0000000..501ed6a\n--- /dev/null\n+++ b/.djtest_tmp/testapp/apps.py\n@@ -0,0 +1,6 @@\n+from django.apps import AppConfig\n+\n+\n+class TestAppConfig(AppConfig):\n+    name = 'testapp'\n+    label = 'testapp'\ndiff --git a/django/db/models/fields/__init__.py b/django/db/models/fields/__init__.py\nindex ee45bb9..3024e90 100644\n--- a/django/db/models/fields/__init__.py\n+++ b/django/db/models/fields/__init__.py\n@@ -763,8 +763,12 @@ class Field(RegisterLookupMixin):\n             if not getattr(cls, self.attname, None):\n                 setattr(cls, self.attname, self.descriptor_class(self))\n         if self.choices is not None:\n-            setattr(cls, 'get_%s_display' % self.name,\n-                    partialmethod(cls._get_FIELD_display, field=self))\n+            # Don't override a get_FOO_display() method defined explicitly on\n+            # this class, but don't check methods derived from the parent\n+            # (the method may be defined on an abstract base class).\n+            if not hasattr(cls, 'get_%s_display' % self.name):\n+                setattr(cls, 'get_%s_display' % self.name,\n+                        partialmethod(cls._get_FIELD_display, field=self))\n \n     def get_filter_kwargs_for_object(self, obj):\n         \"\"\"\n",
+  "inputTokens": 44872,
+  "instanceId": "django__django-11999",
+  "maxOutputTokens": 65536,
+  "maxTotalTokens": 512000,
+  "modelId": "byteplus/deepseek-v4-flash-ga",
+  "modelProvider": "rollback-deepseek",
+  "noShell": false,
+  "outputTokens": 14906,
+  "patch": "diff --git a/.djtest_tmp/stubs/asgiref/__init__.py b/.djtest_tmp/stubs/asgiref/__init__.py\nnew file mode 100644\nindex 0000000..e69de29\ndiff --git a/.djtest_tmp/stubs/asgiref/local.py b/.djtest_tmp/stubs/asgiref/local.py\nnew file mode 100644\nindex 0000000..73ebf0f\n--- /dev/null\n+++ b/.djtest_tmp/stubs/asgiref/local.py\n@@ -0,0 +1,12 @@\n+import threading\n+\n+\n+class Local:\n+    def __init__(self):\n+        object.__setattr__(self, '_local', threading.local())\n+\n+    def __getattr__(self, name):\n+        return getattr(self.__dict__['_local'], name)\n+\n+    def __setattr__(self, name, value):\n+        setattr(self.__dict__['_local'], name, value)\ndiff --git a/.djtest_tmp/stubs/pytz.py b/.djtest_tmp/stubs/pytz.py\nnew file mode 100644\nindex 0000000..403a475\n--- /dev/null\n+++ b/.djtest_tmp/stubs/pytz.py\n@@ -0,0 +1,3 @@\n+from datetime import timezone\n+\n+utc = timezone.utc\ndiff --git a/.djtest_tmp/stubs/sqlparse.py b/.djtest_tmp/stubs/sqlparse.py\nnew file mode 100644\nindex 0000000..e69de29\ndiff --git a/.djtest_tmp/testapp/__init__.py b/.djtest_tmp/testapp/__init__.py\nnew file mode 100644\nindex 0000000..e69de29\ndiff --git a/.djtest_tmp/testapp/apps.py b/.djtest_tmp/testapp/apps.py\nnew file mode 100644\nindex 0000000..501ed6a\n--- /dev/null\n+++ b/.djtest_tmp/testapp/apps.py\n@@ -0,0 +1,6 @@\n+from django.apps import AppConfig\n+\n+\n+class TestAppConfig(AppConfig):\n+    name = 'testapp'\n+    label = 'testapp'\ndiff --git a/django/db/models/fields/__init__.py b/django/db/models/fields/__init__.py\nindex ee45bb9..3024e90 100644\n--- a/django/db/models/fields/__init__.py\n+++ b/django/db/models/fields/__init__.py\n@@ -763,8 +763,12 @@ class Field(RegisterLookupMixin):\n             if not getattr(cls, self.attname, None):\n                 setattr(cls, self.attname, self.descriptor_class(self))\n         if self.choices is not None:\n-            setattr(cls, 'get_%s_display' % self.name,\n-                    partialmethod(cls._get_FIELD_display, field=self))\n+            # Don't override a get_FOO_display() method defined explicitly on\n+            # this class, but don't check methods derived from the parent\n+            # (the method may be defined on an abstract base class).\n+            if not hasattr(cls, 'get_%s_display' % self.name):\n+                setattr(cls, 'get_%s_display' % self.name,\n+                        partialmethod(cls._get_FIELD_display, field=self))\n \n     def get_filter_kwargs_for_object(self, obj):\n         \"\"\"\n",
+  "policyViolations": [],
+  "providerError": "This operation was aborted",
+  "runnerExitCode": 1,
+  "sandboxImage": "sweb.eval.arm64.django__django-11999:latest",
+  "schemaVersion": 1,
+  "startedAt": "2026-10-19T23:49:05.708Z",
+  "strategyHash": "462f34ca395d1c0817472c8de3ee61cba155df886fe48dc8386a24cafcd5c17e",
+  "timeoutAborted": false,
+  "tokenTelemetryAvailable": true,
+  "toolCalls": 24
+}

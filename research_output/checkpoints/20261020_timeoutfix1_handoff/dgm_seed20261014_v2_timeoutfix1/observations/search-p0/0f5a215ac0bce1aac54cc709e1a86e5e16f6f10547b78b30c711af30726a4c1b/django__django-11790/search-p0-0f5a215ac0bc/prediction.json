@@ -1,0 +1,7 @@
+[
+  {
+    "instance_id": "django__django-11790",
+    "model_name_or_path": "dgm-pi-0f5a215ac0bc-72cd4edf575f",
+    "model_patch": "diff --git a/django/contrib/auth/forms.py b/django/contrib/auth/forms.py\nindex a0cfed0..1d5f9b7 100644\n--- a/django/contrib/auth/forms.py\n+++ b/django/contrib/auth/forms.py\n@@ -165,7 +165,10 @@ class AuthenticationForm(forms.Form):\n     Base class for authenticating users. Extend this to get a form that accepts\n     username/password logins.\n     \"\"\"\n-    username = UsernameField(widget=forms.TextInput(attrs={'autofocus': True}))\n+    username = UsernameField(\n+        max_length=254,\n+        widget=forms.TextInput(attrs={'autofocus': True}),\n+    )\n     password = forms.CharField(\n         label=_(\"Password\"),\n         strip=False,\n"
+  }
+]

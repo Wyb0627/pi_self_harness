@@ -1,0 +1,40 @@
+{
+  "archive_hash": "e804e64964b3d18f716ef68647553775cedfbdfe2c20df9614f98beb155385f2",
+  "entries": [
+    {
+      "artifact_hash": "0f5a215ac0bce1aac54cc709e1a86e5e16f6f10547b78b30c711af30726a4c1b",
+      "evaluated_tasks": 60,
+      "functioning_child_count": 1,
+      "functioning_child_slots": [
+        0
+      ],
+      "insertion_ordinal": 0,
+      "parent_artifact_hash": null,
+      "resolved_60": 21,
+      "score_60": 0.35
+    },
+    {
+      "artifact_hash": "30be840203090319746a26f6a5ca5ab68280a2d630e900066c3908fa4d03d4b9",
+      "evaluated_tasks": 60,
+      "functioning_child_count": 1,
+      "functioning_child_slots": [
+        3
+      ],
+      "insertion_ordinal": 1,
+      "parent_artifact_hash": "0f5a215ac0bce1aac54cc709e1a86e5e16f6f10547b78b30c711af30726a4c1b",
+      "resolved_60": 23,
+      "score_60": 0.38333333333333336
+    },
+    {
+      "artifact_hash": "190d4f12c362e93045dce6c2d5a322963d66942808419e26cfbecbc017c6ec4a",
+      "evaluated_tasks": 60,
+      "functioning_child_count": 0,
+      "functioning_child_slots": [],
+      "insertion_ordinal": 2,
+      "parent_artifact_hash": "30be840203090319746a26f6a5ca5ab68280a2d630e900066c3908fa4d03d4b9",
+      "resolved_60": 20,
+      "score_60": 0.3333333333333333
+    }
+  ],
+  "schema_version": 1
+}

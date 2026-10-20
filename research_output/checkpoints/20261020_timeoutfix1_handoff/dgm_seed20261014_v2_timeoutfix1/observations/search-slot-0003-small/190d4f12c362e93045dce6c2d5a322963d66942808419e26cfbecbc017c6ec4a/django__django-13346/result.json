@@ -1,0 +1,31 @@
+{
+  "budgetAborted": true,
+  "cacheReadTokens": 481536,
+  "cacheWriteTokens": 0,
+  "candidateToolNames": [
+    "callable_signatures",
+    "code_search"
+  ],
+  "completedAt": "2026-10-20T02:33:04.931Z",
+  "durationMs": 98983,
+  "fullPatch": "diff --git a/stubs/asgiref/__init__.py b/stubs/asgiref/__init__.py\nnew file mode 100644\nindex 0000000..e69de29\ndiff --git a/stubs/asgiref/local.py b/stubs/asgiref/local.py\nnew file mode 100644\nindex 0000000..dd6be22\n--- /dev/null\n+++ b/stubs/asgiref/local.py\n@@ -0,0 +1,11 @@\n+import threading\n+\n+class Local:\n+    def __init__(self, thread_critical=False):\n+        object.__setattr__(self, '_storage', threading.local())\n+\n+    def __getattr__(self, name):\n+        return getattr(self._storage, name)\n+\n+    def __setattr__(self, name, value):\n+        setattr(self._storage, name, value)\ndiff --git a/stubs/asgiref/sync.py b/stubs/asgiref/sync.py\nnew file mode 100644\nindex 0000000..a67d2ac\n--- /dev/null\n+++ b/stubs/asgiref/sync.py\n@@ -0,0 +1,19 @@\n+import asyncio, functools\n+\n+def sync_to_async(func, thread_sensitive=True):\n+    @functools.wraps(func)\n+    async def wrapper(*args, **kwargs):\n+        return func(*args, **kwargs)\n+    return wrapper\n+\n+def async_to_sync(func):\n+    @functools.wraps(func)\n+    def wrapper(*args, **kwargs):\n+        try:\n+            loop = asyncio.get_event_loop()\n+        except RuntimeError:\n+            loop = asyncio.new_event_loop()\n+            asyncio.set_event_loop(loop)\n+        coro = func(*args, **kwargs)\n+        return loop.run_until_complete(coro)\n+    return wrapper\ndiff --git a/stubs/pytz/__init__.py b/stubs/pytz/__init__.py\nnew file mode 100644\nindex 0000000..b408dfb\n--- /dev/null\n+++ b/stubs/pytz/__init__.py\n@@ -0,0 +1,27 @@\n+import datetime\n+\n+class _UTC(datetime.tzinfo):\n+    def utcoffset(self, dt):\n+        return datetime.timedelta(0)\n+    def tzname(self, dt):\n+        return 'UTC'\n+    def dst(self, dt):\n+        return datetime.timedelta(0)\n+\n+utc = _UTC()\n+\n+class _FixedOffset(datetime.tzinfo):\n+    def __init__(self, offset):\n+        self._offset = datetime.timedelta(seconds=offset)\n+    def utcoffset(self, dt):\n+        return self._offset\n+    def tzname(self, dt):\n+        return 'FixedOffset'\n+    def dst(self, dt):\n+        return datetime.timedelta(0)\n+\n+def timezone(name):\n+    return utc\n+\n+def FixedOffset(offset):\n+    return _FixedOffset(offset)\ndiff --git a/stubs/sqlparse/__init__.py b/stubs/sqlparse/__init__.py\nnew file mode 100644\nindex 0000000..e41e2df\n--- /dev/null\n+++ b/stubs/sqlparse/__init__.py\n@@ -0,0 +1,2 @@\n+def format(sql, **kwargs):\n+    return sql\n",
+  "inputTokens": 32492,
+  "instanceId": "django__django-13346",
+  "maxOutputTokens": 65536,
+  "maxTotalTokens": 512000,
+  "modelId": "byteplus/deepseek-v4-flash-ga",
+  "modelProvider": "rollback-deepseek",
+  "noShell": false,
+  "outputTokens": 6961,
+  "patch": "diff --git a/stubs/asgiref/__init__.py b/stubs/asgiref/__init__.py\nnew file mode 100644\nindex 0000000..e69de29\ndiff --git a/stubs/asgiref/local.py b/stubs/asgiref/local.py\nnew file mode 100644\nindex 0000000..dd6be22\n--- /dev/null\n+++ b/stubs/asgiref/local.py\n@@ -0,0 +1,11 @@\n+import threading\n+\n+class Local:\n+    def __init__(self, thread_critical=False):\n+        object.__setattr__(self, '_storage', threading.local())\n+\n+    def __getattr__(self, name):\n+        return getattr(self._storage, name)\n+\n+    def __setattr__(self, name, value):\n+        setattr(self._storage, name, value)\ndiff --git a/stubs/asgiref/sync.py b/stubs/asgiref/sync.py\nnew file mode 100644\nindex 0000000..a67d2ac\n--- /dev/null\n+++ b/stubs/asgiref/sync.py\n@@ -0,0 +1,19 @@\n+import asyncio, functools\n+\n+def sync_to_async(func, thread_sensitive=True):\n+    @functools.wraps(func)\n+    async def wrapper(*args, **kwargs):\n+        return func(*args, **kwargs)\n+    return wrapper\n+\n+def async_to_sync(func):\n+    @functools.wraps(func)\n+    def wrapper(*args, **kwargs):\n+        try:\n+            loop = asyncio.get_event_loop()\n+        except RuntimeError:\n+            loop = asyncio.new_event_loop()\n+            asyncio.set_event_loop(loop)\n+        coro = func(*args, **kwargs)\n+        return loop.run_until_complete(coro)\n+    return wrapper\ndiff --git a/stubs/pytz/__init__.py b/stubs/pytz/__init__.py\nnew file mode 100644\nindex 0000000..b408dfb\n--- /dev/null\n+++ b/stubs/pytz/__init__.py\n@@ -0,0 +1,27 @@\n+import datetime\n+\n+class _UTC(datetime.tzinfo):\n+    def utcoffset(self, dt):\n+        return datetime.timedelta(0)\n+    def tzname(self, dt):\n+        return 'UTC'\n+    def dst(self, dt):\n+        return datetime.timedelta(0)\n+\n+utc = _UTC()\n+\n+class _FixedOffset(datetime.tzinfo):\n+    def __init__(self, offset):\n+        self._offset = datetime.timedelta(seconds=offset)\n+    def utcoffset(self, dt):\n+        return self._offset\n+    def tzname(self, dt):\n+        return 'FixedOffset'\n+    def dst(self, dt):\n+        return datetime.timedelta(0)\n+\n+def timezone(name):\n+    return utc\n+\n+def FixedOffset(offset):\n+    return _FixedOffset(offset)\ndiff --git a/stubs/sqlparse/__init__.py b/stubs/sqlparse/__init__.py\nnew file mode 100644\nindex 0000000..e41e2df\n--- /dev/null\n+++ b/stubs/sqlparse/__init__.py\n@@ -0,0 +1,2 @@\n+def format(sql, **kwargs):\n+    return sql\n",
+  "policyViolations": [],
+  "providerError": "This operation was aborted",
+  "runnerExitCode": 1,
+  "sandboxImage": "sweb.eval.arm64.django__django-13346:latest",
+  "schemaVersion": 1,
+  "startedAt": "2026-10-20T02:31:25.948Z",
+  "strategyHash": "5ebb9addd2b0c24484f90f3ef5f5c51bb5354802d1e7572df5552e3d872efe36",
+  "timeoutAborted": false,
+  "tokenTelemetryAvailable": true,
+  "toolCalls": 34
+}
