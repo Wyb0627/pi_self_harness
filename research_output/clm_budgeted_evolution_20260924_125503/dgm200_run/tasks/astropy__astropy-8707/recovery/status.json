@@ -1,0 +1,25 @@
+{
+  "status": "repair_error",
+  "resolved": false,
+  "candidatePaths": [
+    "astropy/io/fits/tests/test_header.py",
+    "astropy/io/fits/hdu/base.py",
+    "astropy/io/fits/util.py"
+  ],
+  "feedbackEvaluation": {
+    "status": "completed",
+    "resolved": false,
+    "protocol": "feedback_probe",
+    "officialEvaluatorRun": true,
+    "usedInertFeedbackProbe": true,
+    "identitySha256": "8255653ee73ca991b64144a8097cf0dbcf444fb7571d17ebeb460bec4facb050",
+    "submittedPatchSha256": "b57116ef8e292486da0bee168ee28f42f66562fcc02b81299c643eaea834b915",
+    "runId": "dgm200-feedback_probe-8255653ee73ca991",
+    "modelNameOrPath": "pi-rf-clm-feedback-probe-8255653ee73c",
+    "returnCode": 0,
+    "durationSeconds": 65.363,
+    "reportPath": "/Users/bytedance/codes/pi/research_output/clm_budgeted_evolution_20260924_125503/dgm200_run/logs/run_evaluation/dgm200-feedback_probe-8255653ee73ca991/pi-rf-clm-feedback-probe-8255653ee73c/astropy__astropy-8707/report.json",
+    "testOutputPath": "/Users/bytedance/codes/pi/research_output/clm_budgeted_evolution_20260924_125503/dgm200_run/logs/run_evaluation/dgm200-feedback_probe-8255653ee73ca991/pi-rf-clm-feedback-probe-8255653ee73c/astropy__astropy-8707/test_output.txt"
+  },
+  "applicationError": "ValueError: Expected one exact match in astropy/io/fits/header.py, found 0"
+}

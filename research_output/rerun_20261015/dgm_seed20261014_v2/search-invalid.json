@@ -1,0 +1,36 @@
+{
+  "classification": "infrastructure_invalid",
+  "d_test_consumed": false,
+  "evidence": {
+    "completed_p0_tasks": 60,
+    "failed_mutation_slots": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9
+    ],
+    "mutation_reported_tokens": 0,
+    "p0_resolved": 19,
+    "provider_error": "SSL: CERTIFICATE_VERIFY_FAILED",
+    "search_seal_present_but_scientifically_invalid": true,
+    "search_seal_sha256": "b8d57ada48afba2a122b821c32d3e17fdafb5cff1b2f05462e799c915578cd4b"
+  },
+  "invalidated_at": "2026-10-15T03:33:55Z",
+  "p0_reusable": true,
+  "reason": "All ten mutation invocations failed before upstream inference because the local SSE proxy could not verify the corporate TLS certificate chain.",
+  "record_hash": "7d5447dc5f917e10121ad39a36febcb5c5ddc35704c355fabc98ed701a840b7e",
+  "replacement_transport": {
+    "combined_mozilla_and_macos_system_ca_bundle": true,
+    "provider_failure_stops_search_immediately": true,
+    "upstream_tls_probe_required": true
+  },
+  "schema_version": 1,
+  "search_mutations_reusable": false,
+  "terminal_state": "SEARCH_INFRASTRUCTURE_INVALID"
+}

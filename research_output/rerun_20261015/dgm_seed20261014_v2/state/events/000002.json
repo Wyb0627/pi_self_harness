@@ -1,0 +1,14 @@
+{
+  "event_hash": "281c1f0fd3b2d7c2777c54c58be9615e5d239fdd382ec87d8efbab503a9b1158",
+  "event_type": "candidate_invalid",
+  "payload": {
+    "parent_artifact_hash": "0f5a215ac0bce1aac54cc709e1a86e5e16f6f10547b78b30c711af30726a4c1b",
+    "reason": "Unexpected end of JSON input",
+    "schema_version": 1,
+    "slot": 0,
+    "terminal_state": "CANDIDATE_INVALID_REJECTED",
+    "wave": 0
+  },
+  "previous_hash": "1aa64519b48d0b5289ae6cebcb66d91a27a0f70d3637733bed2b81c65abd8014",
+  "sequence": 2
+}

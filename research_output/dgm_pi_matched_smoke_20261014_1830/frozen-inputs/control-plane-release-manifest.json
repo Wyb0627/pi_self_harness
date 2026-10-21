@@ -1,0 +1,9 @@
+{
+  "files": {
+    "rollback_mvp/dgm_evolve/experiment.py": "fef6303262b4d3b52a3029af199475d62e3a1e79bab75792902dd1a5e7a94db0",
+    "rollback_mvp/pi_strategy_mutator.mjs": "ab91c5e007a56b6377ce4422e7df4bf98eaa9dfeb785530ed4029b47a6ba56f5",
+    "rollback_mvp/pi_swe_runner.mjs": "29d81d507ed27625d60740fb6b334c235d6709fad7ba730eebebf276dd1a4a44",
+    "rollback_mvp/run_dgm_pi_evolution.py": "afd61f8089c1982e1b6bae45d2eebd14b8093cf0adb17b2c75800b65c8247c3f"
+  },
+  "schema_version": 1
+}

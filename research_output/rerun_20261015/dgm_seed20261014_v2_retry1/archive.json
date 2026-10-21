@@ -1,0 +1,28 @@
+{
+  "archive_hash": "2a1d377f96bf059de736f7f3f174cefc7f3aad48ae4a31c695a0577f77bfcd50",
+  "entries": [
+    {
+      "artifact_hash": "0f5a215ac0bce1aac54cc709e1a86e5e16f6f10547b78b30c711af30726a4c1b",
+      "evaluated_tasks": 60,
+      "functioning_child_count": 1,
+      "functioning_child_slots": [
+        0
+      ],
+      "insertion_ordinal": 0,
+      "parent_artifact_hash": null,
+      "resolved_60": 19,
+      "score_60": 0.31666666666666665
+    },
+    {
+      "artifact_hash": "3df70b706c460d6478d71bc2b90a517e58defb2e5dcbc6df1dd1952ffbd9bef9",
+      "evaluated_tasks": 60,
+      "functioning_child_count": 0,
+      "functioning_child_slots": [],
+      "insertion_ordinal": 1,
+      "parent_artifact_hash": "0f5a215ac0bce1aac54cc709e1a86e5e16f6f10547b78b30c711af30726a4c1b",
+      "resolved_60": 18,
+      "score_60": 0.3
+    }
+  ],
+  "schema_version": 1
+}

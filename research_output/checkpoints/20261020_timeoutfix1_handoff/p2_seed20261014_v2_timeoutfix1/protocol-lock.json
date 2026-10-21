@@ -1,0 +1,18 @@
+{
+  "arm": "held-out-adapted-p2-on-pi",
+  "cold_start_attestation_hash": "08547f1bef965aeac1b03ee4a648cd1d3b018f46927250b13a21aa5b2308ac1f",
+  "config_hash": "ad85f7e4fe0cd95f52f3cc7f7df90338d6f1d244b5b56826694f12bb2c3e80b9",
+  "confirmatory_status": "exploratory-single-seed",
+  "d_test_visibility": "post-search-seal endpoint worker only",
+  "execution_stack_hash": "fd68171cf7b1173816d9f8a4a080f09222b21509c5e3e2a2d329ba17548b96f1",
+  "final_endpoint_budget_scope": "endpoint:final",
+  "fixed_policy_hash": "6225b6a9c7eef8a43c7abb95db4e51150552ba745a8eeeabba753a79f06a1eae",
+  "model_revision_limitation": "Provider exposes model ID but no immutable serving revision.",
+  "p0_artifact_hash": "0f5a215ac0bce1aac54cc709e1a86e5e16f6f10547b78b30c711af30726a4c1b",
+  "protocol_revision": "matched-dgm-pi-v2",
+  "reference_endpoint_budget_scope": "endpoint:p0",
+  "run_id": "p2-pilot-s20261014-v2-timeoutfix1",
+  "schema_version": 1,
+  "search_budget_scope": "search",
+  "split_binding_hash": "a0136c5b2c7b4b86c6c375bd02f8a67ac7c3c67797030340c9f9aa81b1529134"
+}

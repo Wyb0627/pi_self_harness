@@ -1,0 +1,31 @@
+{
+  "budgetAborted": true,
+  "cacheReadTokens": 426752,
+  "cacheWriteTokens": 0,
+  "candidateToolNames": [
+    "callable_signatures",
+    "code_search"
+  ],
+  "completedAt": "2026-10-20T04:41:17.648Z",
+  "durationMs": 215004,
+  "fullPatch": "diff --git a/django/forms/models.py b/django/forms/models.py\nindex dafc11f..88481af 100644\n--- a/django/forms/models.py\n+++ b/django/forms/models.py\n@@ -13,7 +13,7 @@ from django.forms.forms import BaseForm, DeclarativeFieldsMetaclass\n from django.forms.formsets import BaseFormSet, formset_factory\n from django.forms.utils import ErrorList\n from django.forms.widgets import (\n-    HiddenInput, MultipleHiddenInput, SelectMultiple,\n+    HiddenInput, MultipleHiddenInput, RadioSelect, SelectMultiple,\n )\n from django.utils.text import capfirst, get_text_list\n from django.utils.translation import gettext, gettext_lazy as _\n@@ -1196,6 +1196,10 @@ class ModelChoiceField(ChoiceField):\n             self, required=required, widget=widget, label=label,\n             initial=initial, help_text=help_text, **kwargs\n         )\n+        # Unlike the select widget, a radio widget has an inherent unfilled\n+        # state, so a blank option isn't needed and looks like a valid choice.\n+        if isinstance(self.widget, RadioSelect):\n+            self.empty_label = None\n         self.queryset = queryset\n         self.limit_choices_to = limit_choices_to   # limit the queryset later.\n         self.to_field_name = to_field_name\n",
+  "inputTokens": 65607,
+  "instanceId": "django__django-12406",
+  "maxOutputTokens": 65536,
+  "maxTotalTokens": 512000,
+  "modelId": "byteplus/deepseek-v4-flash-ga",
+  "modelProvider": "rollback-deepseek",
+  "noShell": false,
+  "outputTokens": 39898,
+  "patch": "diff --git a/django/forms/models.py b/django/forms/models.py\nindex dafc11f..88481af 100644\n--- a/django/forms/models.py\n+++ b/django/forms/models.py\n@@ -13,7 +13,7 @@ from django.forms.forms import BaseForm, DeclarativeFieldsMetaclass\n from django.forms.formsets import BaseFormSet, formset_factory\n from django.forms.utils import ErrorList\n from django.forms.widgets import (\n-    HiddenInput, MultipleHiddenInput, SelectMultiple,\n+    HiddenInput, MultipleHiddenInput, RadioSelect, SelectMultiple,\n )\n from django.utils.text import capfirst, get_text_list\n from django.utils.translation import gettext, gettext_lazy as _\n@@ -1196,6 +1196,10 @@ class ModelChoiceField(ChoiceField):\n             self, required=required, widget=widget, label=label,\n             initial=initial, help_text=help_text, **kwargs\n         )\n+        # Unlike the select widget, a radio widget has an inherent unfilled\n+        # state, so a blank option isn't needed and looks like a valid choice.\n+        if isinstance(self.widget, RadioSelect):\n+            self.empty_label = None\n         self.queryset = queryset\n         self.limit_choices_to = limit_choices_to   # limit the queryset later.\n         self.to_field_name = to_field_name\n",
+  "policyViolations": [],
+  "providerError": "This operation was aborted",
+  "runnerExitCode": 1,
+  "sandboxImage": "sweb.eval.arm64.django__django-12406:latest",
+  "schemaVersion": 1,
+  "startedAt": "2026-10-20T04:37:42.643Z",
+  "strategyHash": "5ebb9addd2b0c24484f90f3ef5f5c51bb5354802d1e7572df5552e3d872efe36",
+  "timeoutAborted": false,
+  "tokenTelemetryAvailable": true,
+  "toolCalls": 24
+}

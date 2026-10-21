@@ -1,0 +1,28 @@
+<whiteboard type="mermaid">
+flowchart TD
+  A["加载 DGM SWE 进化树<br/>约 83 节点 / 46 个有分数<br/>〔DGM 原有 · 复用〕"] --> B["取分叉：父节点带 2+ 有分孩子，共 11 个<br/>〔我们新加 · 脚手架〕"]
+  B --> C{"遍历每个分叉<br/>〔我们新加〕"}
+  C --> D["构造决策器视图<br/>孩子 id / 意图 / diff / 自身对错<br/>数据全来自 DGM，禁看下游（信息隔离）<br/>〔复用 DGM 数据〕"]
+  D --> E1["greedy：当前分最高<br/>〔DGM 式基线 · 不耗 token〕"]
+  D --> E2["random：随机<br/>〔我们新加 · 消融 · 不耗 token〕"]
+  D --> E3["llm = Ours：前瞻诊断，5 票投票<br/>〔我们新加 · 核心 · 唯一消耗 token 💰〕"]
+  E1 --> F["oracle = subtree-best<br/>用真实下游，仅打分不决策<br/>〔我们新加 · 评测，离线复用 DGM 分〕"]
+  E2 --> F
+  E3 --> F
+  F --> G["打分：hit / regret<br/>〔我们新加 · 不耗 token〕"]
+  G --> C
+  C --> H["汇总：命中率 &amp; 平均 regret<br/>全部分叉 + 分歧子集<br/>〔我们新加 · 不耗 token〕"]
+
+  subgraph 图例
+    L1["DGM 原有 / 复用<br/>（不耗 token）"]
+    L2["我们新加<br/>（不耗 token）"]
+    L3["我们新加 · 消耗 token 💰"]
+  end
+
+  classDef dgm fill:#dbeafe,stroke:#3b82f6,color:#1e3a5f;
+  classDef ours fill:#dcfce7,stroke:#16a34a,color:#14532d;
+  classDef token fill:#fed7aa,stroke:#ea580c,color:#7c2d12,stroke-width:3px;
+  class A,D,E1,L1 dgm;
+  class B,C,E2,F,G,H,L2 ours;
+  class E3,L3 token;
+</whiteboard>

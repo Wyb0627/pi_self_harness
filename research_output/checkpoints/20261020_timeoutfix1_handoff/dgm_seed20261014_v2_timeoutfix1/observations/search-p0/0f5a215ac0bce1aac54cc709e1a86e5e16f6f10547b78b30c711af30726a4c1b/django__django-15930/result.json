@@ -1,0 +1,33 @@
+{
+  "budgetAborted": true,
+  "cacheReadTokens": 484864,
+  "cacheWriteTokens": 0,
+  "candidateToolNames": [],
+  "completedAt": "2026-10-19T18:05:36.370Z",
+  "durationMs": 119308,
+  "fullPatch": "diff --git a/repro.py b/repro.py\nnew file mode 100644\nindex 0000000..c05e2d5\n--- /dev/null\n+++ b/repro.py\n@@ -0,0 +1,53 @@\n+import django\n+from django.conf import settings\n+\n+settings.configure(\n+    DEBUG=True,\n+    DATABASES={\n+        \"default\": {\n+            \"ENGINE\": \"django.db.backends.sqlite3\",\n+            \"NAME\": \":memory:\",\n+        }\n+    },\n+    INSTALLED_APPS=[\n+        \"django.contrib.contenttypes\",\n+        \"django.contrib.auth\",\n+    ],\n+    DEFAULT_AUTO_FIELD=\"django.db.models.AutoField\",\n+)\n+django.setup()\n+\n+from django.db import models, connection\n+from django.db.models import Case, When, Value, BooleanField, Q\n+\n+\n+class User(models.Model):\n+    name = models.CharField(max_length=50)\n+\n+    class Meta:\n+        app_label = \"repro\"\n+\n+\n+with connection.schema_editor() as editor:\n+    editor.create_model(User)\n+\n+User.objects.create(name=\"a\")\n+User.objects.create(name=\"b\")\n+\n+qs = (\n+    User.objects.annotate(\n+        _a=Case(\n+            When(~Q(pk__in=[]), then=Value(True)),\n+            default=Value(False),\n+            output_field=BooleanField(),\n+        )\n+    )\n+    .order_by(\"-_a\")\n+    .values(\"pk\")\n+)\n+\n+print(\"SQL:\", qs.query)\n+try:\n+    print(list(qs))\n+except Exception as e:\n+    print(\"ERROR:\", type(e).__name__, e)\n",
+  "inputTokens": 47851,
+  "instanceId": "django__django-15930",
+  "maxOutputTokens": 65536,
+  "maxTotalTokens": 512000,
+  "modelId": "byteplus/deepseek-v4-flash-ga",
+  "modelProvider": "rollback-deepseek",
+  "noShell": false,
+  "outputTokens": 15780,
+  "patch": "",
+  "policyViolations": [
+    {
+      "patch": "diff --git a/repro.py b/repro.py\nnew file mode 100644\nindex 0000000..c05e2d5\n--- /dev/null\n+++ b/repro.py\n@@ -0,0 +1,53 @@\n+import django\n+from django.conf import settings\n+\n+settings.configure(\n+    DEBUG=True,\n+    DATABASES={\n+        \"default\": {\n+            \"ENGINE\": \"django.db.backends.sqlite3\",\n+            \"NAME\": \":memory:\",\n+        }\n+    },\n+    INSTALLED_APPS=[\n+        \"django.contrib.contenttypes\",\n+        \"django.contrib.auth\",\n+    ],\n+    DEFAULT_AUTO_FIELD=\"django.db.models.AutoField\",\n+)\n+django.setup()\n+\n+from django.db import models, connection\n+from django.db.models import Case, When, Value, BooleanField, Q\n+\n+\n+class User(models.Model):\n+    name = models.CharField(max_length=50)\n+\n+    class Meta:\n+        app_label = \"repro\"\n+\n+\n+with connection.schema_editor() as editor:\n+    editor.create_model(User)\n+\n+User.objects.create(name=\"a\")\n+User.objects.create(name=\"b\")\n+\n+qs = (\n+    User.objects.annotate(\n+        _a=Case(\n+            When(~Q(pk__in=[]), then=Value(True)),\n+            default=Value(False),\n+            output_field=BooleanField(),\n+        )\n+    )\n+    .order_by(\"-_a\")\n+    .values(\"pk\")\n+)\n+\n+print(\"SQL:\", qs.query)\n+try:\n+    print(list(qs))\n+except Exception as e:\n+    print(\"ERROR:\", type(e).__name__, e)\n",
+      "type": "forbidden-path-modification"
+    }
+  ],
+  "providerError": "This operation was aborted",
+  "runnerExitCode": 1,
+  "sandboxImage": "sweb.eval.x86_64.django__django-15930:latest",
+  "schemaVersion": 1,
+  "startedAt": "2026-10-19T18:03:37.061Z",
+  "strategyHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "timeoutAborted": false,
+  "tokenTelemetryAvailable": true,
+  "toolCalls": 27
+}

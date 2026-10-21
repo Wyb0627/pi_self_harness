@@ -1,0 +1,18 @@
+{
+  "archive_entries": 1,
+  "archive_hash": "eca98de953538bacd0ae648c1aa84688687a35ada2402f437702fa5f6608c6c5",
+  "completed_proposal_slots": 10,
+  "final_artifact_hash": "0f5a215ac0bce1aac54cc709e1a86e5e16f6f10547b78b30c711af30726a4c1b",
+  "final_score_60": 0.31666666666666665,
+  "reason": "proposal_slots_exhausted",
+  "schema_version": 1,
+  "sealed_at": "2026-10-15T03:30:26Z",
+  "search_cost": {
+    "active_seconds": 21922.339,
+    "api_calls": 70,
+    "budget_counted_tokens": 21821181,
+    "conservative_token_charge": 0,
+    "reported_tokens": 21821181,
+    "task_executions": 60
+  }
+}

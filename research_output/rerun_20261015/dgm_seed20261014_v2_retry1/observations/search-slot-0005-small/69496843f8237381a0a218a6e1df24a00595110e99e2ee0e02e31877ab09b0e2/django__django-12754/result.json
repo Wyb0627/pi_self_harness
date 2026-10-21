@@ -1,0 +1,31 @@
+{
+  "budgetAborted": true,
+  "cacheReadTokens": 475136,
+  "cacheWriteTokens": 0,
+  "candidateToolNames": [
+    "code_search",
+    "regex_contract_audit"
+  ],
+  "completedAt": "2026-10-15T12:49:59.710Z",
+  "durationMs": 133521,
+  "fullPatch": "diff --git a/asgiref/__init__.py b/asgiref/__init__.py\nnew file mode 100644\nindex 0000000..e69de29\ndiff --git a/asgiref/local.py b/asgiref/local.py\nnew file mode 100644\nindex 0000000..369fdce\n--- /dev/null\n+++ b/asgiref/local.py\n@@ -0,0 +1,5 @@\n+\"\"\"Minimal stub of asgiref.local for offline test runs.\"\"\"\n+\n+\n+class Local:\n+    pass\ndiff --git a/asgiref/sync.py b/asgiref/sync.py\nnew file mode 100644\nindex 0000000..de14f9e\n--- /dev/null\n+++ b/asgiref/sync.py\n@@ -0,0 +1,9 @@\n+\"\"\"Minimal stub of asgiref.sync for offline test runs (sync-only).\"\"\"\n+\n+\n+def sync_to_async(func, *args, **kwargs):\n+    return func\n+\n+\n+def async_to_sync(func, *args, **kwargs):\n+    return func\ndiff --git a/repro_tmp.py b/repro_tmp.py\nnew file mode 100644\nindex 0000000..43c6568\n--- /dev/null\n+++ b/repro_tmp.py\n@@ -0,0 +1,49 @@\n+import django\n+from django.conf import settings\n+settings.configure(\n+    DEBUG=True,\n+    DATABASES={},\n+    INSTALLED_APPS=['django.contrib.contenttypes', 'django.contrib.auth'],\n+    SECRET_KEY='x',\n+)\n+django.setup()\n+\n+from django.db import models\n+from django.db.migrations.autodetector import MigrationAutodetector\n+from django.db.migrations.loader import MigrationLoader\n+from django.db.migrations.questioner import MigrationQuestioner\n+from django.db.migrations.state import ModelState, ProjectState\n+\n+old_state = ProjectState()\n+old_state.add_model(ModelState(\n+    'testapp', 'Readable',\n+    [('id', models.AutoField(primary_key=True)),\n+     ('title', models.CharField(max_length=200))],\n+    bases=(models.Model,),\n+))\n+\n+new_state = ProjectState()\n+new_state.add_model(ModelState(\n+    'testapp', 'Readable',\n+    [('id', models.AutoField(primary_key=True))],\n+    bases=(models.Model,),\n+))\n+new_state.add_model(ModelState(\n+    'testapp', 'Book',\n+    [('id', models.AutoField(primary_key=True)),\n+     ('title', models.CharField(max_length=200))],\n+    bases=('testapp.Readable',),\n+))\n+\n+q = MigrationQuestioner({'ask_initial': lambda *a: False})\n+graph = MigrationLoader(None, ignore_no_migrations=True).graph\n+changes = MigrationAutodetector(old_state, new_state, q).changes(graph)\n+for app, migs in changes.items():\n+    for mig in migs:\n+        print(mig.name, [type(op).__name__ + '(' + getattr(op, 'name', '') + ')' for op in mig.operations])\n+\n+# Simulate applying the migration state forwards\n+st = ProjectState.from_models([old_state.apps.get_model('testapp', 'Readable')])\n+for mig in changes['testapp']:\n+    mig.apply(st, None)\n+print(\"OK - state applied\")\n",
+  "inputTokens": 48700,
+  "instanceId": "django__django-12754",
+  "maxOutputTokens": 65536,
+  "maxTotalTokens": 512000,
+  "modelId": "byteplus/deepseek-v4-flash-ga",
+  "modelProvider": "rollback-deepseek",
+  "noShell": false,
+  "outputTokens": 17661,
+  "patch": "diff --git a/asgiref/__init__.py b/asgiref/__init__.py\nnew file mode 100644\nindex 0000000..e69de29\ndiff --git a/asgiref/local.py b/asgiref/local.py\nnew file mode 100644\nindex 0000000..369fdce\n--- /dev/null\n+++ b/asgiref/local.py\n@@ -0,0 +1,5 @@\n+\"\"\"Minimal stub of asgiref.local for offline test runs.\"\"\"\n+\n+\n+class Local:\n+    pass\ndiff --git a/asgiref/sync.py b/asgiref/sync.py\nnew file mode 100644\nindex 0000000..de14f9e\n--- /dev/null\n+++ b/asgiref/sync.py\n@@ -0,0 +1,9 @@\n+\"\"\"Minimal stub of asgiref.sync for offline test runs (sync-only).\"\"\"\n+\n+\n+def sync_to_async(func, *args, **kwargs):\n+    return func\n+\n+\n+def async_to_sync(func, *args, **kwargs):\n+    return func\ndiff --git a/repro_tmp.py b/repro_tmp.py\nnew file mode 100644\nindex 0000000..43c6568\n--- /dev/null\n+++ b/repro_tmp.py\n@@ -0,0 +1,49 @@\n+import django\n+from django.conf import settings\n+settings.configure(\n+    DEBUG=True,\n+    DATABASES={},\n+    INSTALLED_APPS=['django.contrib.contenttypes', 'django.contrib.auth'],\n+    SECRET_KEY='x',\n+)\n+django.setup()\n+\n+from django.db import models\n+from django.db.migrations.autodetector import MigrationAutodetector\n+from django.db.migrations.loader import MigrationLoader\n+from django.db.migrations.questioner import MigrationQuestioner\n+from django.db.migrations.state import ModelState, ProjectState\n+\n+old_state = ProjectState()\n+old_state.add_model(ModelState(\n+    'testapp', 'Readable',\n+    [('id', models.AutoField(primary_key=True)),\n+     ('title', models.CharField(max_length=200))],\n+    bases=(models.Model,),\n+))\n+\n+new_state = ProjectState()\n+new_state.add_model(ModelState(\n+    'testapp', 'Readable',\n+    [('id', models.AutoField(primary_key=True))],\n+    bases=(models.Model,),\n+))\n+new_state.add_model(ModelState(\n+    'testapp', 'Book',\n+    [('id', models.AutoField(primary_key=True)),\n+     ('title', models.CharField(max_length=200))],\n+    bases=('testapp.Readable',),\n+))\n+\n+q = MigrationQuestioner({'ask_initial': lambda *a: False})\n+graph = MigrationLoader(None, ignore_no_migrations=True).graph\n+changes = MigrationAutodetector(old_state, new_state, q).changes(graph)\n+for app, migs in changes.items():\n+    for mig in migs:\n+        print(mig.name, [type(op).__name__ + '(' + getattr(op, 'name', '') + ')' for op in mig.operations])\n+\n+# Simulate applying the migration state forwards\n+st = ProjectState.from_models([old_state.apps.get_model('testapp', 'Readable')])\n+for mig in changes['testapp']:\n+    mig.apply(st, None)\n+print(\"OK - state applied\")\n",
+  "policyViolations": [],
+  "providerError": "This operation was aborted",
+  "runnerExitCode": 1,
+  "sandboxImage": "sweb.eval.arm64.django__django-12754:latest",
+  "schemaVersion": 1,
+  "startedAt": "2026-10-15T12:47:46.189Z",
+  "strategyHash": "bd8d2370ae6b950a30b89b8c642302a7498e909e1aecee97975899801d544bd3",
+  "timeoutAborted": false,
+  "tokenTelemetryAvailable": true,
+  "toolCalls": 26
+}

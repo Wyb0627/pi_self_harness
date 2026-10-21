@@ -1,0 +1,46 @@
+]0;DGM Pi protocol-v2 seed 20261014[2026-10-15T03:28:27Z] starting dgm-pilot-s20261014-v2
+commit: 6bccba5bc122b732c042c166d5c24a372707dd03
+{
+  "arm": "held-out-adapted-dgm-on-pi",
+  "cold_start_attestation_hash": "22201e78e0d9136ebac3bd4c727c38f0e2d3c320492e1b69b1266d599b17ef39",
+  "config_hash": "31ad2059612f2cfa20a4e35cec7980a9603bfc66b23efc434493f30cf6f4aa7b",
+  "confirmatory_status": "exploratory-single-seed",
+  "d_test_visibility": "post-search-seal endpoint worker only",
+  "execution_stack_hash": "d6c0de64ed460490733fd93205750400fcf44ba3aa8814b877658edd11b666cb",
+  "final_endpoint_budget_scope": "endpoint:final",
+  "fixed_policy_hash": "2a9aeacab5160555884971b7de14d2c27ccd630250ed73407dfd7b44499b2566",
+  "model_revision_limitation": "Provider exposes model ID but no immutable serving revision.",
+  "p0_artifact_hash": "0f5a215ac0bce1aac54cc709e1a86e5e16f6f10547b78b30c711af30726a4c1b",
+  "protocol_revision": "matched-dgm-pi-v2",
+  "reference_endpoint_budget_scope": "endpoint:p0",
+  "run_id": "dgm-pilot-s20261014-v2",
+  "schema_version": 1,
+  "search_budget_scope": "search",
+  "split_binding_hash": "a0136c5b2c7b4b86c6c375bd02f8a67ac7c3c67797030340c9f9aa81b1529134"
+}
+{
+  "valid": true,
+  "run_id": "dgm-pilot-s20261014-v2",
+  "config_hash": "31ad2059612f2cfa20a4e35cec7980a9603bfc66b23efc434493f30cf6f4aa7b",
+  "paid_runtime_checked": true
+}
+{
+  "schema_version": 1,
+  "sealed_at": "2026-10-15T03:30:26Z",
+  "reason": "proposal_slots_exhausted",
+  "completed_proposal_slots": 10,
+  "archive_entries": 1,
+  "final_artifact_hash": "0f5a215ac0bce1aac54cc709e1a86e5e16f6f10547b78b30c711af30726a4c1b",
+  "final_score_60": 0.31666666666666665,
+  "archive_hash": "eca98de953538bacd0ae648c1aa84688687a35ada2402f437702fa5f6608c6c5",
+  "search_cost": {
+    "reported_tokens": 21821181,
+    "conservative_token_charge": 0,
+    "budget_counted_tokens": 21821181,
+    "active_seconds": 21922.339,
+    "api_calls": 70,
+    "task_executions": 60
+  }
+}
+[2026-10-15T03:30:26Z] search exited with status 0
+]7;file://F92HCQNNF4/Users/bytedance/codes/pi[?25l[?25h

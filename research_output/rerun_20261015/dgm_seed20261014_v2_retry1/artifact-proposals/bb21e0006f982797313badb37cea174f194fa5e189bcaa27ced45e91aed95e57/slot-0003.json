@@ -1,0 +1,61 @@
+{
+  "artifact_hash": "bb21e0006f982797313badb37cea174f194fa5e189bcaa27ced45e91aed95e57",
+  "mutation": {
+    "entry_task_id": "django__django-12262",
+    "kind": "Pi strategy/tool mutation",
+    "mutation_delta": {
+      "depends_on": [
+        "m-0000-1fe24010c967"
+      ],
+      "entry_task_id": "django__django-12262",
+      "mutation_id": "m-0003-d344d719d206",
+      "mutation_summary": "Add an argument-contract tracing strategy and a static callable-signature inspection tool.",
+      "repo": "django/django",
+      "strategy_patch": "## Trace argument contracts before changing dispatch code\n\nWhen a runtime error quotes a callable and one of its parameter names (for example telling the user a keyword was unexpected), the root cause is usually an argument-dispatch layer that reconstructs calls from external syntax. Treat every such layer as a separate contract to inspect, rather than changing the target callable.\n\n1. Locate the error message text verbatim; it identifies the dispatch/validation code that decides whether arguments are accepted.\n2. Use `callable_contract` to read the target callable's signature and find its call sites. Record each parameter kind (positional-only, positional-or-keyword, keyword-only, var-positional, var-keyword), defaults, and decorators.\n3. Reconstruct what argument model the dispatch layer builds: names, positional vs keyword groups, duplicates, defaults, and parameter kinds. Compare that model with the actual signature.\n4. Identify where external syntax is mapped into the call. If the dispatch code filters parameters before calling, verify that accepted parameter kinds and defaults are handled consistently.\n5. Find every entry point that reaches the dispatch layer so the same contract is checked once and shared.\n6. Before editing, write a one-sentence hypothesis naming the contract mismatch and the file that implements the dispatch layer.\n7. After editing, trace the same path again and verify that each accepted external argument reaches the target with the same name and type, and each rejected duplicate reaches the intended error branch.\n\nUse this workflow whenever a public API rejects or forwards arguments unexpectedly, especially when the error message quotes a parameter name.",
+      "tool": {
+        "description": "Statically scan Python files to find definitions and call sites for a named function or method and report its signature: parameter kinds, defaults, keyword-only parameters, varargs, and decorators. Helps diagnose argument dispatch issues without running code.",
+        "handler_code": "import ast\nimport json\nimport os\nimport sys\n\nSKIP_DIRS = {'.git', '.hg', '.svn', '__pycache__', '.tox', '.nox', '.venv', 'node_modules', 'build', 'dist'}\n\ndef emit_error(message):\n    print(json.dumps({'content': message, 'details': {'definitions': [], 'call_sites': [], 'scanned_files': 0}}))\n\ndef source_text(source, node):\n    if node is None:\n        return ''\n    try:\n        return ast.get_source_segment(source, node) or ''\n    except Exception:\n        return ''\n\ndef describe_args(args_node, source):\n    params = []\n    try:\n        posonly_count = len(args_node.posonlyargs)\n    except Exception:\n        posonly_count = 0\n    positional = list(args_node.args)\n    defaults = list(args_node.defaults)\n    default_start = len(positional) - len(defaults)\n    for index, arg_node in enumerate(positional):\n        has_default = index >= default_start\n        default_text = ''\n        if has_default:\n            default_text = source_text(source, defaults[index - default_start])\n        kind = 'positional_only' if index < posonly_count else 'positional_or_keyword'\n        params.append({'name': arg_node.arg, 'kind': kind, 'has_default': has_default, 'default': default_text})\n    if args_node.vararg is not None:\n        params.append({'name': args_node.vararg.arg, 'kind': 'var_positional', 'has_default': False, 'default': ''})\n    kw_defaults = list(args_node.kw_defaults)\n    for index, arg_node in enumerate(args_node.kwonlyargs):\n        has_default = index < len(kw_defaults) and kw_defaults[index] is not None\n        default_text = ''\n        if has_default:\n            default_text = source_text(source, kw_defaults[index])\n        params.append({'name': arg_node.arg, 'kind': 'keyword_only', 'has_default': has_default, 'default': default_text})\n    if args_node.kwarg is not None:\n        params.append({'name': args_node.kwarg.arg, 'kind': 'var_keyword', 'has_default': False, 'default': ''})\n    return params\n\ndef human_params(args_node, source):\n    params = describe_args(args_node, source)\n    pieces = []\n    seen_star = False\n    for param in params:\n        kind = param['kind']\n        name = param['name']\n        if kind == 'var_positional':\n            piece = '*' + name\n            seen_star = True\n        elif kind == 'keyword_only':\n            if not seen_star:\n                pieces.append('*')\n                seen_star = True\n            piece = name\n        elif kind == 'var_keyword':\n            piece = '**' + name\n        else:\n            piece = name\n        if param['has_default']:\n            piece = piece + '=' + (param['default'] or '...')\n        pieces.append(piece)\n    return ', '.join(pieces)\n\ndef format_signature(node, source, relpath):\n    sig = {\n        'path': relpath,\n        'lineno': node.lineno,\n        'end_lineno': node.lineno,\n        'name': node.name,\n        'params': describe_args(node.args, source),\n        'parameters_human': human_params(node.args, source),\n        'decorators': [source_text(source, dec) for dec in node.decorator_list],\n        'returns': source_text(source, node.returns)\n    }\n    try:\n        sig['end_lineno'] = node.end_lineno\n    except Exception:\n        pass\n    return sig\n\ndef find_definitions(tree, source, relpath, symbol, limit, results):\n    for node in ast.walk(tree):\n        if not isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):\n            continue\n        if node.name != symbol:\n            continue\n        if len(results) >= limit:\n            return\n        results.append(format_signature(node, source, relpath))\n\ndef find_calls(tree, source, relpath, symbol, limit, results):\n    lines = source.splitlines()\n    for node in ast.walk(tree):\n        if not isinstance(node, ast.Call):\n            continue\n        func = node.func\n        if isinstance(func, ast.Name):\n            call_name = func.id\n        elif isinstance(func, ast.Attribute):\n            call_name = func.attr\n        else:\n            continue\n        if call_name != symbol:\n            continue\n        if len(results) >= limit:\n            return\n        lineno = node.lineno\n        start = max(1, lineno - 3)\n        end = min(len(lines), lineno + 3)\n        context_lines = []\n        for current in range(start, end + 1):\n            context_lines.append(str(current) + ': ' + lines[current - 1])\n        results.append({'path': relpath, 'lineno': lineno, 'context': context_lines})\n\ndef main():\n    raw = sys.stdin.read()\n    try:\n        data = json.loads(raw)\n    except Exception:\n        emit_error('Could not read input JSON.')\n        return\n    symbol = data.get('symbol')\n    if not isinstance(symbol, str) or not symbol.strip():\n        emit_error('Parameter symbol is required.')\n        return\n    symbol = symbol.strip()\n    root = data.get('path')\n    if not isinstance(root, str) or not root.strip():\n        root = '/testbed'\n    root = os.path.realpath(os.path.abspath(root))\n    testbed = os.path.realpath('/testbed')\n    if root != testbed and not root.startswith(testbed + os.sep):\n        emit_error('Path must be inside /testbed.')\n        return\n    if not os.path.isdir(root):\n        emit_error('Path is not a directory: ' + root)\n        return\n    include_calls = data.get('include_calls', True)\n    if not isinstance(include_calls, bool):\n        include_calls = True\n    try:\n        max_definitions = int(data.get('max_definitions', 10))\n    except Exception:\n        max_definitions = 10\n    max_definitions = max(1, min(max_definitions, 30))\n    max_calls = 80\n\n    definitions = []\n    call_sites = []\n    scanned_files = 0\n    for dirpath, dirnames, filenames in os.walk(root):\n        dirnames[:] = sorted(d for d in dirnames if d not in SKIP_DIRS and not d.startswith('.'))\n        for filename in sorted(filenames):\n            if not filename.endswith('.py'):\n                continue\n            filepath = os.path.join(dirpath, filename)\n            scanned_files += 1\n            try:\n                with open(filepath, 'r', encoding='utf-8', errors='replace') as handle:\n                    source = handle.read()\n            except Exception:\n                continue\n            try:\n                tree = ast.parse(source, filename=filepath)\n            except Exception:\n                continue\n            relpath = os.path.relpath(filepath, root)\n            find_definitions(tree, source, relpath, symbol, max_definitions, definitions)\n            if include_calls:\n                find_calls(tree, source, relpath, symbol, max_calls, call_sites)\n\n    content_lines = []\n    content_lines.append('Scanned ' + str(scanned_files) + ' Python files under ' + root + ' for symbol ' + symbol + '.')\n    if definitions:\n        content_lines.append('Found ' + str(len(definitions)) + ' matching definition(s), showing up to ' + str(len(definitions)) + '.')\n        for sig in definitions:\n            content_lines.append(sig['path'] + ':' + str(sig['lineno']) + ': ' + sig['parameters_human'])\n    else:\n        content_lines.append('No definitions found. Use code_search for aliased or partially qualified names.')\n    if include_calls:\n        if call_sites:\n            content_lines.append('Found ' + str(len(call_sites)) + ' matching call site(s), showing up to ' + str(len(call_sites)) + '.')\n            for call in call_sites:\n                content_lines.append(call['path'] + ':' + str(call['lineno']) + ':')\n                content_lines.extend(call['context'])\n        else:\n            content_lines.append('No matching call sites found.')\n    print(json.dumps({'content': chr(10).join(content_lines), 'details': {'definitions': definitions, 'call_sites': call_sites, 'scanned_files': scanned_files}}))\n\nif __name__ == '__main__':\n    main()",
+        "label": "Callable signature inspector",
+        "name": "callable_contract",
+        "parameters": {
+          "additionalProperties": false,
+          "properties": {
+            "include_calls": {
+              "description": "Whether to also list call sites that reference the symbol; defaults to true.",
+              "type": "boolean"
+            },
+            "max_definitions": {
+              "description": "Maximum number of matching definitions to return, from 1 to 30.",
+              "type": "integer"
+            },
+            "path": {
+              "description": "Root directory to scan; must be under /testbed and defaults to /testbed.",
+              "type": "string"
+            },
+            "symbol": {
+              "description": "Exact function or method name to locate.",
+              "type": "string"
+            }
+          },
+          "required": [
+            "symbol"
+          ],
+          "type": "object"
+        },
+        "timeout_seconds": 60
+      }
+    },
+    "mutation_model_result_hash": "cab31dd75bc721243f359450dfda9feba04092f56c8f570ecbf887a309747825",
+    "probe_task_ids": [
+      "django__django-12262",
+      "django__django-12713",
+      "django__django-12304",
+      "django__django-11790"
+    ],
+    "repo": "django/django",
+    "slot": 3,
+    "summary": "Add an argument-contract tracing strategy and a static callable-signature inspection tool."
+  },
+  "parent_artifact_hash": "3df70b706c460d6478d71bc2b90a517e58defb2e5dcbc6df1dd1952ffbd9bef9",
+  "schema_version": 1
+}

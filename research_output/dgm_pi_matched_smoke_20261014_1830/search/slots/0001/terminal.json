@@ -1,0 +1,11 @@
+{
+  "child_artifact_hash": "e8a2d2abc814753b4a5b1acffea86cb1a41fbc2c75983aa587ca9eac4014cd37",
+  "parent_artifact_hash": "5eb48a6ee49d31a9eacf1fde5cfdd7bada079ffbdc9d1bbf4705088c3b7a9200",
+  "resolved": 0,
+  "schema_version": 1,
+  "score_60": 0.0,
+  "slot": 1,
+  "tasks": 1,
+  "terminal_state": "ARCHIVED",
+  "wave": 0
+}

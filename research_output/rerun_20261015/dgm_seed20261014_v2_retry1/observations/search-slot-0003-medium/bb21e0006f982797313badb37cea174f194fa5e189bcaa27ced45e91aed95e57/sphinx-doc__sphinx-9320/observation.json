@@ -1,0 +1,16 @@
+{
+  "agent_duration_seconds": 73.597,
+  "artifact_hash": "bb21e0006f982797313badb37cea174f194fa5e189bcaa27ced45e91aed95e57",
+  "evaluator_duration_seconds": 60.012,
+  "identity_hash": "4e571d8ee4432d6cadf47629a0a90c35b293516c42b65c32abc3d524c30c666d",
+  "image_build_seconds": 0.101,
+  "instance_id": "sphinx-doc__sphinx-9320",
+  "observation_hash": "87737557370d62de454f69bd3b82362beced83a8e03209e1ae1d9eebf996d30e",
+  "patch_sha256": "cf49ec5d7fd3ded899038a3a4452e7d8614857e9d78080331a21638da3510a5e",
+  "phase": "search-slot-0003-medium",
+  "reported_tokens": 263367,
+  "resolved": true,
+  "status": "completed",
+  "token_telemetry_complete": true,
+  "valid": true
+}

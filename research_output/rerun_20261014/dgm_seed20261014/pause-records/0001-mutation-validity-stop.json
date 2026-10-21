@@ -1,0 +1,88 @@
+{
+  "schema_version": 1,
+  "pause_id": "0001-mutation-validity-stop",
+  "created_at": "2026-10-15T03:04:41Z",
+  "run_id": "dgm-pilot-s20261014",
+  "reason": "Pre-registered stop-loss review after repeated mutation invalidation.",
+  "process_state": {
+    "orchestrator_stopped": true,
+    "active_model_processes": 0,
+    "search_state_next_slot": 4,
+    "slot_4_result_persisted_but_not_normalized": true
+  },
+  "completed_evidence": {
+    "p0_tasks": 60,
+    "p0_resolved": 19,
+    "archive_entries": 1,
+    "reported_tokens": 21937512,
+    "active_seconds": 22235.136,
+    "api_calls": 64,
+    "task_executions": 60,
+    "ledger_sha256": "36fb72d2be3104283dc3b32f645e181c1409e4d0154f2a78ae6d96da759539c5",
+    "ledger_last_sequence": 123,
+    "ledger_last_entry_hash": "abc53d077df4009e11ee312fee3f35b6c489cd136d6f57ba9d8c5c449369df8f"
+  },
+  "mutation_slots": [
+    {
+      "slot": 0,
+      "input_tokens": 13731,
+      "output_tokens": 18686,
+      "output_token_cap": 16384,
+      "result_sha256": "3b046898c8fa64e0753687a75b1006d3f87da5051684cdc71b1bb352dbe315f0",
+      "terminal_state": "CANDIDATE_INVALID_REJECTED",
+      "reason": "Mutation proposer exceeded its frozen token budget."
+    },
+    {
+      "slot": 1,
+      "input_tokens": 10794,
+      "output_tokens": 18104,
+      "output_token_cap": 16384,
+      "result_sha256": "5d0f57205be20bde02ffca9ff5ed1b129afc6d6ccc89e3ffb5996063ead39508",
+      "terminal_state": "CANDIDATE_INVALID_REJECTED",
+      "reason": "Mutation proposer exceeded its frozen token budget."
+    },
+    {
+      "slot": 2,
+      "input_tokens": 10754,
+      "output_tokens": 17956,
+      "output_token_cap": 16384,
+      "result_sha256": "f127f21480e567509f2176fdd37aaf35135960f8b602d69ff1f357e718607c5f",
+      "terminal_state": "CANDIDATE_INVALID_REJECTED",
+      "reason": "Mutation proposer exceeded its frozen token budget."
+    },
+    {
+      "slot": 3,
+      "input_tokens": 12374,
+      "output_tokens": 13932,
+      "reasoning_tokens": 12154,
+      "visible_output_tokens": 1778,
+      "output_token_cap": 16384,
+      "result_sha256": "bcb9520118b3997380271990bd6f372c48c11c6b315e8b8ec9640299bffb943e",
+      "terminal_state": "CANDIDATE_INVALID_REJECTED",
+      "reason": "Tool handler import is not allowed: os"
+    },
+    {
+      "slot": 4,
+      "input_tokens": 10680,
+      "output_tokens": 20142,
+      "output_token_cap": 16384,
+      "result_sha256": "48b85dc57e5670de64d3f7d3f39aa1db865dea1dbf031454aa7dc138b8d19860",
+      "terminal_state": "PENDING_NORMALIZATION_ON_RESUME",
+      "reason": "Mutation proposer exceeded its frozen token budget."
+    }
+  ],
+  "assessment": {
+    "invalid_mutations_observed": 5,
+    "token_cap_invalidations": 4,
+    "tool_policy_invalidations": 1,
+    "functioning_children": 0,
+    "remaining_proposal_slots": 5,
+    "continuing_without_protocol_review_recommended": false
+  },
+  "resume_safety": {
+    "p0_rerun_required": false,
+    "slots_0_to_3_rerun_required": false,
+    "slot_4_rerun_required": false,
+    "next_new_model_sample_if_resumed": "slot 5"
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "budgetAborted": false,
+  "cacheReadTokens": 239360,
+  "cacheWriteTokens": 0,
+  "candidateToolNames": [
+    "code_search"
+  ],
+  "completedAt": "2026-10-15T06:46:27.976Z",
+  "durationMs": 113463,
+  "fullPatch": "diff --git a/sphinx/util/inspect.py b/sphinx/util/inspect.py\nindex 15f0d66..f19cb80 100644\n--- a/sphinx/util/inspect.py\n+++ b/sphinx/util/inspect.py\n@@ -521,10 +521,16 @@ def signature_from_str(signature: str) -> inspect.Signature:\n     params = []\n \n     if hasattr(args, \"posonlyargs\"):\n-        for arg in args.posonlyargs:  # type: ignore\n+        for i, arg in enumerate(args.posonlyargs):  # type: ignore\n             annotation = ast_unparse(arg.annotation) or Parameter.empty\n+            if i >= len(args.posonlyargs) - (len(args.defaults) - len(args.args)):\n+                default = ast_unparse(args.defaults[i - len(args.posonlyargs)\n+                                                    - len(args.args)\n+                                                    + len(args.defaults)])\n+            else:\n+                default = Parameter.empty\n             params.append(Parameter(arg.arg, Parameter.POSITIONAL_ONLY,\n-                                    annotation=annotation))\n+                                    default=default, annotation=annotation))\n \n     for i, arg in enumerate(args.args):\n         if len(args.args) - i <= len(args.defaults):\n",
+  "inputTokens": 32848,
+  "instanceId": "sphinx-doc__sphinx-7757",
+  "maxOutputTokens": 65536,
+  "maxTotalTokens": 512000,
+  "modelId": "byteplus/deepseek-v4-flash-ga",
+  "modelProvider": "rollback-deepseek",
+  "noShell": false,
+  "outputTokens": 16449,
+  "patch": "diff --git a/sphinx/util/inspect.py b/sphinx/util/inspect.py\nindex 15f0d66..f19cb80 100644\n--- a/sphinx/util/inspect.py\n+++ b/sphinx/util/inspect.py\n@@ -521,10 +521,16 @@ def signature_from_str(signature: str) -> inspect.Signature:\n     params = []\n \n     if hasattr(args, \"posonlyargs\"):\n-        for arg in args.posonlyargs:  # type: ignore\n+        for i, arg in enumerate(args.posonlyargs):  # type: ignore\n             annotation = ast_unparse(arg.annotation) or Parameter.empty\n+            if i >= len(args.posonlyargs) - (len(args.defaults) - len(args.args)):\n+                default = ast_unparse(args.defaults[i - len(args.posonlyargs)\n+                                                    - len(args.args)\n+                                                    + len(args.defaults)])\n+            else:\n+                default = Parameter.empty\n             params.append(Parameter(arg.arg, Parameter.POSITIONAL_ONLY,\n-                                    annotation=annotation))\n+                                    default=default, annotation=annotation))\n \n     for i, arg in enumerate(args.args):\n         if len(args.args) - i <= len(args.defaults):\n",
+  "policyViolations": [],
+  "runnerExitCode": 0,
+  "sandboxImage": "sweb.eval.arm64.sphinx-doc__sphinx-7757:latest",
+  "schemaVersion": 1,
+  "startedAt": "2026-10-15T06:44:34.514Z",
+  "strategyHash": "af051feb0d3041c9c41a99f22ca71062093da67e27fa02a01a79dbb8b7c197e6",
+  "timeoutAborted": false,
+  "tokenTelemetryAvailable": true,
+  "toolCalls": 18
+}

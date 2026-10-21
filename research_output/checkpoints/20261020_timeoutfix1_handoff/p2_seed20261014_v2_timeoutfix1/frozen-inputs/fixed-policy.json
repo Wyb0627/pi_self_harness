@@ -1,0 +1,28 @@
+{
+  "adaptive_gate": {
+    "coverage_selection_mode": "agent_only",
+    "rf_clm": "repair-first minimal removal with dependency-safe replay",
+    "same_repo_only": true,
+    "task_budget": 4
+  },
+  "archive_rule": "keep every valid child with complete cumulative-60 evidence",
+  "arm": "p2",
+  "candidate_tools": "trusted host proxy; generated handlers execute in the task image with network=none, artifact read-only, and task workspace read-write",
+  "endpoint_rule": "P0 and final artifact each run once on sealed big-140",
+  "final_selection": "highest score_60; then earliest insertion ordinal; then artifact hash",
+  "mutable_surface": [
+    "strategy.md",
+    "tools.json",
+    "handlers/*.py"
+  ],
+  "name": "held-out-adapted-p2-on-pi",
+  "p0_reuse_rule": "explicit pre-search audited import only; preserve source observation identity and bind exact evolve panel, task stack, evidence, archive, and cost ledger",
+  "parent_selection": "sampling with replacement proportional to sigmoid(10*(score_60-0.5))/(1+functioning_child_count)",
+  "proposal_slots": 10,
+  "proposals_per_wave": 2,
+  "protocol_revision": "matched-dgm-pi-v2",
+  "schema_version": 1,
+  "search_active_seconds_cap": 108000,
+  "search_global_token_stop": null,
+  "small_promotion_rule": "resolved >= ceil(0.4 * small_tasks)"
+}

@@ -1,0 +1,29 @@
+{
+  "budgetAborted": true,
+  "cacheReadTokens": 474112,
+  "cacheWriteTokens": 0,
+  "candidateToolNames": [
+    "code_occurrence_search"
+  ],
+  "completedAt": "2026-10-15T14:29:24.141Z",
+  "durationMs": 153164,
+  "fullPatch": "diff --git a/django/contrib/sessions/backends/base.py b/django/contrib/sessions/backends/base.py\nindex b545316..35d3494 100644\n--- a/django/contrib/sessions/backends/base.py\n+++ b/django/contrib/sessions/backends/base.py\n@@ -106,8 +106,16 @@ class SessionBase:\n         key_salt = \"django.contrib.sessions\" + self.__class__.__name__\n         return salted_hmac(key_salt, value).hexdigest()\n \n+    def _legacy_encode(self, session_dict):\n+        # RemovedInDjango40Warning: pre-Django 3.1 format will be invalid.\n+        serialized = self.serializer().dumps(session_dict)\n+        hash = self._hash(serialized)\n+        return base64.b64encode(hash.encode() + b':' + serialized).decode('ascii')\n+\n     def encode(self, session_dict):\n         \"Return the given session dictionary serialized and encoded as a string.\"\n+        if settings.DEFAULT_HASHING_ALGORITHM == 'sha1':\n+            return self._legacy_encode(session_dict)\n         return signing.dumps(\n             session_dict, salt=self.key_salt, serializer=self.serializer,\n             compress=True,\n",
+  "inputTokens": 31662,
+  "instanceId": "django__django-13279",
+  "maxOutputTokens": 65536,
+  "maxTotalTokens": 512000,
+  "modelId": "byteplus/deepseek-v4-flash-ga",
+  "modelProvider": "rollback-deepseek",
+  "noShell": false,
+  "outputTokens": 14736,
+  "patch": "diff --git a/django/contrib/sessions/backends/base.py b/django/contrib/sessions/backends/base.py\nindex b545316..35d3494 100644\n--- a/django/contrib/sessions/backends/base.py\n+++ b/django/contrib/sessions/backends/base.py\n@@ -106,8 +106,16 @@ class SessionBase:\n         key_salt = \"django.contrib.sessions\" + self.__class__.__name__\n         return salted_hmac(key_salt, value).hexdigest()\n \n+    def _legacy_encode(self, session_dict):\n+        # RemovedInDjango40Warning: pre-Django 3.1 format will be invalid.\n+        serialized = self.serializer().dumps(session_dict)\n+        hash = self._hash(serialized)\n+        return base64.b64encode(hash.encode() + b':' + serialized).decode('ascii')\n+\n     def encode(self, session_dict):\n         \"Return the given session dictionary serialized and encoded as a string.\"\n+        if settings.DEFAULT_HASHING_ALGORITHM == 'sha1':\n+            return self._legacy_encode(session_dict)\n         return signing.dumps(\n             session_dict, salt=self.key_salt, serializer=self.serializer,\n             compress=True,\n",
+  "policyViolations": [],
+  "runnerExitCode": 0,
+  "sandboxImage": "sweb.eval.arm64.django__django-13279:latest",
+  "schemaVersion": 1,
+  "startedAt": "2026-10-15T14:26:50.977Z",
+  "strategyHash": "cee75f8b2f8367266b3e29c1e9e53e7912dcac89df6bd8d6d18db3efac677496",
+  "timeoutAborted": false,
+  "tokenTelemetryAvailable": true,
+  "toolCalls": 31
+}

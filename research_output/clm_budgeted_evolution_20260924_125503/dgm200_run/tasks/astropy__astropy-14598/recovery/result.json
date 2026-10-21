@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "instanceId": "astropy__astropy-14598",
+  "method": "repair-first-causal-slice",
+  "status": "completed",
+  "candidatePaths": [
+    "sim_card.py",
+    "CHANGES.rst",
+    "astropy/io/fits/util.py"
+  ],
+  "changedPaths": [
+    "astropy/io/fits/card.py"
+  ],
+  "inputTokens": 77709,
+  "outputTokens": 33348,
+  "latencySeconds": 139.182371125,
+  "attempts": 1,
+  "tokenTelemetryAvailable": true,
+  "failureHash": "a4ad737e89aeac76eac14dd58fbb0d92ed9685e1affa40e27e05245a6d3a352d",
+  "patch": "diff --git a/astropy/io/fits/card.py b/astropy/io/fits/card.py\nindex 1b3285d..bd48eba 100644\n--- a/astropy/io/fits/card.py\n+++ b/astropy/io/fits/card.py\n@@ -859,7 +859,7 @@ class Card(_Verify):\n                     return kw, vc\n \n                 value = m.group(\"strg\") or \"\"\n-                value = value.rstrip().replace(\"''\", \"'\")\n+                value = value.rstrip()\n                 if value and value[-1] == \"&\":\n                     value = value[:-1]\n                 values.append(value)\n",
+  "proposedEdits": [
+    {
+      "path": "astropy/io/fits/card.py",
+      "old": "value = value.rstrip().replace(\"''\", \"'\")",
+      "new": "value = value.rstrip()"
+    }
+  ],
+  "explanation": "Do not collapse doubled single quotes in each CONTINUE segment; preserve the escaped form so Card._parse_value can correctly combine quote pairs split across cards."
+}

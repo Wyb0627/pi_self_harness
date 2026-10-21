@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "prerequisite_images": [
+    {
+      "image": "sweb.base.arm64:latest",
+      "architecture": "arm64",
+      "status": "reused"
+    },
+    {
+      "image": "sweb.env.arm64.a18371b03f944585b4f08c:latest",
+      "architecture": "arm64",
+      "status": "reused"
+    }
+  ],
+  "images": [
+    {
+      "instance_id": "django__django-12039",
+      "base_commit": "58c1acb1d6054dfec29d0f30b1033bae6ef62aec",
+      "env_image": "sweb.env.arm64.a18371b03f944585b4f08c:latest",
+      "instance_image": "sweb.eval.arm64.django__django-12039:latest",
+      "architecture": "arm64",
+      "history_depth": 2,
+      "status": "reused"
+    }
+  ]
+}

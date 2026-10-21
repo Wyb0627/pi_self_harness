@@ -1,0 +1,146 @@
+2026-10-14 18:44:58,410 - INFO - Environment image sweb.env.arm64.2baaea72acc974f6c02079:latest found for django__django-10973
+Building instance image sweb.eval.arm64.django__django-10973:latest for django__django-10973
+2026-10-14 18:44:58,423 - INFO - Image sweb.eval.arm64.django__django-10973:latest already exists, skipping build.
+2026-10-14 18:44:58,424 - INFO - Creating container for django__django-10973...
+2026-10-14 18:44:58,449 - INFO - Container for django__django-10973 created: d1af9952b6a9e75010cfb4a8b765b17fb9a5fe9708673f7c0b894e2514f631ea
+2026-10-14 18:44:58,507 - INFO - Container for django__django-10973 started: d1af9952b6a9e75010cfb4a8b765b17fb9a5fe9708673f7c0b894e2514f631ea
+2026-10-14 18:44:58,507 - INFO - Intermediate patch for django__django-10973 written to logs/run_evaluation/dgm200-search-p0-0f5a215a-349233dd10b6ebed/dgm-pi-0f5a215ac0bc-349233dd10b6/django__django-10973/patch.diff, now applying to container...
+2026-10-14 18:44:58,617 - INFO - Failed to apply patch to container, trying again...
+2026-10-14 18:44:58,649 - INFO - >>>>> Applied Patch:
+patching file django/db/backends/postgresql/client.py
+
+2026-10-14 18:44:59,040 - INFO - Git diff before:
+diff --git a/django/db/backends/postgresql/client.py b/django/db/backends/postgresql/client.py
+index 7fca6ef..f60e6cf 100644
+--- a/django/db/backends/postgresql/client.py
++++ b/django/db/backends/postgresql/client.py
+@@ -2,17 +2,9 @@ import os
+ import signal
+ import subprocess
+ 
+-from django.core.files.temp import NamedTemporaryFile
+ from django.db.backends.base.client import BaseDatabaseClient
+ 
+ 
+-def _escape_pgpass(txt):
+-    """
+-    Escape a fragment of a PostgreSQL .pgpass file.
+-    """
+-    return txt.replace('\\', '\\\\').replace(':', '\\:')
+-
+-
+ class DatabaseClient(BaseDatabaseClient):
+     executable_name = 'psql'
+ 
+@@ -34,38 +26,14 @@ class DatabaseClient(BaseDatabaseClient):
+             args += ['-p', str(port)]
+         args += [dbname]
+ 
+-        temp_pgpass = None
+         sigint_handler = signal.getsignal(signal.SIGINT)
+         try:
+-            if passwd:
+-                # Create temporary .pgpass file.
+-                temp_pgpass = NamedTemporaryFile(mode='w+')
+-                try:
+-                    print(
+-                        _escape_pgpass(host) or '*',
+-                        str(port) or '*',
+-                        _escape_pgpass(dbname) or '*',
+-                        _escape_pgpass(user) or '*',
+-                        _escape_pgpass(passwd),
+-                        file=temp_pgpass,
+-                        sep=':',
+-                        flush=True,
+-                    )
+-                    os.environ['PGPASSFILE'] = temp_pgpass.name
+-                except UnicodeEncodeError:
+-                    # If the current locale can't encode the data, let the
+-                    # user input the password manually.
+-                    pass
+             # Allow SIGINT to pass to psql to abort queries.
+             signal.signal(signal.SIGINT, signal.SIG_IGN)
+-            subprocess.check_call(args)
++            subprocess.run(args, env={**os.environ, 'PGPASSWORD': passwd} if passwd else None, check=True)
+         finally:
+             # Restore the original SIGINT handler.
+             signal.signal(signal.SIGINT, sigint_handler)
+-            if temp_pgpass:
+-                temp_pgpass.close()
+-                if 'PGPASSFILE' in os.environ:  # unit tests need cleanup
+-                    del os.environ['PGPASSFILE']
+ 
+     def runshell(self):
+         DatabaseClient.runshell_db(self.connection.get_connection_params())
+2026-10-14 18:44:59,041 - INFO - Eval script for django__django-10973 written to logs/run_evaluation/dgm200-search-p0-0f5a215a-349233dd10b6ebed/dgm-pi-0f5a215ac0bc-349233dd10b6/django__django-10973/eval.sh; copying to container...
+2026-10-14 18:45:01,564 - INFO - Test runtime: 2.43 seconds
+2026-10-14 18:45:01,565 - INFO - Test output for django__django-10973 written to logs/run_evaluation/dgm200-search-p0-0f5a215a-349233dd10b6ebed/dgm-pi-0f5a215ac0bc-349233dd10b6/django__django-10973/test_output.txt
+2026-10-14 18:45:01,602 - INFO - Git diff after:
+diff --git a/django/db/backends/postgresql/client.py b/django/db/backends/postgresql/client.py
+index 7fca6ef..f60e6cf 100644
+--- a/django/db/backends/postgresql/client.py
++++ b/django/db/backends/postgresql/client.py
+@@ -2,17 +2,9 @@ import os
+ import signal
+ import subprocess
+ 
+-from django.core.files.temp import NamedTemporaryFile
+ from django.db.backends.base.client import BaseDatabaseClient
+ 
+ 
+-def _escape_pgpass(txt):
+-    """
+-    Escape a fragment of a PostgreSQL .pgpass file.
+-    """
+-    return txt.replace('\\', '\\\\').replace(':', '\\:')
+-
+-
+ class DatabaseClient(BaseDatabaseClient):
+     executable_name = 'psql'
+ 
+@@ -34,38 +26,14 @@ class DatabaseClient(BaseDatabaseClient):
+             args += ['-p', str(port)]
+         args += [dbname]
+ 
+-        temp_pgpass = None
+         sigint_handler = signal.getsignal(signal.SIGINT)
+         try:
+-            if passwd:
+-                # Create temporary .pgpass file.
+-                temp_pgpass = NamedTemporaryFile(mode='w+')
+-                try:
+-                    print(
+-                        _escape_pgpass(host) or '*',
+-                        str(port) or '*',
+-                        _escape_pgpass(dbname) or '*',
+-                        _escape_pgpass(user) or '*',
+-                        _escape_pgpass(passwd),
+-                        file=temp_pgpass,
+-                        sep=':',
+-                        flush=True,
+-                    )
+-                    os.environ['PGPASSFILE'] = temp_pgpass.name
+-                except UnicodeEncodeError:
+-                    # If the current locale can't encode the data, let the
+-                    # user input the password manually.
+-                    pass
+             # Allow SIGINT to pass to psql to abort queries.
+             signal.signal(signal.SIGINT, signal.SIG_IGN)
+-            subprocess.check_call(args)
++            subprocess.run(args, env={**os.environ, 'PGPASSWORD': passwd} if passwd else None, check=True)
+         finally:
+             # Restore the original SIGINT handler.
+             signal.signal(signal.SIGINT, sigint_handler)
+-            if temp_pgpass:
+-                temp_pgpass.close()
+-                if 'PGPASSFILE' in os.environ:  # unit tests need cleanup
+-                    del os.environ['PGPASSFILE']
+ 
+     def runshell(self):
+         DatabaseClient.runshell_db(self.connection.get_connection_params())
+2026-10-14 18:45:01,602 - INFO - Grading answer for django__django-10973...
+2026-10-14 18:45:01,605 - INFO - report: {'django__django-10973': {'patch_is_None': False, 'patch_exists': True, 'patch_successfully_applied': True, 'resolved': False, 'tests_status': {'FAIL_TO_PASS': {'success': ['test_accent (dbshell.test_postgresql.PostgreSqlDbshellCommandTestCase)', 'test_basic (dbshell.test_postgresql.PostgreSqlDbshellCommandTestCase)', 'test_column (dbshell.test_postgresql.PostgreSqlDbshellCommandTestCase)', 'SIGINT is ignored in Python and passed to psql to abort quries.'], 'failure': ['test_nopass (dbshell.test_postgresql.PostgreSqlDbshellCommandTestCase)']}, 'PASS_TO_PASS': {'success': [], 'failure': []}, 'FAIL_TO_FAIL': {'success': [], 'failure': []}, 'PASS_TO_FAIL': {'success': [], 'failure': []}}}}
+Result for django__django-10973: resolved: False
+2026-10-14 18:45:01,606 - INFO - Attempting to stop container sweb.eval.django__django-10973.dgm200-search-p0-0f5a215a-349233dd10b6ebed...
+2026-10-14 18:45:16,727 - INFO - Attempting to remove container sweb.eval.django__django-10973.dgm200-search-p0-0f5a215a-349233dd10b6ebed...
+2026-10-14 18:45:16,746 - INFO - Container sweb.eval.django__django-10973.dgm200-search-p0-0f5a215a-349233dd10b6ebed removed.

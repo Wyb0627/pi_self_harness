@@ -1,0 +1,7 @@
+[
+  {
+    "instance_id": "django__django-11848",
+    "model_name_or_path": "dgm-pi-0f5a215ac0bc-df75e108edfd",
+    "model_patch": "diff --git a/django/utils/http.py b/django/utils/http.py\nindex 572cfb4..f811411 100644\n--- a/django/utils/http.py\n+++ b/django/utils/http.py\n@@ -13,6 +13,7 @@ from urllib.parse import (\n )\n \n from django.core.exceptions import TooManyFieldsSent\n+from django.utils import timezone\n from django.utils.datastructures import MultiValueDict\n from django.utils.deprecation import RemovedInDjango40Warning\n from django.utils.functional import keep_lazy_text\n@@ -176,10 +177,13 @@ def parse_http_date(date):\n     try:\n         year = int(m.group('year'))\n         if year < 100:\n-            if year < 70:\n-                year += 2000\n-            else:\n-                year += 1900\n+            current_year = timezone.now().year\n+            current_century = current_year // 100 * 100\n+            if year > current_year % 100 + 50:\n+                # Interpret 50+ years in the future as the most recent year\n+                # in the past with the same last two digits.\n+                current_century -= 100\n+            year += current_century\n         month = MONTHS.index(m.group('mon').lower()) + 1\n         day = int(m.group('day'))\n         hour = int(m.group('hour'))\n"
+  }
+]

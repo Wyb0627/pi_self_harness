@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "prerequisite_images": [
+    {
+      "image": "sweb.base.arm64:latest",
+      "architecture": "arm64",
+      "status": "reused"
+    },
+    {
+      "image": "sweb.env.arm64.c6d251a05e0af7688b64fd:latest",
+      "architecture": "arm64",
+      "status": "reused"
+    }
+  ],
+  "images": [
+    {
+      "instance_id": "sphinx-doc__sphinx-8638",
+      "base_commit": "4b452338f914d4f6b54704222d70ae8a746e3db5",
+      "env_image": "sweb.env.arm64.c6d251a05e0af7688b64fd:latest",
+      "instance_image": "sweb.eval.arm64.sphinx-doc__sphinx-8638:latest",
+      "architecture": "arm64",
+      "history_depth": 2,
+      "status": "reused"
+    }
+  ]
+}

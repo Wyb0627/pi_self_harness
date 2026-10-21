@@ -1,0 +1,556 @@
+{
+  "budget": {
+    "cap_interpretation": "Search has no token stop. The 80M values are independent post-seal endpoint:p0 and endpoint:final reserves.",
+    "endpoint_active_seconds_cap": 108000,
+    "endpoint_reserved_maximum_per_scope": 71680000,
+    "final_endpoint_token_cap": 80000000,
+    "per_task_token_cap": 512000,
+    "reference_endpoint_token_cap": 80000000,
+    "relaxation_action": "No config mutation: the active search cap is already null, and the endpoint reservation maximum is below each frozen reserve.",
+    "search_active_seconds_cap": 108000,
+    "search_token_cap": null,
+    "user_authorized_relaxation": true
+  },
+  "checkpoint": {
+    "manifested_file_count": 1276,
+    "manifested_payload_bytes": 4090169
+  },
+  "cross_validation": {
+    "explanation": "All complete observations bind to exactly one task ledger charge. The all-scope ledger total is higher only by mutation proposer calls.",
+    "observation_count": 190,
+    "observation_reported_tokens": 70521795,
+    "reported_token_difference": 0,
+    "result": "pass",
+    "task_count_difference": 0,
+    "task_ledger_count": 190,
+    "task_ledger_reported_tokens": 70521795
+  },
+  "d_test": {
+    "consumed": false,
+    "evidence": [
+      "DGM search-seal.json absent",
+      "DGM search-invalid.json absent",
+      "endpoint-state.json absent",
+      "test-140-manifest.json absent",
+      "runtime/test-inputs absent",
+      "P2 observation count is zero",
+      "Only hash commitment test-140-commitment.json exists"
+    ]
+  },
+  "interrupted_or_incomplete_tasks": [
+    {
+      "artifact_hash": "f025ec008a75ccbe5b2cb803ebae117be2f8b2200f380e164b18e691dd189490",
+      "copied_as_observation": false,
+      "existing_evidence_files_excluding_workspace": [
+        "evaluator-invocation.json",
+        "identity.json",
+        "invocation.json",
+        "result.json",
+        "runner.log",
+        "search-slot-0004-small-f025ec008a75/evaluator.log",
+        "search-slot-0004-small-f025ec008a75/prediction.json",
+        "trace.jsonl"
+      ],
+      "included_in_accuracy": false,
+      "included_in_token_aggregates": false,
+      "instance_id": "django__django-10973",
+      "phase": "search-slot-0004-small",
+      "reason": "User-requested SIGINT interrupted the official evaluator after result.json was persisted but before observation.json was written.",
+      "relative_path": "observations/search-slot-0004-small/f025ec008a75ccbe5b2cb803ebae117be2f8b2200f380e164b18e691dd189490/django__django-10973",
+      "reported_tokens_if_available_excluded_from_aggregates": 233205
+    }
+  ],
+  "ledger": {
+    "all_scopes": {
+      "active_seconds": 41389.387,
+      "agent_seconds": 21317.445,
+      "api_calls": 195,
+      "budget_counted_tokens": 70678467,
+      "conservative_token_charge": 0,
+      "evaluator_seconds": 2295.212,
+      "image_build_seconds": 217.512,
+      "mutation_active_seconds": 459.215,
+      "pacing_seconds": 17100.0,
+      "reported_tokens": 70678467,
+      "task_executions": 190
+    },
+    "by_scope": {
+      "search": {
+        "active_seconds": 41389.387,
+        "agent_seconds": 21317.445,
+        "api_calls": 195,
+        "budget_counted_tokens": 70678467,
+        "conservative_token_charge": 0,
+        "evaluator_seconds": 2295.212,
+        "image_build_seconds": 217.512,
+        "reported_tokens": 70678467,
+        "task_executions": 190
+      }
+    },
+    "chain_valid": true,
+    "last_entry_hash": "d664575109e80cbcc5ffcf26f9c0598fd705c231a9fd24c261871c013a7008e8",
+    "record_count": 385,
+    "task_records": {
+      "active_seconds": 23830.172,
+      "agent_seconds": 21317.445,
+      "api_calls": 190,
+      "budget_counted_tokens": 70521795,
+      "conservative_token_charge": 0,
+      "evaluator_seconds": 2295.212,
+      "image_build_seconds": 217.512,
+      "reported_tokens": 70521795,
+      "task_executions": 190
+    }
+  },
+  "metrics_by_phase": [
+    {
+      "accuracy": 0.35,
+      "accuracy_denominator": 60,
+      "agent_duration_seconds": 6715.686,
+      "completed": 60,
+      "evaluator_duration_seconds": 748.943,
+      "image_build_seconds": 206.331,
+      "invalid": 0,
+      "phase": "search-p0",
+      "reported_tokens": 22149322,
+      "resolved": 21,
+      "valid": 60
+    },
+    {
+      "accuracy": 0.36,
+      "accuracy_denominator": 50,
+      "agent_duration_seconds": 5396.821,
+      "completed": 50,
+      "evaluator_duration_seconds": 589.021,
+      "image_build_seconds": 4.382,
+      "invalid": 0,
+      "phase": "search-slot-0000-medium",
+      "reported_tokens": 18851704,
+      "resolved": 18,
+      "valid": 50
+    },
+    {
+      "accuracy": 0.5,
+      "accuracy_denominator": 10,
+      "agent_duration_seconds": 1109.715,
+      "completed": 10,
+      "evaluator_duration_seconds": 167.088,
+      "image_build_seconds": 1.186,
+      "invalid": 0,
+      "phase": "search-slot-0000-small",
+      "reported_tokens": 3388536,
+      "resolved": 5,
+      "valid": 10
+    },
+    {
+      "accuracy": 0.3,
+      "accuracy_denominator": 10,
+      "agent_duration_seconds": 1213.133,
+      "completed": 10,
+      "evaluator_duration_seconds": 102.93,
+      "image_build_seconds": 0.77,
+      "invalid": 0,
+      "phase": "search-slot-0002-small",
+      "reported_tokens": 3623671,
+      "resolved": 3,
+      "valid": 10
+    },
+    {
+      "accuracy": 0.32,
+      "accuracy_denominator": 50,
+      "agent_duration_seconds": 5974.045,
+      "completed": 50,
+      "evaluator_duration_seconds": 554.132,
+      "image_build_seconds": 4.285,
+      "invalid": 0,
+      "phase": "search-slot-0003-medium",
+      "reported_tokens": 19214334,
+      "resolved": 16,
+      "valid": 50
+    },
+    {
+      "accuracy": 0.4,
+      "accuracy_denominator": 10,
+      "agent_duration_seconds": 908.045,
+      "completed": 10,
+      "evaluator_duration_seconds": 133.098,
+      "image_build_seconds": 0.558,
+      "invalid": 0,
+      "phase": "search-slot-0003-small",
+      "reported_tokens": 3294228,
+      "resolved": 4,
+      "valid": 10
+    }
+  ],
+  "observations": {
+    "accuracy": 0.3526315789473684,
+    "accuracy_denominator": 190,
+    "budget_aborted_results": 104,
+    "completed": 190,
+    "invalid": 0,
+    "latest_complete_observation": {
+      "local_mtime": "2026-10-20T13:54:42.824932+08:00",
+      "relative_path": "observations/search-slot-0003-medium/190d4f12c362e93045dce6c2d5a322963d66942808419e26cfbecbc017c6ec4a/sphinx-doc__sphinx-9281/observation.json"
+    },
+    "provider_error_field_results": 104,
+    "provider_error_interpretation": "All providerError fields are 'This operation was aborted' on the same 104 locally budget-aborted calls; none is classified as provider infrastructure invalid.",
+    "provider_infrastructure_error_results": 0,
+    "reported_tokens": 70521795,
+    "resolved": 67,
+    "status_distribution": {
+      "completed": 86,
+      "task_budget_exhausted_observed_zero": 104
+    },
+    "timeout_aborted_results": 0,
+    "valid": 190
+  },
+  "p2": {
+    "config_hash": "ad85f7e4fe0cd95f52f3cc7f7df90338d6f1d244b5b56826694f12bb2c3e80b9",
+    "observation_count": 0,
+    "search_seal_exists": false,
+    "search_state_exists": false,
+    "status": "prepared_not_started"
+  },
+  "schema_version": 1,
+  "search": {
+    "archive": {
+      "archive_hash": "e804e64964b3d18f716ef68647553775cedfbdfe2c20df9614f98beb155385f2",
+      "entries": [
+        {
+          "artifact_hash": "0f5a215ac0bce1aac54cc709e1a86e5e16f6f10547b78b30c711af30726a4c1b",
+          "evaluated_tasks": 60,
+          "functioning_child_count": 1,
+          "functioning_child_slots": [
+            0
+          ],
+          "insertion_ordinal": 0,
+          "parent_artifact_hash": null,
+          "resolved_60": 21,
+          "score_60": 0.35
+        },
+        {
+          "artifact_hash": "30be840203090319746a26f6a5ca5ab68280a2d630e900066c3908fa4d03d4b9",
+          "evaluated_tasks": 60,
+          "functioning_child_count": 1,
+          "functioning_child_slots": [
+            3
+          ],
+          "insertion_ordinal": 1,
+          "parent_artifact_hash": "0f5a215ac0bce1aac54cc709e1a86e5e16f6f10547b78b30c711af30726a4c1b",
+          "resolved_60": 23,
+          "score_60": 0.38333333333333336
+        },
+        {
+          "artifact_hash": "190d4f12c362e93045dce6c2d5a322963d66942808419e26cfbecbc017c6ec4a",
+          "evaluated_tasks": 60,
+          "functioning_child_count": 0,
+          "functioning_child_slots": [],
+          "insertion_ordinal": 2,
+          "parent_artifact_hash": "30be840203090319746a26f6a5ca5ab68280a2d630e900066c3908fa4d03d4b9",
+          "resolved_60": 20,
+          "score_60": 0.3333333333333333
+        }
+      ],
+      "schema_version": 1
+    },
+    "candidate_metrics": [
+      {
+        "artifact_hash": "0f5a215ac0bce1aac54cc709e1a86e5e16f6f10547b78b30c711af30726a4c1b",
+        "cumulative": {
+          "accuracy": 0.35,
+          "completed": 60,
+          "resolved": 21
+        },
+        "label": "p0",
+        "medium": null,
+        "promotion_status": "baseline_archive_entry",
+        "slot": null,
+        "small": null
+      },
+      {
+        "artifact_hash": "30be840203090319746a26f6a5ca5ab68280a2d630e900066c3908fa4d03d4b9",
+        "cumulative": {
+          "accuracy": 0.38333333333333336,
+          "completed": 60,
+          "resolved": 23
+        },
+        "label": "slot-0000",
+        "medium": {
+          "accuracy": 0.36,
+          "completed": 50,
+          "resolved": 18
+        },
+        "promotion_status": "ARCHIVED",
+        "slot": 0,
+        "small": {
+          "accuracy": 0.5,
+          "completed": 10,
+          "resolved": 5
+        }
+      },
+      {
+        "artifact_hash": null,
+        "cumulative": {
+          "accuracy": null,
+          "completed": 0,
+          "resolved": 0
+        },
+        "label": "slot-0001",
+        "medium": {
+          "accuracy": null,
+          "completed": 0,
+          "resolved": 0
+        },
+        "promotion_status": "CANDIDATE_INVALID_REJECTED",
+        "slot": 1,
+        "small": {
+          "accuracy": null,
+          "completed": 0,
+          "resolved": 0
+        }
+      },
+      {
+        "artifact_hash": "05faca0a7696bc221377f5bbaab0174f3a05097fbc706e78e8e34b8947174709",
+        "cumulative": {
+          "accuracy": 0.3,
+          "completed": 10,
+          "resolved": 3
+        },
+        "label": "slot-0002",
+        "medium": {
+          "accuracy": null,
+          "completed": 0,
+          "resolved": 0
+        },
+        "promotion_status": "REJECT_SMALL",
+        "slot": 2,
+        "small": {
+          "accuracy": 0.3,
+          "completed": 10,
+          "resolved": 3
+        }
+      },
+      {
+        "artifact_hash": "190d4f12c362e93045dce6c2d5a322963d66942808419e26cfbecbc017c6ec4a",
+        "cumulative": {
+          "accuracy": 0.3333333333333333,
+          "completed": 60,
+          "resolved": 20
+        },
+        "label": "slot-0003",
+        "medium": {
+          "accuracy": 0.32,
+          "completed": 50,
+          "resolved": 16
+        },
+        "promotion_status": "ARCHIVED",
+        "slot": 3,
+        "small": {
+          "accuracy": 0.4,
+          "completed": 10,
+          "resolved": 4
+        }
+      },
+      {
+        "artifact_hash": "f025ec008a75ccbe5b2cb803ebae117be2f8b2200f380e164b18e691dd189490",
+        "cumulative": {
+          "accuracy": null,
+          "completed": 0,
+          "resolved": 0
+        },
+        "label": "slot-0004",
+        "medium": {
+          "accuracy": null,
+          "completed": 0,
+          "resolved": 0
+        },
+        "promotion_status": "INTERRUPTED_AFTER_MUTATION",
+        "slot": 4,
+        "small": {
+          "accuracy": null,
+          "completed": 0,
+          "resolved": 0
+        }
+      },
+      {
+        "artifact_hash": null,
+        "cumulative": {
+          "accuracy": null,
+          "completed": 0,
+          "resolved": 0
+        },
+        "label": "slot-0005",
+        "medium": {
+          "accuracy": null,
+          "completed": 0,
+          "resolved": 0
+        },
+        "promotion_status": "NOT_STARTED",
+        "slot": 5,
+        "small": {
+          "accuracy": null,
+          "completed": 0,
+          "resolved": 0
+        }
+      },
+      {
+        "artifact_hash": null,
+        "cumulative": {
+          "accuracy": null,
+          "completed": 0,
+          "resolved": 0
+        },
+        "label": "slot-0006",
+        "medium": {
+          "accuracy": null,
+          "completed": 0,
+          "resolved": 0
+        },
+        "promotion_status": "NOT_STARTED",
+        "slot": 6,
+        "small": {
+          "accuracy": null,
+          "completed": 0,
+          "resolved": 0
+        }
+      },
+      {
+        "artifact_hash": null,
+        "cumulative": {
+          "accuracy": null,
+          "completed": 0,
+          "resolved": 0
+        },
+        "label": "slot-0007",
+        "medium": {
+          "accuracy": null,
+          "completed": 0,
+          "resolved": 0
+        },
+        "promotion_status": "NOT_STARTED",
+        "slot": 7,
+        "small": {
+          "accuracy": null,
+          "completed": 0,
+          "resolved": 0
+        }
+      },
+      {
+        "artifact_hash": null,
+        "cumulative": {
+          "accuracy": null,
+          "completed": 0,
+          "resolved": 0
+        },
+        "label": "slot-0008",
+        "medium": {
+          "accuracy": null,
+          "completed": 0,
+          "resolved": 0
+        },
+        "promotion_status": "NOT_STARTED",
+        "slot": 8,
+        "small": {
+          "accuracy": null,
+          "completed": 0,
+          "resolved": 0
+        }
+      },
+      {
+        "artifact_hash": null,
+        "cumulative": {
+          "accuracy": null,
+          "completed": 0,
+          "resolved": 0
+        },
+        "label": "slot-0009",
+        "medium": {
+          "accuracy": null,
+          "completed": 0,
+          "resolved": 0
+        },
+        "promotion_status": "NOT_STARTED",
+        "slot": 9,
+        "small": {
+          "accuracy": null,
+          "completed": 0,
+          "resolved": 0
+        }
+      }
+    ],
+    "completed_terminal_slots": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "generated_proposal_slots": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "interrupted_slots": [
+      4
+    ],
+    "not_started_slots": [
+      5,
+      6,
+      7,
+      8,
+      9
+    ],
+    "partial_metric_warning": "These are partial-search metrics, not a final sealed DGM/P2 result.",
+    "partial_search_best": {
+      "artifact_hash": "30be840203090319746a26f6a5ca5ab68280a2d630e900066c3908fa4d03d4b9",
+      "evaluated_tasks": 60,
+      "functioning_child_count": 1,
+      "functioning_child_slots": [
+        3
+      ],
+      "insertion_ordinal": 1,
+      "parent_artifact_hash": "0f5a215ac0bce1aac54cc709e1a86e5e16f6f10547b78b30c711af30726a4c1b",
+      "resolved_60": 23,
+      "score_60": 0.38333333333333336
+    },
+    "remaining_on_resume": "Resume slot 4 from its first small task using the persisted mutation; then run slots 5-9.",
+    "sealed": false,
+    "search_state": {
+      "next_slot": 4,
+      "schema_version": 1,
+      "updated_at": "2026-10-19T21:42:38Z"
+    }
+  },
+  "snapshot": {
+    "force_kill_used": false,
+    "formal_process_group": 15186,
+    "idle_launcher_shell_closed_with": "SIGHUP",
+    "schedule_last_run_utc": "2026-10-20T05:08:05.590076Z",
+    "schedule_status": "paused",
+    "snapshot_generated_utc": "2026-10-20T06:15:09Z",
+    "stop_local": "2026-10-20T14:00:16+08:00",
+    "stop_reason": "user_requested_machine_handoff",
+    "stop_signal": "SIGINT",
+    "stop_utc": "2026-10-20T06:00:16Z"
+  },
+  "source": {
+    "branch": "main",
+    "concurrency": 1,
+    "config_hash": "2460d9258112d8d5210174ce439a64a9634fe545cf8491779132a08f7723f5bd",
+    "execution_stack_hash": "fd68171cf7b1173816d9f8a4a080f09222b21509c5e3e2a2d329ba17548b96f1",
+    "fixed_policy_hash": "2a9aeacab5160555884971b7de14d2c27ccd630250ed73407dfd7b44499b2566",
+    "frozen_experiment_head": "64de49831ac64144b0981428cd6c104bb8f97196",
+    "handoff_source_head": "855e89073f00d217e7687f9c29510dd88a32024e",
+    "model_id": "byteplus/deepseek-v4-flash-ga",
+    "model_provider": "rollback-deepseek",
+    "p0_artifact_hash": "0f5a215ac0bce1aac54cc709e1a86e5e16f6f10547b78b30c711af30726a4c1b",
+    "protocol_revision": "matched-dgm-pi-v2",
+    "run_ids": {
+      "dgm": "dgm-pilot-s20261014-v2-timeoutfix1",
+      "p2": "p2-pilot-s20261014-v2-timeoutfix1"
+    },
+    "seed": 20261014,
+    "split_binding_hash": "a0136c5b2c7b4b86c6c375bd02f8a67ac7c3c67797030340c9f9aa81b1529134"
+  }
+}

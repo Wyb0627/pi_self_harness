@@ -1,0 +1,31 @@
+{
+  "budgetAborted": true,
+  "cacheReadTokens": 464384,
+  "cacheWriteTokens": 0,
+  "candidateToolNames": [
+    "callable_signatures",
+    "code_search"
+  ],
+  "completedAt": "2026-10-20T02:17:08.872Z",
+  "durationMs": 105039,
+  "fullPatch": "diff --git a/repro_issue.py b/repro_issue.py\nnew file mode 100644\nindex 0000000..2a5045c\n--- /dev/null\n+++ b/repro_issue.py\n@@ -0,0 +1,66 @@\n+import django\n+from django.conf import settings\n+\n+settings.configure(\n+    DEBUG=True,\n+    DATABASES={},\n+    INSTALLED_APPS=[\"django.contrib.contenttypes\", \"django.contrib.auth\"],\n+)\n+django.setup()\n+\n+from django.db import models\n+from django.db.migrations.autodetector import MigrationAutodetector\n+from django.db.migrations.state import ModelState, ProjectState\n+\n+\n+def get_changes(before, after):\n+    return MigrationAutodetector(\n+        ProjectState.from_apps(before),\n+        ProjectState.from_apps(after),\n+    )._detect_changes()\n+\n+\n+before_apps = django.apps.apps  # not used\n+\n+# old models\n+Readable = ModelState(\"testapp\", \"Readable\", [\n+    (\"id\", models.AutoField(primary_key=True)),\n+    (\"title\", models.CharField(max_length=200)),\n+])\n+Book_old = ModelState(\"testapp\", \"Book\", [\n+    (\"id\", models.AutoField(primary_key=True)),\n+])\n+\n+# new models\n+Readable_new = ModelState(\"testapp\", \"Readable\", [\n+    (\"id\", models.AutoField(primary_key=True)),\n+])\n+Book_new = ModelState(\"testapp\", \"Book\", [\n+    (\"id\", models.AutoField(primary_key=True)),\n+    (\"title\", models.CharField(max_length=200)),\n+], bases=(\"testapp.Readable\",))\n+\n+# We need to create real app registry states with testapp\n+from django.db.migrations.state import ModelState\n+from django.apps.registry import Apps\n+\n+def make_project_state(model_states):\n+    from django.db.migrations.state import ProjectState\n+    ps = ProjectState()\n+    ps.apps = Apps()\n+    for model_state in model_states:\n+        ps.add_model(model_state.clone())\n+    return ps\n+\n+before = make_project_state([Readable, Book_old])\n+after = make_project_state([Readable_new, Book_new])\n+\n+changes = MigrationAutodetector(before, after)._detect_changes()\n+for app_label, migrations in changes.items():\n+    for migration in migrations:\n+        print(\"Migration:\", migration.name, migration.dependencies)\n+        for op in migration.operations:\n+            print(\"   \", op.describe() if hasattr(op, \"describe\") else op)\n+        print(\"  auto_deps:\")\n+        for op in migration.operations:\n+            print(\"      \", type(op).__name__, getattr(op, \"_auto_deps\", None))\n",
+  "inputTokens": 37956,
+  "instanceId": "django__django-12754",
+  "maxOutputTokens": 65536,
+  "maxTotalTokens": 512000,
+  "modelId": "byteplus/deepseek-v4-flash-ga",
+  "modelProvider": "rollback-deepseek",
+  "noShell": false,
+  "outputTokens": 10771,
+  "patch": "diff --git a/repro_issue.py b/repro_issue.py\nnew file mode 100644\nindex 0000000..2a5045c\n--- /dev/null\n+++ b/repro_issue.py\n@@ -0,0 +1,66 @@\n+import django\n+from django.conf import settings\n+\n+settings.configure(\n+    DEBUG=True,\n+    DATABASES={},\n+    INSTALLED_APPS=[\"django.contrib.contenttypes\", \"django.contrib.auth\"],\n+)\n+django.setup()\n+\n+from django.db import models\n+from django.db.migrations.autodetector import MigrationAutodetector\n+from django.db.migrations.state import ModelState, ProjectState\n+\n+\n+def get_changes(before, after):\n+    return MigrationAutodetector(\n+        ProjectState.from_apps(before),\n+        ProjectState.from_apps(after),\n+    )._detect_changes()\n+\n+\n+before_apps = django.apps.apps  # not used\n+\n+# old models\n+Readable = ModelState(\"testapp\", \"Readable\", [\n+    (\"id\", models.AutoField(primary_key=True)),\n+    (\"title\", models.CharField(max_length=200)),\n+])\n+Book_old = ModelState(\"testapp\", \"Book\", [\n+    (\"id\", models.AutoField(primary_key=True)),\n+])\n+\n+# new models\n+Readable_new = ModelState(\"testapp\", \"Readable\", [\n+    (\"id\", models.AutoField(primary_key=True)),\n+])\n+Book_new = ModelState(\"testapp\", \"Book\", [\n+    (\"id\", models.AutoField(primary_key=True)),\n+    (\"title\", models.CharField(max_length=200)),\n+], bases=(\"testapp.Readable\",))\n+\n+# We need to create real app registry states with testapp\n+from django.db.migrations.state import ModelState\n+from django.apps.registry import Apps\n+\n+def make_project_state(model_states):\n+    from django.db.migrations.state import ProjectState\n+    ps = ProjectState()\n+    ps.apps = Apps()\n+    for model_state in model_states:\n+        ps.add_model(model_state.clone())\n+    return ps\n+\n+before = make_project_state([Readable, Book_old])\n+after = make_project_state([Readable_new, Book_new])\n+\n+changes = MigrationAutodetector(before, after)._detect_changes()\n+for app_label, migrations in changes.items():\n+    for migration in migrations:\n+        print(\"Migration:\", migration.name, migration.dependencies)\n+        for op in migration.operations:\n+            print(\"   \", op.describe() if hasattr(op, \"describe\") else op)\n+        print(\"  auto_deps:\")\n+        for op in migration.operations:\n+            print(\"      \", type(op).__name__, getattr(op, \"_auto_deps\", None))\n",
+  "policyViolations": [],
+  "providerError": "This operation was aborted",
+  "runnerExitCode": 1,
+  "sandboxImage": "sweb.eval.arm64.django__django-12754:latest",
+  "schemaVersion": 1,
+  "startedAt": "2026-10-20T02:15:23.833Z",
+  "strategyHash": "5ebb9addd2b0c24484f90f3ef5f5c51bb5354802d1e7572df5552e3d872efe36",
+  "timeoutAborted": false,
+  "tokenTelemetryAvailable": true,
+  "toolCalls": 28
+}

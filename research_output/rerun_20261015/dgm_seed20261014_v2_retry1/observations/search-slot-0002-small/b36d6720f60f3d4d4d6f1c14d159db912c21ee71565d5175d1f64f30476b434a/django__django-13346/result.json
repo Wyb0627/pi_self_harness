@@ -1,0 +1,35 @@
+{
+  "budgetAborted": true,
+  "cacheReadTokens": 460288,
+  "cacheWriteTokens": 0,
+  "candidateToolNames": [
+    "source_grep"
+  ],
+  "completedAt": "2026-10-15T09:24:41.959Z",
+  "durationMs": 117061,
+  "fullPatch": "diff --git a/repro.py b/repro.py\nnew file mode 100644\nindex 0000000..084b043\n--- /dev/null\n+++ b/repro.py\n@@ -0,0 +1,46 @@\n+import django\n+from django.conf import settings\n+\n+settings.configure(\n+    DEBUG=True,\n+    DATABASES={\n+        'default': {\n+            'ENGINE': 'django.db.backends.sqlite3',\n+            'NAME': ':memory:',\n+        }\n+    },\n+    INSTALLED_APPS=['django.contrib.contenttypes', 'django.contrib.auth'],\n+    DEFAULT_AUTO_FIELD='django.db.models.AutoField',\n+)\n+django.setup()\n+\n+from django.db import models, connection\n+\n+\n+class OurModel(models.Model):\n+    our_field = models.JSONField()\n+\n+    class Meta:\n+        app_label = 'repro'\n+\n+\n+with connection.schema_editor() as editor:\n+    editor.create_model(OurModel)\n+\n+OurModel.objects.create(our_field={'key': 0})\n+OurModel.objects.create(our_field={'key': 1})\n+OurModel.objects.create(our_field={'key': 2})\n+\n+qs1 = OurModel.objects.filter(our_field__key__in=[0])\n+print('in=[0]  ->', list(qs1.values_list('id', flat=True)))\n+print(qs1.query)\n+print()\n+\n+qs2 = OurModel.objects.filter(our_field__key__in=[0, 2])\n+print('in=[0,2] ->', list(qs2.values_list('id', flat=True)))\n+print(qs2.query)\n+print()\n+\n+qs3 = OurModel.objects.filter(our_field__key=0)\n+print('key=0  ->', list(qs3.values_list('id', flat=True)))\n+print(qs3.query)\n",
+  "inputTokens": 38866,
+  "instanceId": "django__django-13346",
+  "maxOutputTokens": 65536,
+  "maxTotalTokens": 512000,
+  "modelId": "byteplus/deepseek-v4-flash-ga",
+  "modelProvider": "rollback-deepseek",
+  "noShell": false,
+  "outputTokens": 12953,
+  "patch": "",
+  "policyViolations": [
+    {
+      "patch": "diff --git a/repro.py b/repro.py\nnew file mode 100644\nindex 0000000..084b043\n--- /dev/null\n+++ b/repro.py\n@@ -0,0 +1,46 @@\n+import django\n+from django.conf import settings\n+\n+settings.configure(\n+    DEBUG=True,\n+    DATABASES={\n+        'default': {\n+            'ENGINE': 'django.db.backends.sqlite3',\n+            'NAME': ':memory:',\n+        }\n+    },\n+    INSTALLED_APPS=['django.contrib.contenttypes', 'django.contrib.auth'],\n+    DEFAULT_AUTO_FIELD='django.db.models.AutoField',\n+)\n+django.setup()\n+\n+from django.db import models, connection\n+\n+\n+class OurModel(models.Model):\n+    our_field = models.JSONField()\n+\n+    class Meta:\n+        app_label = 'repro'\n+\n+\n+with connection.schema_editor() as editor:\n+    editor.create_model(OurModel)\n+\n+OurModel.objects.create(our_field={'key': 0})\n+OurModel.objects.create(our_field={'key': 1})\n+OurModel.objects.create(our_field={'key': 2})\n+\n+qs1 = OurModel.objects.filter(our_field__key__in=[0])\n+print('in=[0]  ->', list(qs1.values_list('id', flat=True)))\n+print(qs1.query)\n+print()\n+\n+qs2 = OurModel.objects.filter(our_field__key__in=[0, 2])\n+print('in=[0,2] ->', list(qs2.values_list('id', flat=True)))\n+print(qs2.query)\n+print()\n+\n+qs3 = OurModel.objects.filter(our_field__key=0)\n+print('key=0  ->', list(qs3.values_list('id', flat=True)))\n+print(qs3.query)\n",
+      "type": "forbidden-path-modification"
+    }
+  ],
+  "providerError": "This operation was aborted",
+  "runnerExitCode": 1,
+  "sandboxImage": "sweb.eval.arm64.django__django-13346:latest",
+  "schemaVersion": 1,
+  "startedAt": "2026-10-15T09:22:44.897Z",
+  "strategyHash": "f846a6be10d929146803c76f111dcfc56c9abaad976591e89029235185f1628b",
+  "timeoutAborted": false,
+  "tokenTelemetryAvailable": true,
+  "toolCalls": 29
+}

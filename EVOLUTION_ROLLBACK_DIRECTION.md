@@ -8,11 +8,11 @@
 
 ## 0. 一句话方向（headline）
 
-> 现有 harness 自进化把进化史当成"只增 archive + 按分数重选 parent"，**回退是缺失的一等操作**。我们把进化谱系建成可回溯的搜索树，失败后用 **failure attribution 决定回退到哪个祖先版本**（不是上一个、也不是当前最高分那个，而是"缺陷引入点之前"），并用**回退点之后整段分支的成败分析**做 credit assignment，指导回退点选择与回退后的再进化。
+> 现有 harness 自进化把进化史当成"只增 archive + 按分数重选 parent"，**回退是缺失的一等操作**。我们把进化谱系建成可回溯的搜索树，失败后用 **failure attribution** 定位缺陷引入边，并以 **active counterfactual replay** 验证最小充分移除集；回退到“缺陷引入点之前”的祖先，而不是上一版或当前最高分版本。回退点之后整段分支的成败分析被用于 credit assignment，指导回退后的再进化。
 
-可证伪 claim：这种"诊断式回退 + 分支级学习"，在相同评测预算下，比 DGM 式"重选 parent"、以及固定"回退一版 / keep-revert" 的盲回退，**更快逃出坏区、更省 rollout、且更不容易被污染分支带偏**。若在这三个指标上无可测优势，claim 被推翻。
+可证伪 claim：这种"诊断式回退 + 反事实 replay + 分支级学习"，在相同评测预算下，比 DGM 式"重选 parent"、固定"回退一版 / keep-revert" 的盲回退，**更快逃出坏区、更省 rollout、且更不容易被污染分支带偏**。若在这三个指标上无可测优势，claim 被推翻。
 
-**第三条 claim（成本/复杂度，与上面并列）**：DGM 类系统的进化成本随生成的 agent 数线性累积，且每个新 agent 都要从零评测、跨代零复用。我们用 attribution 驱动的 **partial 复评（只重跑受影响任务）** + **回退剪枝（收缩被评测的节点集）**，把"到达目标分数的总评测成本"显著降低。详见 §3.4。
+**成本边界**：DGM 类系统的进化成本随生成的 agent 数线性累积；我们用 attribution 驱动的 **partial 复评**（只重跑受影响任务） + **回退剪枝**（收缩被评测的节点集） + **selective replay**（只重放与移除集无依赖的后续增益）来显著降低“到达目标分数的总评测成本”。详见 §3.4。
 
 ---
 
@@ -25,6 +25,21 @@ Harness 自进化本质是一个无梯度搜索：提出对 harness 的改动（
 1. **缺陷延迟暴露**：某个早期改动引入的问题，可能要到很多代之后、在特定任务上才崩。此时"退一版"退不到病灶，"退到当前最高分节点"可能恰好丢掉了后续所有有效增益所依赖的那个前提改动。
 2. **失败分支不是垃圾**：从回退点到崩溃点这一整段 trajectory，包含"哪些改动其实有效、哪个是毒、什么组合导致回归"的信息。丢掉它等于每次失败都从零重来。
 
+### 1.1 核心失败模式：毒性前提（toxic stepping stone），不只是显性 bug
+
+回退要解决的失败，有强弱两个层次，第一版聚焦更本质的强版：
+
+- **弱版（显性回归）**：某改动本身带 bug，只是当时评测没测出来，后代在特定任务上崩。判据是"某祖先自己对不对"。
+- **强版（毒性前提）**：`initial→A→B→C→D`，**C 在它自己的评测上真通过、C 本身也没 bug**，但 B→C 这一步引入了某种结构性约束/方向，使得**任何基于 C 的后续改动要么容易错、要么要付很高代价才对**。C 是"能过评测、但走不远"的死胡同前提。此时正确决策是：**即使 C 通过，也不该在 C 上继续长，应退到 B 换方向。** 判据不是"C 自己对不对"，而是"以 C 为根的整棵子树的下游产出率/成本"。
+
+强版之所以是主战场，且被现有系统系统性漏掉，有两个机制性理由：
+
+1. **分级评测 = 结构性盲区，不是全量测试**。DGM 每个新 agent 只在 10→60→(晋级才)200 的子集上评测；绝大多数节点从未跑过全量。所以"在被评的子集上通过、实则是差前提"不是罕见，是结构性普遍。这与 §3.5 的 C2（优化器钻缓存/评测盲区）是同一机制。
+2. **点式分数无法表示交互原因**。一个失败可能要求多个历史 patch 同时存在；此时"第一个显性失败版本"、"单边嫌疑最高"和"最早潜伏前提"是三个不同对象。DGM 的 parent selection 只看 score+novelty，不构造可执行反事实，也不返回致因集合。我们原先用 DGM 释放树声称 11 个分叉中有 4 个贪心/子树最优分歧，但审计发现该统计混用了 10/60/200 任务的 raw accuracy；统一到每个分叉的共同任务集并使用 set-valued oracle 后，**严格分歧只剩 1/11**。因此旧的 4/11 不能作为真实证据，DGM 树只保留作单调性和浅路径成本分析。
+
+因此需要回答两个现有系统没正面回答的问题：
+
+- **Q1（回退点选择）**：失败后应该退回到谱系上的哪个祖先节点？
 因此需要回答两个现有系统没正面回答的问题：
 
 - **Q1（回退点选择）**：失败后应该退回到谱系上的哪个祖先节点？
@@ -65,7 +80,7 @@ Harness 自进化本质是一个无梯度搜索：提出对 harness 的改动（
 
 ## 3. 方法草图（一个系统，三个可拆解部件）
 
-三个部件对应三条可消融的因子，全开是 full method，逐个关掉即 ablation，保证 attribution 干净。
+最终候选方法暂名 **Causal Lineage Minimization (CLM)**。三个部件对应三条可消融的因子，全开是 full method，逐个关掉即 ablation，保证 attribution 干净。
 
 ```text
           一次 harness 改动 (mutation)
@@ -77,20 +92,18 @@ Harness 自进化本质是一个无梯度搜索：提出对 harness 的改动（
         │   diag, branch_stats}     │
         └───────────┬───────────────┘
                     │ 出现回归/失败
-     因子A ─────────► Failure Attribution
-                    │  (定位缺陷在哪条边引入)
+     因子A ─────────► Failure Attribution + Candidate Prior
+                    │  (定位缺陷在哪条边引入；先给候选排序/缩小范围)
                     ▼
-     因子B ─────────► Rollback Point Selection
-                    │  (退到"缺陷引入点之前"的祖先, 非上一版/非最高分)
+     因子B ─────────► Rollback Point Selection + Active Counterfactual Replay
+                    │  (退到"缺陷引入点之前"的祖先；验证 singleton → ddmin → full fallback)
                     ▼
-     因子C ─────────► Branch Credit → Re-Evolution
-                       (回退点之后整段分支的成败/根因回流,
-                        指导下一步改动, 避免重犯)
-```
+     因子C ─────────► Branch Credit → Re-Evolution / Rollback-and-Replay
+                       (回退点之后整段分支的成败/根因回流，指导下一步改动；只重放与移除集无依赖的后续增益)
 
-- **因子 A（Attribution）**：给"这次失败"归因到谱系上的某条边/某个改动。信号来源：MARS 式 failure taxonomy 打分 + 逐边 partial 复评（只重跑受影响任务子集，而非全量）。
-- **因子 B（Rollback Point Selection）**：候选回退点 = 缺陷引入边的父节点及其祖先；用"该祖先在受影响任务上的表现 + 其保留了多少下游有效增益"打分，选净收益最高的回退点。对照：DGM 的"重选最高分 parent"、盲回退的"退一版"。
-- **因子 C（Branch Credit + Re-Evolution）**：把 A 段 trajectory 里"有效改动 / 毒改动 / 危险组合"蒸馏成再进化时的约束与提示，注入回退后的 mutation prompt，并降权已知会导致回归的方向。
+- **因子 A（Attribution / 候选先验）**：给"这次失败"归因到谱系上的某条边/某个改动，并用 failure bundle、patch manifest、组件依赖和历史 branch credit 对候选 edge 排序。LLM 输出是 soft prior；不得据此硬删除候选。
+- **因子 B（Rollback Point Selection / 反事实验证）**：候选回退点 = 缺陷引入边的父节点及其祖先；先验证完整 lineage 删除最高先验 singleton 能否修复，不能时在安全 slice 上对移除集运行 ddmin，再 fallback 到 full lineage。对照：DGM 的"重选最高分 parent"、盲回退的"退一版"。
+- **因子 C（Branch Credit + Re-Evolution / rollback-and-replay）**：把 A 段 trajectory 中"有效改动 / 毒改动 / 危险组合"蒸馏成再进化时的约束与提示，注入回退后的 mutation prompt，并降权已知会导致回归的方向；同时只保留与移除集无依赖且通过 probe 的后续增益。
 
 数据结构（节点）：
 ```text
@@ -199,7 +212,65 @@ pi 载体优势：session 本身是树（`/tree`、fork、branch summary），ex
 
 ### 4.2 数据设置：公开 benchmark 做 main result + 公开任务上受控注入做诊断
 
-不自造任务数据集（会被 argue 挑分布）。分两个用途，用途不同、数据来源不同：
+不自造任务数据集（会被 argue 挑分布）。分三用途，用途不同、数据来源不同：
+
+**用途 C · 第一版 idea 验证（因子 A+B 的决策质量）——离线 replay DGM 释放的真实进化树。**
+DGM 开源结果（`DGM_results/swe_results.zip`，本仓库已下载）给出 SWE 上一棵**真实进化树**：约 83 个节点，其中 46 个有非空分数。每节点含 `parent_commit`（父指针→树结构）、`entry`（改动标签）、`self_evo.md`（自我修改完整推理）、`model_patch.diff`（相对父节点改动）、`predictions/*.md`（每任务完整 agent 轨迹=debug 信息）、`overall_performance`（`accuracy_score` + 每任务 `total_resolved_ids`/`total_unresolved_ids`/`total_emptypatch_ids`）。
+
+这批数据让第一版**零 Docker、零重跑、用 DGM literal 树和分数**就能验证回退决策：给回退 LLM 喂（失败任务/差前提 + 沿路各节点 diff/entry/self_evo + 各祖先在相关任务上的对错 + 失败节点轨迹），让它选回退点，再用 DGM 现成分数离线判分，对比 Ours vs 盲回退-1 vs DGM 重选。
+
+**信息隔离原则（第一版的核心方法论，写死）**：决策器与 oracle 用两套不相交的信息，绝不能混。
+- **决策器（被测方法 = LLM 自行决策）只看决策时刻已有信息**：当前错误/失败任务、各节点 `model_patch.diff`、`self_evo.md` 推理历史、截至当前的分数。**禁看任何下游子树结果**。它做的是**前瞻判断**"某父节点下面的子树是否有前途"，这与真实部署一致（回退时下游本就还没发生）。方法本身因此天然无幸存者偏差。
+- **oracle（判分 gold label）才用真实下游**：从 DGM 已释放的下游结果离线算，不参与决策，只事后判分。用未来信息在这里合法，因为"前提到底好不好"的标准答案只能由"后代实际长成什么样"定义。
+- **不能纯用 LLM 当评判**：那是用 LLM 判 LLM、循环论证，无独立 ground truth。离线唯一可得的独立标准答案就是 DGM 真实下游。
+
+- **强版判据（主）**：oracle = 在一个分叉上**子树产出最好的那个兄弟分支**（操作化为 subtree-best：该孩子整棵子树内可达最高分；将来可加"达标成本"作第二维），而非当前分最高的兄弟。该判据必须在同一共同任务集上计算并保留并列集合；修正后 11 个有效分叉中只有 1 个严格分歧，只能作个案，不能支撑统计性 claim。
+- **弱版判据（sanity check）**：oracle = 任务 t 最后一次通过的祖先之前的显性回归点。
+- **子集不均必须处理**：DGM 分级评测导致节点评测子集不同（10/60/200），任何跨节点比较**只在两节点评测子集的交集上做**，否则"后代没评该任务"会被误判成回归。
+- **诚实边界（写死）**：(a) 节点是 DGM 的 coding-agent 代码，不是 pi harness，故这是"回退决策器"验证，不是 pi harness 闭环；pi harness 化是后续步骤。(b) 树浅（83 节点里 53 个叶子），强版信号只够 case study，不足统计显著；要更强统计靠用途 B 的受控注入造密集样本。(c) **因子 C（回退后再进化）离线不可验证**——再进化会产生 DGM 树里不存在的新节点，那需要真跑（Docker），推迟到 main result 阶段。(d) oracle 的 subtree-best 带幸存者偏差（DGM 投喂多的分支更容易长深/长高），故 claim 收窄为"方法能否预测出 DGM 这次真实探索中最终产出更好的分支"，而非"判断前提的先天质量"；深度归一 / 单步增益率作 oracle 的 robustness check（同样只读现成数据，不重跑）。
+
+**历史第一轮离线结果（deepseek-v4-flash，11 个分叉，每分叉 5 次多数票；已撤回）**：
+- v1 简短前瞻 prompt：全分叉 hit=0.4545、mean regret=0.0538；4 个关键 disagreement 分叉 hit=0/4、mean regret=0.1363。
+- v2 强制逐候选结构化分析（能力、结构约束、通用性、可组合性、下游风险，最后才参考当前分）：全分叉 hit=0.3636、mean regret=0.0797；关键分叉 hit=1/4、mean regret=0.1533。55/55 次返回结构完整，无 JSON/fallback 失败；关键分叉单次投票命中 7/20，但多数票不稳定。运行约 42 分钟，显著慢于 v1 的约 2 分钟。
+- **原预注册判据**：v2 预期关键分叉至少 1/4 命中且 regret<greedy 0.1353；原始计算触发了 kill 条件。但后续审计发现 oracle 无效，因此不能把它写成正式证伪。可保留的结论是：现有实验没有显示静态 LLM 预测的优势，且增加了显著延迟，不值得继续无界调 prompt。
+- **退化归因**：v2 修对 1 个关键分叉（regret -0.0119），但把两个 v1 已选对的普通分叉改错（regret 分别 +0.0787、+0.1213），另有两个 5 票 plurality 出现 2-2 平票，其中 `initial` 分叉因不稳定 tie-break 新增 +0.0797 regret。结构化 prompt 让解释更完整，却过度奖励"模块化/低耦合/易修复"的改动；这些静态属性未必转化成真实下游产出。
+
+**可信度审计与撤回**：
+- 上述 v1/v2 数字把 10/60/200 staged subset 的 raw accuracy 直接跨节点比较，违反本节自己的共同任务集规则；plurality tie 又被插入顺序任意打破。它们只能说明 prompt 行为，**不能作为回退准确率或 DGM 分歧率证据**。
+- 修复后，每个分叉只在所有候选共有任务集上重算，oracle/greedy 都允许并列；11 个分叉中严格 `greedy ∩ oracle = ∅` 的仅 **1 个**。旧的 “4/11 (36%)” 已撤回。
+- 因此 H1 的可靠结论只保留为：静态 LLM 预测没有显示出可复现优势，且延迟从约 2 分钟增至约 42 分钟；不再报告旧 regret 为方法 headline。
+
+**用途 B 第一轮实现与结果（deepseek-v4-flash，positive control）**：
+- 数据：12 条人工控制的 harness 历史，其中 10 条是"早期埋入、后代才暴露"的延迟缺陷，2 条是"最新边就是根因"的对照，防止模型靠"固定多退几版"取巧。案例覆盖 compaction 丢契约、跨 repo 缓存污染、retry reset 丢进展、框架专用 validator、并行工具 race、summary 丢 error state、cwd 缓存、静态 tool allowlist、token budget 漏计、deletion patch 误拒、reload schema stale、timeout 单位错误。
+- oracle 定义：**最早引入该潜伏条件的边**之父节点；即使该边当时尚未造成失败、后续边才把它接入阻断路径，也按最早埋雷点标注。这与 §1.1 的强版定义一致。
+- 条件：`llm-full` 看版本历史 + 当前错误 + reproduction observations + debug evidence；`llm-no-debug` 去掉 debug，其余相同；每案例 5 次。oracle 字段不进 prompt。
+- 结果（独立重跑，单票）：盲退一版 exact/clears=0.1667/0.1667；最高分祖先=0.1667/0.1667；`llm-no-debug`=0.9500/0.9500；`llm-full`=1.0000/1.0000，且 culprit-edge attribution=1.0000。
+- 结果（案例 plurality，平票算 abstain）：`llm-no-debug` exact/clears=0.9167/0.9167；`llm-full`=1.0000/1.0000；两者均无平票。
+- **撤回过度解读**：case id、错误文本和 debug 直接暴露了机制，五票也共享同一 prompt/data、并非独立样本。该 1.0 只能证明代码链路和输出 schema 可工作，**不能证明 LLM attribution 在真实失败上准确**，也不能成为 headline。
+
+**第二轮主动 replay 结果（E3-E7）**：
+- 数据审计发现原 parser 漏掉 evaluator `error_ids`，旧的 245/226/92.24% 与 99.18%/8.1% 统计全部撤回。修正后共有 69 条去重的 start-pass/end-fail episode（9 tasks、22 leaves），其中 56 条单调、13 条非单调。全 69 条上，线性扫描 exact=1.0000、平均 1.4783 probes；二分 exact=0.9710、平均 1.7246 probes，在 13 条非单调 episode 上 exact=0.8462。二分在这棵浅树上不仅不省，反而更贵。
+- 合成交互原因（1-3 edges）上，full ddmin clean exact=1.000；sliced ddmin clean exact=1.000、noise 5%/10% exact=0.967。但 40% slice 的平均调用节省只有约 11%-14%，通用 `>=20%` 成本 claim 被证伪。
+- prior-first singleton 在 5%/10% noise 下分别省约 24.6%/20.6%，clean 仅约 19%，仍不足以支持无条件 claim。
+- sensitivity 显示仅当 slice `<=30%` 且 cause recall `>=95%` 时，safety fallback 后 exact 保持 1.0 且 clean calls 可省约 26%-37%。这成为插件的硬门控；门控外走 full ddmin。
+
+**E8 · DGM released-data CLM 对照**：
+- 统一到 initial 节点的 canonical 60 tasks 后，released endpoints 为：initial DGM agent 12/60=20.00%，full DGM best 30/60=50.00%，no-open-ended 14/60=23.33%，no-self-improve 23/60=38.33%（raw 23/59=38.98%，缺失 task 按失败计）。
+- 修正后的 41 条 monotone delayed episode 全量离线基线：no-rollback=0、rollback-1=0、score-only DGM proxy=0.1951 repair/exact；linear=1.0000 at 1.0244 probes；binary=1.0000 at 1.3659 probes。
+- 注意选择效应：no-rollback=0 由“当前失败”定义保证，rollback-1=0 由“延迟回归且前一 scored state 已失败”的筛选保证；二者只是构造检查，不能当作广义性能优势。
+- 预注册 12-episode DeepSeek pilot 只覆盖 4 个 unique tasks / 10 个 leaves：CLM repair/exact=1.0000，但 DeepSeek top-1=4/12、fallback=3/12、平均 probes=1.5000；同样本 linear 为 1.0833。12 次调用报告 52,754 input tokens、181,072 output tokens、767.291 秒。
+- **判决：成本 kill criterion 触发，不扩三次重复。** 这只测试 CLM 的 monotone-boundary fast path，不覆盖 interaction ddmin、selective replay 或回退后的反事实进化。CLM 可说打赢了这些筛选 recovery episode 上的 no-rollback、rollback-1 和 score-only proxy；不能说打赢 DGM 的 fixed-D60 50% 最终任务分数，更不能把 no-rollback proxy 冒充原版 Pi。
+
+**第三轮目标重构与结果（E9-E11）**：
+- E9 branch quarantine：保守规则在 full DGM 上保留 0.5000 但节省 0%；激进规则节省 86.28% 却把最好端点降到 0.2833。原因是退化叶子无后续成本可剪，而过早剪枝会杀掉真实 stepping stone。该方向否决。
+- E10 multi-fidelity promotion：官方固定 split 上 stability gate 以 520 vs 660 task evaluations 保留 0.5000；但 5,000 个无结果依赖的 task rotations 上 best-node recall=0.8946、仅省 6.58%。该方向不满足 95% recall / 20% saving 联合标准。
+- E11 **Repair-First CLM（最终算法核心）**：优化目标从“完整恢复 failure-inducing family”改为“直接找一最小充分移除集”。对完整 lineage 删除候选并验证 repair；单边不够时才对 removal set 做 ddmin。这样 conjunctive failure 中删去任一必要 patch 即可停止，不再为解释完整 cause family 付费；alternative causes 则由验证强制联合删除。
+- 在 balanced conjunctive/alternative/mixed synthetic families 上，repair-first 相对旧 failure-first 路径减少 42.86%-49.89% probes；clean repair/minimal/optimal=1.000/1.000/1.000，5% noise repair=0.9733（旧方法 0.9833），10% noise repair=0.9700（旧方法 0.9767），均在预注册 2-point non-inferiority margin 内。所有 paired bootstrap 95% call-reduction CI 都严格大于 0；无先验、误导先验和 DGM-like depth 3-6 均通过。
+- 插件额外验证 dependency-safe selective replay 的**精确最终 active set**；若因为依赖或文件冲突多跳过 patch 后失败，则 abstain。
+- **结论边界**：E11 首次同时通过合成精度和成本门槛，但尚未证明 fixed-D60/200 端点超过 DGM 或原版 Pi。公开 DGM 日志缺 counterfactual children，公开 runner 又缺实际使用过的 140-task promotion 路径；主张升级仍需同模型、同预算的新 evolution runs。
+
+**用途 A · main result（方法在真实分布上有效）——用公开集。**
+在 Terminal-Bench / SWE-bench(-Verified) 上按任务序喂进进化回路，比较 Ours vs B0–B3。任务分布公开、不可被质疑挑数据。
 
 **用途 A · main result（方法在真实分布上有效）——用公开集。**
 在 Terminal-Bench / SWE-bench(-Verified) 上按任务序喂进进化回路，比较 Ours vs B0–B3。任务分布公开、不可被质疑挑数据。
@@ -217,6 +288,9 @@ gen5: 任务族 T 出现 -> 崩
 ```
 oracle 落点 = 退到 gen2/gen4 之间、剔除 S、保留 P/Q/R。盲回退-1 退到 gen4（仍带 S 或丢 R）；DGM 重选最高分 parent 可能挑含 S 的 gen4 或丢掉 P 依赖链；Ours 应 attribute 到 S、退到 S 之前、带"R 有效"credit 重进化。这是最便宜的 kill test：若此设置下 Ours 都不能比盲回退更常退到 oracle 落点，方法核心即证伪。
 
+```
+oracle 落点 = 退到 gen2/gen4 之间、剔除 S、保留 P/Q/R。盲回退-1 退到 gen4（仍带 S 或丢 R）；DGM 重选最高分 parent 可能挑含 S 的 gen4 或丢掉 P 依赖链；Ours 应 attribute 到 S、退到 S 之前、带"R 有效"credit 重进化。这是最便宜的 kill test：若此设置下 Ours 都不能比盲回退更常退到 oracle 落点，方法核心即证伪。
+```
 **数据泄露三防线（写死，全部强制）**：
 1. **D_evolve / D_test 切分**：D_test 全程不进任何评测 / 回退 / attribution 决策，只在最后跑一次报成绩。防"进化过拟合到评测集"（C3）。
 2. **S 只依赖 harness**：注入缺陷只允许看 harness、改 harness，**不允许**看 D_test 的任务或答案，否则 S 编码测试信息、oracle 落点循环论证。
@@ -269,6 +343,10 @@ oracle 落点 = 退到 gen2/gen4 之间、剔除 S、保留 P/Q/R。盲回退-1 
 - 版本切换：`/reload` + resources_discover 切 harness 版本。
 - 评测：`packages/evals/src/pi-harness.ts` 的 `createPiCodingAgentHarness`（已按 task 起隔离 session、记 token/cost/tool trace）+ `evalHarnessTable`。
 - 状态持久化：`appendEntry`（CustomEntry 不进 LLM 上下文）存 EvoTree/branch_stats。
+- 谱系树：用 CustomEntry 持久化 checkpoint manifest，并把 session entry id 作为对话状态锚点；patch artifact 独立存储，不能假设 `/tree` 会恢复文件。
+- 版本切换：恢复受控 artifact 后 `navigateTree` + `reload`；不自动修改 Git 历史。
+- 命令面：`/rollback checkpoint`、`/rollback diagnose`、`/rollback apply`、`/rollback status`。外部 probe command 通过 manifest 配置；`apply` 必须确认且默认 dry-run。
+- 不碰 core 主循环 / provider，保 no-fork、归因干净。
 - 不碰 core 主循环 / provider，保 no-fork、归因干净。
 
 ## 8. 命题：partial 复评的 decision-consistency 与成本上界（证明草稿）

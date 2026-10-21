@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "instanceId": "astropy__astropy-14539",
+  "method": "repair-first-causal-slice",
+  "status": "completed",
+  "candidatePaths": [
+    "astropy/utils/diff.py",
+    "CHANGES.rst",
+    "astropy/io/fits/tests/test_diff.py"
+  ],
+  "changedPaths": [
+    "astropy/io/fits/diff.py"
+  ],
+  "inputTokens": 72660,
+  "outputTokens": 11757,
+  "latencySeconds": 56.576174458,
+  "attempts": 2,
+  "tokenTelemetryAvailable": true,
+  "failureHash": "ddbbcf75da95037e6367f472bcea9bc6922a01debc3b1b5b170e9c75434a9ac7",
+  "patch": "diff --git a/astropy/io/fits/diff.py b/astropy/io/fits/diff.py\nindex 100cdf1..d3608ef 100644\n--- a/astropy/io/fits/diff.py\n+++ b/astropy/io/fits/diff.py\n@@ -1449,7 +1449,7 @@ class TableDataDiff(_BaseDiff):\n                 arrb.dtype, np.floating\n             ):\n                 diffs = where_not_allclose(arra, arrb, rtol=self.rtol, atol=self.atol)\n-            elif \"P\" in col.format:\n+            elif \"P\" in col.format or \"Q\" in col.format:\n                 diffs = (\n                     [\n                         idx\n",
+  "proposedEdits": [
+    {
+      "path": "astropy/io/fits/diff.py",
+      "old": "            elif \"P\" in col.format:",
+      "new": "            elif \"P\" in col.format or \"Q\" in col.format:"
+    }
+  ],
+  "explanation": "Q-prefixed variable-length array formats were not being treated as variable-length arrays, so their columns fell through to np.where(arra != arrb), which fails when comparing arrays element-by-element. Adding Q to the existing VLA detection keeps the allclose-based row comparison for both P and Q VLA columns."
+}

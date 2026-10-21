@@ -1,0 +1,730 @@
+{
+  "schemaVersion": 1,
+  "amendments": [
+    {
+      "id": "repair-runtime-openai-sdk",
+      "detectedAfterInstance": "astropy__astropy-13033",
+      "appliesFromRecoveryRetryInstance": "astropy__astropy-13033",
+      "change": "Installed openai==2.48.0 in the temporary SWE-bench virtual environment used by the repair runner.",
+      "invalidModelCalls": 0,
+      "reusedOriginalGeneration": true,
+      "reusedOriginalEvaluation": true
+    },
+    {
+      "id": "gateway-tpm-pacing",
+      "detectedDuringInstance": "astropy__astropy-13453",
+      "appliesAfterInstance": "astropy__astropy-13453",
+      "change": "Retry upstream HTTP 429 responses up to three times after waiting at least 65 seconds; retain the 90-second inter-task delay.",
+      "interTaskDelaySeconds": 90,
+      "maxRateLimitRetries": 3,
+      "minimumRateLimitWaitSeconds": 65,
+      "proxySha256Before": "a59f376e40b314e4ddbd24508b37929a4a649048b2f50f187bd220c38040b903",
+      "proxySha256After": "72210ae143ffa0aaf1952aae350009055c991c236fa956a80d097a8b404a8ba5",
+      "triggeringAttempt": {
+        "reportedTokens": 487145,
+        "patchProduced": true,
+        "officiallyResolved": true,
+        "retainedInMetrics": true
+      }
+    },
+    {
+      "id": "image-build-network-resilience",
+      "detectedDuringInstance": "astropy__astropy-13579",
+      "appliesFromInstance": "astropy__astropy-13579",
+      "change": "Set build-only Docker ARG values PIP_DEFAULT_TIMEOUT=120 and PIP_RETRIES=20 for prerequisite and instance image builds.",
+      "failedBuildAttemptsBeforeAmendment": 2,
+      "modelCallsBeforeAmendment": 0,
+      "imageBuilderSha256Before": "7f65c6a848cb9aaae1fa0560bc98e620cf574338b877b125a96785c1c3b083b3",
+      "imageBuilderSha256After": "6efe1bd8648810623b86ae0df9db4e7a9750debadbb3d8323b9009a2a4162a4f"
+    },
+    {
+      "id": "repair-error-terminal-accounting",
+      "detectedDuringInstance": "astropy__astropy-14096",
+      "appliesFromInstance": "astropy__astropy-14096",
+      "change": "Persist repair-call telemetry before edit application and classify a model response that cannot satisfy exact-edit validation as a completed failed P2 attempt rather than an infrastructure error. Official evaluator errors remain infrastructure errors.",
+      "orchestratorSha256Before": "150c9adb3a37e338d00b2286bd84600d1dca259196378e88d532db5eb7fe4d2b",
+      "orchestratorSha256After": "0a46b8b374746ab9a3dcd261edd09f0f6c3e7bae92a4731fe02a6e75735fe4f0",
+      "repairRunnerSha256Before": "c6e94dbd6c89f475326b35e1da006e997dcd038c1f04dc0899066fafb877e474",
+      "repairRunnerSha256After": "2abf81b82f0230a1dea6aaa2ff243eef247eb99f788813fec5e7758d1f7f8e37",
+      "triggeringAttempt": {
+        "instanceId": "astropy__astropy-14096",
+        "originalResultRetained": true,
+        "secondRepairCallMade": false,
+        "recoveryResolved": false,
+        "reportedTokenTelemetryAvailable": false,
+        "conservativeTokenCharge": 512000
+      }
+    },
+    {
+      "id": "content-verified-build-wheelhouse",
+      "detectedDuringInstance": "astropy__astropy-14369",
+      "appliesFromInstance": "astropy__astropy-14369",
+      "change": "Use a SHA-256-manifested local wheelhouse with PIP_NO_INDEX during instance setup and official evaluation, retry failed image builds up to two times, skip pacing sleeps for already-completed tasks, and enforce wall time from the original run start.",
+      "dependencyResolutionChanged": false,
+      "runtimeImageContainsWheelhouse": true,
+      "wheelhouseContainsTaskInformation": false,
+      "failedBuildsBeforeAmendment": 1,
+      "modelCallsBeforeAmendment": 0,
+      "wheelhouseManifest": "build_wheelhouse/astropy-py39-arm64/SHA256SUMS",
+      "wheelhouseManifestSha256": "4ebd40f989a28b6dfc2faf01f7b5cf2ca9f0dcbdeddb842fad838e47f4ae7858",
+      "orchestratorSha256Before": "0a46b8b374746ab9a3dcd261edd09f0f6c3e7bae92a4731fe02a6e75735fe4f0",
+      "orchestratorSha256After": "547eb163376aed5c6b849e7c59aef35e7826b9aaa489b5f341b4d1f24ccb8def",
+      "imageBuilderSha256Before": "6efe1bd8648810623b86ae0df9db4e7a9750debadbb3d8323b9009a2a4162a4f",
+      "imageBuilderSha256After": "2c4c32a00b01b7a68a8bcba969a9c139ddff56647f4ad60811349406619c6921",
+      "verification": {
+        "instanceId": "astropy__astropy-14508",
+        "buildDurationSeconds": 48.457,
+        "architecture": "arm64",
+        "baseCommit": "a3f4ae6cd24d5ecdf49f213d77b3513dd509a06c",
+        "remoteCount": 0,
+        "wheelhousePresentAtRuntime": true,
+        "wheelhouseHashesVerifiedAtRuntime": true
+      }
+    },
+    {
+      "id": "wheelhouse-cython-0.29.34",
+      "detectedDuringInstance": "astropy__astropy-14995",
+      "appliesFromInstanceRetry": "astropy__astropy-14995",
+      "change": "Added the exact official PyPI CPython 3.9 ARM64 wheel for Cython==0.29.34, which this frozen commit pins as a build dependency.",
+      "dependencyResolutionChanged": false,
+      "failedBuildAttemptsBeforeAmendment": 3,
+      "modelCallsBeforeAmendment": 0,
+      "wheelFilename": "Cython-0.29.34-cp39-cp39-manylinux_2_17_aarch64.manylinux2014_aarch64.manylinux_2_24_aarch64.whl",
+      "wheelSha256": "5718319a01489688fdd22ddebb8e2fcbbd60be5f30de4336ea7063c3ae29fbe5",
+      "pypiMetadataUrl": "https://pypi.org/pypi/Cython/0.29.34/json",
+      "downloadMirror": "https://pypi.tuna.tsinghua.edu.cn/",
+      "wheelhouseManifestSha256Before": "4ebd40f989a28b6dfc2faf01f7b5cf2ca9f0dcbdeddb842fad838e47f4ae7858",
+      "wheelhouseManifestSha256After": "bbc5cc9269f4e705fbebdb6b0a9d4d5a15b257817481fb1ec85957710767b07e"
+    },
+    {
+      "id": "astropy-1.3-x86-rosetta-and-external-pause",
+      "detectedDuringInstance": "astropy__astropy-7166",
+      "appliesFromInstanceRetry": "astropy__astropy-7166",
+      "change": "Prebuilt the four Astropy 1.3 evaluator images as standard x86_64 TestSpecs under Rosetta because their exact Python 3.6 environment is unavailable on current ARM64 Conda channels; excluded the user-paused interval from the active wall-time cap.",
+      "affectedInstances": [
+        "astropy__astropy-7166",
+        "astropy__astropy-7336",
+        "astropy__astropy-7606",
+        "astropy__astropy-7671"
+      ],
+      "testSpecArchitectureRule": "SWE-bench selects x86_64 on x86_64 hosts and defaults to ARM64 on ARM64 hosts unless an instance is explicitly listed in USE_X86.",
+      "sourceCommitsChanged": false,
+      "dependencyVersionsChanged": false,
+      "compilerOptimizationChangedInFinalImages": false,
+      "modelCallsBeforeFinalImages": 0,
+      "failedArm64EnvironmentBuilds": 3,
+      "failedQemuCompilationBuilds": 5,
+      "discardedLowerOptimizationImageCount": 0,
+      "colima": {
+        "vmType": "vz",
+        "rosetta": true,
+        "cpu": 8,
+        "memoryGiB": 16,
+        "diskGiB": 120
+      },
+      "buildOnlyPyPiMirror": "https://pypi.tuna.tsinghua.edu.cn/simple",
+      "evaluatorPythonWrapper": "swebench_python_wrapper.py",
+      "evaluatorPythonWrapperSha256": "127ffd035fce1fb43401de94aaa21032430e56326bb60e222c6fdaa9d7edb82c",
+      "evaluatorWrapperScope": "Only reports x86_64 to swebench.harness.run_evaluation when --instance_ids includes one of the four affected Astropy 1.3 tasks; all other Python commands and task IDs use the real interpreter unchanged.",
+      "verifiedImages": [
+        {
+          "instanceId": "astropy__astropy-7166",
+          "baseCommit": "26d147868f8a891a6009a25cd6a8576d2e1bd747",
+          "architecture": "amd64",
+          "durationSeconds": 375.77
+        },
+        {
+          "instanceId": "astropy__astropy-7336",
+          "baseCommit": "732d89c2940156bdc0e200bb36dc38b5e424bcba",
+          "architecture": "amd64",
+          "durationSeconds": 203.67
+        },
+        {
+          "instanceId": "astropy__astropy-7606",
+          "baseCommit": "3cedd79e6c121910220f8e6df77c54a0b344ea94",
+          "architecture": "amd64",
+          "durationSeconds": 191.606
+        },
+        {
+          "instanceId": "astropy__astropy-7671",
+          "baseCommit": "a7141cd90019b62688d507ae056298507678c058",
+          "architecture": "amd64",
+          "durationSeconds": 188.701
+        }
+      ],
+      "verification": {
+        "exactBaseCommits": true,
+        "remoteCount": 0,
+        "wheelhouseHashesVerifiedAtRuntime": true
+      },
+      "externalPause": {
+        "pausedAtUnix": 1790316408,
+        "resumedAtUnix": 1791514558,
+        "excludedSeconds": 1198150,
+        "activeElapsedBeforePauseSeconds": 17065.656
+      }
+    },
+    {
+      "id": "astropy-4-test-wheelhouse-and-legacy-build-isolation",
+      "detectedDuringInstance": "astropy__astropy-8707",
+      "appliesFromInstanceRetry": "astropy__astropy-8707",
+      "change": "Completed the SHA-256-manifested offline wheelhouse for the frozen Astropy 4.0 test extra and derived only its shared ARM64 environment image with declared setup requirements preinstalled and Pip build isolation disabled, restoring legacy setup_requires behavior under Pip 26.",
+      "affectedEnvironmentImage": "sweb.env.arm64.428468730904ff6b4232aa:latest",
+      "affectedInstances": [
+        "astropy__astropy-8707",
+        "astropy__astropy-8872"
+      ],
+      "taskSourceChanged": false,
+      "testSelectionChanged": false,
+      "dependencyResolutionChanged": false,
+      "modelCallsBeforeFinalImage": 0,
+      "failedBuildAttemptsBeforeFinalImage": 7,
+      "declaredTestRequirementsAdded": {
+        "pytest-mpl": "0.18.0",
+        "objgraph": "3.6.2",
+        "ipython": "8.18.1",
+        "skyfield": "1.55"
+      },
+      "declaredSetupRequirementsPreinstalled": {
+        "Cython": "0.29.34",
+        "Jinja2": "3.1.6",
+        "MarkupSafe": "3.0.4"
+      },
+      "pipCompatibility": {
+        "pipVersion": "26.0.1",
+        "environment": "PIP_NO_BUILD_ISOLATION=0",
+        "reason": "Pip configuration maps the negative --no-build-isolation option through a store_false destination; value 0 yields build_isolation=false."
+      },
+      "environmentImage": {
+        "originalImageId": "sha256:79b82bc8f634711c659c766adfe61475839dfc430d7132ca884ce811e66a3e44",
+        "originalBackupTag": "sweb.env.arm64.428468730904ff6b4232aa-bootstrap-base:latest",
+        "derivedImageId": "sha256:5a8d3c9313e0f2fb121e3a7209dd6bcdfdff811bde92ce1dd4693de797084082",
+        "architecture": "arm64"
+      },
+      "wheelhouseManifestSha256Before": "bbc5cc9269f4e705fbebdb6b0a9d4d5a15b257817481fb1ec85957710767b07e",
+      "wheelhouseManifestSha256After": "e04a94c1d078132e1df18a077f7f66f1eecd0787fa10fca9357b8cd7fa0005e1",
+      "frozenBuilderSha256": "2c4c32a00b01b7a68a8bcba969a9c139ddff56647f4ad60811349406619c6921",
+      "verification": {
+        "instanceId": "astropy__astropy-8707",
+        "baseCommit": "a85a0747c54bac75e9c3b2fe436b105ea029d6cf",
+        "instanceImageId": "sha256:54796664d4ab3910897738e618e2f6c75692674fceab7f10fde579475d94c56e",
+        "architecture": "arm64",
+        "durationSeconds": 65.933,
+        "remoteCount": 0,
+        "wheelhouseHashesVerifiedAtRuntime": true,
+        "declaredDependenciesImportable": true
+      }
+    },
+    {
+      "id": "cross-python-build-wheelhouse-compatibility",
+      "detectedDuringInstance": "django__django-14007",
+      "appliesFromInstanceRetry": "django__django-14007",
+      "change": "Added public build-tool wheels that let the frozen offline wheelhouse resolve the highest compatible packaging toolchain for Python 3.6, 3.8, and 3.9.",
+      "affectedFailedInstances": [
+        "django__django-14007",
+        "django__django-14011",
+        "django__django-14017"
+      ],
+      "failedBuildAttemptsBeforeAmendment": 9,
+      "modelCallsBeforeAmendment": 0,
+      "taskSourceChanged": false,
+      "testSelectionChanged": false,
+      "taskDependencyResolutionChanged": false,
+      "buildToolCompatibilityExpanded": true,
+      "compatibilityArtifacts": [
+        "packaging-21.3-py3-none-any.whl",
+        "packaging-25.0-py3-none-any.whl",
+        "pyparsing-2.4.7-py2.py3-none-any.whl",
+        "pyparsing-3.0.9-py3-none-any.whl",
+        "setuptools-59.6.0-py3-none-any.whl",
+        "tomli-1.2.3-py3-none-any.whl",
+        "wheel-0.37.1-py2.py3-none-any.whl",
+        "wheel-0.45.1-py3-none-any.whl"
+      ],
+      "wheelhouseManifestSha256Before": "e04a94c1d078132e1df18a077f7f66f1eecd0787fa10fca9357b8cd7fa0005e1",
+      "wheelhouseManifestSha256After": "80e4b3ee4ceb998563283e4692798a99f64855c1a77d6f91cb205a8cc18f882b",
+      "resolverVerification": {
+        "python3.6": [
+          "setuptools==59.6.0",
+          "wheel==0.37.1",
+          "packaging==21.3",
+          "pyparsing==2.4.7"
+        ],
+        "python3.8": [
+          "setuptools==68.0.0",
+          "wheel==0.45.1",
+          "packaging==25.0"
+        ],
+        "python3.9": [
+          "setuptools==68.0.0",
+          "wheel==0.48.0",
+          "packaging==26.3"
+        ],
+        "allManifestHashesVerified": true
+      },
+      "externalPause": {
+        "pausedAtUnix": 1791617448,
+        "resumedAtUnix": 1791774476.871686,
+        "excludedSeconds": 157028.87168598175
+      }
+    },
+    {
+      "id": "wall-clock-cap-108000-extension",
+      "detectedAfterCompletedTasks": 168,
+      "detectedAfterInstance": "django__django-14765",
+      "appliesFromInstance": "django__django-14771",
+      "change": "Extended the global active wall-clock cap from 86,400 to 108,000 seconds by explicit user confirmation after the run reached the original cap at 168/200 completed tasks.",
+      "wallClockCapBeforeSeconds": 86400,
+      "wallClockCapAfterSeconds": 108000,
+      "globalTokenCapUnchanged": 80000000,
+      "concurrencyUnchanged": 1,
+      "taskOrderChanged": false,
+      "taskSourceChanged": false,
+      "testSelectionChanged": false,
+      "promptsChanged": false,
+      "modelCallsRepeated": false,
+      "patchOrAttributionChanged": false,
+      "stateAtAmendment": {
+        "completedTasks": 168,
+        "remainingTasks": 32,
+        "originalResolvedTasks": 87,
+        "feedbackResolvedTasks": 119,
+        "budgetCountedTokens": 62684495,
+        "globalTokenCap": 80000000,
+        "experimentElapsedSecondsAtStop": 86475.371
+      },
+      "externalPause": {
+        "pausedAtUnix": 1791790011.124946,
+        "resumedAtUnix": 1791795329.407,
+        "excludedSeconds": 5318.282053947449,
+        "reason": "Orchestrator stopped at the original 86,400-second wall-clock cap after 168 completed tasks; no benchmark, evaluator, image-build, or model process ran before the user-confirmed 108,000-second resume."
+      }
+    },
+    {
+      "id": "sphinx-5.1-wheelhouse-dependencies",
+      "detectedDuringInstance": "sphinx-doc__sphinx-10449",
+      "appliesFromInstanceRetry": "sphinx-doc__sphinx-10449",
+      "change": "Completed the offline Python 3.9 ARM64 wheelhouse for the frozen Sphinx 5.1 test environment after evaluator-image builds failed because sphinxcontrib-applehelp and related declared dependencies were unavailable under PIP_NO_INDEX.",
+      "taskSourceChanged": false,
+      "testSelectionChanged": false,
+      "promptsChanged": false,
+      "modelCallsBeforeAmendment": 0,
+      "failedBuildAttemptsBeforeAmendment": 2,
+      "interruptedBuildsBeforeAmendment": 1,
+      "affectedInstancesBeforeAmendment": [
+        "sphinx-doc__sphinx-10449",
+        "sphinx-doc__sphinx-10466",
+        "sphinx-doc__sphinx-10673"
+      ],
+      "addedWheels": [
+        "alabaster-0.7.16-py3-none-any.whl",
+        "babel-2.18.0-py3-none-any.whl",
+        "charset_normalizer-3.5.2-cp39-cp39-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl",
+        "cython-3.3.0-cp39-cp39-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl",
+        "docutils-0.18.1-py2.py3-none-any.whl",
+        "html5lib-1.1-py2.py3-none-any.whl",
+        "idna-3.20-py3-none-any.whl",
+        "imagesize-1.5.0-py2.py3-none-any.whl",
+        "importlib_metadata-8.7.1-py3-none-any.whl",
+        "iniconfig-2.1.0-py3-none-any.whl",
+        "pluggy-1.6.0-py3-none-any.whl",
+        "pytest-8.4.2-py3-none-any.whl",
+        "requests-2.32.5-py3-none-any.whl",
+        "snowballstemmer-3.1.1-py3-none-any.whl",
+        "sphinxcontrib_applehelp-2.0.0-py3-none-any.whl",
+        "sphinxcontrib_devhelp-2.0.0-py3-none-any.whl",
+        "sphinxcontrib_htmlhelp-2.1.0-py3-none-any.whl",
+        "sphinxcontrib_jsmath-1.0.1-py2.py3-none-any.whl",
+        "sphinxcontrib_qthelp-2.0.0-py3-none-any.whl",
+        "sphinxcontrib_serializinghtml-2.0.0-py3-none-any.whl",
+        "urllib3-2.6.3-py3-none-any.whl",
+        "webencodings-0.5.1-py2.py3-none-any.whl"
+      ],
+      "wheelhouseManifestSha256Before": "80e4b3ee4ceb998563283e4692798a99f64855c1a77d6f91cb205a8cc18f882b",
+      "wheelhouseManifestSha256After": "baf7879e2baeb36f09c8211b595e8246321a574365d86b0b0e5cdffa130d2ef6",
+      "resolverVerification": {
+        "command": "python3 -m pip download --no-index --find-links build_wheelhouse/astropy-py39-arm64 --only-binary=:all: --platform manylinux2014_aarch64 --python-version 39 --implementation cp --abi cp39 <Sphinx 5.1 install and test requirements>",
+        "allRequirementsResolvedFromLocalWheelhouse": true,
+        "allManifestHashesVerified": true
+      },
+      "externalPause": {
+        "pausedAtUnix": 1791799390.323926,
+        "resumedAtUnix": 1791799678.484804,
+        "excludedSeconds": 288.16087794303894,
+        "reason": "Orchestrator and active Sphinx image build were stopped after repeated evaluator-image failures caused by missing offline Sphinx dependency wheels; no benchmark, evaluator, image-build, or model process ran during wheelhouse completion and manifest verification."
+      }
+    },
+    {
+      "id": "sphinx-py39-pytest-exceptiongroup",
+      "detectedDuringInstance": "sphinx-doc__sphinx-10449",
+      "appliesFromInstanceRetry": "sphinx-doc__sphinx-10449",
+      "change": "Added exceptiongroup==1.3.0 to the offline Python 3.9 ARM64 wheelhouse after the Sphinx 5.1 evaluator-image build reached pytest installation and failed under PIP_NO_INDEX because pytest 8.4.2 declares exceptiongroup>=1 for python_version < 3.11.",
+      "taskSourceChanged": false,
+      "testSelectionChanged": false,
+      "promptsChanged": false,
+      "modelCallsBeforeAmendment": 0,
+      "failedBuildAttemptsBeforeAmendment": 1,
+      "addedWheels": [
+        "exceptiongroup-1.3.0-py3-none-any.whl"
+      ],
+      "wheelhouseManifestSha256Before": "baf7879e2baeb36f09c8211b595e8246321a574365d86b0b0e5cdffa130d2ef6",
+      "wheelhouseManifestSha256After": "56dc1c696dae6ea2ca170cee93c80529f09fdc0003a6c77b1286d2ded6370fb2",
+      "resolverVerification": {
+        "commands": [
+          "shasum -a 256 -c build_wheelhouse/astropy-py39-arm64/SHA256SUMS",
+          "python3 -m pip download --no-index --find-links build_wheelhouse/astropy-py39-arm64 --only-binary=:all: --platform manylinux2014_aarch64 --python-version 39 --implementation cp --abi cp39 pytest==8.4.2"
+        ],
+        "allManifestHashesVerified": true,
+        "pytestRuntimeDependenciesResolvedFromLocalWheelhouse": true
+      },
+      "externalPause": {
+        "pausedAtUnix": 1791800886,
+        "resumedAtUnix": 1791801168,
+        "excludedSeconds": 282,
+        "reason": "Orchestrator and active Sphinx image build were stopped after a missing offline pytest runtime dependency was identified; no benchmark, evaluator, image-build, or model process ran during wheelhouse completion and manifest verification."
+      }
+    },
+    {
+      "id": "sphinx-py39-flit-core-build-backend",
+      "detectedDuringInstance": "sphinx-doc__sphinx-11510",
+      "appliesFromInstanceRetry": "sphinx-doc__sphinx-11510",
+      "change": "Added flit_core==4.1.0 to the offline Python 3.9 ARM64 wheelhouse after the Sphinx evaluator-image build reached PEP 517 build-dependency installation and failed under PIP_NO_INDEX because the frozen checkout declares flit_core>=3.7.",
+      "taskSourceChanged": false,
+      "testSelectionChanged": false,
+      "promptsChanged": false,
+      "modelCallsBeforeAmendment": 0,
+      "failedBuildAttemptsBeforeAmendment": 1,
+      "stoppedActiveBuildRetry": true,
+      "addedWheels": [
+        "flit_core-4.1.0-py3-none-any.whl"
+      ],
+      "wheelSha256": "17398cdd2c38b24047a5a9c93089ec5c0bf12ec3d1469bbf69c27ed7965299db",
+      "downloadMirror": "https://pypi.tuna.tsinghua.edu.cn/simple",
+      "wheelhouseManifestSha256Before": "56dc1c696dae6ea2ca170cee93c80529f09fdc0003a6c77b1286d2ded6370fb2",
+      "wheelhouseManifestSha256After": "d7303f1d7039b4a36ea53cc9db7b7b31f76cd2f65db3892fa82d28e3374c0e0a",
+      "resolverVerification": {
+        "commands": [
+          "shasum -a 256 -c build_wheelhouse/astropy-py39-arm64/SHA256SUMS",
+          "python3 -m pip download --no-index --find-links build_wheelhouse/astropy-py39-arm64 --only-binary=:all: --platform manylinux2014_aarch64 --python-version 39 --implementation cp --abi cp39 'flit_core>=3.7'"
+        ],
+        "allManifestHashesVerified": true,
+        "flitCoreBuildDependencyResolvedFromLocalWheelhouse": true
+      },
+      "externalPause": {
+        "pausedAtUnix": 1791803073,
+        "resumedAtUnix": 1791803707,
+        "excludedSeconds": 634,
+        "reason": "Orchestrator and active Sphinx image build were stopped after a missing offline PEP 517 build-backend dependency was identified; no benchmark, evaluator, image-build, or model process ran during wheelhouse completion and manifest verification."
+      }
+    },
+    {
+      "id": "sphinx-legacy-contrib-constraints",
+      "detectedDuringInstance": "sphinx-doc__sphinx-7454",
+      "appliesFromInstanceRetry": "sphinx-doc__sphinx-7454",
+      "change": "Added the frozen legacy Sphinx contrib and template dependency versions required by the task setup script after offline evaluator-image builds failed because only newer incompatible wheelhouse versions were available.",
+      "taskSourceChanged": false,
+      "testSelectionChanged": false,
+      "promptsChanged": false,
+      "modelCallsBeforeAmendment": 0,
+      "failedBuildAttemptsBeforeAmendment": 2,
+      "addedWheels": [
+        "alabaster-0.7.11-py2.py3-none-any.whl",
+        "Jinja2-2.11.3-py2.py3-none-any.whl",
+        "MarkupSafe-2.0.1-cp39-cp39-manylinux_2_17_aarch64.manylinux2014_aarch64.whl",
+        "sphinxcontrib_applehelp-1.0.7-py3-none-any.whl",
+        "sphinxcontrib_devhelp-1.0.5-py3-none-any.whl",
+        "sphinxcontrib_htmlhelp-2.0.4-py3-none-any.whl",
+        "sphinxcontrib_qthelp-1.0.6-py3-none-any.whl",
+        "sphinxcontrib_serializinghtml-1.1.9-py3-none-any.whl"
+      ],
+      "downloadMirror": "https://pypi.tuna.tsinghua.edu.cn/simple",
+      "wheelhouseManifestSha256Before": "d7303f1d7039b4a36ea53cc9db7b7b31f76cd2f65db3892fa82d28e3374c0e0a",
+      "wheelhouseManifestSha256After": "90623bb8fb206fac1bd8434050292467eab253a07dfdd437c58d339a06b8fce9",
+      "resolverVerification": {
+        "allManifestHashesVerified": true,
+        "exactWheelsResolvedFromLocalWheelhouse": true,
+        "selfProvidedDependency": "The editable frozen Sphinx source checkout provides the Sphinx>=5 dependency declared by its contrib wheels during evaluator-image installation."
+      },
+      "externalPause": {
+        "pausedAtUnix": 1791860825,
+        "resumedAtUnix": 1791861082,
+        "excludedSeconds": 257,
+        "reason": "Orchestrator and the active legacy Sphinx image build were stopped after an offline version-constraint conflict was identified; no benchmark, evaluator, image-build, or model process ran while the wheelhouse was completed and verified."
+      }
+    },
+    {
+      "id": "sphinx-py39-pytest-cov",
+      "detectedDuringInstance": "sphinx-doc__sphinx-7454",
+      "appliesFromInstanceRetry": "sphinx-doc__sphinx-7454",
+      "change": "Added pytest-cov==7.1.0 and coverage==7.10.7 to the offline Python 3.9 ARM64 wheelhouse after the legacy Sphinx evaluator-image build reached its declared pytest-cov dependency and failed under PIP_NO_INDEX.",
+      "taskSourceChanged": false,
+      "testSelectionChanged": false,
+      "promptsChanged": false,
+      "modelCallsBeforeAmendment": 0,
+      "failedBuildAttemptsBeforeAmendment": 1,
+      "stoppedActiveBuildRetry": true,
+      "addedWheels": [
+        "pytest_cov-7.1.0-py3-none-any.whl",
+        "coverage-7.10.7-cp39-cp39-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl"
+      ],
+      "pypiMetadataUrls": [
+        "https://pypi.org/pypi/pytest-cov/7.1.0/json",
+        "https://pypi.org/pypi/coverage/7.10.7/json"
+      ],
+      "wheelSha256": {
+        "pytest_cov-7.1.0-py3-none-any.whl": "a0461110b7865f9a271aa1b51e516c9a95de9d696734a2f71e3e78f46e1d4678",
+        "coverage-7.10.7-cp39-cp39-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl": "c7315339eae3b24c2d2fa1ed7d7a38654cba34a13ef19fbcb9425da46d3dc594"
+      },
+      "wheelhouseManifestSha256Before": "90623bb8fb206fac1bd8434050292467eab253a07dfdd437c58d339a06b8fce9",
+      "wheelhouseManifestSha256After": "d0645761eee6262a79e77739f41f0b33db94f7aca41af77774c4ff0a459a4bd2",
+      "resolverVerification": {
+        "allManifestHashesVerified": true,
+        "targetPlatform": "manylinux2014_aarch64",
+        "pythonVersion": "3.9",
+        "pytestCovDependencyClosureResolvedFromLocalWheelhouse": true,
+        "selectedDependencies": {
+          "pytest-cov": "7.1.0",
+          "coverage": "7.10.7",
+          "pytest": "8.4.2",
+          "pluggy": "1.6.0",
+          "iniconfig": "2.1.0",
+          "packaging": "26.3",
+          "pygments": "2.21.0",
+          "tomli": "2.4.1",
+          "exceptiongroup": "1.3.0",
+          "typing-extensions": "4.16.0"
+        }
+      },
+      "externalPause": {
+        "pausedAtUnix": 1791861398,
+        "resumedAtUnix": 1791861609,
+        "excludedSeconds": 211,
+        "reason": "Orchestrator and the active legacy Sphinx image build were stopped after a missing offline pytest-cov dependency was identified; no benchmark, evaluator, image-build, or model process runs during wheelhouse completion and manifest verification."
+      }
+    },
+    {
+      "id": "sphinx-3.0-contrib-and-typed-ast",
+      "detectedDuringInstance": "sphinx-doc__sphinx-7454",
+      "appliesFromInstanceRetry": "sphinx-doc__sphinx-7454",
+      "change": "Added typed-ast==1.5.5 and the Sphinx 3.0-compatible historical sphinxcontrib releases to the offline Python 3.9 ARM64 wheelhouse. The frozen source's existing setup script and its original version ceilings remain unchanged; pip resolves the compatible releases from the expanded candidate set.",
+      "taskSourceChanged": false,
+      "testSelectionChanged": false,
+      "promptsChanged": false,
+      "modelCallsBeforeAmendment": 0,
+      "failedBuildAttemptsBeforeAmendment": 1,
+      "interruptedBuildRetriesBeforeAmendment": 1,
+      "compatibilityCorrection": {
+        "supersedesAssumptionInAmendment": "sphinx-legacy-contrib-constraints",
+        "previousAssumption": "The frozen editable Sphinx source checkout provides the Sphinx>=5 dependency declared by the added contrib wheels.",
+        "observedFrozenSourceVersion": "3.0.1.dev20261013",
+        "correction": "The latest versions permitted by the source's existing <= constraints declare Sphinx>=5 and cannot satisfy the frozen Sphinx 3.0 source. Added contemporaneous releases with no Sphinx>=5 dependency so pip can solve the source's unchanged declarations."
+      },
+      "addedWheels": [
+        "typed_ast-1.5.5-cp39-cp39-manylinux_2_17_aarch64.manylinux2014_aarch64.whl",
+        "sphinxcontrib_applehelp-1.0.2-py2.py3-none-any.whl",
+        "sphinxcontrib_devhelp-1.0.2-py2.py3-none-any.whl",
+        "sphinxcontrib_htmlhelp-1.0.3-py2.py3-none-any.whl",
+        "sphinxcontrib_qthelp-1.0.3-py2.py3-none-any.whl",
+        "sphinxcontrib_serializinghtml-1.1.4-py2.py3-none-any.whl"
+      ],
+      "pypiMetadataUrls": [
+        "https://pypi.org/pypi/typed-ast/1.5.5/json",
+        "https://pypi.org/pypi/sphinxcontrib-applehelp/1.0.2/json",
+        "https://pypi.org/pypi/sphinxcontrib-devhelp/1.0.2/json",
+        "https://pypi.org/pypi/sphinxcontrib-htmlhelp/1.0.3/json",
+        "https://pypi.org/pypi/sphinxcontrib-qthelp/1.0.3/json",
+        "https://pypi.org/pypi/sphinxcontrib-serializinghtml/1.1.4/json"
+      ],
+      "wheelhouseManifestSha256Before": "d0645761eee6262a79e77739f41f0b33db94f7aca41af77774c4ff0a459a4bd2",
+      "wheelhouseManifestSha256After": "7c90906cf11732b0b31faaabda4b767d44cbcb79e64a582363c4c0c6428c1c0b",
+      "resolverVerification": {
+        "allManifestHashesVerified": true,
+        "targetPlatform": "manylinux2014_aarch64",
+        "pythonVersion": "3.9",
+        "typedAstRequiresPython": ">=3.6",
+        "historicalContribReleasesDeclareSphinxGte5": false,
+        "frozenSetupScriptUnchanged": true,
+        "directImageBuild": {
+          "baseCommit": "aca3f825f2e4a8817190f3c885a242a285aa0dba",
+          "instanceImage": "sweb.eval.arm64.sphinx-doc__sphinx-7454:latest",
+          "instanceImageId": "sha256:c982a69308c33b8b0ae91cbdec955ec6b295da3e39a8baca38541fdd50c322cc",
+          "architecture": "arm64",
+          "historyDepth": 2,
+          "durationSeconds": 29.091,
+          "selectedContribVersions": {
+            "sphinxcontrib-applehelp": "1.0.2",
+            "sphinxcontrib-devhelp": "1.0.2",
+            "sphinxcontrib-htmlhelp": "1.0.3",
+            "sphinxcontrib-qthelp": "1.0.3",
+            "sphinxcontrib-serializinghtml": "1.1.4"
+          }
+        }
+      },
+      "externalPause": {
+        "pausedAtUnix": 1791861912,
+        "resumedAtUnix": 1791862114,
+        "excludedSeconds": 202,
+        "reason": "Orchestrator and the active Sphinx 3.0 image build were stopped after the next missing typed-ast dependency and an incompatible latest-allowed sphinxcontrib version family were identified; no benchmark, evaluator, image-build, or model process ran while the compatible offline wheelhouse was completed and verified."
+      }
+    },
+    {
+      "id": "sphinx-4.1-docutils-0.17.1",
+      "detectedDuringInstance": "sphinx-doc__sphinx-9229",
+      "appliesFromInstanceRetry": "sphinx-doc__sphinx-9229",
+      "change": "Added docutils==0.17.1 to the offline Python 3.9 ARM64 wheelhouse after the frozen Sphinx 4.1 evaluator-image build failed under PIP_NO_INDEX because the only available docutils wheel was 0.18.1, outside the source's declared >=0.14,<0.18 range.",
+      "taskSourceChanged": false,
+      "testSelectionChanged": false,
+      "promptsChanged": false,
+      "modelCallsBeforeAmendment": 0,
+      "failedImageBuildAttemptsBeforeAmendment": 3,
+      "addedWheels": [
+        "docutils-0.17.1-py2.py3-none-any.whl"
+      ],
+      "pypiMetadataUrl": "https://pypi.org/pypi/docutils/0.17.1/json",
+      "wheelSha256": "cf316c8370a737a022b72b56874f6602acf974a37a9fba42ec2876387549fc61",
+      "wheelhouseManifestSha256Before": "7c90906cf11732b0b31faaabda4b767d44cbcb79e64a582363c4c0c6428c1c0b",
+      "wheelhouseManifestSha256After": "87b6fa28bb16400d9d2ecb859e8da5da96a3cdb17b9642c8cb07e5241086c1da",
+      "resolverVerification": {
+        "allManifestHashesVerified": true,
+        "targetPlatform": "manylinux2014_aarch64",
+        "pythonVersion": "3.9",
+        "resolvedRequirement": "docutils>=0.14,<0.18",
+        "selectedDocutilsVersion": "0.17.1"
+      },
+      "directImageBuild": {
+        "baseCommit": "876fa81e0a038cda466925b85ccf6c5452e0f685",
+        "instanceImage": "sweb.eval.arm64.sphinx-doc__sphinx-9229:latest",
+        "instanceImageId": "sha256:20dca1ef3587c0847fafb9733eb46c9a00a5f9681196829da3f8aecd64b17fcd",
+        "architecture": "arm64",
+        "durationSeconds": 27.53,
+        "remoteCount": 0,
+        "wheelhouseHashesVerifiedAtRuntime": true,
+        "docutilsVersionInTestbed": "0.17.1"
+      },
+      "externalPauseIntervals": [
+        {
+          "pausedAtUnix": 1791869163,
+          "resumedAtUnix": 1791869244.35755,
+          "excludedSeconds": 81.35755014419556,
+          "reason": "The orchestrator had stopped after the pre-model image failure; no benchmark, evaluator, image-build, or model process ran before the direct verification build."
+        },
+        {
+          "pausedAtUnix": 1791869272,
+          "resumedAtUnix": 1791869386,
+          "excludedSeconds": 114,
+          "reason": "The direct evaluator-image build had completed; no benchmark, evaluator, image-build, or model process ran before restart."
+        }
+      ]
+    },
+    {
+      "id": "sphinx-4.2-contrib-metadata-compatibility",
+      "detectedDuringInstance": "sphinx-doc__sphinx-9461",
+      "appliesFromInstanceRetry": "sphinx-doc__sphinx-9461",
+      "affectedInstances": [
+        "sphinx-doc__sphinx-9461",
+        "sphinx-doc__sphinx-9698"
+      ],
+      "change": "Created a SHA-256-manifested Sphinx 4.2/4.3 compatibility wheelhouse view that selects public contrib releases satisfying the frozen source's existing version ranges without the later Sphinx>=5 metadata requirement. The frozen source, setup script, test selection, prompts, model configuration, patches, and grader remain unchanged.",
+      "taskSourceChanged": false,
+      "testSelectionChanged": false,
+      "promptsChanged": false,
+      "modelCallsBeforeAmendment": 0,
+      "failedImageBuildAttemptsBeforeAmendment": {
+        "sphinx-doc__sphinx-9461": 3,
+        "sphinx-doc__sphinx-9698": 1
+      },
+      "incompatibleCandidatesExcludedOnlyFromCompatibilityView": {
+        "sphinxcontrib_htmlhelp-2.0.4-py3-none-any.whl": {
+          "requiresDist": "Sphinx>=5"
+        },
+        "sphinxcontrib_serializinghtml-1.1.9-py3-none-any.whl": {
+          "requiresDist": "Sphinx>=5"
+        }
+      },
+      "compatiblePublicCandidates": {
+        "sphinxcontrib_htmlhelp-2.0.1-py3-none-any.whl": {
+          "sha256": "c38cb46dccf316c79de6e5515e1770414b797162b23cd3d06e67020e1d2a6903",
+          "pypiMetadataUrl": "https://pypi.org/pypi/sphinxcontrib-htmlhelp/2.0.1/json",
+          "requiresSphinxGte5": false
+        },
+        "sphinxcontrib_serializinghtml-1.1.5-py2.py3-none-any.whl": {
+          "sha256": "352a9a00ae864471d3a7ead8d7d79f5fc0b57e8b3f95e9867eb9eb28999b92fd",
+          "pypiMetadataUrl": "https://pypi.org/pypi/sphinxcontrib-serializinghtml/1.1.5/json",
+          "requiresSphinxGte5": false
+        }
+      },
+      "compatibilityWheelhouse": {
+        "path": "build_wheelhouse/sphinx-4-legacy-contrib-compat-v2",
+        "manifestSha256": "b547ea98b685df4bd89051a9dcc11ff8652ff0ec314262317332cc29a696f3a4",
+        "allManifestHashesVerified": true
+      },
+      "directImageBuilds": [
+        {
+          "instanceId": "sphinx-doc__sphinx-9461",
+          "baseCommit": "939c7bb7ff7c53a4d27df067cea637540f0e1dad",
+          "instanceImage": "sweb.eval.arm64.sphinx-doc__sphinx-9461:latest",
+          "instanceImageId": "sha256:ded43fdcc52df19921dc2237dd33bdae3043cb937421c256178f9f750d77de4a",
+          "architecture": "arm64",
+          "durationSeconds": 33.41,
+          "installedSphinx": "4.2.0.dev20261013",
+          "installedHtmlhelp": "2.0.1",
+          "installedSerializinghtml": "1.1.5",
+          "remoteCount": 0,
+          "wheelhouseHashesVerifiedAtRuntime": true
+        },
+        {
+          "instanceId": "sphinx-doc__sphinx-9698",
+          "baseCommit": "f050a7775dfc9000f55d023d36d925a8d02ccfa8",
+          "instanceImage": "sweb.eval.arm64.sphinx-doc__sphinx-9698:latest",
+          "instanceImageId": "sha256:95a534262ece152a24bd2bdc4da7497d1e12a8bbea0755366d4c2897d588b265",
+          "architecture": "arm64",
+          "durationSeconds": 22.941,
+          "installedSphinx": "4.3.0.dev20261013",
+          "installedHtmlhelp": "2.0.1",
+          "installedSerializinghtml": "1.1.5",
+          "remoteCount": 0,
+          "wheelhouseHashesVerifiedAtRuntime": true
+        }
+      ],
+      "externalPauseIntervals": [
+        {
+          "pausedAtUnix": 1791872147,
+          "resumedAtUnix": 1791872321,
+          "excludedSeconds": 174
+        },
+        {
+          "pausedAtUnix": 1791872411,
+          "resumedAtUnix": 1791872440,
+          "excludedSeconds": 29
+        },
+        {
+          "pausedAtUnix": 1791872493,
+          "resumedAtUnix": 1791872574,
+          "excludedSeconds": 81
+        },
+        {
+          "pausedAtUnix": 1791872650,
+          "resumedAtUnix": 1791872854,
+          "excludedSeconds": 204
+        }
+      ]
+    }
+  ],
+  "quarantinedAttempts": [
+    {
+      "instanceId": "astropy__astropy-13453",
+      "reason": "RATE_LIMIT_TPM_EXCEEDED before any reported usage or patch",
+      "reportedTokens": 0,
+      "path": "invalid_attempts/astropy__astropy-13453.tpm429-20260925T022019Z"
+    },
+    {
+      "instanceId": "astropy__astropy-7166",
+      "reason": "User interruption terminated the Pi runner with exit -9 before its atomic result file was written.",
+      "completedTurnReportedTokens": 101767,
+      "conservativeTokenCharge": 512000,
+      "qualityMetricsIncluded": false,
+      "retryFromFrozenInput": true,
+      "path": "invalid_attempts/astropy__astropy-7166.user-interrupt-20261009T111347"
+    }
+  ]
+}

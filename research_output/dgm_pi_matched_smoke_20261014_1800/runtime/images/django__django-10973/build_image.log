@@ -1,0 +1,42 @@
+$ /opt/homebrew/Caskroom/miniconda/base/bin/python /Users/bytedance/codes/pi/rollback_mvp/build_local_swebench_images.py --dataset /Users/bytedance/codes/pi/research_output/dgm_pi_matched_smoke_20261014_1800/runtime/evolve-inputs/frozen_swebench_dataset.json --instance-id django__django-10973 --log-dir /Users/bytedance/codes/pi/research_output/dgm_pi_matched_smoke_20261014_1800/runtime/images/django__django-10973/image_logs --output /Users/bytedance/codes/pi/research_output/dgm_pi_matched_smoke_20261014_1800/runtime/images/django__django-10973/image.json --build-missing-env
+Traceback (most recent call last):
+  File "/Users/bytedance/codes/pi/rollback_mvp/build_local_swebench_images.py", line 14, in <module>
+    from swebench.harness.test_spec import TestSpec, make_test_spec  # type: ignore[import-not-found]
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/bytedance/codes/pi/datasets/SWE-bench/swebench/__init__.py", line 3, in <module>
+    from swebench.collect.build_dataset import main as build_dataset
+  File "/Users/bytedance/codes/pi/datasets/SWE-bench/swebench/collect/build_dataset.py", line 9, in <module>
+    from swebench.collect.utils import (
+    ...<3 lines>...
+    )
+  File "/Users/bytedance/codes/pi/datasets/SWE-bench/swebench/collect/utils.py", line 9, in <module>
+    from bs4 import BeautifulSoup
+ModuleNotFoundError: No module named 'bs4'
+$ /opt/homebrew/Caskroom/miniconda/base/bin/python /Users/bytedance/codes/pi/rollback_mvp/build_local_swebench_images.py --dataset /Users/bytedance/codes/pi/research_output/dgm_pi_matched_smoke_20261014_1800/runtime/evolve-inputs/frozen_swebench_dataset.json --instance-id django__django-10973 --log-dir /Users/bytedance/codes/pi/research_output/dgm_pi_matched_smoke_20261014_1800/runtime/images/django__django-10973/image_logs --output /Users/bytedance/codes/pi/research_output/dgm_pi_matched_smoke_20261014_1800/runtime/images/django__django-10973/image.json --build-missing-env
+Traceback (most recent call last):
+  File "/Users/bytedance/codes/pi/rollback_mvp/build_local_swebench_images.py", line 14, in <module>
+    from swebench.harness.test_spec import TestSpec, make_test_spec  # type: ignore[import-not-found]
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/bytedance/codes/pi/datasets/SWE-bench/swebench/__init__.py", line 3, in <module>
+    from swebench.collect.build_dataset import main as build_dataset
+  File "/Users/bytedance/codes/pi/datasets/SWE-bench/swebench/collect/build_dataset.py", line 9, in <module>
+    from swebench.collect.utils import (
+    ...<3 lines>...
+    )
+  File "/Users/bytedance/codes/pi/datasets/SWE-bench/swebench/collect/utils.py", line 9, in <module>
+    from bs4 import BeautifulSoup
+ModuleNotFoundError: No module named 'bs4'
+$ /opt/homebrew/Caskroom/miniconda/base/bin/python /Users/bytedance/codes/pi/rollback_mvp/build_local_swebench_images.py --dataset /Users/bytedance/codes/pi/research_output/dgm_pi_matched_smoke_20261014_1800/runtime/evolve-inputs/frozen_swebench_dataset.json --instance-id django__django-10973 --log-dir /Users/bytedance/codes/pi/research_output/dgm_pi_matched_smoke_20261014_1800/runtime/images/django__django-10973/image_logs --output /Users/bytedance/codes/pi/research_output/dgm_pi_matched_smoke_20261014_1800/runtime/images/django__django-10973/image.json --build-missing-env
+Traceback (most recent call last):
+  File "/Users/bytedance/codes/pi/rollback_mvp/build_local_swebench_images.py", line 14, in <module>
+    from swebench.harness.test_spec import TestSpec, make_test_spec  # type: ignore[import-not-found]
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/bytedance/codes/pi/datasets/SWE-bench/swebench/__init__.py", line 3, in <module>
+    from swebench.collect.build_dataset import main as build_dataset
+  File "/Users/bytedance/codes/pi/datasets/SWE-bench/swebench/collect/build_dataset.py", line 9, in <module>
+    from swebench.collect.utils import (
+    ...<3 lines>...
+    )
+  File "/Users/bytedance/codes/pi/datasets/SWE-bench/swebench/collect/utils.py", line 9, in <module>
+    from bs4 import BeautifulSoup
+ModuleNotFoundError: No module named 'bs4'

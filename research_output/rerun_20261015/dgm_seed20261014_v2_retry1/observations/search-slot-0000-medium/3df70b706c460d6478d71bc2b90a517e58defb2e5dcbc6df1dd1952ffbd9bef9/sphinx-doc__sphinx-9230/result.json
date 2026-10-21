@@ -1,0 +1,30 @@
+{
+  "budgetAborted": true,
+  "cacheReadTokens": 462592,
+  "cacheWriteTokens": 0,
+  "candidateToolNames": [
+    "code_search"
+  ],
+  "completedAt": "2026-10-15T07:52:37.943Z",
+  "durationMs": 188491,
+  "fullPatch": "diff --git a/sphinx/util/docfields.py b/sphinx/util/docfields.py\nindex 3a3367e..6f40f46 100644\n--- a/sphinx/util/docfields.py\n+++ b/sphinx/util/docfields.py\n@@ -22,6 +22,29 @@ if TYPE_CHECKING:\n     from sphinx.directive import ObjectDescription\n \n \n+def _split_argtype_and_argname(fieldarg: str) -> Tuple[str, str]:\n+    \"\"\"Split a field argument into type and name.\n+\n+    The argument is expected to be of the form ``type name``.  The type can\n+    contain whitespace inside brackets (e.g. ``dict(str, str)``), so the\n+    split is performed at the first whitespace that is outside any brackets.\n+    \"\"\"\n+    brackets = {'(': ')', '[': ']', '{': '}'}\n+    stack = []\n+    for i, char in enumerate(fieldarg):\n+        if char in brackets:\n+            stack.append(brackets[char])\n+        elif stack and char == stack[-1]:\n+            stack.pop()\n+        elif char.isspace() and not stack:\n+            argtype, argname = fieldarg[:i], fieldarg[i:].strip()\n+            if argtype:\n+                return argtype, argname\n+            raise ValueError\n+\n+    raise ValueError\n+\n+\n def _is_single_paragraph(node: nodes.field_body) -> bool:\n     \"\"\"True if the node only contains one paragraph (and system messages).\"\"\"\n     if len(node) == 0:\n@@ -298,7 +321,7 @@ class DocFieldTransformer:\n             # also support syntax like ``:param type name:``\n             if typedesc.is_typed:\n                 try:\n-                    argtype, argname = fieldarg.split(None, 1)\n+                    argtype, argname = _split_argtype_and_argname(fieldarg)\n                 except ValueError:\n                     pass\n                 else:\n",
+  "inputTokens": 47381,
+  "instanceId": "sphinx-doc__sphinx-9230",
+  "maxOutputTokens": 65536,
+  "maxTotalTokens": 512000,
+  "modelId": "byteplus/deepseek-v4-flash-ga",
+  "modelProvider": "rollback-deepseek",
+  "noShell": false,
+  "outputTokens": 27017,
+  "patch": "diff --git a/sphinx/util/docfields.py b/sphinx/util/docfields.py\nindex 3a3367e..6f40f46 100644\n--- a/sphinx/util/docfields.py\n+++ b/sphinx/util/docfields.py\n@@ -22,6 +22,29 @@ if TYPE_CHECKING:\n     from sphinx.directive import ObjectDescription\n \n \n+def _split_argtype_and_argname(fieldarg: str) -> Tuple[str, str]:\n+    \"\"\"Split a field argument into type and name.\n+\n+    The argument is expected to be of the form ``type name``.  The type can\n+    contain whitespace inside brackets (e.g. ``dict(str, str)``), so the\n+    split is performed at the first whitespace that is outside any brackets.\n+    \"\"\"\n+    brackets = {'(': ')', '[': ']', '{': '}'}\n+    stack = []\n+    for i, char in enumerate(fieldarg):\n+        if char in brackets:\n+            stack.append(brackets[char])\n+        elif stack and char == stack[-1]:\n+            stack.pop()\n+        elif char.isspace() and not stack:\n+            argtype, argname = fieldarg[:i], fieldarg[i:].strip()\n+            if argtype:\n+                return argtype, argname\n+            raise ValueError\n+\n+    raise ValueError\n+\n+\n def _is_single_paragraph(node: nodes.field_body) -> bool:\n     \"\"\"True if the node only contains one paragraph (and system messages).\"\"\"\n     if len(node) == 0:\n@@ -298,7 +321,7 @@ class DocFieldTransformer:\n             # also support syntax like ``:param type name:``\n             if typedesc.is_typed:\n                 try:\n-                    argtype, argname = fieldarg.split(None, 1)\n+                    argtype, argname = _split_argtype_and_argname(fieldarg)\n                 except ValueError:\n                     pass\n                 else:\n",
+  "policyViolations": [],
+  "providerError": "This operation was aborted",
+  "runnerExitCode": 1,
+  "sandboxImage": "sweb.eval.arm64.sphinx-doc__sphinx-9230:latest",
+  "schemaVersion": 1,
+  "startedAt": "2026-10-15T07:49:29.452Z",
+  "strategyHash": "af051feb0d3041c9c41a99f22ca71062093da67e27fa02a01a79dbb8b7c197e6",
+  "timeoutAborted": false,
+  "tokenTelemetryAvailable": true,
+  "toolCalls": 36
+}

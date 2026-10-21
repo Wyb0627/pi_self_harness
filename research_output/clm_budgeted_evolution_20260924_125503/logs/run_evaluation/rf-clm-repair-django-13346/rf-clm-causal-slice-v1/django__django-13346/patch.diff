@@ -1,0 +1,47 @@
+diff --git a/django/db/models/fields/json.py b/django/db/models/fields/json.py
+index fafc1be..b58aac3 100644
+--- a/django/db/models/fields/json.py
++++ b/django/db/models/fields/json.py
+@@ -423,6 +423,34 @@ class KeyTransformExact(JSONExact):
+         return super().as_sql(compiler, connection)
+ 
+ 
++class KeyTransformIn(lookups.In):
++    def process_rhs(self, compiler, connection):
++        if not isinstance(self.rhs, (list, tuple)):
++            return super().process_rhs(compiler, connection)
++        rhs, rhs_params = super().process_rhs(compiler, connection)
++        if connection.vendor == 'oracle':
++            rhs_params = ['null' if value is None else value for value in rhs_params]
++            func = []
++            for value in rhs_params:
++                value = json.loads(value)
++                function = 'JSON_QUERY' if isinstance(value, (list, dict)) else 'JSON_VALUE'
++                func.append("%s('%s', '$.value')" % (
++                    function,
++                    json.dumps({'value': value}),
++                ))
++            rhs = rhs % tuple(func)
++            rhs_params = []
++        elif connection.vendor == 'sqlite':
++            rhs_params = ['null' if value is None else value for value in rhs_params]
++            func = ["JSON_EXTRACT(%s, '$')" if value != 'null' else '%s' for value in rhs_params]
++            rhs = rhs % tuple(func)
++        elif connection.vendor == 'mysql':
++            rhs_params = ['null' if value is None else value for value in rhs_params]
++            func = ["JSON_EXTRACT(%s, '$')"] * len(rhs_params)
++            rhs = rhs % tuple(func)
++        return rhs, rhs_params
++
++
+ class KeyTransformIExact(CaseInsensitiveMixin, KeyTransformTextLookupMixin, lookups.IExact):
+     pass
+ 
+@@ -489,6 +517,7 @@ KeyTransform.register_lookup(KeyTransformEndsWith)
+ KeyTransform.register_lookup(KeyTransformIEndsWith)
+ KeyTransform.register_lookup(KeyTransformRegex)
+ KeyTransform.register_lookup(KeyTransformIRegex)
++KeyTransform.register_lookup(KeyTransformIn)
+ 
+ KeyTransform.register_lookup(KeyTransformLt)
+ KeyTransform.register_lookup(KeyTransformLte)

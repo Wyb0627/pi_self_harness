@@ -1,0 +1,14 @@
+{
+  "agent_auth_shape_sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+  "agent_models_sha256": "bfd834523d43655717f0750d199a7db966c3ddc8db5428b5ba6c3930d5c7dde8",
+  "agent_models_store_sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+  "image_builder_sha256": "2c4c32a00b01b7a68a8bcba969a9c139ddff56647f4ad60811349406619c6921",
+  "node_version": "v26.5.0",
+  "orchestrator_sha256": "547eb163376aed5c6b849e7c59aef35e7826b9aaa489b5f341b4d1f24ccb8def",
+  "pi_package_dist_tree_hash": "37f824228786e430aa135b2d11c8de83bfb3661c806b6a4e44cb0dbaee95b4ed",
+  "pi_package_json_sha256": "f1738e4b42203e5f22bcb513f13fb2fb224f1e98d1f129ff042f87048665a94c",
+  "pi_rollback_package_lock_sha256": "8705b2a3768814a55a1f981775b781f6a9bd170cee0bf5e2e9bfaa1c8084c3b5",
+  "pi_runner_sha256": "29d81d507ed27625d60740fb6b334c235d6709fad7ba730eebebf276dd1a4a44",
+  "schema_version": 1,
+  "swebench_revision": "dc4c087c2b9e4cefebf2e3d201d27e362d899e0f"
+}

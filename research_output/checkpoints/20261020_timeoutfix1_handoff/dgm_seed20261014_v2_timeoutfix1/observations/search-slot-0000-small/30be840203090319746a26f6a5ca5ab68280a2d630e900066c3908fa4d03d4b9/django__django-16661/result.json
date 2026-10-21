@@ -1,0 +1,30 @@
+{
+  "budgetAborted": true,
+  "cacheReadTokens": 468480,
+  "cacheWriteTokens": 0,
+  "candidateToolNames": [
+    "code_search"
+  ],
+  "completedAt": "2026-10-19T22:05:07.232Z",
+  "durationMs": 159354,
+  "fullPatch": "diff --git a/_stubs/asgiref/__init__.py b/_stubs/asgiref/__init__.py\nnew file mode 100644\nindex 0000000..e69de29\ndiff --git a/_stubs/asgiref/current_thread_executor.py b/_stubs/asgiref/current_thread_executor.py\nnew file mode 100644\nindex 0000000..e69de29\ndiff --git a/_stubs/asgiref/local.py b/_stubs/asgiref/local.py\nnew file mode 100644\nindex 0000000..f286db6\n--- /dev/null\n+++ b/_stubs/asgiref/local.py\n@@ -0,0 +1,3 @@\n+class Local:\n+    def __init__(self, thread_critical=False):\n+        pass\ndiff --git a/_stubs/asgiref/sync.py b/_stubs/asgiref/sync.py\nnew file mode 100644\nindex 0000000..715da6a\n--- /dev/null\n+++ b/_stubs/asgiref/sync.py\n@@ -0,0 +1,11 @@\n+def iscoroutinefunction(func):\n+    return False\n+\n+def markcoroutinefunction(func):\n+    return func\n+\n+def sync_to_async(func, thread_sensitive=True):\n+    return func\n+\n+def async_to_sync(func):\n+    return func\ndiff --git a/_stubs/asgiref/timeout.py b/_stubs/asgiref/timeout.py\nnew file mode 100644\nindex 0000000..e69de29\ndiff --git a/_stubs/sqlparse/__init__.py b/_stubs/sqlparse/__init__.py\nnew file mode 100644\nindex 0000000..e69de29\n",
+  "inputTokens": 39987,
+  "instanceId": "django__django-16661",
+  "maxOutputTokens": 65536,
+  "maxTotalTokens": 512000,
+  "modelId": "byteplus/deepseek-v4-flash-ga",
+  "modelProvider": "rollback-deepseek",
+  "noShell": false,
+  "outputTokens": 22035,
+  "patch": "diff --git a/_stubs/asgiref/__init__.py b/_stubs/asgiref/__init__.py\nnew file mode 100644\nindex 0000000..e69de29\ndiff --git a/_stubs/asgiref/current_thread_executor.py b/_stubs/asgiref/current_thread_executor.py\nnew file mode 100644\nindex 0000000..e69de29\ndiff --git a/_stubs/asgiref/local.py b/_stubs/asgiref/local.py\nnew file mode 100644\nindex 0000000..f286db6\n--- /dev/null\n+++ b/_stubs/asgiref/local.py\n@@ -0,0 +1,3 @@\n+class Local:\n+    def __init__(self, thread_critical=False):\n+        pass\ndiff --git a/_stubs/asgiref/sync.py b/_stubs/asgiref/sync.py\nnew file mode 100644\nindex 0000000..715da6a\n--- /dev/null\n+++ b/_stubs/asgiref/sync.py\n@@ -0,0 +1,11 @@\n+def iscoroutinefunction(func):\n+    return False\n+\n+def markcoroutinefunction(func):\n+    return func\n+\n+def sync_to_async(func, thread_sensitive=True):\n+    return func\n+\n+def async_to_sync(func):\n+    return func\ndiff --git a/_stubs/asgiref/timeout.py b/_stubs/asgiref/timeout.py\nnew file mode 100644\nindex 0000000..e69de29\ndiff --git a/_stubs/sqlparse/__init__.py b/_stubs/sqlparse/__init__.py\nnew file mode 100644\nindex 0000000..e69de29\n",
+  "policyViolations": [],
+  "providerError": "This operation was aborted",
+  "runnerExitCode": 1,
+  "sandboxImage": "sweb.eval.arm64.django__django-16661:latest",
+  "schemaVersion": 1,
+  "startedAt": "2026-10-19T22:02:27.877Z",
+  "strategyHash": "462f34ca395d1c0817472c8de3ee61cba155df886fe48dc8386a24cafcd5c17e",
+  "timeoutAborted": false,
+  "tokenTelemetryAvailable": true,
+  "toolCalls": 27
+}

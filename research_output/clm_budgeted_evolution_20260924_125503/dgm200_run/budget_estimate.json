@@ -1,0 +1,9 @@
+{
+  "source": "/Users/bytedance/codes/pi/research_output/clm_budgeted_evolution_20260924_125503/endpoint_small_results.json",
+  "pilotTasks": 10,
+  "projectedOriginalReportedTokens": 68844680,
+  "projectedOriginalSummedAgentSeconds": 17978.16,
+  "projectedOriginalSerialHours": 4.994,
+  "projectedRepairTokensAtPilotAttemptRate": 2747820,
+  "pricingStatus": "Unknown. Model catalog prices are zero placeholders and must not be interpreted as free usage."
+}

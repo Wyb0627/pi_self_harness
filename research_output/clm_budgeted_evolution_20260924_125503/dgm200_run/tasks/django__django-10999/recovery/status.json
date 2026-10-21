@@ -1,0 +1,37 @@
+{
+  "status": "completed",
+  "resolved": true,
+  "candidatePaths": [
+    "django/utils/dateparse.py"
+  ],
+  "feedbackEvaluation": {
+    "status": "completed",
+    "resolved": false,
+    "protocol": "original",
+    "officialEvaluatorRun": true,
+    "usedInertFeedbackProbe": false,
+    "identitySha256": "36c68caed45653f04c1e8703fa6e46fe9fd6205d73b80f17647b723473d5964d",
+    "submittedPatchSha256": "15f84b3269f4d5fde7e51b5c515197685cde56e42927cba5152c9ff8c71aba38",
+    "runId": "dgm200-original-36c68caed45653f0",
+    "modelNameOrPath": "original-pi-one-shot-36c68caed456",
+    "returnCode": 0,
+    "durationSeconds": 31.657,
+    "reportPath": "/Users/bytedance/codes/pi/research_output/clm_budgeted_evolution_20260924_125503/dgm200_run/logs/run_evaluation/dgm200-original-36c68caed45653f0/original-pi-one-shot-36c68caed456/django__django-10999/report.json",
+    "testOutputPath": "/Users/bytedance/codes/pi/research_output/clm_budgeted_evolution_20260924_125503/dgm200_run/logs/run_evaluation/dgm200-original-36c68caed45653f0/original-pi-one-shot-36c68caed456/django__django-10999/test_output.txt"
+  },
+  "evaluation": {
+    "status": "completed",
+    "resolved": true,
+    "protocol": "recovery",
+    "officialEvaluatorRun": true,
+    "usedInertFeedbackProbe": false,
+    "identitySha256": "b9d4a66afb04e01a9d0a14343a8d837e71b5c580a4d995d54916ae15aaf0e036",
+    "submittedPatchSha256": "ceec638fcf0000d45e712bcf3efc0f35c0db0370d8ca32a9b3173bd01a7c7760",
+    "runId": "dgm200-recovery-b9d4a66afb04e01a",
+    "modelNameOrPath": "pi-rf-clm-feedback-1-b9d4a66afb04",
+    "returnCode": 0,
+    "durationSeconds": 34.093,
+    "reportPath": "/Users/bytedance/codes/pi/research_output/clm_budgeted_evolution_20260924_125503/dgm200_run/logs/run_evaluation/dgm200-recovery-b9d4a66afb04e01a/pi-rf-clm-feedback-1-b9d4a66afb04/django__django-10999/report.json",
+    "testOutputPath": "/Users/bytedance/codes/pi/research_output/clm_budgeted_evolution_20260924_125503/dgm200_run/logs/run_evaluation/dgm200-recovery-b9d4a66afb04e01a/pi-rf-clm-feedback-1-b9d4a66afb04/django__django-10999/test_output.txt"
+  }
+}

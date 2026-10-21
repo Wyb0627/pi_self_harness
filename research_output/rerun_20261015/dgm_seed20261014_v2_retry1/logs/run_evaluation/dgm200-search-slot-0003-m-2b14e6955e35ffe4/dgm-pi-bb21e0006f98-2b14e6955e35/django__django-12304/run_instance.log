@@ -1,0 +1,48 @@
+2026-10-15 19:48:38,403 - INFO - Environment image sweb.env.arm64.a18371b03f944585b4f08c:latest found for django__django-12304
+Building instance image sweb.eval.arm64.django__django-12304:latest for django__django-12304
+2026-10-15 19:48:38,417 - INFO - Image sweb.eval.arm64.django__django-12304:latest already exists, skipping build.
+2026-10-15 19:48:38,417 - INFO - Creating container for django__django-12304...
+2026-10-15 19:48:38,434 - INFO - Container for django__django-12304 created: cbb8450b5cdd135fd333d21a9f14e2d3024fba0a358ca026ba787f3de7531091
+2026-10-15 19:48:38,487 - INFO - Container for django__django-12304 started: cbb8450b5cdd135fd333d21a9f14e2d3024fba0a358ca026ba787f3de7531091
+2026-10-15 19:48:38,488 - INFO - Intermediate patch for django__django-12304 written to logs/run_evaluation/dgm200-search-slot-0003-m-2b14e6955e35ffe4/dgm-pi-bb21e0006f98-2b14e6955e35/django__django-12304/patch.diff, now applying to container...
+2026-10-15 19:48:38,595 - INFO - Failed to apply patch to container, trying again...
+2026-10-15 19:48:38,622 - INFO - >>>>> Applied Patch:
+patching file django/db/models/enums.py
+
+2026-10-15 19:48:39,025 - INFO - Git diff before:
+diff --git a/django/db/models/enums.py b/django/db/models/enums.py
+index f48143d..1e05f8c 100644
+--- a/django/db/models/enums.py
++++ b/django/db/models/enums.py
+@@ -57,6 +57,8 @@ class ChoicesMeta(enum.EnumMeta):
+     def values(cls):
+         return [value for value, _ in cls.choices]
+ 
++    do_not_call_in_templates = True
++
+ 
+ class Choices(enum.Enum, metaclass=ChoicesMeta):
+     """Class for creating enumerated choices."""
+2026-10-15 19:48:39,026 - INFO - Eval script for django__django-12304 written to logs/run_evaluation/dgm200-search-slot-0003-m-2b14e6955e35ffe4/dgm-pi-bb21e0006f98-2b14e6955e35/django__django-12304/eval.sh; copying to container...
+2026-10-15 19:48:41,570 - INFO - Test runtime: 2.47 seconds
+2026-10-15 19:48:41,571 - INFO - Test output for django__django-12304 written to logs/run_evaluation/dgm200-search-slot-0003-m-2b14e6955e35ffe4/dgm-pi-bb21e0006f98-2b14e6955e35/django__django-12304/test_output.txt
+2026-10-15 19:48:41,601 - INFO - Git diff after:
+diff --git a/django/db/models/enums.py b/django/db/models/enums.py
+index f48143d..1e05f8c 100644
+--- a/django/db/models/enums.py
++++ b/django/db/models/enums.py
+@@ -57,6 +57,8 @@ class ChoicesMeta(enum.EnumMeta):
+     def values(cls):
+         return [value for value, _ in cls.choices]
+ 
++    do_not_call_in_templates = True
++
+ 
+ class Choices(enum.Enum, metaclass=ChoicesMeta):
+     """Class for creating enumerated choices."""
+2026-10-15 19:48:41,602 - INFO - Grading answer for django__django-12304...
+2026-10-15 19:48:41,604 - INFO - report: {'django__django-12304': {'patch_is_None': False, 'patch_exists': True, 'patch_successfully_applied': True, 'resolved': True, 'tests_status': {'FAIL_TO_PASS': {'success': ['test_templates (model_enums.tests.ChoicesTests)'], 'failure': []}, 'PASS_TO_PASS': {'success': ['test_integerchoices (model_enums.tests.ChoicesTests)', 'test_integerchoices_auto_label (model_enums.tests.ChoicesTests)', 'test_integerchoices_containment (model_enums.tests.ChoicesTests)', 'test_integerchoices_empty_label (model_enums.tests.ChoicesTests)', 'test_integerchoices_functional_api (model_enums.tests.ChoicesTests)', 'test_invalid_definition (model_enums.tests.ChoicesTests)', 'test_str (model_enums.tests.ChoicesTests)', 'test_textchoices (model_enums.tests.ChoicesTests)', 'test_textchoices_auto_label (model_enums.tests.ChoicesTests)', 'test_textchoices_blank_value (model_enums.tests.ChoicesTests)', 'test_textchoices_containment (model_enums.tests.ChoicesTests)', 'test_textchoices_empty_label (model_enums.tests.ChoicesTests)', 'test_textchoices_functional_api (model_enums.tests.ChoicesTests)', 'test_bool_unsupported (model_enums.tests.CustomChoicesTests)', 'test_labels_valid (model_enums.tests.CustomChoicesTests)', 'test_timezone_unsupported (model_enums.tests.CustomChoicesTests)', 'test_uuid_unsupported (model_enums.tests.CustomChoicesTests)'], 'failure': []}, 'FAIL_TO_FAIL': {'success': [], 'failure': []}, 'PASS_TO_FAIL': {'success': [], 'failure': []}}}}
+Result for django__django-12304: resolved: True
+2026-10-15 19:48:41,605 - INFO - Attempting to stop container sweb.eval.django__django-12304.dgm200-search-slot-0003-m-2b14e6955e35ffe4...
+2026-10-15 19:48:56,750 - INFO - Attempting to remove container sweb.eval.django__django-12304.dgm200-search-slot-0003-m-2b14e6955e35ffe4...
+2026-10-15 19:48:56,773 - INFO - Container sweb.eval.django__django-12304.dgm200-search-slot-0003-m-2b14e6955e35ffe4 removed.

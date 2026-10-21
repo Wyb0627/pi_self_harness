@@ -1,0 +1,10 @@
+{
+	"artifactPaths": [".pi/rollback-demo"],
+	"probeCommand": ["node", "pi-rollback/fixtures/demo-probe.mjs"],
+	"probeRepeats": 1,
+	"timeoutMs": 30000,
+	"maxSliceFraction": 0.3,
+	"minSliceRecall": 0.95,
+	"singletonBudget": 1,
+	"dryRun": true
+}

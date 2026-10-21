@@ -1,0 +1,7 @@
+{
+  "schemaVersion": 1,
+  "instanceId": "astropy__astropy-7166",
+  "status": "infrastructure_error",
+  "updatedAtUnix": 1791515628.65749,
+  "error": "RuntimeError: Pi runner failed without a result for astropy__astropy-7166 (exit -9)."
+}

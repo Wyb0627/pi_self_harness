@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "instanceId": "astropy__astropy-8872",
+  "method": "repair-first-causal-slice",
+  "status": "completed",
+  "candidatePaths": [
+    "astropy/units/quantity.py",
+    "CHANGES.rst",
+    "astropy/units/tests/test_quantity.py"
+  ],
+  "changedPaths": [
+    "astropy/units/quantity.py"
+  ],
+  "inputTokens": 92758,
+  "outputTokens": 24024,
+  "latencySeconds": 149.141890792,
+  "attempts": 1,
+  "tokenTelemetryAvailable": true,
+  "failureHash": "2e86414f8371bf499b7c23b8f69766076463761514a253cb41add75b52d14483",
+  "patch": "diff --git a/astropy/units/quantity.py b/astropy/units/quantity.py\nindex ded609c..01ba90b 100644\n--- a/astropy/units/quantity.py\n+++ b/astropy/units/quantity.py\n@@ -296,7 +296,7 @@ class Quantity(np.ndarray, metaclass=InheritDocstrings):\n                 if not copy:\n                     return value\n \n-                if not (np.can_cast(np.float32, value.dtype) or\n+                if not (np.issubdtype(value.dtype, np.inexact) or\n                         value.dtype.fields):\n                     dtype = float\n \n@@ -377,9 +377,9 @@ class Quantity(np.ndarray, metaclass=InheritDocstrings):\n                             \"Numpy numeric type.\")\n \n         # by default, cast any integer, boolean, etc., to float\n-        if dtype is None and (not (np.can_cast(np.float32, value.dtype)\n-                                   or value.dtype.fields)\n-                              or value.dtype.kind == 'O'):\n+        if dtype is None and not (\n+                np.issubdtype(value.dtype, np.inexact)\n+                or value.dtype.fields):\n             value = value.astype(float)\n \n         value = value.view(cls)\n",
+  "proposedEdits": [
+    {
+      "path": "astropy/units/quantity.py",
+      "old": "                if value.dtype.kind not in 'f' and not (\n                        np.can_cast(np.float32, value.dtype) or\n                        value.dtype.fields):\n                    dtype = float",
+      "new": "                if not (np.issubdtype(value.dtype, np.inexact) or\n                        value.dtype.fields):\n                    dtype = float"
+    },
+    {
+      "path": "astropy/units/quantity.py",
+      "old": "        # by default, cast any integer, boolean, etc., to float\n        if dtype is None and value.dtype.kind not in 'f' and (\n                not (np.can_cast(np.float32, value.dtype)\n                     or value.dtype.fields)\n                or value.dtype.kind == 'O'):\n            value = value.astype(float)",
+      "new": "        # by default, cast any integer, boolean, etc., to float\n        if dtype is None and not (\n                np.issubdtype(value.dtype, np.inexact)\n                or value.dtype.fields):\n            value = value.astype(float)"
+    }
+  ],
+  "explanation": "Replace the can_cast-based dtype check with np.issubdtype(..., np.inexact), which preserves all floating dtypes including float16 (and complex) while still converting integer, boolean, object, and non-field dtypes to float by default."
+}

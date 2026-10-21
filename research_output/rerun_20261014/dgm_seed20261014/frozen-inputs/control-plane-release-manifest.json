@@ -1,0 +1,12 @@
+{
+  "files": {
+    "rollback_mvp/candidate_tool_runtime.mjs": "1a594a4650a03b57aac50081260395362acd5c3e0beb2ce6aa25f3be30d73d09",
+    "rollback_mvp/dgm_evolve/artifacts.py": "c329f60cfa8192ca872772a7c0337708ccd3b665637e5241a48d9f239723fca8",
+    "rollback_mvp/dgm_evolve/experiment.py": "148d6a8e498c5418a0a98e1ccbd67352aab695cbab5279ef41c019246958217c",
+    "rollback_mvp/dgm_evolve/rf_clm.py": "2830b552cc1af5ca289cbcc1f9712acf9926ccd6af0ffae20814ff23839e42a2",
+    "rollback_mvp/pi_strategy_mutator.mjs": "9a2b0f9a2fdcb317afc4f268de823390f818ace7184a225ce799ca41cccbb911",
+    "rollback_mvp/pi_swe_runner.mjs": "66bfdc8499d35f08c05f13142a12157a7ae703053088718b0bded3a5e1da3cb7",
+    "rollback_mvp/run_dgm_pi_evolution.py": "8afae1d35a73762188ee90012700f696085fe16bb4be4404428f5ea914722ed7"
+  },
+  "schema_version": 1
+}

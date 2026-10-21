@@ -1,0 +1,29 @@
+{
+  "budgetAborted": false,
+  "cacheReadTokens": 39680,
+  "cacheWriteTokens": 0,
+  "candidateToolNames": [
+    "code_search"
+  ],
+  "completedAt": "2026-10-19T22:54:35.032Z",
+  "durationMs": 32255,
+  "fullPatch": "diff --git a/django/db/models/query.py b/django/db/models/query.py\nindex d9c9b0d..3796919 100644\n--- a/django/db/models/query.py\n+++ b/django/db/models/query.py\n@@ -689,8 +689,13 @@ class QuerySet:\n         \"\"\"\n         assert not self.query.is_sliced, \\\n             \"Cannot use 'limit' or 'offset' with in_bulk\"\n-        if field_name != 'pk' and not self.model._meta.get_field(field_name).unique:\n-            raise ValueError(\"in_bulk()'s field_name must be a unique field but %r isn't.\" % field_name)\n+        if field_name != 'pk':\n+            field = self.model._meta.get_field(field_name)\n+            if not field.unique and not any(\n+                len(constraint.fields) == 1 and constraint.fields[0] == field_name\n+                for constraint in self.model._meta.total_unique_constraints\n+            ):\n+                raise ValueError(\"in_bulk()'s field_name must be a unique field but %r isn't.\" % field_name)\n         if id_list is not None:\n             if not id_list:\n                 return {}\n",
+  "inputTokens": 12594,
+  "instanceId": "django__django-12774",
+  "maxOutputTokens": 65536,
+  "maxTotalTokens": 512000,
+  "modelId": "byteplus/deepseek-v4-flash-ga",
+  "modelProvider": "rollback-deepseek",
+  "noShell": false,
+  "outputTokens": 3315,
+  "patch": "diff --git a/django/db/models/query.py b/django/db/models/query.py\nindex d9c9b0d..3796919 100644\n--- a/django/db/models/query.py\n+++ b/django/db/models/query.py\n@@ -689,8 +689,13 @@ class QuerySet:\n         \"\"\"\n         assert not self.query.is_sliced, \\\n             \"Cannot use 'limit' or 'offset' with in_bulk\"\n-        if field_name != 'pk' and not self.model._meta.get_field(field_name).unique:\n-            raise ValueError(\"in_bulk()'s field_name must be a unique field but %r isn't.\" % field_name)\n+        if field_name != 'pk':\n+            field = self.model._meta.get_field(field_name)\n+            if not field.unique and not any(\n+                len(constraint.fields) == 1 and constraint.fields[0] == field_name\n+                for constraint in self.model._meta.total_unique_constraints\n+            ):\n+                raise ValueError(\"in_bulk()'s field_name must be a unique field but %r isn't.\" % field_name)\n         if id_list is not None:\n             if not id_list:\n                 return {}\n",
+  "policyViolations": [],
+  "runnerExitCode": 0,
+  "sandboxImage": "sweb.eval.arm64.django__django-12774:latest",
+  "schemaVersion": 1,
+  "startedAt": "2026-10-19T22:54:02.777Z",
+  "strategyHash": "462f34ca395d1c0817472c8de3ee61cba155df886fe48dc8386a24cafcd5c17e",
+  "timeoutAborted": false,
+  "tokenTelemetryAvailable": true,
+  "toolCalls": 11
+}

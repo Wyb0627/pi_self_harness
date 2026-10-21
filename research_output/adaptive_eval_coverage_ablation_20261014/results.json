@@ -1,0 +1,155 @@
+{
+  "schema_version": 1,
+  "evidence_level": "mechanism_only",
+  "catalogue": {
+    "dataset_manifest_hash": "3fb913fbc73a05c1f7cae3b708c976374632820b58377aab5de08b742f96c967",
+    "catalogue_hash": "cfbff9b128886aecf791b3a9e2556595c1be3d99ff8336e80ddb9235ca9cad4c",
+    "task_count": 200
+  },
+  "replay_design": {
+    "selector": "scripted fixed trace",
+    "embeddings": "synthetic orthogonal 1024-D vectors",
+    "paired_task_execution": false,
+    "paid_model_calls": false
+  },
+  "preregistered_predictions": {
+    "exact_direct_budget_same_ids": true,
+    "over_capacity_modes_can_differ": true,
+    "under_capacity_agent_only_selects_fewer_tasks": true,
+    "selector_trace_and_token_usage_unchanged": true
+  },
+  "scenario_results": {
+    "exact_direct_budget": {
+      "greedy": {
+        "config_hash": "3a39ca8e81113fc95421dd2b8c8a71c36e40b211deb77e0c83d55a756e3695b5",
+        "selected_ids": [
+          "astropy__astropy-13236",
+          "astropy__astropy-13033"
+        ],
+        "selection_sources": [
+          "direct_hypothesis",
+          "direct_hypothesis"
+        ],
+        "marginal_coverage": [
+          0.005,
+          0.005
+        ],
+        "coverage": 0.01,
+        "redundancy": 0.0,
+        "selector_input_tokens": 4,
+        "selector_output_tokens": 4,
+        "selector_trace_hash": "2ca185918fa234b5c1109ad60bfbf30ff0c6a1328ba851b3f90f264ab6c78ba3"
+      },
+      "agent_only": {
+        "config_hash": "398b1b8c35c0230b03556856a2ba53555812db4982d8defc83e66106444d2cdc",
+        "selected_ids": [
+          "astropy__astropy-13236",
+          "astropy__astropy-13033"
+        ],
+        "selection_sources": [
+          "agent_direct",
+          "agent_direct"
+        ],
+        "marginal_coverage": [
+          0.005,
+          0.005
+        ],
+        "coverage": 0.01,
+        "redundancy": 0.0,
+        "selector_input_tokens": 4,
+        "selector_output_tokens": 4,
+        "selector_trace_hash": "2ca185918fa234b5c1109ad60bfbf30ff0c6a1328ba851b3f90f264ab6c78ba3"
+      }
+    },
+    "over_capacity": {
+      "greedy": {
+        "config_hash": "3a39ca8e81113fc95421dd2b8c8a71c36e40b211deb77e0c83d55a756e3695b5",
+        "selected_ids": [
+          "astropy__astropy-12907",
+          "astropy__astropy-13033"
+        ],
+        "selection_sources": [
+          "direct_hypothesis",
+          "direct_hypothesis"
+        ],
+        "marginal_coverage": [
+          0.005,
+          0.005
+        ],
+        "coverage": 0.01,
+        "redundancy": 0.0,
+        "selector_input_tokens": 5,
+        "selector_output_tokens": 5,
+        "selector_trace_hash": "f4a9f2301710ca025096f4562a431e04d2cb2129b6f187dd19fcc44d58cd62fe"
+      },
+      "agent_only": {
+        "config_hash": "398b1b8c35c0230b03556856a2ba53555812db4982d8defc83e66106444d2cdc",
+        "selected_ids": [
+          "astropy__astropy-13236",
+          "astropy__astropy-13033"
+        ],
+        "selection_sources": [
+          "agent_direct",
+          "agent_direct"
+        ],
+        "marginal_coverage": [
+          0.005,
+          0.005
+        ],
+        "coverage": 0.01,
+        "redundancy": 0.0,
+        "selector_input_tokens": 5,
+        "selector_output_tokens": 5,
+        "selector_trace_hash": "f4a9f2301710ca025096f4562a431e04d2cb2129b6f187dd19fcc44d58cd62fe"
+      }
+    },
+    "under_capacity": {
+      "greedy": {
+        "config_hash": "3a39ca8e81113fc95421dd2b8c8a71c36e40b211deb77e0c83d55a756e3695b5",
+        "selected_ids": [
+          "astropy__astropy-12907",
+          "astropy__astropy-13033"
+        ],
+        "selection_sources": [
+          "direct_hypothesis",
+          "coverage_completion"
+        ],
+        "marginal_coverage": [
+          0.005,
+          0.005
+        ],
+        "coverage": 0.01,
+        "redundancy": 0.0,
+        "selector_input_tokens": 4,
+        "selector_output_tokens": 4,
+        "selector_trace_hash": "5d2dae1d88b98899e064586042d27434fa5ad099b22f5f9571e795ed6f35724e"
+      },
+      "agent_only": {
+        "config_hash": "398b1b8c35c0230b03556856a2ba53555812db4982d8defc83e66106444d2cdc",
+        "selected_ids": [
+          "astropy__astropy-12907"
+        ],
+        "selection_sources": [
+          "agent_direct"
+        ],
+        "marginal_coverage": [
+          0.005
+        ],
+        "coverage": 0.005,
+        "redundancy": 0.0,
+        "selector_input_tokens": 4,
+        "selector_output_tokens": 4,
+        "selector_trace_hash": "5d2dae1d88b98899e064586042d27434fa5ad099b22f5f9571e795ed6f35724e"
+      }
+    }
+  },
+  "checks": {
+    "exact_direct_budget_same_ids": true,
+    "over_capacity_modes_differ": true,
+    "under_capacity_planned_task_reduction": 0.5,
+    "selector_trace_hashes_unchanged": true,
+    "full_budget_isolation_kill_triggered": false
+  },
+  "conclusion": "The mechanism hypothesis survives replay: coverage arbitration is behaviorally redundant only when direct proposals exactly fill the round. Agent-only can save paired executions only when a round is underfilled.",
+  "limitations": "This replay does not estimate SWE-bench quality, regression recall, wall time, or endpoint cost. A valid endpoint ablation still requires a real selector adapter, pinned embedding sidecar, trusted paired round evaluator, and isolated candidate runtime."
+}

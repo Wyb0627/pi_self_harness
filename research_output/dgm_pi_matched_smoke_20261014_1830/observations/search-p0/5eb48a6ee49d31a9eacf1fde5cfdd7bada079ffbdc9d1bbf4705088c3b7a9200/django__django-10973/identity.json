@@ -1,0 +1,23 @@
+{
+  "agent_timeout_seconds": 900,
+  "artifact_hash": "5eb48a6ee49d31a9eacf1fde5cfdd7bada079ffbdc9d1bbf4705088c3b7a9200",
+  "base_commit": "ddb293685235fd09e932805771ae97f72e817181",
+  "budget_scope": "search",
+  "config_hash": "bc68181a35a2d55b044604fd0bdbd5de401330f1aa88df53f8c2af669c09a16a",
+  "evaluator_timeout_seconds": 1200,
+  "execution_stack_hash": "ebf8d7083e93392ca58717d62afde5714d64c9e21819f1480c6831cebc5c16f4",
+  "image": "sweb.eval.arm64.django__django-10973:latest",
+  "image_digest": "sha256:83e64078b1efce710efd16c4dd476560495921ce2c203b559a8b7084cf1d2e92",
+  "instance_id": "django__django-10973",
+  "model_id": "byteplus/deepseek-v4-flash-ga",
+  "model_provider": "rollback-deepseek",
+  "per_task_output_token_cap": 16384,
+  "per_task_token_cap": 64000,
+  "phase": "search-p0",
+  "repo": "django/django",
+  "role_manifest_hash": "ba5617a82f44048abd7ecf334d1f633341759613d21faedd0fc2ffc53e15cf86",
+  "rollout": 0,
+  "run_id": "dgm-pi-smoke-20261014-1830",
+  "schema_version": 1,
+  "strategy_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+}

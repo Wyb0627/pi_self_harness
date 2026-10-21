@@ -1,0 +1,43 @@
+{
+  "iteration": 3,
+  "max_iterations": 5,
+  "original_query": "Find and validate a precise, low-cost rollback method for self-evolving pi harnesses, then package it as a pi plugin.",
+  "subproblems": [
+    {
+      "id": 1,
+      "title": "Diagnose current static-LLM and controlled-experiment performance",
+      "status": "synthesized",
+      "sources": 3
+    },
+    {
+      "id": 2,
+      "title": "Identify precise low-cost rollback algorithms from prior work",
+      "status": "synthesized",
+      "sources": 5
+    },
+    {
+      "id": 3,
+      "title": "Design and validate a pi extension and open-source evaluation workflow",
+      "status": "implemented",
+      "sources": 3
+    }
+  ],
+  "has_new_concepts": false,
+  "enough_evidence": true,
+  "selected_method": "Causal Lineage Minimization",
+  "research_phase": "complete",
+  "implementation_phase": "prototype_complete",
+  "released_dgm_evaluation": {
+    "status": "revise_cost_hypothesis_killed",
+    "sample_episodes": 12,
+    "unique_tasks": 4,
+    "clm_repair_success": 1.0,
+    "clm_mean_probes": 1.5,
+    "linear_repair_success": 1.0,
+    "linear_mean_probes": 1.0833,
+    "deepseek_top1_accuracy": 0.3333,
+    "end_to_end_dgm_or_pi_comparison": false
+  },
+  "status": "complete",
+  "remaining_validation": "Counterfactual end-to-end pi/SWE-bench evolution runs"
+}

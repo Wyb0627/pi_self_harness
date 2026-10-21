@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "tools": [
+    {
+      "description": "Search text files under /testbed for a Python regular expression and return line-numbered context snippets. Useful for locating event names, reader/transform functions, and all call sites before changing code. Pure static search: does not modify files, run commands, or inspect history.",
+      "handler": "handlers/code_search.py",
+      "label": "Static Code Search",
+      "name": "code_search",
+      "parameters": {
+        "additionalProperties": false,
+        "properties": {
+          "context_lines": {
+            "description": "Number of lines to show before and after each match; defaults to 3.",
+            "type": "integer"
+          },
+          "file_pattern": {
+            "description": "Python regular expression matched against each file basename; defaults to .*[.]py$.",
+            "type": "string"
+          },
+          "max_results": {
+            "description": "Maximum number of matching lines to include in the output; defaults to 50.",
+            "type": "integer"
+          },
+          "pattern": {
+            "description": "Python regular expression to search for in file contents.",
+            "type": "string"
+          },
+          "search_path": {
+            "description": "Directory under /testbed to search recursively; relative values resolve under /testbed; defaults to /testbed.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "pattern"
+        ],
+        "type": "object"
+      },
+      "timeout_seconds": 30
+    }
+  ]
+}

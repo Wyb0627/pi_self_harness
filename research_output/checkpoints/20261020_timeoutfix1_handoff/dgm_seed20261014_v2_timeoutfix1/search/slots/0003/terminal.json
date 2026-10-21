@@ -1,0 +1,18 @@
+{
+  "adaptive_gate": {
+    "accepted": true,
+    "arm": "dgm",
+    "artifact_hash": "190d4f12c362e93045dce6c2d5a322963d66942808419e26cfbecbc017c6ec4a",
+    "schema_version": 1,
+    "terminal_state": "GATE_NOT_APPLICABLE"
+  },
+  "child_artifact_hash": "190d4f12c362e93045dce6c2d5a322963d66942808419e26cfbecbc017c6ec4a",
+  "parent_artifact_hash": "30be840203090319746a26f6a5ca5ab68280a2d630e900066c3908fa4d03d4b9",
+  "resolved": 20,
+  "schema_version": 1,
+  "score_60": 0.3333333333333333,
+  "slot": 3,
+  "tasks": 60,
+  "terminal_state": "ARCHIVED",
+  "wave": 1
+}

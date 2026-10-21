@@ -1,0 +1,29 @@
+{
+  "budgetAborted": false,
+  "cacheReadTokens": 338432,
+  "cacheWriteTokens": 0,
+  "candidateToolNames": [
+    "code_search"
+  ],
+  "completedAt": "2026-10-19T21:56:07.268Z",
+  "durationMs": 126991,
+  "fullPatch": "diff --git a/django/db/models/expressions.py b/django/db/models/expressions.py\nindex 822968e..4d3808b 100644\n--- a/django/db/models/expressions.py\n+++ b/django/db/models/expressions.py\n@@ -1299,8 +1299,11 @@ class When(Expression):\n         template_params = extra_context\n         sql_params = []\n         condition_sql, condition_params = compiler.compile(self.condition)\n-        template_params[\"condition\"] = condition_sql\n-        sql_params.extend(condition_params)\n+        if condition_sql:\n+            template_params[\"condition\"] = condition_sql\n+            sql_params.extend(condition_params)\n+        else:\n+            template_params[\"condition\"] = \"1=1\"  # Always true.\n         result_sql, result_params = compiler.compile(self.result)\n         template_params[\"result\"] = result_sql\n         sql_params.extend(result_params)\n",
+  "inputTokens": 32599,
+  "instanceId": "django__django-15930",
+  "maxOutputTokens": 65536,
+  "maxTotalTokens": 512000,
+  "modelId": "byteplus/deepseek-v4-flash-ga",
+  "modelProvider": "rollback-deepseek",
+  "noShell": false,
+  "outputTokens": 11992,
+  "patch": "diff --git a/django/db/models/expressions.py b/django/db/models/expressions.py\nindex 822968e..4d3808b 100644\n--- a/django/db/models/expressions.py\n+++ b/django/db/models/expressions.py\n@@ -1299,8 +1299,11 @@ class When(Expression):\n         template_params = extra_context\n         sql_params = []\n         condition_sql, condition_params = compiler.compile(self.condition)\n-        template_params[\"condition\"] = condition_sql\n-        sql_params.extend(condition_params)\n+        if condition_sql:\n+            template_params[\"condition\"] = condition_sql\n+            sql_params.extend(condition_params)\n+        else:\n+            template_params[\"condition\"] = \"1=1\"  # Always true.\n         result_sql, result_params = compiler.compile(self.result)\n         template_params[\"result\"] = result_sql\n         sql_params.extend(result_params)\n",
+  "policyViolations": [],
+  "runnerExitCode": 0,
+  "sandboxImage": "sweb.eval.x86_64.django__django-15930:latest",
+  "schemaVersion": 1,
+  "startedAt": "2026-10-19T21:54:00.276Z",
+  "strategyHash": "462f34ca395d1c0817472c8de3ee61cba155df886fe48dc8386a24cafcd5c17e",
+  "timeoutAborted": false,
+  "tokenTelemetryAvailable": true,
+  "toolCalls": 32
+}

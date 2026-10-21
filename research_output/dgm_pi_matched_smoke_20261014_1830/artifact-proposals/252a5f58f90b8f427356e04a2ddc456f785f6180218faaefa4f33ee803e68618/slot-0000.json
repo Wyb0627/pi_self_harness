@@ -1,0 +1,11 @@
+{
+  "artifact_hash": "252a5f58f90b8f427356e04a2ddc456f785f6180218faaefa4f33ee803e68618",
+  "mutation": {
+    "kind": "Pi strategy mutation",
+    "mutation_model_result_hash": "4aefc8a295632d3c896cb81b4f76f279c7a1eea6ff3862e89c9708764d5adaf3",
+    "slot": 0,
+    "summary": "Switch to a budget-aware minimal-patch loop that bounds repository exploration, verifies the smallest hypothesis early, and stops after a verified patch."
+  },
+  "parent_artifact_hash": "5eb48a6ee49d31a9eacf1fde5cfdd7bada079ffbdc9d1bbf4705088c3b7a9200",
+  "schema_version": 1
+}

@@ -1,0 +1,31 @@
+{
+  "budgetAborted": true,
+  "cacheReadTokens": 481792,
+  "cacheWriteTokens": 0,
+  "candidateToolNames": [
+    "callable_contract",
+    "code_search"
+  ],
+  "completedAt": "2026-10-15T11:41:54.697Z",
+  "durationMs": 139284,
+  "fullPatch": "diff --git a/.test_stubs/asgiref/__init__.py b/.test_stubs/asgiref/__init__.py\nnew file mode 100644\nindex 0000000..e69de29\ndiff --git a/.test_stubs/asgiref/local.py b/.test_stubs/asgiref/local.py\nnew file mode 100644\nindex 0000000..50c6ef8\n--- /dev/null\n+++ b/.test_stubs/asgiref/local.py\n@@ -0,0 +1,19 @@\n+# Temporary stub for verification only. Not part of the fix.\n+import threading\n+\n+\n+class Local:\n+    def __init__(self):\n+        object.__setattr__(self, \"_storage\", threading.local())\n+\n+    def __getattr__(self, name):\n+        try:\n+            return getattr(self._storage, name)\n+        except AttributeError:\n+            raise AttributeError(name)\n+\n+    def __setattr__(self, name, value):\n+        setattr(self._storage, name, value)\n+\n+    def __delattr__(self, name):\n+        delattr(self._storage, name)\ndiff --git a/.test_stubs/psycopg2/__init__.py b/.test_stubs/psycopg2/__init__.py\nnew file mode 100644\nindex 0000000..45e3771\n--- /dev/null\n+++ b/.test_stubs/psycopg2/__init__.py\n@@ -0,0 +1 @@\n+# Temporary stub for verification only. Not part of the fix.\ndiff --git a/.test_stubs/psycopg2/extras.py b/.test_stubs/psycopg2/extras.py\nnew file mode 100644\nindex 0000000..c69042f\n--- /dev/null\n+++ b/.test_stubs/psycopg2/extras.py\n@@ -0,0 +1,20 @@\n+# Temporary stub for verification only. Not part of the fix.\n+\n+class Range:\n+    def __init__(self, lower=None, upper=None, bounds=\"[)\", empty=False):\n+        self.lower = lower\n+        self.upper = upper\n+        self.bounds = bounds\n+        self.empty = empty\n+\n+\n+class DateRange(Range):\n+    pass\n+\n+\n+class DateTimeTZRange(Range):\n+    pass\n+\n+\n+class NumericRange(Range):\n+    pass\ndiff --git a/.test_stubs/pytz.py b/.test_stubs/pytz.py\nnew file mode 100644\nindex 0000000..c70e30c\n--- /dev/null\n+++ b/.test_stubs/pytz.py\n@@ -0,0 +1,15 @@\n+# Temporary stub for verification only (backed by zoneinfo). Not part of the fix.\n+from zoneinfo import ZoneInfo\n+\n+utc = ZoneInfo(\"UTC\")\n+\n+\n+class UnknownTimeZoneError(KeyError):\n+    pass\n+\n+\n+def timezone(name):\n+    try:\n+        return ZoneInfo(name)\n+    except Exception as exc:\n+        raise UnknownTimeZoneError(name) from exc\n",
+  "inputTokens": 38578,
+  "instanceId": "django__django-12193",
+  "maxOutputTokens": 65536,
+  "maxTotalTokens": 512000,
+  "modelId": "byteplus/deepseek-v4-flash-ga",
+  "modelProvider": "rollback-deepseek",
+  "noShell": false,
+  "outputTokens": 18134,
+  "patch": "diff --git a/.test_stubs/asgiref/__init__.py b/.test_stubs/asgiref/__init__.py\nnew file mode 100644\nindex 0000000..e69de29\ndiff --git a/.test_stubs/asgiref/local.py b/.test_stubs/asgiref/local.py\nnew file mode 100644\nindex 0000000..50c6ef8\n--- /dev/null\n+++ b/.test_stubs/asgiref/local.py\n@@ -0,0 +1,19 @@\n+# Temporary stub for verification only. Not part of the fix.\n+import threading\n+\n+\n+class Local:\n+    def __init__(self):\n+        object.__setattr__(self, \"_storage\", threading.local())\n+\n+    def __getattr__(self, name):\n+        try:\n+            return getattr(self._storage, name)\n+        except AttributeError:\n+            raise AttributeError(name)\n+\n+    def __setattr__(self, name, value):\n+        setattr(self._storage, name, value)\n+\n+    def __delattr__(self, name):\n+        delattr(self._storage, name)\ndiff --git a/.test_stubs/psycopg2/__init__.py b/.test_stubs/psycopg2/__init__.py\nnew file mode 100644\nindex 0000000..45e3771\n--- /dev/null\n+++ b/.test_stubs/psycopg2/__init__.py\n@@ -0,0 +1 @@\n+# Temporary stub for verification only. Not part of the fix.\ndiff --git a/.test_stubs/psycopg2/extras.py b/.test_stubs/psycopg2/extras.py\nnew file mode 100644\nindex 0000000..c69042f\n--- /dev/null\n+++ b/.test_stubs/psycopg2/extras.py\n@@ -0,0 +1,20 @@\n+# Temporary stub for verification only. Not part of the fix.\n+\n+class Range:\n+    def __init__(self, lower=None, upper=None, bounds=\"[)\", empty=False):\n+        self.lower = lower\n+        self.upper = upper\n+        self.bounds = bounds\n+        self.empty = empty\n+\n+\n+class DateRange(Range):\n+    pass\n+\n+\n+class DateTimeTZRange(Range):\n+    pass\n+\n+\n+class NumericRange(Range):\n+    pass\ndiff --git a/.test_stubs/pytz.py b/.test_stubs/pytz.py\nnew file mode 100644\nindex 0000000..c70e30c\n--- /dev/null\n+++ b/.test_stubs/pytz.py\n@@ -0,0 +1,15 @@\n+# Temporary stub for verification only (backed by zoneinfo). Not part of the fix.\n+from zoneinfo import ZoneInfo\n+\n+utc = ZoneInfo(\"UTC\")\n+\n+\n+class UnknownTimeZoneError(KeyError):\n+    pass\n+\n+\n+def timezone(name):\n+    try:\n+        return ZoneInfo(name)\n+    except Exception as exc:\n+        raise UnknownTimeZoneError(name) from exc\n",
+  "policyViolations": [],
+  "providerError": "This operation was aborted",
+  "runnerExitCode": 1,
+  "sandboxImage": "sweb.eval.arm64.django__django-12193:latest",
+  "schemaVersion": 1,
+  "startedAt": "2026-10-15T11:39:35.412Z",
+  "strategyHash": "e925574904955546f15307878ea80f282aea7848af4d8378b105bd3c7d572036",
+  "timeoutAborted": false,
+  "tokenTelemetryAvailable": true,
+  "toolCalls": 28
+}

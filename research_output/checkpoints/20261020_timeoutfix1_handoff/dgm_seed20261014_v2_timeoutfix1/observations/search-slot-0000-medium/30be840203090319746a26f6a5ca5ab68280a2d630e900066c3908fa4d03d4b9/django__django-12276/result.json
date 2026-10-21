@@ -1,0 +1,29 @@
+{
+  "budgetAborted": false,
+  "cacheReadTokens": 56064,
+  "cacheWriteTokens": 0,
+  "candidateToolNames": [
+    "code_search"
+  ],
+  "completedAt": "2026-10-19T23:35:05.795Z",
+  "durationMs": 35798,
+  "fullPatch": "diff --git a/django/forms/widgets.py b/django/forms/widgets.py\nindex 338d54d..3ad8833 100644\n--- a/django/forms/widgets.py\n+++ b/django/forms/widgets.py\n@@ -384,6 +384,9 @@ class FileInput(Input):\n         \"File widgets take data from FILES, not POST\"\n         return files.get(name)\n \n+    def use_required_attribute(self, initial):\n+        return super().use_required_attribute(initial) and not initial\n+\n     def value_omitted_from_data(self, data, files, name):\n         return name not in files\n \n@@ -451,9 +454,6 @@ class ClearableFileInput(FileInput):\n             return False\n         return upload\n \n-    def use_required_attribute(self, initial):\n-        return super().use_required_attribute(initial) and not initial\n-\n     def value_omitted_from_data(self, data, files, name):\n         return (\n             super().value_omitted_from_data(data, files, name) and\n",
+  "inputTokens": 16153,
+  "instanceId": "django__django-12276",
+  "maxOutputTokens": 65536,
+  "maxTotalTokens": 512000,
+  "modelId": "byteplus/deepseek-v4-flash-ga",
+  "modelProvider": "rollback-deepseek",
+  "noShell": false,
+  "outputTokens": 3571,
+  "patch": "diff --git a/django/forms/widgets.py b/django/forms/widgets.py\nindex 338d54d..3ad8833 100644\n--- a/django/forms/widgets.py\n+++ b/django/forms/widgets.py\n@@ -384,6 +384,9 @@ class FileInput(Input):\n         \"File widgets take data from FILES, not POST\"\n         return files.get(name)\n \n+    def use_required_attribute(self, initial):\n+        return super().use_required_attribute(initial) and not initial\n+\n     def value_omitted_from_data(self, data, files, name):\n         return name not in files\n \n@@ -451,9 +454,6 @@ class ClearableFileInput(FileInput):\n             return False\n         return upload\n \n-    def use_required_attribute(self, initial):\n-        return super().use_required_attribute(initial) and not initial\n-\n     def value_omitted_from_data(self, data, files, name):\n         return (\n             super().value_omitted_from_data(data, files, name) and\n",
+  "policyViolations": [],
+  "runnerExitCode": 0,
+  "sandboxImage": "sweb.eval.arm64.django__django-12276:latest",
+  "schemaVersion": 1,
+  "startedAt": "2026-10-19T23:34:29.996Z",
+  "strategyHash": "462f34ca395d1c0817472c8de3ee61cba155df886fe48dc8386a24cafcd5c17e",
+  "timeoutAborted": false,
+  "tokenTelemetryAvailable": true,
+  "toolCalls": 11
+}

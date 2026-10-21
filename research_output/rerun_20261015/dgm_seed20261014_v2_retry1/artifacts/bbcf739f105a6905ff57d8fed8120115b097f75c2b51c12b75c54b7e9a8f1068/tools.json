@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "tools": [
+    {
+      "description": "Search the Django source tree under /testbed for a regular expression and return matching file paths, line numbers, and surrounding context. Use it to locate error messages, function definitions, loops over model metadata, and call sites before editing.",
+      "handler": "handlers/source_search.py",
+      "label": "Source code search",
+      "name": "source_search",
+      "parameters": {
+        "additionalProperties": false,
+        "properties": {
+          "case_sensitive": {
+            "type": "boolean"
+          },
+          "context_lines": {
+            "type": "integer"
+          },
+          "file_pattern": {
+            "type": "string"
+          },
+          "max_results": {
+            "type": "integer"
+          },
+          "pattern": {
+            "type": "string"
+          },
+          "root": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "pattern"
+        ],
+        "type": "object"
+      },
+      "timeout_seconds": 20
+    }
+  ]
+}

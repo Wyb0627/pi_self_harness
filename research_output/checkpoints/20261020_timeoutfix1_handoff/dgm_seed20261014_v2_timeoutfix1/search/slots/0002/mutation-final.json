@@ -1,0 +1,68 @@
+{
+  "artifact_hash": "05faca0a7696bc221377f5bbaab0174f3a05097fbc706e78e8e34b8947174709",
+  "budgetAborted": false,
+  "cacheReadTokens": 0,
+  "cacheWriteTokens": 0,
+  "completedAt": "2026-10-20T01:28:22.728Z",
+  "dependsOn": [],
+  "durationMs": 49331,
+  "entry_task_id": "django__django-12406",
+  "inputTokens": 10799,
+  "maxOutputTokens": 32768,
+  "maxTotalTokens": 64000,
+  "modelId": "byteplus/deepseek-v4-flash-ga",
+  "modelProvider": "rollback-deepseek",
+  "mutationSummary": "Add an offline repository source-text search tool and a diagnose-before-patch strategy to help agents locate owning code and build focused regression coverage.",
+  "mutation_id": "m-0002-7896028f680b",
+  "outputTokens": 9943,
+  "parentArtifactHash": "0f5a215ac0bce1aac54cc709e1a86e5e16f6f10547b78b30c711af30726a4c1b",
+  "probeTaskIds": [
+    "django__django-12406",
+    "django__django-12713",
+    "django__django-12193",
+    "django__django-12276"
+  ],
+  "probe_task_ids": [
+    "django__django-12406",
+    "django__django-12713",
+    "django__django-12193",
+    "django__django-12276"
+  ],
+  "rawResponse": "{\n  \"mutation_summary\": \"Add an offline repository source-text search tool and a diagnose-before-patch strategy to help agents locate owning code and build focused regression coverage.\",\n  \"strategy_patch\": \"## Diagnose by tracing behavior to its source\\n\\n- Start with the observable symptom: rendered output, error message, or generated query. Search the repository for the most distinctive symbol in that symptom, then follow callers from the public API down to the low-level helper that owns the decision.\\n- Before changing code, locate existing tests around the owning module. Identify the smallest model/form/request fixture needed to turn the symptom into a failing regression test. A focused test is both evidence and a safety net.\\n- When the fix belongs in a shared rendering or helper path, prefer changing the shared function so all call sites remain consistent. Pay special attention to default, blank, empty, and missing states; these are common sources of subtle behavioral bugs.\\n- After patching, run the focused regression test and related tests in the same module to confirm no nearby behavior changed.\",\n  \"tool\": {\n    \"name\": \"source_text_search\",\n    \"label\": \"Search repository source text\",\n    \"description\": \"Scans Python and HTML files under /testbed for a case-insensitive text substring and returns file:line excerpts. This helps locate implementation code without requiring a shell, grep, or network access.\",\n    \"parameters\": {\n      \"type\": \"object\",\n      \"properties\": {\n        \"query\": {\n          \"type\": \"string\",\n          \"description\": \"Text to search for in repository source files. Case-insensitive substring matching is used.\"\n        },\n        \"scope\": {\n          \"type\": \"string\",\n          \"description\": \"Optional directory under /testbed to restrict the search, e.g. django/forms.\"\n        },\n        \"max_results\": {\n          \"type\": \"integer\",\n          \"description\": \"Maximum number of matches to return (1-200, default 30).\"\n        }\n      },\n      \"required\": [\n        \"query\"\n      ],\n      \"additionalProperties\": false\n    },\n    \"handler_code\": \"import sys\\nimport os\\nimport json\\n\\ndef main():\\n    try:\\n        raw = sys.stdin.read()\\n        request = json.loads(raw)\\n    except Exception as exc:\\n        print(json.dumps({'content': 'Invalid JSON input.', 'details': {'error': str(exc)}}))\\n        return\\n\\n    query = request.get('query')\\n    if not isinstance(query, str) or not query.strip():\\n        print(json.dumps({'content': 'Provide a non-empty string query.', 'details': {}}))\\n        return\\n    query = query.strip()\\n\\n    root = '/testbed'\\n    requested_scope = request.get('scope')\\n    if requested_scope:\\n        scope = os.path.abspath(os.path.join(root, requested_scope.lstrip('/')))\\n        try:\\n            if os.path.commonpath([scope, root]) != root:\\n                scope = root\\n        except ValueError:\\n            scope = root\\n    else:\\n        scope = root\\n\\n    if not os.path.isdir(scope):\\n        print(json.dumps({'content': 'Scope directory not found.', 'details': {'scope': scope}}))\\n        return\\n\\n    try:\\n        max_results = int(request.get('max_results', 30))\\n    except (TypeError, ValueError):\\n        max_results = 30\\n    max_results = max(1, min(max_results, 200))\\n\\n    results = []\\n    files_scanned = 0\\n    excluded_dirs = {'.git', '.hg', '.svn', '__pycache__', 'node_modules', '.tox', '.venv', 'venv'}\\n    needle = query.lower()\\n\\n    for dirpath, dirnames, filenames in os.walk(scope):\\n        dirnames[:] = [d for d in dirnames if d not in excluded_dirs and not d.startswith('.')]\\n        for filename in filenames:\\n            if not (filename.endswith('.py') or filename.endswith('.html')):\\n                continue\\n            filepath = os.path.join(dirpath, filename)\\n            try:\\n                with open(filepath, 'r', encoding='utf-8', errors='replace') as f:\\n                    lines = f.readlines()\\n                files_scanned += 1\\n            except Exception:\\n                continue\\n            for idx, line in enumerate(lines):\\n                if needle in line.lower():\\n                    relpath = os.path.relpath(filepath, root)\\n                    start = max(0, idx - 1)\\n                    end = min(len(lines), idx + 2)\\n                    excerpt = ''.join(lines[start:end]).rstrip()\\n                    results.append(relpath + ':' + str(idx + 1) + '\\\\n' + excerpt)\\n                    if len(results) >= max_results:\\n                        break\\n            if len(results) >= max_results:\\n                break\\n        if len(results) >= max_results:\\n            break\\n\\n    if results:\\n        content = 'Found matches:\\\\n\\\\n' + '\\\\n\\\\n---\\\\n\\\\n'.join(results)\\n    else:\\n        content = 'No matches for ' + repr(query) + ' under ' + scope + '.'\\n\\n    details = {\\n        'match_count': len(results),\\n        'files_scanned': files_scanned,\\n        'truncated': len(results) >= max_results,\\n        'scope': scope\\n    }\\n    print(json.dumps({'content': content, 'details': details}))\\n\\nif __name__ == '__main__':\\n    main()\\n\",\n    \"timeout_seconds\": 30\n  },\n  \"depends_on\": [],\n  \"probe_task_ids\": [\n    \"django__django-12406\",\n    \"django__django-12713\",\n    \"django__django-12193\",\n    \"django__django-12276\"\n  ]\n}",
+  "rawResponseSha256": "ad359c4bac07fb711071aeb4bfe7bde40e0f1a5cadf4bbf9afb405707b04972c",
+  "repo": "django/django",
+  "schemaVersion": 1,
+  "startedAt": "2026-10-20T01:27:33.397Z",
+  "strategyPatch": "## Diagnose by tracing behavior to its source\n\n- Start with the observable symptom: rendered output, error message, or generated query. Search the repository for the most distinctive symbol in that symptom, then follow callers from the public API down to the low-level helper that owns the decision.\n- Before changing code, locate existing tests around the owning module. Identify the smallest model/form/request fixture needed to turn the symptom into a failing regression test. A focused test is both evidence and a safety net.\n- When the fix belongs in a shared rendering or helper path, prefer changing the shared function so all call sites remain consistent. Pay special attention to default, blank, empty, and missing states; these are common sources of subtle behavioral bugs.\n- After patching, run the focused regression test and related tests in the same module to confirm no nearby behavior changed.",
+  "timeoutAborted": false,
+  "tokenTelemetryAvailable": true,
+  "tool": {
+    "description": "Scans Python and HTML files under /testbed for a case-insensitive text substring and returns file:line excerpts. This helps locate implementation code without requiring a shell, grep, or network access.",
+    "handler_code": "import sys\nimport os\nimport json\n\ndef main():\n    try:\n        raw = sys.stdin.read()\n        request = json.loads(raw)\n    except Exception as exc:\n        print(json.dumps({'content': 'Invalid JSON input.', 'details': {'error': str(exc)}}))\n        return\n\n    query = request.get('query')\n    if not isinstance(query, str) or not query.strip():\n        print(json.dumps({'content': 'Provide a non-empty string query.', 'details': {}}))\n        return\n    query = query.strip()\n\n    root = '/testbed'\n    requested_scope = request.get('scope')\n    if requested_scope:\n        scope = os.path.abspath(os.path.join(root, requested_scope.lstrip('/')))\n        try:\n            if os.path.commonpath([scope, root]) != root:\n                scope = root\n        except ValueError:\n            scope = root\n    else:\n        scope = root\n\n    if not os.path.isdir(scope):\n        print(json.dumps({'content': 'Scope directory not found.', 'details': {'scope': scope}}))\n        return\n\n    try:\n        max_results = int(request.get('max_results', 30))\n    except (TypeError, ValueError):\n        max_results = 30\n    max_results = max(1, min(max_results, 200))\n\n    results = []\n    files_scanned = 0\n    excluded_dirs = {'.git', '.hg', '.svn', '__pycache__', 'node_modules', '.tox', '.venv', 'venv'}\n    needle = query.lower()\n\n    for dirpath, dirnames, filenames in os.walk(scope):\n        dirnames[:] = [d for d in dirnames if d not in excluded_dirs and not d.startswith('.')]\n        for filename in filenames:\n            if not (filename.endswith('.py') or filename.endswith('.html')):\n                continue\n            filepath = os.path.join(dirpath, filename)\n            try:\n                with open(filepath, 'r', encoding='utf-8', errors='replace') as f:\n                    lines = f.readlines()\n                files_scanned += 1\n            except Exception:\n                continue\n            for idx, line in enumerate(lines):\n                if needle in line.lower():\n                    relpath = os.path.relpath(filepath, root)\n                    start = max(0, idx - 1)\n                    end = min(len(lines), idx + 2)\n                    excerpt = ''.join(lines[start:end]).rstrip()\n                    results.append(relpath + ':' + str(idx + 1) + '\\n' + excerpt)\n                    if len(results) >= max_results:\n                        break\n            if len(results) >= max_results:\n                break\n        if len(results) >= max_results:\n            break\n\n    if results:\n        content = 'Found matches:\\n\\n' + '\\n\\n---\\n\\n'.join(results)\n    else:\n        content = 'No matches for ' + repr(query) + ' under ' + scope + '.'\n\n    details = {\n        'match_count': len(results),\n        'files_scanned': files_scanned,\n        'truncated': len(results) >= max_results,\n        'scope': scope\n    }\n    print(json.dumps({'content': content, 'details': details}))\n\nif __name__ == '__main__':\n    main()\n",
+    "label": "Search repository source text",
+    "name": "source_text_search",
+    "parameters": {
+      "additionalProperties": false,
+      "properties": {
+        "max_results": {
+          "description": "Maximum number of matches to return (1-200, default 30).",
+          "type": "integer"
+        },
+        "query": {
+          "description": "Text to search for in repository source files. Case-insensitive substring matching is used.",
+          "type": "string"
+        },
+        "scope": {
+          "description": "Optional directory under /testbed to restrict the search, e.g. django/forms.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "query"
+      ],
+      "type": "object"
+    },
+    "timeout_seconds": 30
+  },
+  "valid": true
+}

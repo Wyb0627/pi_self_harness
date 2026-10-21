@@ -1,0 +1,14 @@
+{
+  "event_hash": "167e77f7b32db7909c733dcdec477bfe26c02e74233e95892dcbecfa117ff09d",
+  "event_type": "candidate_invalid",
+  "payload": {
+    "parent_artifact_hash": "0f5a215ac0bce1aac54cc709e1a86e5e16f6f10547b78b30c711af30726a4c1b",
+    "reason": "Tool name must match [a-z][a-z0-9_]{2,31}",
+    "schema_version": 1,
+    "slot": 7,
+    "terminal_state": "CANDIDATE_INVALID_REJECTED",
+    "wave": 3
+  },
+  "previous_hash": "4d1183ccf955327ebed7987b38a979803db717217376c13051b355d89eb4689e",
+  "sequence": 9
+}

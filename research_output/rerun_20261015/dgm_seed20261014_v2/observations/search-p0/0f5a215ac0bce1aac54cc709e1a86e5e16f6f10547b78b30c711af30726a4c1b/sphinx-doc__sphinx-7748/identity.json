@@ -1,0 +1,23 @@
+{
+  "agent_timeout_seconds": 3600,
+  "artifact_content_hash": "0f5a215ac0bce1aac54cc709e1a86e5e16f6f10547b78b30c711af30726a4c1b",
+  "artifact_hash": "0f5a215ac0bce1aac54cc709e1a86e5e16f6f10547b78b30c711af30726a4c1b",
+  "base_commit": "9988d5ce267bf0df4791770b469431b1fb00dcdd",
+  "budget_scope": "search",
+  "config_hash": "7d92d8528b0e1d4d161d82646579100f6743d07e4eb33b65a1b85ec941e4d02a",
+  "evaluator_timeout_seconds": 1800,
+  "execution_stack_hash": "d6c0de64ed460490733fd93205750400fcf44ba3aa8814b877658edd11b666cb",
+  "image": "sweb.eval.arm64.sphinx-doc__sphinx-7748:latest",
+  "image_digest": "sha256:49ec556771146b2dfeb2b27f6e67bec73a7fa2934806b6fc682c58b2ea22c8e3",
+  "instance_id": "sphinx-doc__sphinx-7748",
+  "model_id": "byteplus/deepseek-v4-flash-ga",
+  "model_provider": "rollback-deepseek",
+  "per_task_output_token_cap": 65536,
+  "per_task_token_cap": 512000,
+  "phase": "search-p0",
+  "repo": "sphinx-doc/sphinx",
+  "role_manifest_hash": "ba5617a82f44048abd7ecf334d1f633341759613d21faedd0fc2ffc53e15cf86",
+  "rollout": 0,
+  "run_id": "dgm-pilot-s20261014",
+  "schema_version": 1
+}

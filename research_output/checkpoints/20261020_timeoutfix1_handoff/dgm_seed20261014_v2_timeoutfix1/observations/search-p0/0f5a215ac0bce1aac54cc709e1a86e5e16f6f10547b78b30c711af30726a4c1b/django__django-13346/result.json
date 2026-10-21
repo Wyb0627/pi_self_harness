@@ -1,0 +1,33 @@
+{
+  "budgetAborted": true,
+  "cacheReadTokens": 468480,
+  "cacheWriteTokens": 0,
+  "candidateToolNames": [],
+  "completedAt": "2026-10-19T18:20:17.687Z",
+  "durationMs": 192563,
+  "fullPatch": "diff --git a/repro.py b/repro.py\nnew file mode 100644\nindex 0000000..13f9839\n--- /dev/null\n+++ b/repro.py\n@@ -0,0 +1,46 @@\n+import django\n+from django.conf import settings\n+\n+settings.configure(\n+    DEBUG=True,\n+    DATABASES={\n+        'default': {\n+            'ENGINE': 'django.db.backends.sqlite3',\n+            'NAME': ':memory:',\n+        }\n+    },\n+    INSTALLED_APPS=[\n+        'django.contrib.contenttypes',\n+        'django.contrib.auth',\n+    ],\n+)\n+django.setup()\n+\n+from django.db import models, connection\n+\n+\n+class OurModel(models.Model):\n+    our_field = models.JSONField()\n+\n+    class Meta:\n+        app_label = 'testapp'\n+\n+\n+with connection.schema_editor() as editor:\n+    editor.create_model(OurModel)\n+\n+OurModel.objects.create(our_field={'key': 0})\n+OurModel.objects.create(our_field={'key': 1})\n+OurModel.objects.create(our_field={'key': 0})\n+OurModel.objects.create(our_field={'key': '0'})\n+OurModel.objects.create(our_field={'key': 'a'})\n+\n+print('exact 0:', list(OurModel.objects.filter(our_field__key=0).values_list('pk', flat=True)))\n+print('in [0]:', list(OurModel.objects.filter(our_field__key__in=[0]).values_list('pk', flat=True)))\n+print('in [1]:', list(OurModel.objects.filter(our_field__key__in=[1]).values_list('pk', flat=True)))\n+print('in [0, 1]:', list(OurModel.objects.filter(our_field__key__in=[0, 1]).values_list('pk', flat=True)))\n+print('in [\"0\"]:', list(OurModel.objects.filter(our_field__key__in=['0']).values_list('pk', flat=True)))\n+print('in [\"a\"]:', list(OurModel.objects.filter(our_field__key__in=['a']).values_list('pk', flat=True)))\n+\n+qs = OurModel.objects.filter(our_field__key__in=[0])\n+print(qs.query)\n",
+  "inputTokens": 50010,
+  "instanceId": "django__django-13346",
+  "maxOutputTokens": 65536,
+  "maxTotalTokens": 512000,
+  "modelId": "byteplus/deepseek-v4-flash-ga",
+  "modelProvider": "rollback-deepseek",
+  "noShell": false,
+  "outputTokens": 25323,
+  "patch": "",
+  "policyViolations": [
+    {
+      "patch": "diff --git a/repro.py b/repro.py\nnew file mode 100644\nindex 0000000..13f9839\n--- /dev/null\n+++ b/repro.py\n@@ -0,0 +1,46 @@\n+import django\n+from django.conf import settings\n+\n+settings.configure(\n+    DEBUG=True,\n+    DATABASES={\n+        'default': {\n+            'ENGINE': 'django.db.backends.sqlite3',\n+            'NAME': ':memory:',\n+        }\n+    },\n+    INSTALLED_APPS=[\n+        'django.contrib.contenttypes',\n+        'django.contrib.auth',\n+    ],\n+)\n+django.setup()\n+\n+from django.db import models, connection\n+\n+\n+class OurModel(models.Model):\n+    our_field = models.JSONField()\n+\n+    class Meta:\n+        app_label = 'testapp'\n+\n+\n+with connection.schema_editor() as editor:\n+    editor.create_model(OurModel)\n+\n+OurModel.objects.create(our_field={'key': 0})\n+OurModel.objects.create(our_field={'key': 1})\n+OurModel.objects.create(our_field={'key': 0})\n+OurModel.objects.create(our_field={'key': '0'})\n+OurModel.objects.create(our_field={'key': 'a'})\n+\n+print('exact 0:', list(OurModel.objects.filter(our_field__key=0).values_list('pk', flat=True)))\n+print('in [0]:', list(OurModel.objects.filter(our_field__key__in=[0]).values_list('pk', flat=True)))\n+print('in [1]:', list(OurModel.objects.filter(our_field__key__in=[1]).values_list('pk', flat=True)))\n+print('in [0, 1]:', list(OurModel.objects.filter(our_field__key__in=[0, 1]).values_list('pk', flat=True)))\n+print('in [\"0\"]:', list(OurModel.objects.filter(our_field__key__in=['0']).values_list('pk', flat=True)))\n+print('in [\"a\"]:', list(OurModel.objects.filter(our_field__key__in=['a']).values_list('pk', flat=True)))\n+\n+qs = OurModel.objects.filter(our_field__key__in=[0])\n+print(qs.query)\n",
+      "type": "forbidden-path-modification"
+    }
+  ],
+  "providerError": "This operation was aborted",
+  "runnerExitCode": 1,
+  "sandboxImage": "sweb.eval.arm64.django__django-13346:latest",
+  "schemaVersion": 1,
+  "startedAt": "2026-10-19T18:17:05.124Z",
+  "strategyHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "timeoutAborted": false,
+  "tokenTelemetryAvailable": true,
+  "toolCalls": 24
+}

@@ -1,0 +1,14 @@
+{
+  "event_hash": "b7866e99a983ee114a7785af768f26123009219039b84144647408dcc2620d98",
+  "event_type": "candidate_invalid",
+  "payload": {
+    "parent_artifact_hash": "3df70b706c460d6478d71bc2b90a517e58defb2e5dcbc6df1dd1952ffbd9bef9",
+    "reason": "Tool handler dunder access is not allowed: __name__",
+    "schema_version": 1,
+    "slot": 9,
+    "terminal_state": "CANDIDATE_INVALID_REJECTED",
+    "wave": 4
+  },
+  "previous_hash": "f718d49bd2438a05173720d769990dd616486cec6a4ef2ab7db12b5d30ea8010",
+  "sequence": 11
+}

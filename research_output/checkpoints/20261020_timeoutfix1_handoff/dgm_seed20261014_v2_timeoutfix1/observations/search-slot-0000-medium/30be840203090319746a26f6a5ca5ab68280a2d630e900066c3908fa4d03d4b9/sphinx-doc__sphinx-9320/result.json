@@ -1,0 +1,29 @@
+{
+  "budgetAborted": false,
+  "cacheReadTokens": 303616,
+  "cacheWriteTokens": 0,
+  "candidateToolNames": [
+    "code_search"
+  ],
+  "completedAt": "2026-10-19T22:45:39.288Z",
+  "durationMs": 91326,
+  "fullPatch": "diff --git a/CHANGES b/CHANGES\nindex 7e86580..71e920e 100644\n--- a/CHANGES\n+++ b/CHANGES\n@@ -76,6 +76,8 @@ Bugs fixed\n   whitespace (ex. ``Dict[str, str]``)\n * #8945: when transforming typed fields, call the specified role instead of\n   making an single xref. For C and C++, use the ``expr`` role for typed fields.\n+* #9320: quickstart: ``sphinx-quickstart`` with existing ``conf.py`` doesn't exit\n+  easily\n \n Testing\n --------\ndiff --git a/sphinx/cmd/quickstart.py b/sphinx/cmd/quickstart.py\nindex a40a210..8d1accf 100644\n--- a/sphinx/cmd/quickstart.py\n+++ b/sphinx/cmd/quickstart.py\n@@ -129,7 +129,8 @@ def ok(x: str) -> str:\n     return x\n \n \n-def do_prompt(text: str, default: str = None, validator: Callable[[str], Any] = nonempty) -> Union[str, bool]:  # NOQA\n+def do_prompt(text: str, default: str = None, validator: Callable[[str], Any] = nonempty,\n+              exit_on_empty_input: bool = False) -> Union[str, bool]:\n     while True:\n         if default is not None:\n             prompt = PROMPT_PREFIX + '%s [%s]: ' % (text, default)\n@@ -148,6 +149,8 @@ def do_prompt(text: str, default: str = None, validator: Callable[[str], Any] =\n         x = term_input(prompt).strip()\n         if default and not x:\n             x = default\n+        if exit_on_empty_input and not x:\n+            sys.exit(1)\n         try:\n             x = validator(x)\n         except ValidationError as err:\n@@ -223,7 +226,7 @@ def ask_user(d: Dict) -> None:\n         print(__('sphinx-quickstart will not overwrite existing Sphinx projects.'))\n         print()\n         d['path'] = do_prompt(__('Please enter a new root path (or just Enter to exit)'),\n-                              '', is_path)\n+                              '', is_path, exit_on_empty_input=True)\n         if not d['path']:\n             sys.exit(1)\n \n",
+  "inputTokens": 30703,
+  "instanceId": "sphinx-doc__sphinx-9320",
+  "maxOutputTokens": 65536,
+  "maxTotalTokens": 512000,
+  "modelId": "byteplus/deepseek-v4-flash-ga",
+  "modelProvider": "rollback-deepseek",
+  "noShell": false,
+  "outputTokens": 11457,
+  "patch": "diff --git a/CHANGES b/CHANGES\nindex 7e86580..71e920e 100644\n--- a/CHANGES\n+++ b/CHANGES\n@@ -76,6 +76,8 @@ Bugs fixed\n   whitespace (ex. ``Dict[str, str]``)\n * #8945: when transforming typed fields, call the specified role instead of\n   making an single xref. For C and C++, use the ``expr`` role for typed fields.\n+* #9320: quickstart: ``sphinx-quickstart`` with existing ``conf.py`` doesn't exit\n+  easily\n \n Testing\n --------\ndiff --git a/sphinx/cmd/quickstart.py b/sphinx/cmd/quickstart.py\nindex a40a210..8d1accf 100644\n--- a/sphinx/cmd/quickstart.py\n+++ b/sphinx/cmd/quickstart.py\n@@ -129,7 +129,8 @@ def ok(x: str) -> str:\n     return x\n \n \n-def do_prompt(text: str, default: str = None, validator: Callable[[str], Any] = nonempty) -> Union[str, bool]:  # NOQA\n+def do_prompt(text: str, default: str = None, validator: Callable[[str], Any] = nonempty,\n+              exit_on_empty_input: bool = False) -> Union[str, bool]:\n     while True:\n         if default is not None:\n             prompt = PROMPT_PREFIX + '%s [%s]: ' % (text, default)\n@@ -148,6 +149,8 @@ def do_prompt(text: str, default: str = None, validator: Callable[[str], Any] =\n         x = term_input(prompt).strip()\n         if default and not x:\n             x = default\n+        if exit_on_empty_input and not x:\n+            sys.exit(1)\n         try:\n             x = validator(x)\n         except ValidationError as err:\n@@ -223,7 +226,7 @@ def ask_user(d: Dict) -> None:\n         print(__('sphinx-quickstart will not overwrite existing Sphinx projects.'))\n         print()\n         d['path'] = do_prompt(__('Please enter a new root path (or just Enter to exit)'),\n-                              '', is_path)\n+                              '', is_path, exit_on_empty_input=True)\n         if not d['path']:\n             sys.exit(1)\n \n",
+  "policyViolations": [],
+  "runnerExitCode": 0,
+  "sandboxImage": "sweb.eval.arm64.sphinx-doc__sphinx-9320:latest",
+  "schemaVersion": 1,
+  "startedAt": "2026-10-19T22:44:07.962Z",
+  "strategyHash": "462f34ca395d1c0817472c8de3ee61cba155df886fe48dc8386a24cafcd5c17e",
+  "timeoutAborted": false,
+  "tokenTelemetryAvailable": true,
+  "toolCalls": 21
+}

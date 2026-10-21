@@ -1,0 +1,23 @@
+$ /tmp/pi-swebench-runtime/bin/python -m swebench.harness.run_evaluation --dataset_name /Users/bytedance/codes/pi/research_output/rerun_20261015/dgm_seed20261014_v2_retry1/runtime/evolve-inputs/frozen_swebench_dataset.json --split test --instance_ids django__django-11951 --predictions_path /Users/bytedance/codes/pi/research_output/rerun_20261015/dgm_seed20261014_v2_retry1/observations/search-slot-0000-medium/3df70b706c460d6478d71bc2b90a517e58defb2e5dcbc6df1dd1952ffbd9bef9/django__django-11951/search-slot-0000-medium-3df70b706c46/prediction.json --max_workers 1 --force_rebuild false --cache_level instance --clean false --run_id dgm200-search-slot-0000-m-2dd21654a5b69567 --timeout 1800
+<frozen runpy>:130: RuntimeWarning: 'swebench.harness.run_evaluation' found in sys.modules after import of package 'swebench.harness', but prior to execution of 'swebench.harness.run_evaluation'; this may result in unpredictable behaviour
+Running 1 unevaluated instances...
+Base image sweb.base.arm64:latest already exists, skipping build.
+Base images built successfully.
+No environment images need to be built.
+Found 1 existing instance images. Will reuse them.
+Running 1 instances...
+  0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [00:18<00:00, 18.92s/it]100%|██████████| 1/1 [00:18<00:00, 18.92s/it]
+All instances run.
+Cleaning cached images...
+Removed 0 images.
+Total instances: 1
+Instances submitted: 1
+Instances completed: 1
+Instances incomplete: 0
+Instances resolved: 1
+Instances unresolved: 0
+Instances with empty patches: 0
+Instances with errors: 0
+Unstopped containers: 0
+Unremoved images: 1
+Report written to dgm-pi-3df70b706c46-2dd21654a5b6.dgm200-search-slot-0000-m-2dd21654a5b69567.json

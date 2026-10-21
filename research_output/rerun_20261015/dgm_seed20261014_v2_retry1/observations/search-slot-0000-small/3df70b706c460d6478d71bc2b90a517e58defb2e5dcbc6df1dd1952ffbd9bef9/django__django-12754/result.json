@@ -1,0 +1,35 @@
+{
+  "budgetAborted": true,
+  "cacheReadTokens": 477952,
+  "cacheWriteTokens": 0,
+  "candidateToolNames": [
+    "code_search"
+  ],
+  "completedAt": "2026-10-15T03:53:25.847Z",
+  "durationMs": 119527,
+  "fullPatch": "diff --git a/asgiref_stub/asgiref/__init__.py b/asgiref_stub/asgiref/__init__.py\nnew file mode 100644\nindex 0000000..e69de29\ndiff --git a/asgiref_stub/asgiref/local.py b/asgiref_stub/asgiref/local.py\nnew file mode 100644\nindex 0000000..1c15656\n--- /dev/null\n+++ b/asgiref_stub/asgiref/local.py\n@@ -0,0 +1,12 @@\n+class Local:\n+    def __init__(self):\n+        object.__setattr__(self, \"_storage\", {})\n+\n+    def __getattr__(self, key):\n+        try:\n+            return self._storage[key]\n+        except KeyError:\n+            raise AttributeError(key)\n+\n+    def __setattr__(self, key, value):\n+        self._storage[key] = value\ndiff --git a/asgiref_stub/asgiref/sync.py b/asgiref_stub/asgiref/sync.py\nnew file mode 100644\nindex 0000000..4b93ecb\n--- /dev/null\n+++ b/asgiref_stub/asgiref/sync.py\n@@ -0,0 +1,6 @@\n+def async_to_sync(func):\n+    return func\n+\n+\n+def sync_to_async(func, thread_sensitive=True):\n+    return func\ndiff --git a/repro.py b/repro.py\nnew file mode 100644\nindex 0000000..c28db87\n--- /dev/null\n+++ b/repro.py\n@@ -0,0 +1,47 @@\n+import django\n+from django.conf import settings\n+\n+settings.configure(\n+    DEBUG=True,\n+    DATABASES={},\n+    INSTALLED_APPS=[\n+        \"django.contrib.contenttypes\",\n+        \"django.contrib.auth\",\n+        \"migapp\",\n+    ],\n+    DEFAULT_AUTO_FIELD=\"django.db.models.AutoField\",\n+)\n+django.setup()\n+\n+from django.db import models\n+from django.db.migrations.autodetector import MigrationAutodetector\n+from django.db.migrations.graph import MigrationGraph\n+from django.db.migrations.questioner import MigrationQuestioner\n+from django.db.migrations.state import ModelState, ProjectState\n+\n+\n+readable = ModelState(\"migapp\", \"Readable\", [\n+    (\"id\", models.AutoField(primary_key=True)),\n+    (\"title\", models.CharField(max_length=200)),\n+])\n+readable_empty = ModelState(\"migapp\", \"Readable\", [\n+    (\"id\", models.AutoField(primary_key=True)),\n+])\n+book = ModelState(\"migapp\", \"Book\", [\n+    (\"id\", models.AutoField(primary_key=True)),\n+    (\"title\", models.CharField(max_length=200)),\n+], bases=(\"migapp.Readable\",))\n+\n+before = ProjectState()\n+before.add_model(readable)\n+after = ProjectState()\n+after.add_model(readable_empty)\n+after.add_model(book)\n+\n+autodetector = MigrationAutodetector(before, after, MigrationQuestioner())\n+changes = autodetector._detect_changes(graph=MigrationGraph())\n+for app_label, migrations in changes.items():\n+    for migration in migrations:\n+        print(\"Migration:\", migration.name)\n+        for op in migration.operations:\n+            print(\"   \", op)\n",
+  "inputTokens": 47990,
+  "instanceId": "django__django-12754",
+  "maxOutputTokens": 65536,
+  "maxTotalTokens": 512000,
+  "modelId": "byteplus/deepseek-v4-flash-ga",
+  "modelProvider": "rollback-deepseek",
+  "noShell": false,
+  "outputTokens": 11530,
+  "patch": "diff --git a/asgiref_stub/asgiref/__init__.py b/asgiref_stub/asgiref/__init__.py\nnew file mode 100644\nindex 0000000..e69de29\ndiff --git a/asgiref_stub/asgiref/local.py b/asgiref_stub/asgiref/local.py\nnew file mode 100644\nindex 0000000..1c15656\n--- /dev/null\n+++ b/asgiref_stub/asgiref/local.py\n@@ -0,0 +1,12 @@\n+class Local:\n+    def __init__(self):\n+        object.__setattr__(self, \"_storage\", {})\n+\n+    def __getattr__(self, key):\n+        try:\n+            return self._storage[key]\n+        except KeyError:\n+            raise AttributeError(key)\n+\n+    def __setattr__(self, key, value):\n+        self._storage[key] = value\ndiff --git a/asgiref_stub/asgiref/sync.py b/asgiref_stub/asgiref/sync.py\nnew file mode 100644\nindex 0000000..4b93ecb\n--- /dev/null\n+++ b/asgiref_stub/asgiref/sync.py\n@@ -0,0 +1,6 @@\n+def async_to_sync(func):\n+    return func\n+\n+\n+def sync_to_async(func, thread_sensitive=True):\n+    return func\n",
+  "policyViolations": [
+    {
+      "patch": "diff --git a/repro.py b/repro.py\nnew file mode 100644\nindex 0000000..c28db87\n--- /dev/null\n+++ b/repro.py\n@@ -0,0 +1,47 @@\n+import django\n+from django.conf import settings\n+\n+settings.configure(\n+    DEBUG=True,\n+    DATABASES={},\n+    INSTALLED_APPS=[\n+        \"django.contrib.contenttypes\",\n+        \"django.contrib.auth\",\n+        \"migapp\",\n+    ],\n+    DEFAULT_AUTO_FIELD=\"django.db.models.AutoField\",\n+)\n+django.setup()\n+\n+from django.db import models\n+from django.db.migrations.autodetector import MigrationAutodetector\n+from django.db.migrations.graph import MigrationGraph\n+from django.db.migrations.questioner import MigrationQuestioner\n+from django.db.migrations.state import ModelState, ProjectState\n+\n+\n+readable = ModelState(\"migapp\", \"Readable\", [\n+    (\"id\", models.AutoField(primary_key=True)),\n+    (\"title\", models.CharField(max_length=200)),\n+])\n+readable_empty = ModelState(\"migapp\", \"Readable\", [\n+    (\"id\", models.AutoField(primary_key=True)),\n+])\n+book = ModelState(\"migapp\", \"Book\", [\n+    (\"id\", models.AutoField(primary_key=True)),\n+    (\"title\", models.CharField(max_length=200)),\n+], bases=(\"migapp.Readable\",))\n+\n+before = ProjectState()\n+before.add_model(readable)\n+after = ProjectState()\n+after.add_model(readable_empty)\n+after.add_model(book)\n+\n+autodetector = MigrationAutodetector(before, after, MigrationQuestioner())\n+changes = autodetector._detect_changes(graph=MigrationGraph())\n+for app_label, migrations in changes.items():\n+    for migration in migrations:\n+        print(\"Migration:\", migration.name)\n+        for op in migration.operations:\n+            print(\"   \", op)\n",
+      "type": "forbidden-path-modification"
+    }
+  ],
+  "providerError": "This operation was aborted",
+  "runnerExitCode": 1,
+  "sandboxImage": "sweb.eval.arm64.django__django-12754:latest",
+  "schemaVersion": 1,
+  "startedAt": "2026-10-15T03:51:26.320Z",
+  "strategyHash": "af051feb0d3041c9c41a99f22ca71062093da67e27fa02a01a79dbb8b7c197e6",
+  "timeoutAborted": false,
+  "tokenTelemetryAvailable": true,
+  "toolCalls": 23
+}

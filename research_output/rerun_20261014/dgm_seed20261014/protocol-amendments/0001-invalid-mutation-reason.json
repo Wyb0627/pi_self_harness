@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "amendment_id": "0001-invalid-mutation-reason",
+  "created_at": "2026-10-15T02:53:23Z",
+  "run_id": "dgm-pilot-s20261014",
+  "reason": "Search crashed while recording an invalid mutation because the consumer required an error field that the budget-abort producer did not emit.",
+  "scientific_scope": {
+    "changed": [
+      "Normalize invalid mutation reasons before writing the slot terminal record.",
+      "Continue to the next proposal slot after any valid=false mutation result."
+    ],
+    "unchanged": [
+      "Dataset split and D_test isolation",
+      "Parent selection",
+      "Mutation prompt and model",
+      "Per-call token and time budgets",
+      "Candidate validity",
+      "Small-10 promotion and cumulative-60 scoring",
+      "Archive and endpoint rules"
+    ]
+  },
+  "control_plane": {
+    "prior_commit": "d63fe099d1c4a6cb15ef01ef454c324ea6b84652",
+    "amended_commit": "4c312e7d199ed9ad5c857c9621e38ea7dce6ee70",
+    "file": "rollback_mvp/dgm_evolve/experiment.py",
+    "prior_file_sha256": "7d02b5bde4923a5cd6843d298be055044a620c7519e72f4511747a5ba1880561",
+    "amended_file_sha256": "148d6a8e498c5418a0a98e1ccbd67352aab695cbab5279ef41c019246958217c",
+    "prior_release_manifest_sha256": "59e604637579777a168ca1a12bd0f7f1a30df6bd167b0f2ccdd377c8f5f46add",
+    "amended_release_manifest_sha256": "d190c8e9b15b9cd13a699a51b78d3a5d4f5833ce34643e9f589eb7f2f64cab92",
+    "cold_start_attestation_hash": "7f3078f79cf82a90d4f36780853d0d87197847972a50d4836c2ef2a8ac98663d"
+  },
+  "frozen_state_at_amendment": {
+    "search_state_next_slot": 0,
+    "archive_sha256": "bcd0be06d9b64d8004b793e94f487e78fff5ff73e89ea4110c673d3a2885bf3f",
+    "p0_tasks": 60,
+    "p0_resolved": 19,
+    "p0_observation_hashes_sha256": "60eef62139c04394c4ed6fde9a1662877e0e320485a0bea51f1481882cebe56d",
+    "slot_0_mutation_result_sha256": "3b046898c8fa64e0753687a75b1006d3f87da5051684cdc71b1bb352dbe315f0",
+    "slot_0_mutation_final_sha256": "87c6bead7ece46c4a8f4bbc75a6969b0a4116712c0fbe69e9d5ddfb7884fb899",
+    "slot_0_valid": false,
+    "slot_0_budget_aborted": true,
+    "slot_0_reported_output_tokens": 18686,
+    "slot_0_output_token_cap": 16384,
+    "ledger_sha256": "59b0c7df34b3bf69577b3d06b014bbc899562d3384ae6b0dcbd088851026a0cb",
+    "ledger_last_sequence": 120,
+    "ledger_last_entry_hash": "88186de8a5f9ebef0ffd177f4217ea592a4bbf5eca8aa78ddb91b500266dedd9"
+  },
+  "resume_policy": {
+    "reuse_p0_observations": true,
+    "rerun_slot_0_mutation": false,
+    "slot_0_terminal_state": "CANDIDATE_INVALID_REJECTED",
+    "slot_0_reason": "Mutation proposer exceeded its frozen token budget.",
+    "next_model_sample": "slot 1"
+  }
+}

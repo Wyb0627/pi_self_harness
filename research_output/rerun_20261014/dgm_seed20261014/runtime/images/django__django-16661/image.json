@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "prerequisite_images": [
+    {
+      "image": "sweb.base.arm64:latest",
+      "architecture": "arm64",
+      "status": "reused"
+    },
+    {
+      "image": "sweb.env.arm64.c70909fdac4897d1c685df:latest",
+      "architecture": "arm64",
+      "status": "reused"
+    }
+  ],
+  "images": [
+    {
+      "instance_id": "django__django-16661",
+      "base_commit": "d687febce5868545f99974d2499a91f81a32fef5",
+      "env_image": "sweb.env.arm64.c70909fdac4897d1c685df:latest",
+      "instance_image": "sweb.eval.arm64.django__django-16661:latest",
+      "architecture": "arm64",
+      "history_depth": 2,
+      "status": "built",
+      "duration_seconds": 55.727,
+      "log": "/Users/bytedance/codes/pi/research_output/rerun_20261014/dgm_seed20261014/runtime/images/django__django-16661/image_logs/django__django-16661.build.log"
+    }
+  ]
+}

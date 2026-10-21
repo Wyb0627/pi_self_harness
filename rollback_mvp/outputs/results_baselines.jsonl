@@ -1,0 +1,22 @@
+{"fork_parent": "20250327_044512_401971", "decider": "greedy", "choice": "20250328_113705_938015", "reason": "highest own accuracy", "hit": 1, "regret": 0.0}
+{"fork_parent": "20250327_044512_401971", "decider": "random", "choice": "20250328_113705_938015", "reason": "uniform random", "hit": 1, "regret": 0.0}
+{"fork_parent": "20250327_084619_287593", "decider": "greedy", "choice": "20250329_024021_893075", "reason": "highest own accuracy", "hit": 1, "regret": 0.0}
+{"fork_parent": "20250327_084619_287593", "decider": "random", "choice": "20250330_110348_637680", "reason": "uniform random", "hit": 0, "regret": 0.0351}
+{"fork_parent": "20250327_084619_293670", "decider": "greedy", "choice": "20250327_113104_564253", "reason": "highest own accuracy", "hit": 0, "regret": 0.1}
+{"fork_parent": "20250327_084619_293670", "decider": "random", "choice": "20250327_113104_564253", "reason": "uniform random", "hit": 0, "regret": 0.1}
+{"fork_parent": "20250327_141021_286218", "decider": "greedy", "choice": "20250328_014441_399142", "reason": "highest own accuracy", "hit": 0, "regret": 0.1}
+{"fork_parent": "20250327_141021_286218", "decider": "random", "choice": "20250328_162643_296955", "reason": "uniform random", "hit": 1, "regret": 0.0}
+{"fork_parent": "20250327_162845_831928", "decider": "greedy", "choice": "20250329_104654_602457", "reason": "highest own accuracy", "hit": 1, "regret": 0.0}
+{"fork_parent": "20250327_162845_831928", "decider": "random", "choice": "20250329_104654_602457", "reason": "uniform random", "hit": 1, "regret": 0.0}
+{"fork_parent": "20250328_014441_399142", "decider": "greedy", "choice": "20250331_131622_337643", "reason": "highest own accuracy", "hit": 1, "regret": 0.0}
+{"fork_parent": "20250328_014441_399142", "decider": "random", "choice": "20250402_121108_002158", "reason": "uniform random", "hit": 0, "regret": 0.04}
+{"fork_parent": "20250328_043621_592702", "decider": "greedy", "choice": "20250402_144852_141439", "reason": "highest own accuracy", "hit": 1, "regret": 0.0}
+{"fork_parent": "20250328_043621_592702", "decider": "random", "choice": "20250401_214239_643967", "reason": "uniform random", "hit": 0, "regret": 0.1}
+{"fork_parent": "20250329_024021_871963", "decider": "greedy", "choice": "20250428_001718_747012", "reason": "highest own accuracy", "hit": 1, "regret": 0.0}
+{"fork_parent": "20250329_024021_871963", "decider": "random", "choice": "20250403_191215_472006", "reason": "uniform random", "hit": 0, "regret": 0.4}
+{"fork_parent": "20250330_040956_487852", "decider": "greedy", "choice": "20250330_235839_349015", "reason": "highest own accuracy", "hit": 1, "regret": 0.0}
+{"fork_parent": "20250330_040956_487852", "decider": "random", "choice": "20250330_235839_349015", "reason": "uniform random", "hit": 1, "regret": 0.0}
+{"fork_parent": "20250330_235839_349015", "decider": "greedy", "choice": "20250331_131622_310781", "reason": "highest own accuracy", "hit": 1, "regret": 0.0}
+{"fork_parent": "20250330_235839_349015", "decider": "random", "choice": "20250402_233611_062279", "reason": "uniform random", "hit": 0, "regret": 0.0385}
+{"fork_parent": "initial", "decider": "greedy", "choice": "20250327_044512_401971", "reason": "highest own accuracy", "hit": 0, "regret": 0.1}
+{"fork_parent": "initial", "decider": "random", "choice": "20250327_084619_287593", "reason": "uniform random", "hit": 0, "regret": 0.1}

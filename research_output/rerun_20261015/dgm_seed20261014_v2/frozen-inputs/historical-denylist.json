@@ -1,0 +1,12 @@
+{
+  "roots": [
+    {
+      "allowed_as_cache": false,
+      "allowed_as_search_input": false,
+      "path": "/Users/bytedance/codes/pi/research_output/clm_budgeted_evolution_20260924_125503/dgm200_run",
+      "run_config_sha256": "5115a32477a5e6e168e22e79144d1c49c01e6eac766aa955391f288bea938e5a",
+      "summary_sha256": "c91a8feedb2796197f679281714f335afdc777d48ed760fd51a7c0e2a1d633c4"
+    }
+  ],
+  "schema_version": 1
+}

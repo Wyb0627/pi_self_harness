@@ -1,0 +1,30 @@
+{
+  "budgetAborted": true,
+  "cacheReadTokens": 449280,
+  "cacheWriteTokens": 0,
+  "candidateToolNames": [
+    "code_search"
+  ],
+  "completedAt": "2026-10-15T06:29:24.817Z",
+  "durationMs": 194196,
+  "fullPatch": "diff --git a/scratch_repro/__init__.py b/scratch_repro/__init__.py\nnew file mode 100644\nindex 0000000..e69de29\ndiff --git a/scratch_repro/apps.py b/scratch_repro/apps.py\nnew file mode 100644\nindex 0000000..9a8cdba\n--- /dev/null\n+++ b/scratch_repro/apps.py\n@@ -0,0 +1,30 @@\n+import django\n+from django.conf import settings\n+\n+settings.configure(\n+    DEBUG=True,\n+    DATABASES={},\n+    INSTALLED_APPS=[\n+        'django.contrib.contenttypes',\n+        'django.contrib.auth',\n+        'scratch_repro',\n+    ],\n+    SECRET_KEY='x',\n+)\n+\n+django.setup()\n+\n+from django.db import models\n+\n+\n+class Document(models.Model):\n+    pass\n+\n+\n+class Picking(Document):\n+    document_ptr = models.OneToOneField(Document, on_delete=models.CASCADE, parent_link=True, related_name='+')\n+    origin = models.OneToOneField(Document, related_name='picking', on_delete=models.PROTECT)\n+\n+\n+print(\"OK - both fields declared, document_ptr first\")\n+print(\"Picking._meta.pk:\", Picking._meta.pk)\n",
+  "inputTokens": 54073,
+  "instanceId": "django__django-12325",
+  "maxOutputTokens": 65536,
+  "maxTotalTokens": 512000,
+  "modelId": "byteplus/deepseek-v4-flash-ga",
+  "modelProvider": "rollback-deepseek",
+  "noShell": false,
+  "outputTokens": 28961,
+  "patch": "diff --git a/scratch_repro/__init__.py b/scratch_repro/__init__.py\nnew file mode 100644\nindex 0000000..e69de29\ndiff --git a/scratch_repro/apps.py b/scratch_repro/apps.py\nnew file mode 100644\nindex 0000000..9a8cdba\n--- /dev/null\n+++ b/scratch_repro/apps.py\n@@ -0,0 +1,30 @@\n+import django\n+from django.conf import settings\n+\n+settings.configure(\n+    DEBUG=True,\n+    DATABASES={},\n+    INSTALLED_APPS=[\n+        'django.contrib.contenttypes',\n+        'django.contrib.auth',\n+        'scratch_repro',\n+    ],\n+    SECRET_KEY='x',\n+)\n+\n+django.setup()\n+\n+from django.db import models\n+\n+\n+class Document(models.Model):\n+    pass\n+\n+\n+class Picking(Document):\n+    document_ptr = models.OneToOneField(Document, on_delete=models.CASCADE, parent_link=True, related_name='+')\n+    origin = models.OneToOneField(Document, related_name='picking', on_delete=models.PROTECT)\n+\n+\n+print(\"OK - both fields declared, document_ptr first\")\n+print(\"Picking._meta.pk:\", Picking._meta.pk)\n",
+  "policyViolations": [],
+  "providerError": "This operation was aborted",
+  "runnerExitCode": 1,
+  "sandboxImage": "sweb.eval.arm64.django__django-12325:latest",
+  "schemaVersion": 1,
+  "startedAt": "2026-10-15T06:26:10.619Z",
+  "strategyHash": "af051feb0d3041c9c41a99f22ca71062093da67e27fa02a01a79dbb8b7c197e6",
+  "timeoutAborted": false,
+  "tokenTelemetryAvailable": true,
+  "toolCalls": 27
+}

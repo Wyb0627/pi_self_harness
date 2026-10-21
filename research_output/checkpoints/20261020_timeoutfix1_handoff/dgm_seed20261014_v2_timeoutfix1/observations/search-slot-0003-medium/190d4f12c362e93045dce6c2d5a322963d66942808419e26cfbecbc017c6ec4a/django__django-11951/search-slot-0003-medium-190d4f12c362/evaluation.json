@@ -1,0 +1,15 @@
+{
+  "status": "completed",
+  "resolved": true,
+  "protocol": "search-slot-0003-medium-190d4f12c362",
+  "officialEvaluatorRun": true,
+  "usedInertFeedbackProbe": false,
+  "identitySha256": "4ac6ed15837b69d303326baf21f1a85ac93722e713360d8590b392aacff09115",
+  "submittedPatchSha256": "289ce705726719992bb236ab7d232bee8a4b463277b7ae206e39100b605c6351",
+  "runId": "dgm200-search-slot-0003-m-4ac6ed15837b69d3",
+  "modelNameOrPath": "dgm-pi-190d4f12c362-4ac6ed15837b",
+  "returnCode": 0,
+  "durationSeconds": 25.533,
+  "reportPath": "/Users/bytedance/codes/pi/research_output/rerun_20261020/dgm_seed20261014_v2_timeoutfix1/logs/run_evaluation/dgm200-search-slot-0003-m-4ac6ed15837b69d3/dgm-pi-190d4f12c362-4ac6ed15837b/django__django-11951/report.json",
+  "testOutputPath": "/Users/bytedance/codes/pi/research_output/rerun_20261020/dgm_seed20261014_v2_timeoutfix1/logs/run_evaluation/dgm200-search-slot-0003-m-4ac6ed15837b69d3/dgm-pi-190d4f12c362-4ac6ed15837b/django__django-11951/test_output.txt"
+}

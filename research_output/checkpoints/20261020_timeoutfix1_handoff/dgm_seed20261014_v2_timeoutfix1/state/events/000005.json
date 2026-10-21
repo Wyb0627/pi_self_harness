@@ -1,0 +1,24 @@
+{
+  "event_hash": "4a106205c087973d0ead9eef5af96aa9f083abf050d1b1f574d09211ac678887",
+  "event_type": "slot_terminal",
+  "payload": {
+    "adaptive_gate": {
+      "accepted": true,
+      "arm": "dgm",
+      "artifact_hash": "190d4f12c362e93045dce6c2d5a322963d66942808419e26cfbecbc017c6ec4a",
+      "schema_version": 1,
+      "terminal_state": "GATE_NOT_APPLICABLE"
+    },
+    "child_artifact_hash": "190d4f12c362e93045dce6c2d5a322963d66942808419e26cfbecbc017c6ec4a",
+    "parent_artifact_hash": "30be840203090319746a26f6a5ca5ab68280a2d630e900066c3908fa4d03d4b9",
+    "resolved": 20,
+    "schema_version": 1,
+    "score_60": 0.3333333333333333,
+    "slot": 3,
+    "tasks": 60,
+    "terminal_state": "ARCHIVED",
+    "wave": 1
+  },
+  "previous_hash": "6e7616d505e29ec31292f82ba197a1cc04bf910d88e335495a25ab6cb001030c",
+  "sequence": 5
+}

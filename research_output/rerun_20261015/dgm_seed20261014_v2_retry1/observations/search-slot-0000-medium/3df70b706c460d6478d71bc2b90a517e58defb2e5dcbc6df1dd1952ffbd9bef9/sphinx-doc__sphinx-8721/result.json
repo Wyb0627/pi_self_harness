@@ -1,0 +1,29 @@
+{
+  "budgetAborted": false,
+  "cacheReadTokens": 97792,
+  "cacheWriteTokens": 0,
+  "candidateToolNames": [
+    "code_search"
+  ],
+  "completedAt": "2026-10-15T04:46:48.554Z",
+  "durationMs": 48634,
+  "fullPatch": "diff --git a/sphinx/ext/viewcode.py b/sphinx/ext/viewcode.py\nindex a7d52a9..863fc3d 100644\n--- a/sphinx/ext/viewcode.py\n+++ b/sphinx/ext/viewcode.py\n@@ -180,6 +180,8 @@ def should_generate_module_page(app: Sphinx, modname: str) -> bool:\n \n def collect_pages(app: Sphinx) -> Generator[Tuple[str, Dict[str, Any], str], None, None]:\n     env = app.builder.env\n+    if app.builder.name.startswith(\"epub\") and not env.config.viewcode_enable_epub:\n+        return\n     if not hasattr(env, '_viewcode_modules'):\n         return\n     highlighter = app.builder.highlighter  # type: ignore\n",
+  "inputTokens": 15720,
+  "instanceId": "sphinx-doc__sphinx-8721",
+  "maxOutputTokens": 65536,
+  "maxTotalTokens": 512000,
+  "modelId": "byteplus/deepseek-v4-flash-ga",
+  "modelProvider": "rollback-deepseek",
+  "noShell": false,
+  "outputTokens": 4315,
+  "patch": "diff --git a/sphinx/ext/viewcode.py b/sphinx/ext/viewcode.py\nindex a7d52a9..863fc3d 100644\n--- a/sphinx/ext/viewcode.py\n+++ b/sphinx/ext/viewcode.py\n@@ -180,6 +180,8 @@ def should_generate_module_page(app: Sphinx, modname: str) -> bool:\n \n def collect_pages(app: Sphinx) -> Generator[Tuple[str, Dict[str, Any], str], None, None]:\n     env = app.builder.env\n+    if app.builder.name.startswith(\"epub\") and not env.config.viewcode_enable_epub:\n+        return\n     if not hasattr(env, '_viewcode_modules'):\n         return\n     highlighter = app.builder.highlighter  # type: ignore\n",
+  "policyViolations": [],
+  "runnerExitCode": 0,
+  "sandboxImage": "sweb.eval.arm64.sphinx-doc__sphinx-8721:latest",
+  "schemaVersion": 1,
+  "startedAt": "2026-10-15T04:45:59.920Z",
+  "strategyHash": "af051feb0d3041c9c41a99f22ca71062093da67e27fa02a01a79dbb8b7c197e6",
+  "timeoutAborted": false,
+  "tokenTelemetryAvailable": true,
+  "toolCalls": 14
+}

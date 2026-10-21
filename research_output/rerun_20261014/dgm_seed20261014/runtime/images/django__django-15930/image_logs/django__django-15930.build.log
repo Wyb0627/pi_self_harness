@@ -1,0 +1,195 @@
+DEPRECATED: The legacy builder is deprecated and will be removed in a future release.
+            Install the buildx component to build images with BuildKit:
+            https://docs.docker.com/go/buildx/
+
+Sending build context to Docker daemon  61.17MB
+
+Step 1/7 : FROM --platform=linux/amd64 sweb.env.x86_64.a33dddf55cdff5d8e23374:latest
+ ---> 49000c31f1fc
+Step 2/7 : ARG PIP_DEFAULT_TIMEOUT=120
+ ---> [Warning] The requested image's platform (linux/amd64) does not match the detected host platform (linux/arm64/v8) and no specific platform was requested
+ ---> Running in 6fb9df53779e
+ ---> Removed intermediate container 6fb9df53779e
+ ---> 345a4e8741fc
+Step 3/7 : ARG PIP_RETRIES=20
+ ---> [Warning] The requested image's platform (linux/amd64) does not match the detected host platform (linux/arm64/v8) and no specific platform was requested
+ ---> Running in 80bcf32ea64c
+ ---> Removed intermediate container 80bcf32ea64c
+ ---> 59bff4a99b77
+Step 4/7 : COPY ./repo /testbed
+ ---> cc5ede1574d2
+Step 5/7 : COPY ./setup_local_repo.sh /root/
+ ---> 5846b81b8db4
+Step 6/7 : RUN /bin/bash /root/setup_local_repo.sh
+ ---> [Warning] The requested image's platform (linux/amd64) does not match the detected host platform (linux/arm64/v8) and no specific platform was requested
+ ---> Running in f013c8ee5c3d
+[91m++ git -C /testbed rev-parse HEAD
+[0m[91m+ test 63884829acd207404f2a5c3cc1d6b4cd0a822b70 = 63884829acd207404f2a5c3cc1d6b4cd0a822b70
+[0m[91m++ git -C /testbed remote
+[0m[91m+ test -z ''
+[0m[91m+ chmod -R 777 /testbed
+[0m[91m+ cd /testbed
+[0m[91m+ git reset --hard 63884829acd207404f2a5c3cc1d6b4cd0a822b70
+[0mHEAD is now at 6388482 Fixed #33902 -- Fixed Meta.constraints validation crash with F() expressions.
+[91m+ source /opt/miniconda3/bin/activate
+[0m[91m++ _CONDA_ROOT=/opt/miniconda3
+[0m[91m++ . /opt/miniconda3/etc/profile.d/conda.sh
+[0m[91m+++ export CONDA_EXE=/opt/miniconda3/bin/conda
+[0m[91m+++ CONDA_EXE=/opt/miniconda3/bin/conda
+[0m[91m+++ export _CE_M=
++++ _CE_M=
++++ export _CE_CONDA=
++++ _CE_CONDA=
++++ export CONDA_PYTHON_EXE=/opt/miniconda3/bin/python
++++ CONDA_PYTHON_EXE=/opt/miniconda3/bin/python
+[0m[91m+++ '[' -z '' ']'
++++ export CONDA_SHLVL=0
++++ CONDA_SHLVL=0
+[0m[91m+++ '[' -n '' ']'
+[0m[91m+++++ dirname /opt/miniconda3/bin/conda
+[0m[91m++++ dirname /opt/miniconda3/bin
+[0m[91m+++ PATH=/opt/miniconda3/condabin:/opt/miniconda3/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+[0m[91m+++ export PATH
++++ '[' -z '' ']'
++++ PS1=
+[0m[91m++ conda activate
+[0m[91m++ local cmd=activate
+[0m[91m++ case "$cmd" in
+[0m[91m++ __conda_activate activate
+++ '[' -n '' ']'
+++ local ask_conda
+[0m[91m+++ PS1=
++++ __conda_exe shell.posix activate
+[0m[91m+++ /opt/miniconda3/bin/conda shell.posix activate
+[0m[91m++ ask_conda='PS1='\''(base) '\''
+export PATH='\''/opt/miniconda3/bin:/opt/miniconda3/condabin:/opt/miniconda3/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'\''
+export CONDA_PREFIX='\''/opt/miniconda3'\''
+export CONDA_SHLVL='\''1'\''
+export CONDA_DEFAULT_ENV='\''base'\''
+export CONDA_PROMPT_MODIFIER='\''(base) '\''
+export CONDA_EXE='\''/opt/miniconda3/bin/conda'\''
+export _CE_M='\'''\''
+export _CE_CONDA='\'''\''
+export CONDA_PYTHON_EXE='\''/opt/miniconda3/bin/python'\'''
+++ eval 'PS1='\''(base) '\''
+export PATH='\''/opt/miniconda3/bin:/opt/miniconda3/condabin:/opt/miniconda3/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'\''
+export CONDA_PREFIX='\''/opt/miniconda3'\''
+export CONDA_SHLVL='\''1'\''
+export CONDA_DEFAULT_ENV='\''base'\''
+export CONDA_PROMPT_MODIFIER='\''(base) '\''
+export CONDA_EXE='\''/opt/miniconda3/bin/conda'\''
+export _CE_M='\'''\''
+export _CE_CONDA='\'''\''
+export CONDA_PYTHON_EXE='\''/opt/miniconda3/bin/python'\'''
+[0m[91m+++ PS1='(base) '
++++ export PATH=/opt/miniconda3/bin:/opt/miniconda3/condabin:/opt/miniconda3/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
++++ PATH=/opt/miniconda3/bin:/opt/miniconda3/condabin:/opt/miniconda3/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
++++ export CONDA_PREFIX=/opt/miniconda3
++++ CONDA_PREFIX=/opt/miniconda3
+[0m[91m+++ export CONDA_SHLVL=1
++++ CONDA_SHLVL=1
++++ export CONDA_DEFAULT_ENV=base
++++ CONDA_DEFAULT_ENV=base
++++ export 'CONDA_PROMPT_MODIFIER=(base) '
+[0m[91m+++ CONDA_PROMPT_MODIFIER='(base) '
+[0m[91m+++ export CONDA_EXE=/opt/miniconda3/bin/conda
++++ CONDA_EXE=/opt/miniconda3/bin/conda
++++ export _CE_M=
++++ _CE_M=
++++ export _CE_CONDA=
++++ _CE_CONDA=
++++ export CONDA_PYTHON_EXE=/opt/miniconda3/bin/python
++++ CONDA_PYTHON_EXE=/opt/miniconda3/bin/python
+[0m[91m++ __conda_hashr
+[0m[91m++ '[' -n '' ']'
+++ '[' -n '' ']'
+++ hash -r
+[0m[91m+ conda activate testbed
++ local cmd=activate
++ case "$cmd" in
++ __conda_activate activate testbed
++ '[' -n '' ']'
++ local ask_conda
+[0m[91m++ PS1='(base) '
+++ __conda_exe shell.posix activate testbed
+[0m[91m++ /opt/miniconda3/bin/conda shell.posix activate testbed
+[0m[91m+ ask_conda='PS1='\''(testbed) '\''
+export PATH='\''/opt/miniconda3/envs/testbed/bin:/opt/miniconda3/condabin:/opt/miniconda3/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'\''
+export CONDA_PREFIX='\''/opt/miniconda3/envs/testbed'\''
+export CONDA_SHLVL='\''2'\''
+export CONDA_DEFAULT_ENV='\''testbed'\''
+export CONDA_PROMPT_MODIFIER='\''(testbed) '\''
+export CONDA_PREFIX_1='\''/opt/miniconda3'\''
+export CONDA_EXE='\''/opt/miniconda3/bin/conda'\''
+export _CE_M='\'''\''
+export _CE_CONDA='\'''\''
+export CONDA_PYTHON_EXE='\''/opt/miniconda3/bin/python'\'''
++ eval 'PS1='\''(testbed) '\''
+export PATH='\''/opt/miniconda3/envs/testbed/bin:/opt/miniconda3/condabin:/opt/miniconda3/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'\''
+export CONDA_PREFIX='\''/opt/miniconda3/envs/testbed'\''
+export CONDA_SHLVL='\''2'\''
+export CONDA_DEFAULT_ENV='\''testbed'\''
+export CONDA_PROMPT_MODIFIER='\''(testbed) '\''
+export CONDA_PREFIX_1='\''/opt/miniconda3'\''
+export CONDA_EXE='\''/opt/miniconda3/bin/conda'\''
+export _CE_M='\'''\''
+export _CE_CONDA='\'''\''
+export CONDA_PYTHON_EXE='\''/opt/miniconda3/bin/python'\'''
+++ PS1='(testbed) '
+++ export PATH=/opt/miniconda3/envs/testbed/bin:/opt/miniconda3/condabin:/opt/miniconda3/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+++ PATH=/opt/miniconda3/envs/testbed/bin:/opt/miniconda3/condabin:/opt/miniconda3/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+[0m[91m++ export CONDA_PREFIX=/opt/miniconda3/envs/testbed
+++ CONDA_PREFIX=/opt/miniconda3/envs/testbed
+++ export CONDA_SHLVL=2
+++ CONDA_SHLVL=2
+++ export CONDA_DEFAULT_ENV=testbed
+++ CONDA_DEFAULT_ENV=testbed
+[0m[91m++ export 'CONDA_PROMPT_MODIFIER=(testbed) '
+++ CONDA_PROMPT_MODIFIER='(testbed) '
+++ export CONDA_PREFIX_1=/opt/miniconda3
+++ CONDA_PREFIX_1=/opt/miniconda3
+[0m[91m++ export CONDA_EXE=/opt/miniconda3/bin/conda
+++ CONDA_EXE=/opt/miniconda3/bin/conda
+++ export _CE_M=
+++ _CE_M=
+++ export _CE_CONDA=
+++ _CE_CONDA=
+++ export CONDA_PYTHON_EXE=/opt/miniconda3/bin/python
+++ CONDA_PYTHON_EXE=/opt/miniconda3/bin/python
+[0m[91m+ __conda_hashr
+[0m[91m+ '[' -n '' ']'
++ '[' -n '' ']'
++ hash -r
+[0m[91m+ echo 'Current environment: testbed'
+[0m[91m+ python -m pip install -e .
+[0mCurrent environment: testbed
+Obtaining file:///testbed
+  Installing build dependencies: started
+  Installing build dependencies: finished with status 'done'
+  Checking if build backend supports build_editable: started
+  Checking if build backend supports build_editable: finished with status 'done'
+  Getting requirements to build editable: started
+  Getting requirements to build editable: finished with status 'done'
+  Preparing editable metadata (pyproject.toml): started
+  Preparing editable metadata (pyproject.toml): finished with status 'done'
+Requirement already satisfied: asgiref>=3.5.2 in /opt/miniconda3/envs/testbed/lib/python3.9/site-packages (from Django==4.2.dev20220809040848) (3.11.1)
+Requirement already satisfied: sqlparse>=0.2.2 in /opt/miniconda3/envs/testbed/lib/python3.9/site-packages (from Django==4.2.dev20220809040848) (0.5.5)
+Requirement already satisfied: typing_extensions>=4 in /opt/miniconda3/envs/testbed/lib/python3.9/site-packages (from asgiref>=3.5.2->Django==4.2.dev20220809040848) (4.16.0)
+Building wheels for collected packages: Django
+  Building editable for Django (pyproject.toml): started
+  Building editable for Django (pyproject.toml): finished with status 'done'
+  Created wheel for Django: filename=django-4.2.dev20220809040848-0.editable-py3-none-any.whl size=27200 sha256=96b383b56ec513ef969859a317a84eb715d1ccac7ae6137ca17259765e969eec
+  Stored in directory: /tmp/pip-ephem-wheel-cache-w_z6wn7r/wheels/7d/66/67/70d1ee2124ccf21d601c352e25cdca10f611f7c8b3f9ffb9e4
+Successfully built Django
+Installing collected packages: Django
+Successfully installed Django-4.2.dev20220809040848
+[91mWARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.
+[0m ---> Removed intermediate container f013c8ee5c3d
+ ---> e7e926bcc807
+Step 7/7 : WORKDIR /testbed/
+ ---> [Warning] The requested image's platform (linux/amd64) does not match the detected host platform (linux/arm64/v8) and no specific platform was requested
+ ---> Running in 538139fac87a
+ ---> Removed intermediate container 538139fac87a
+ ---> 508e501b981b
+Successfully built 508e501b981b
+Successfully tagged sweb.eval.x86_64.django__django-15930:latest

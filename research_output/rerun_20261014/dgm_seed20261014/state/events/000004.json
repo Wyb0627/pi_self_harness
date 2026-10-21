@@ -1,0 +1,14 @@
+{
+  "event_hash": "17704bb0c47fcca28bbe52dab7a2358250b8f8f24504be7dd103eddf11c2c2d1",
+  "event_type": "candidate_invalid",
+  "payload": {
+    "parent_artifact_hash": "0f5a215ac0bce1aac54cc709e1a86e5e16f6f10547b78b30c711af30726a4c1b",
+    "reason": "Mutation proposer exceeded its frozen token budget.",
+    "schema_version": 1,
+    "slot": 1,
+    "terminal_state": "CANDIDATE_INVALID_REJECTED",
+    "wave": 0
+  },
+  "previous_hash": "b9dee3fe071261b75c929fe0d620dcd7f7e404113f103f4ba40a7ff58567612e",
+  "sequence": 4
+}

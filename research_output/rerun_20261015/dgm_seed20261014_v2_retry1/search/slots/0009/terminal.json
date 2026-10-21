@@ -1,0 +1,8 @@
+{
+  "parent_artifact_hash": "3df70b706c460d6478d71bc2b90a517e58defb2e5dcbc6df1dd1952ffbd9bef9",
+  "reason": "Tool handler dunder access is not allowed: __name__",
+  "schema_version": 1,
+  "slot": 9,
+  "terminal_state": "CANDIDATE_INVALID_REJECTED",
+  "wave": 4
+}

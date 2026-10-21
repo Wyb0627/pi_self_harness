@@ -1,0 +1,7 @@
+[
+  {
+    "instance_id": "astropy__astropy-13579",
+    "model_name_or_path": "pi-rf-clm-feedback-probe-66a2db890a5b",
+    "model_patch": "diff --git a/.rf_clm_feedback_probe b/.rf_clm_feedback_probe\nnew file mode 100644\nindex 0000000..f6223a0\n--- /dev/null\n+++ b/.rf_clm_feedback_probe\n@@ -0,0 +1 @@\n+feedback probe for astropy__astropy-13579\n"
+  }
+]

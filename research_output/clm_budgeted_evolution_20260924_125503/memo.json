@@ -1,0 +1,171 @@
+{
+  "subproblems": [
+    {
+      "id": 1,
+      "title": "Establish an identifiable same-task, same-model, same-budget benchmark",
+      "findings": [
+        {
+          "source": "https://arxiv.org/html/2505.22954v2/",
+          "priority": "P1-paper",
+          "key_points": [
+            "DGM reports improvement from 20.0% to 50.0% on SWE-bench through self-modification plus archive-based open-ended exploration.",
+            "Its released search uses staged evaluation and a growing archive, so final score and search cost must be reported separately."
+          ],
+          "conflict": null
+        },
+        {
+          "source": "file:///tmp/dgm-clm-eval",
+          "priority": "P1-code",
+          "key_points": [
+            "The published checkout loads big.json and computes full_eval_threshold but never executes the 140-task third stage.",
+            "The released result contains 197-200-task nodes, implying code/data drift from the public runner."
+          ],
+          "conflict": "The paper describes 10->60->200 promotion, but the released main branch cannot reproduce its third stage."
+        },
+        {
+          "source": "https://dl.acm.org/doi/fullHtml/10.1145/3460231.3473320",
+          "priority": "P1-tutorial",
+          "key_points": [
+            "Logged data observes rewards only for actions selected by the logging policy.",
+            "Deficient action support and distribution shift limit off-policy conclusions."
+          ],
+          "conflict": null
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "title": "Find a method that reduces evaluated-node count while preserving task performance",
+      "findings": [
+        {
+          "source": "https://ar5iv.labs.arxiv.org/html/1807.01774",
+          "priority": "P1-paper",
+          "key_points": [
+            "Successive halving allocates increasing fidelity only to competitive candidates.",
+            "BOHB combines strong anytime multi-fidelity allocation with model-guided proposal."
+          ],
+          "conflict": null
+        },
+        {
+          "source": "https://arxiv.org/html/2606.04866",
+          "priority": "P1-paper",
+          "key_points": [
+            "Prior-guided successive halving can reduce sample cost when priors are informative.",
+            "A robust design must recover prior-free behavior when the prior is uninformative or misleading."
+          ],
+          "conflict": null
+        },
+        {
+          "source": "https://arxiv.org/html/2604.14655v1",
+          "priority": "P1-paper",
+          "key_points": [
+            "AgentGA uses deterministic elite tournaments and online Hedge allocation over mutation operators.",
+            "Fresh workspaces plus curated inherited artifacts separate generation from reusable lineage information."
+          ],
+          "conflict": null
+        },
+        {
+          "source": "https://arxiv.org/html/2608.29228",
+          "priority": "P1-paper",
+          "key_points": [
+            "Graph-constrained counterfactual replay represents interacting and alternative repair sets that pointwise rankings miss.",
+            "Its reported 52-55% replay saving is domain-bounded controlled evidence, not a guarantee for harness evolution."
+          ],
+          "conflict": null
+        },
+        {
+          "source": "https://arxiv.org/html/2507.12453",
+          "priority": "P1-paper",
+          "key_points": [
+            "Stopping should compare expected improvement with heterogeneous evaluation cost rather than use a fixed probe count.",
+            "Cost-adjusted simple regret is the appropriate joint quality-cost objective."
+          ],
+          "conflict": null
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "title": "Implement staged Pi, DGM-style, and CLM experiments",
+      "findings": [
+        {
+          "source": "file:///Users/bytedance/codes/pi/rollback_mvp/outputs/dgm_budgeted_quarantine.json",
+          "priority": "P1-project-evidence",
+          "key_points": [
+            "Conservative direct-regression quarantine saved 0% on full DGM because flagged nodes were leaves.",
+            "Aggressive net-loss quarantine saved 86.28% but reduced the full-DGM endpoint from 0.5000 to 0.2833.",
+            "The primary H9 rule passed only one of three released runs and was killed."
+          ],
+          "conflict": null
+        },
+        {
+          "source": "file:///Users/bytedance/codes/pi/rollback_mvp/outputs/dgm_multifidelity_race.json",
+          "priority": "P1-project-evidence",
+          "key_points": [
+            "Stability-gated promotion preserved the 0.5000 node and saved 21.21% on the official split.",
+            "Across 5000 hash task rotations it hit the best node only 89.46% and saved 6.58%, so H10 was killed."
+          ],
+          "conflict": null
+        },
+        {
+          "source": "file:///Users/bytedance/codes/pi/rollback_mvp/outputs/repair_first_results.json",
+          "priority": "P1-project-evidence",
+          "key_points": [
+            "Repair-first CLM passed all seven synthetic settings, including conjunctive, alternative, mixed, noisy, low-recall, misleading-prior, and DGM-depth cases.",
+            "It preserved repair within the 0.02 non-inferiority margin and reduced calls by 42.86%-49.89% versus failure-first repair; every paired bootstrap interval excluded zero."
+          ],
+          "conflict": null
+        },
+        {
+          "source": "https://www.swebench.com/SWE-bench/guides/docker_setup/",
+          "priority": "P1-official",
+          "key_points": [
+            "SWE-bench recommends at least 8 CPUs, 16GB RAM, and 120GB disk for Docker evaluation.",
+            "The local Docker VM was restored with 8 CPUs, 16 GiB RAM, and a 120 GiB Docker data disk before endpoint evaluation."
+          ],
+          "conflict": null
+        },
+        {
+          "source": "file:///Users/bytedance/codes/pi/research_output/clm_budgeted_evolution_20260924_125503/endpoint_small_results.json",
+          "priority": "P1-project-evidence",
+          "key_points": [
+            "On DGM's 10-task small development subset, isolated Pi resolves 5/10 and Pi plus three verified RF-CLM repairs resolves 8/10.",
+            "The three one-call repairs add 137391 reported tokens, or 3.99% of the 10-task Pi baseline total."
+          ],
+          "conflict": "The endpoint gateway reported 20473-51860 output tokens per repair despite an 8192 max_tokens request, so monetary cost is not yet reliable."
+        },
+        {
+          "source": "file:///Users/bytedance/codes/pi/DGM_results/swe_results/swe_dgm/20250402_233611_093918/metadata.json",
+          "priority": "P1-released-evidence",
+          "key_points": [
+            "The best released DGM node resolves 4/10 on the same small task IDs.",
+            "The released DGM node uses a different model and agent substrate, so it is a historical reference rather than a matched causal baseline."
+          ],
+          "conflict": null
+        },
+        {
+          "source": "file:///Users/bytedance/codes/pi/research_output/clm_budgeted_evolution_20260924_125503/logs/run_evaluation",
+          "priority": "P1-executable-evidence",
+          "key_points": [
+            "The official SWE-bench grader resolves all three RF candidates: django__django-13346, django__django-15930, and django__django-10999.",
+            "Each report records all FAIL_TO_PASS tests passing and no PASS_TO_PASS regressions."
+          ],
+          "conflict": null
+        }
+      ]
+    }
+  ],
+  "new_concepts": [
+    "risk-adjusted successive halving",
+    "branch quarantine",
+    "logged-candidate tree-search benchmark",
+    "repair-first sufficient removal"
+  ],
+  "uncertain_points": [
+    "Released DGM trajectories do not identify counterfactual children under a different parent policy.",
+    "No matching original-Pi predictions exist in the released DGM artifacts.",
+    "The public DGM runner and released 200-task results were produced from different code paths or revisions.",
+    "The DGM-small result is a development-set comparison, not a matched multi-seed evolution result on the untouched 140-task holdout.",
+    "The endpoint gateway exceeded the requested max_tokens value, so billable-token and monetary-cost comparisons remain unreliable."
+  ]
+}

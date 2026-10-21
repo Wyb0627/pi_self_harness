@@ -46,3 +46,29 @@ packages/agent/docs/extensions/pi-server-artifact/index.md
 default.profraw
 /DGM_results
 datasets/SWE-bench/
+/tmp/pdfs
+
+# Python caches
+__pycache__/
+*.pyc
+
+# Local-only DGM200 workspaces, wheel cache, and runtime auth state
+/research_output/**/dgm200_run/tasks/*/workspace/
+/research_output/**/dgm200_run/invalid_attempts/*/workspace/
+/research_output/**/dgm200_run/build_wheelhouse/
+/research_output/**/pi_home/**/auth.json
+
+# Regenerable DGM200 evaluator artifacts; retain only aggregate audit metadata.
+/research_output/**/dgm200_run/logs/
+/research_output/**/dgm200_run/tasks/
+/research_output/**/dgm200_run/invalid_attempts/
+/research_output/**/dgm200_run/direct_verify_*/
+/research_output/**/dgm200_run/*dgm200-*.json
+
+# Runtime-generated cruft in research runs (regenerable, not needed to reproduce)
+**/combined-ca.pem
+**/.execution.lock
+**/proxy.log
+
+# Zip copies of committed HTML deliverables (produced by the share tool)
+.trae-html-share-packages/

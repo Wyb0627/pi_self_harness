@@ -1,0 +1,7 @@
+diff --git a/swebench_smoke.txt b/swebench_smoke.txt
+new file mode 100644
+index 0000000..caed606
+--- /dev/null
++++ b/swebench_smoke.txt
+@@ -0,0 +1 @@
++smoke

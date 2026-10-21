@@ -1,0 +1,9 @@
+{
+  "artifact_hash": "0f5a215ac0bce1aac54cc709e1a86e5e16f6f10547b78b30c711af30726a4c1b",
+  "mutation": {
+    "kind": "P0",
+    "summary": "Frozen Pi baseline with no added strategy."
+  },
+  "parent_artifact_hash": null,
+  "schema_version": 1
+}

@@ -1,0 +1,33 @@
+{
+  "budgetAborted": true,
+  "cacheReadTokens": 463104,
+  "cacheWriteTokens": 0,
+  "candidateToolNames": [],
+  "completedAt": "2026-10-19T20:17:12.782Z",
+  "durationMs": 162056,
+  "fullPatch": "diff --git a/repro.py b/repro.py\nnew file mode 100644\nindex 0000000..1bd8f45\n--- /dev/null\n+++ b/repro.py\n@@ -0,0 +1,56 @@\n+import django\n+from django.conf import settings\n+\n+settings.configure(\n+    DEBUG=True,\n+    DATABASES={\n+        'default': {\n+            'ENGINE': 'django.db.backends.sqlite3',\n+            'NAME': ':memory:',\n+        }\n+    },\n+    INSTALLED_APPS=['repro_app'],\n+    DEFAULT_AUTO_FIELD='django.db.models.AutoField',\n+)\n+django.setup()\n+\n+from django.db import models, connection\n+\n+\n+class Item(models.Model):\n+    uid = models.AutoField(primary_key=True, editable=False)\n+    f = models.BooleanField(default=False)\n+\n+    class Meta:\n+        app_label = 'repro_app'\n+\n+    def reset(self):\n+        self.uid = None\n+        self.f = False\n+\n+\n+class Derived(Item):\n+    class Meta:\n+        app_label = 'repro_app'\n+\n+\n+with connection.schema_editor() as editor:\n+    editor.create_model(Item)\n+    editor.create_model(Derived)\n+\n+# --- reproduce bug scenario ---\n+derived = Derived.objects.create(f=True)\n+item = Item.objects.get(pk=derived.pk)\n+obj1 = item.derived\n+print(\"before reset: uid=%r item_ptr_id=%r f=%r adding=%r\" % (\n+    obj1.uid, obj1.item_ptr_id, obj1.f, obj1._state.adding))\n+obj1.reset()\n+print(\"after reset:  uid=%r item_ptr_id=%r f=%r adding=%r\" % (\n+    obj1.uid, obj1.item_ptr_id, obj1.f, obj1._state.adding))\n+obj1.save()\n+print(\"after save:   uid=%r item_ptr_id=%r f=%r\" % (obj1.uid, obj1.item_ptr_id, obj1.f))\n+\n+obj = Item.objects.get(pk=derived.pk)\n+print(\"old Item row f =\", obj.f)\n+print(\"number of Item rows:\", Item.objects.count())\n+print(\"number of Derived rows:\", Derived.objects.count())\n",
+  "inputTokens": 44638,
+  "instanceId": "django__django-12273",
+  "maxOutputTokens": 65536,
+  "maxTotalTokens": 512000,
+  "modelId": "byteplus/deepseek-v4-flash-ga",
+  "modelProvider": "rollback-deepseek",
+  "noShell": false,
+  "outputTokens": 25929,
+  "patch": "",
+  "policyViolations": [
+    {
+      "patch": "diff --git a/repro.py b/repro.py\nnew file mode 100644\nindex 0000000..1bd8f45\n--- /dev/null\n+++ b/repro.py\n@@ -0,0 +1,56 @@\n+import django\n+from django.conf import settings\n+\n+settings.configure(\n+    DEBUG=True,\n+    DATABASES={\n+        'default': {\n+            'ENGINE': 'django.db.backends.sqlite3',\n+            'NAME': ':memory:',\n+        }\n+    },\n+    INSTALLED_APPS=['repro_app'],\n+    DEFAULT_AUTO_FIELD='django.db.models.AutoField',\n+)\n+django.setup()\n+\n+from django.db import models, connection\n+\n+\n+class Item(models.Model):\n+    uid = models.AutoField(primary_key=True, editable=False)\n+    f = models.BooleanField(default=False)\n+\n+    class Meta:\n+        app_label = 'repro_app'\n+\n+    def reset(self):\n+        self.uid = None\n+        self.f = False\n+\n+\n+class Derived(Item):\n+    class Meta:\n+        app_label = 'repro_app'\n+\n+\n+with connection.schema_editor() as editor:\n+    editor.create_model(Item)\n+    editor.create_model(Derived)\n+\n+# --- reproduce bug scenario ---\n+derived = Derived.objects.create(f=True)\n+item = Item.objects.get(pk=derived.pk)\n+obj1 = item.derived\n+print(\"before reset: uid=%r item_ptr_id=%r f=%r adding=%r\" % (\n+    obj1.uid, obj1.item_ptr_id, obj1.f, obj1._state.adding))\n+obj1.reset()\n+print(\"after reset:  uid=%r item_ptr_id=%r f=%r adding=%r\" % (\n+    obj1.uid, obj1.item_ptr_id, obj1.f, obj1._state.adding))\n+obj1.save()\n+print(\"after save:   uid=%r item_ptr_id=%r f=%r\" % (obj1.uid, obj1.item_ptr_id, obj1.f))\n+\n+obj = Item.objects.get(pk=derived.pk)\n+print(\"old Item row f =\", obj.f)\n+print(\"number of Item rows:\", Item.objects.count())\n+print(\"number of Derived rows:\", Derived.objects.count())\n",
+      "type": "forbidden-path-modification"
+    }
+  ],
+  "providerError": "This operation was aborted",
+  "runnerExitCode": 1,
+  "sandboxImage": "sweb.eval.arm64.django__django-12273:latest",
+  "schemaVersion": 1,
+  "startedAt": "2026-10-19T20:14:30.726Z",
+  "strategyHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "timeoutAborted": false,
+  "tokenTelemetryAvailable": true,
+  "toolCalls": 26
+}

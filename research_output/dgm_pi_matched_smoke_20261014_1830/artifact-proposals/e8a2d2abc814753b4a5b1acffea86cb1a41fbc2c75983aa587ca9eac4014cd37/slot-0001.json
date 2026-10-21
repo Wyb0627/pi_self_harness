@@ -1,0 +1,11 @@
+{
+  "artifact_hash": "e8a2d2abc814753b4a5b1acffea86cb1a41fbc2c75983aa587ca9eac4014cd37",
+  "mutation": {
+    "kind": "Pi strategy mutation",
+    "mutation_model_result_hash": "ece2dc75fe0fabf8a4ebca230ce0a8298a2d1ae4d50db39edc4945866a22c056",
+    "slot": 1,
+    "summary": "Introduce a minimal-diff-first strategy: stop inspection at the first credible edit site, patch conservatively, verify with targeted tests, and explicitly manage token budget and rollback."
+  },
+  "parent_artifact_hash": "5eb48a6ee49d31a9eacf1fde5cfdd7bada079ffbdc9d1bbf4705088c3b7a9200",
+  "schema_version": 1
+}

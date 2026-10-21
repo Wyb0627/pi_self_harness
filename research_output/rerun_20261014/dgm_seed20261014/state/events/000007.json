@@ -1,0 +1,14 @@
+{
+  "event_hash": "8fa30a65b6e2a25054f58cd679ca4a77d82669dc03ed1de5b55ded5cd1ef5737",
+  "event_type": "search_paused",
+  "payload": {
+    "active_model_processes": 0,
+    "functioning_children": 0,
+    "next_slot": 4,
+    "pause_id": "0001-mutation-validity-stop",
+    "pause_path": "pause-records/0001-mutation-validity-stop.json",
+    "pause_sha256": "fec7d05fc1bd68d780f4e4426a106e45aa944f7a10a4a6210385ca829e2a34fb"
+  },
+  "previous_hash": "7737871248ce4470196e6bd92e49bfc38af9b96569d42dabcccadd5ee62f6d2b",
+  "sequence": 7
+}

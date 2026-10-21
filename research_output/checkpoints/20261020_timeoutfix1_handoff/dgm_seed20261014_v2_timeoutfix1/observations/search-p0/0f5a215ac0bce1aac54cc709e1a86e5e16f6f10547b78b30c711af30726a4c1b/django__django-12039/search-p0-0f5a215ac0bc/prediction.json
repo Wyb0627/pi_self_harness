@@ -1,0 +1,7 @@
+[
+  {
+    "instance_id": "django__django-12039",
+    "model_name_or_path": "dgm-pi-0f5a215ac0bc-09e46e24a396",
+    "model_patch": "diff --git a/django/db/backends/ddl_references.py b/django/db/backends/ddl_references.py\nindex 44e4980..0e22e46 100644\n--- a/django/db/backends/ddl_references.py\n+++ b/django/db/backends/ddl_references.py\n@@ -84,9 +84,10 @@ class Columns(TableColumns):\n     def __str__(self):\n         def col_str(column, idx):\n             try:\n-                return self.quote_name(column) + self.col_suffixes[idx]\n+                col = self.col_suffixes[idx]\n             except IndexError:\n                 return self.quote_name(column)\n+            return self.quote_name(column) + (' ' + col if col else '')\n \n         return ', '.join(col_str(column, idx) for idx, column in enumerate(self.columns))\n \n@@ -114,9 +115,12 @@ class IndexColumns(Columns):\n             # length as self.columns.\n             col = '{} {}'.format(self.quote_name(column), self.opclasses[idx])\n             try:\n-                col = '{} {}'.format(col, self.col_suffixes[idx])\n+                suffix = self.col_suffixes[idx]\n             except IndexError:\n                 pass\n+            else:\n+                if suffix:\n+                    col = '{} {}'.format(col, suffix)\n             return col\n \n         return ', '.join(col_str(column, idx) for idx, column in enumerate(self.columns))\n"
+  }
+]

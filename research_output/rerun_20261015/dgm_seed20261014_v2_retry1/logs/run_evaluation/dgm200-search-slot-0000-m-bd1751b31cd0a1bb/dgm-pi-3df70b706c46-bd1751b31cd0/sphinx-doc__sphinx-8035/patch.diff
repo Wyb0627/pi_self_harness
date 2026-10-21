@@ -1,0 +1,83 @@
+diff --git a/CHANGES b/CHANGES
+index eadace6..a749010 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -17,6 +17,7 @@ Deprecated
+ Features added
+ --------------
+ 
++* #8035: autodoc: Support ``:private-members:`` option to take arguments
+ * #2076: autodoc: Allow overriding of exclude-members in skip-member function
+ * #2024: autosummary: Add :confval:`autosummary_filename_map` to avoid conflict
+   of filenames between two object with different case
+diff --git a/doc/usage/extensions/autodoc.rst b/doc/usage/extensions/autodoc.rst
+index 150b62c..b0f7533 100644
+--- a/doc/usage/extensions/autodoc.rst
++++ b/doc/usage/extensions/autodoc.rst
+@@ -140,6 +140,9 @@ inserting them into the page source under a suitable :rst:dir:`py:module`,
+ 
+      .. versionadded:: 1.1
+ 
++     .. versionchanged:: 3.2
++        The ``private-members`` option can now take arguments.
++
+    * autodoc considers a member private if its docstring contains
+      ``:meta private:`` in its :ref:`info-field-lists`.
+      For example:
+diff --git a/sphinx/ext/autodoc/__init__.py b/sphinx/ext/autodoc/__init__.py
+index 8c3509c..01395d9 100644
+--- a/sphinx/ext/autodoc/__init__.py
++++ b/sphinx/ext/autodoc/__init__.py
+@@ -136,6 +136,19 @@ def merge_special_members_option(options: Dict) -> None:
+             options['members'] = options['special-members']
+ 
+ 
++def merge_private_members_option(options: Dict) -> None:
++    """Merge :private-members: option to :members: option."""
++    if options.get('private-members') and options['private-members'] is not ALL:
++        if options.get('members') is ALL:
++            pass
++        elif options.get('members'):
++            for member in options['private-members']:
++                if member not in options['members']:
++                    options['members'].append(member)
++        else:
++            options['members'] = options['private-members']
++
++
+ # Some useful event listener factories for autodoc-process-docstring.
+ 
+ def cut_lines(pre: int, post: int = 0, what: str = None) -> Callable:
+@@ -859,13 +872,14 @@ class ModuleDocumenter(Documenter):
+         'show-inheritance': bool_option, 'synopsis': identity,
+         'platform': identity, 'deprecated': bool_option,
+         'member-order': member_order_option, 'exclude-members': members_set_option,
+-        'private-members': bool_option, 'special-members': members_option,
++        'private-members': members_option, 'special-members': members_option,
+         'imported-members': bool_option, 'ignore-module-all': bool_option
+     }  # type: Dict[str, Callable]
+ 
+     def __init__(self, *args: Any) -> None:
+         super().__init__(*args)
+         merge_special_members_option(self.options)
++        merge_private_members_option(self.options)
+         self.__all__ = None
+ 
+     @classmethod
+@@ -1279,7 +1293,7 @@ class ClassDocumenter(DocstringSignatureMixin, ModuleLevelDocumenter):  # type:
+         'noindex': bool_option, 'inherited-members': inherited_members_option,
+         'show-inheritance': bool_option, 'member-order': member_order_option,
+         'exclude-members': members_set_option,
+-        'private-members': bool_option, 'special-members': members_option,
++        'private-members': members_option, 'special-members': members_option,
+     }  # type: Dict[str, Callable]
+ 
+     _signature_class = None  # type: Any
+@@ -1288,6 +1302,7 @@ class ClassDocumenter(DocstringSignatureMixin, ModuleLevelDocumenter):  # type:
+     def __init__(self, *args: Any) -> None:
+         super().__init__(*args)
+         merge_special_members_option(self.options)
++        merge_private_members_option(self.options)
+ 
+     @classmethod
+     def can_document_member(cls, member: Any, membername: str, isattr: bool, parent: Any

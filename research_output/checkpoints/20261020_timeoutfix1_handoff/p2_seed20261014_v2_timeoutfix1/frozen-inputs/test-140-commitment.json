@@ -1,0 +1,7 @@
+{
+  "ordered_instance_ids_sha256": "3bb6b01e516ba5d3793e8cf02e8bbed85d8c5c33badbce187669daf06a3b8cbb",
+  "role": "test_commitment",
+  "role_manifest_hash": "cb2711ad5e0603fb810dcc92cbcea7140f36069d43c1524c504b570b358d6ca7",
+  "schema_version": 1,
+  "task_count": 140
+}

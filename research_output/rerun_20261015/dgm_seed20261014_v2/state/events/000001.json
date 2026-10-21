@@ -1,0 +1,16 @@
+{
+  "event_hash": "1aa64519b48d0b5289ae6cebcb66d91a27a0f70d3637733bed2b81c65abd8014",
+  "event_type": "p0_imported",
+  "payload": {
+    "completion_hash": "a54d83971eaf1843d97ae190b788f6df69ea744df063c00bb2eeb74e967099eb",
+    "completion_path": "p0-import-complete.json",
+    "contract_hash": "d893017f61873040a2f94aa9b2c47291070de9e4e723ee158e77b9f4abecc41f",
+    "contract_path": "p0-import-contract.json",
+    "p0_artifact_hash": "0f5a215ac0bce1aac54cc709e1a86e5e16f6f10547b78b30c711af30726a4c1b",
+    "resolved": 19,
+    "source_run_id": "dgm-pilot-s20261014",
+    "tasks": 60
+  },
+  "previous_hash": "38813ac3a0b340f4b9edc3fa94c2cd70ab75f6ad82327fe412b2182aa754b368",
+  "sequence": 1
+}

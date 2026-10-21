@@ -1,0 +1,23 @@
+{
+  "agent_models_sha256": "bfd834523d43655717f0750d199a7db966c3ddc8db5428b5ba6c3930d5c7dde8",
+  "control_plane_release_manifest_hash": "f9d036a882f50e8d0e79366352b2fe5e7aefeabc9f63b1f5bd4a7a47a49e4b24",
+  "created_at": "2026-10-15T03:26:24Z",
+  "current_dirty_status_sha256": "17b926700b0eb0f6273091213bc664606c63490b1931f451d82435cd7cabe4df",
+  "endpoint_commitment_hash": "caee6a7de908a90b874fd62fa6ee369d6f3e6fccd5cc4d77a8992547d1001383",
+  "evolve_manifest_hash": "ba5617a82f44048abd7ecf334d1f633341759613d21faedd0fc2ffc53e15cf86",
+  "execution_stack_hash": "d6c0de64ed460490733fd93205750400fcf44ba3aa8814b877658edd11b666cb",
+  "experiment_config_hash": "87c9e89b688766e0dc2ca505d694aecb06a788d9ef38ab8580176ecf920f8b59",
+  "fixed_policy_hash": "2a9aeacab5160555884971b7de14d2c27ccd630250ed73407dfd7b44499b2566",
+  "freshness_limitation": "big-140 is isolated from this new search but has appeared in historical repository runs and human analysis.",
+  "historical_denylist_hash": "cafe6aaabf316ea878f35ead8b04be7d557851796652bcb93da9260a6c447615",
+  "initial_harness_git_sha": "6bccba5bc122b732c042c166d5c24a372707dd03",
+  "initial_harness_source": "clean committed HEAD; dirty files excluded",
+  "mutation_runner_sha256": "d4d002134b57535c7e3f253fe018f348a577edc8615369bd921fca8ffcda5502",
+  "p0_artifact_hash": "0f5a215ac0bce1aac54cc709e1a86e5e16f6f10547b78b30c711af30726a4c1b",
+  "pi_package_sha256": "f1738e4b42203e5f22bcb513f13fb2fb224f1e98d1f129ff042f87048665a94c",
+  "pi_runner_sha256": "66bfdc8499d35f08c05f13142a12157a7ae703053088718b0bded3a5e1da3cb7",
+  "schema_version": 1,
+  "scope_limitation": "Project-specific Pi strategy and tool evolution; Pi core and harness source remain frozen.",
+  "split_binding_hash": "a0136c5b2c7b4b86c6c375bd02f8a67ac7c3c67797030340c9f9aa81b1529134",
+  "swebench_revision": "dc4c087c2b9e4cefebf2e3d201d27e362d899e0f"
+}

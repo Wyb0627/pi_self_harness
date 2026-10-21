@@ -1,0 +1,61 @@
+{
+  "artifact_hash": "bbcf739f105a6905ff57d8fed8120115b097f75c2b51c12b75c54b7e9a8f1068",
+  "mutation": {
+    "entry_task_id": "django__django-12325",
+    "kind": "Pi strategy/tool mutation",
+    "mutation_delta": {
+      "depends_on": [],
+      "entry_task_id": "django__django-12325",
+      "mutation_id": "m-0004-12eae0ac86e2",
+      "mutation_summary": "Add a reusable source_search tool and an order-sensitivity strategy for Django model metadata bugs.",
+      "repo": "django/django",
+      "strategy_patch": "## Prefer source archaeology when field order changes behavior\n\nIf a failing behavior depends on the order of model field declarations:\n\n1. Find the source module responsible for building model metadata instead of guessing or permuting the user model.\n   Use the source_search tool with the exact exception message or the public method name that appears in the traceback.\n2. Read the whole function that raises the error. Pay attention to the ordered lists it iterates (for example local_fields, local_concrete_fields, local_many_to_many) and the dictionaries populated from those lists (for example parents, fields_map).\n3. Separate semantically different relations that have the same target model.\n   A relation explicitly marked as a parent link is not the same as an ordinary relation to that parent model.\n   Verify that every branch treats those two cases independently of declaration order.\n4. When order matters, prefer changing the predicate or the iteration to be order-independent instead of reordering user declarations. A guard that selects the marked parent link is usually a smaller and safer fix.\n5. Before editing, search the surrounding source for similar loops over the same metadata list so the fix matches the existing convention.\n6. After identifying the intended operation, test both the originally failing order and the reversed order mentally or by running the relevant Django check/validation path; both should pass.\n",
+      "tool": {
+        "description": "Search the Django source tree under /testbed for a regular expression and return matching file paths, line numbers, and surrounding context. Use it to locate error messages, function definitions, loops over model metadata, and call sites before editing.",
+        "handler_code": "import json, os, re, sys\n\ndef main():\n    try:\n        request = json.load(sys.stdin)\n    except Exception as exc:\n        print(json.dumps({'content': 'Invalid JSON input.', 'details': {'error': str(exc)}}))\n        return\n\n    pattern = request.get('pattern', '')\n    if not isinstance(pattern, str) or not pattern:\n        print(json.dumps({'content': 'Missing pattern string.', 'details': {'error': 'pattern is required'}}))\n        return\n\n    try:\n        flags = 0 if request.get('case_sensitive', False) else re.IGNORECASE\n        regex = re.compile(pattern, flags)\n    except re.error as exc:\n        print(json.dumps({'content': 'Invalid regex.', 'details': {'error': str(exc)}}))\n        return\n\n    base = '/testbed'\n    try:\n        search_root = os.path.abspath(os.path.join(base, request.get('root', '.')))\n        if os.path.commonpath([base, search_root]) != base:\n            raise ValueError('root must be inside /testbed')\n    except Exception as exc:\n        print(json.dumps({'content': 'Invalid root.', 'details': {'error': str(exc)}}))\n        return\n\n    try:\n        file_pattern = request.get('file_pattern', r'\\.py$')\n        file_regex = re.compile(file_pattern)\n    except re.error as exc:\n        print(json.dumps({'content': 'Invalid file_pattern.', 'details': {'error': str(exc)}}))\n        return\n\n    context = request.get('context_lines', 2)\n    if not isinstance(context, int):\n        context = 2\n    context = max(0, min(10, context))\n\n    max_results = request.get('max_results', 60)\n    if not isinstance(max_results, int):\n        max_results = 60\n    max_results = max(1, min(200, max_results))\n\n    skip_dirs = {'.git', '.hg', '.svn', '__pycache__', 'node_modules', '.tox', '.venv', 'venv'}\n    matches = []\n\n    for dirpath, dirnames, filenames in os.walk(search_root):\n        dirnames[:] = [d for d in dirnames if d not in skip_dirs]\n        dirnames.sort()\n        for filename in sorted(filenames):\n            path = os.path.join(dirpath, filename)\n            if not file_regex.search(path):\n                continue\n            try:\n                with open(path, 'r', encoding='utf-8', errors='replace') as fh:\n                    lines = fh.readlines()\n            except OSError:\n                continue\n            for lineno, line in enumerate(lines, 1):\n                if regex.search(line):\n                    start = max(0, lineno - 1 - context)\n                    end = min(len(lines), lineno + context)\n                    snippet_lines = lines[start:end]\n                    if snippet_lines and not snippet_lines[-1].endswith('\\n'):\n                        snippet_lines[-1] += '\\n'\n                    snippet = ''.join(snippet_lines)\n                    matches.append({\n                        'path': os.path.relpath(path, base),\n                        'line': lineno,\n                        'snippet': snippet,\n                    })\n                    if len(matches) >= max_results:\n                        break\n            if len(matches) >= max_results:\n                break\n        if len(matches) >= max_results:\n            break\n\n    parts = []\n    for idx, m in enumerate(matches, 1):\n        parts.append(str(idx) + '. ' + m['path'] + ':' + str(m['line']))\n        if context:\n            parts.append(m['snippet'].rstrip('\\n'))\n    content = '\\n'.join(parts)\n    print(json.dumps({'content': content, 'details': {'count': len(matches), 'searched_root': os.path.relpath(search_root, base)}}))\n\nif __name__ == '__main__':\n    main()",
+        "label": "Source code search",
+        "name": "source_search",
+        "parameters": {
+          "additionalProperties": false,
+          "properties": {
+            "case_sensitive": {
+              "type": "boolean"
+            },
+            "context_lines": {
+              "type": "integer"
+            },
+            "file_pattern": {
+              "type": "string"
+            },
+            "max_results": {
+              "type": "integer"
+            },
+            "pattern": {
+              "type": "string"
+            },
+            "root": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "pattern"
+          ],
+          "type": "object"
+        },
+        "timeout_seconds": 20
+      }
+    },
+    "mutation_model_result_hash": "b91c3ed3c071e54b4a8a3ed4ae8bb3cca75c4341d26f2fe62a900abdb4555185",
+    "probe_task_ids": [
+      "django__django-12325",
+      "django__django-12754",
+      "django__django-16661",
+      "django__django-12273"
+    ],
+    "repo": "django/django",
+    "slot": 4,
+    "summary": "Add a reusable source_search tool and an order-sensitivity strategy for Django model metadata bugs."
+  },
+  "parent_artifact_hash": "0f5a215ac0bce1aac54cc709e1a86e5e16f6f10547b78b30c711af30726a4c1b",
+  "schema_version": 1
+}

@@ -1,0 +1,29 @@
+{
+  "budgetAborted": false,
+  "cacheReadTokens": 88320,
+  "cacheWriteTokens": 0,
+  "candidateToolNames": [
+    "source_search"
+  ],
+  "completedAt": "2026-10-15T11:58:10.362Z",
+  "durationMs": 50755,
+  "fullPatch": "diff --git a/django/contrib/contenttypes/management/__init__.py b/django/contrib/contenttypes/management/__init__.py\nindex 2b5f688..563cba2 100644\n--- a/django/contrib/contenttypes/management/__init__.py\n+++ b/django/contrib/contenttypes/management/__init__.py\n@@ -24,7 +24,7 @@ class RenameContentType(migrations.RunPython):\n             content_type.model = new_model\n             try:\n                 with transaction.atomic(using=db):\n-                    content_type.save(update_fields={'model'})\n+                    content_type.save(using=db, update_fields={'model'})\n             except IntegrityError:\n                 # Gracefully fallback if a stale content type causes a\n                 # conflict as remove_stale_contenttypes will take care of\n",
+  "inputTokens": 14694,
+  "instanceId": "django__django-11066",
+  "maxOutputTokens": 65536,
+  "maxTotalTokens": 512000,
+  "modelId": "byteplus/deepseek-v4-flash-ga",
+  "modelProvider": "rollback-deepseek",
+  "noShell": false,
+  "outputTokens": 4571,
+  "patch": "diff --git a/django/contrib/contenttypes/management/__init__.py b/django/contrib/contenttypes/management/__init__.py\nindex 2b5f688..563cba2 100644\n--- a/django/contrib/contenttypes/management/__init__.py\n+++ b/django/contrib/contenttypes/management/__init__.py\n@@ -24,7 +24,7 @@ class RenameContentType(migrations.RunPython):\n             content_type.model = new_model\n             try:\n                 with transaction.atomic(using=db):\n-                    content_type.save(update_fields={'model'})\n+                    content_type.save(using=db, update_fields={'model'})\n             except IntegrityError:\n                 # Gracefully fallback if a stale content type causes a\n                 # conflict as remove_stale_contenttypes will take care of\n",
+  "policyViolations": [],
+  "runnerExitCode": 0,
+  "sandboxImage": "sweb.eval.arm64.django__django-11066:latest",
+  "schemaVersion": 1,
+  "startedAt": "2026-10-15T11:57:19.606Z",
+  "strategyHash": "457a02a71369cac29a7f81801dda8dd09d2555cb73fd94993ab2a9f1f4ffb7b9",
+  "timeoutAborted": false,
+  "tokenTelemetryAvailable": true,
+  "toolCalls": 13
+}
